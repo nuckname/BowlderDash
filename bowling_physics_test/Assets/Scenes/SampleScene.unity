@@ -400,10 +400,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 213346366}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd93a7c9df47cbf45b074a3e763df74c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1b60b4f0a49b48a469f4504a2d3c752f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  launchForce: 2000
+  maxPower: 5000
+  sideForceMult: 100
+  spinMult: 100
 --- !u!1 &249776612
 GameObject:
   m_ObjectHideFlags: 0
