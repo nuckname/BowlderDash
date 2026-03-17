@@ -22,6 +22,8 @@ public class BowlingControllerV1 : MonoBehaviour
     private float spin;
     private float maxPull;
 
+    private float mousePos;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,8 @@ public class BowlingControllerV1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    
+        mousePos = currentMouse.x - startMouse.x;
+        Debug.Log(currentMouse.x - startMouse.x);
         if (launched) return;
 
         if (Input.GetMouseButtonDown(0))
@@ -78,9 +81,15 @@ public class BowlingControllerV1 : MonoBehaviour
             // rolling
             rb.AddTorque(Vector3.right * power * 0.3f);
 
-            //hook spin
-            rb.AddTorque(Vector3.up * spin);
-
+        //hook spin
+        if (mousePos > 0)
+        {
+            rb.AddTorque(Vector3.forward * spin);
+        }
+        if (mousePos < 0)
+        {
+            rb.AddTorque(Vector3.back * spin);
+        }
             launched = true;
         }
     }

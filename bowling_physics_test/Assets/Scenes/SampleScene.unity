@@ -286,9 +286,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 213346366}
   serializedVersion: 4
-  m_Mass: 6
+  m_Mass: 5
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.03
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -385,8 +385,8 @@ Transform:
   m_GameObject: {fileID: 213346366}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.64, y: 1.295, z: -5.764}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalPosition: {x: 0.64, y: 1.36, z: -5.764}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -403,8 +403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b60b4f0a49b48a469f4504a2d3c752f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPower: 5000
-  sideForceMult: 100
+  maxPower: 1600
+  sideForceMult: 50
   spinMult: 100
 --- !u!1 &249776612
 GameObject:
@@ -1637,7 +1637,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5484323, y: 1.0240334, z: -1.1358652}
-  m_LocalScale: {x: 1.2, y: 0.1, z: 10}
+  m_LocalScale: {x: 5, y: 0.1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
