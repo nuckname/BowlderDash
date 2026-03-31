@@ -33,8 +33,8 @@ public class BowlingControllerV1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        mousePos = currentMouse.x - startMouse.x;
-        Debug.Log(currentMouse.x - startMouse.x);
+        
+       
         if (launched) return;
 
         if (Input.GetMouseButtonDown(0))

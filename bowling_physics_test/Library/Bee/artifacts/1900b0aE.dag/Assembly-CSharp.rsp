@@ -354,7 +354,10 @@
 -analyzer:"D:/Applications/UnityEditor/2022.3.62f3/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"D:/Applications/UnityEditor/2022.3.62f3/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scripts/BallLauncherMVP.cs"
+"Assets/Scripts/BallPhysics.cs"
+"Assets/Scripts/BallThrowController.cs"
 "Assets/Scripts/BowlingControllerV1.cs"
+"Assets/Scripts/TrajectoryRenderer.cs"
 -langversion:9.0
 /deterministic
 /optimize+
