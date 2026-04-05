@@ -203,12 +203,48 @@ public class BallThrowController : MonoBehaviour
     {
         _state = ThrowState.Rolling;
         
-        // Calculate the world-space vector for the throw based on the current aim angle
+        // Calculate the world-space vector for the throw based on the current Aim Angle
         Vector3 throwDirection = Quaternion.Euler(0, _currentAimAngle, 0) * Vector3.forward;
         
         // Pass power vector to the BallPhysics script
         ballPhysics.ThrowBall(throwDirection * forceValue, _currentSpin);
         
         UpdateInstructionText($"THROWN! Power: {forceValue:F1} | Spin: {_currentSpin:F2}");
+        
+        // Inform the Global loop that this phase is over
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.NotifyBallRolled();
+        }
+    }
+    
+    /// <summary>
+    /// Called by the GameManager to prep the ball for the next throw
+    /// </summary>
+    public void ResetThrowSetup()
+    {
+        _state = ThrowState.Positioning;
+        _currentAimAngle = 0f;
+        _currentSpin = 0f;
+        
+        transform.position = _initialPosition;
+        transform.localEulerAngles = Vector3.zero;
+        
+        if (spinGauge != null)
+        {
+            spinGauge.value = 0f;
+            spinGauge.gameObject.SetActive(false);
+        }
+        
+        if (trajectoryRenderer != null) trajectoryRenderer.Show();
+        
+        if (TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
+        
+        UpdateInstructionText("Frame Ready: Move Mouse X to Position. Click to lock.");
     }
 }
