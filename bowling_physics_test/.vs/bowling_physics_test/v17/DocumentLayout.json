@@ -1,26 +1,29 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\2026 Git\\physics_test\\bowling_physics_test\\",
+  "WorkspaceRootPath": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\GameUIController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\HexGridSnapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\HexGridSnapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\GameUIController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\GameUIController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\TrajectoryRenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\TrajectoryRenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\TrajectoryRenderer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallPhysics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallPhysics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\BallPhysics.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallThrowController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallThrowController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\BallThrowController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BowlingControllerV1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\BowlingControllerV1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BowlingControllerV1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\GitHub\\physics_test\\bowling_physics_test\\Assets\\Scripts\\MouseBallLauncherMVP.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
@@ -38,14 +41,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GameUIController.cs",
-              "DocumentMoniker": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\GameUIController.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\GameUIController.cs",
-              "ToolTip": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\GameUIController.cs*",
-              "RelativeToolTip": "Assets\\Scripts\\GameUIController.cs*",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAACYAAAAFAAAAAAAAAA==",
+              "Title": "HexGridSnapper.cs",
+              "DocumentMoniker": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\HexGridSnapper.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\HexGridSnapper.cs",
+              "ToolTip": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\HexGridSnapper.cs",
+              "RelativeToolTip": "Assets\\Scripts\\HexGridSnapper.cs",
+              "ViewState": "AgIAABoBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-31T23:35:42.243Z",
+              "WhenOpened": "2026-04-08T12:39:33.071Z",
               "EditorCaption": ""
             },
             {
@@ -55,23 +58,35 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "TrajectoryRenderer.cs",
-              "DocumentMoniker": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\TrajectoryRenderer.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\TrajectoryRenderer.cs",
-              "ToolTip": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\TrajectoryRenderer.cs",
-              "RelativeToolTip": "Assets\\Scripts\\TrajectoryRenderer.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADwAAAAfAAAAAAAAAA==",
+              "Title": "GameUIController.cs",
+              "DocumentMoniker": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\GameUIController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\GameUIController.cs",
+              "ToolTip": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\GameUIController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\GameUIController.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACYAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-31T05:00:04.441Z",
+              "WhenOpened": "2026-03-31T23:35:42.243Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "TrajectoryRenderer.cs",
+              "DocumentMoniker": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\TrajectoryRenderer.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\TrajectoryRenderer.cs",
+              "ToolTip": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\TrajectoryRenderer.cs",
+              "RelativeToolTip": "Assets\\Scripts\\TrajectoryRenderer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADwAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-31T05:00:04.441Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "BallPhysics.cs",
-              "DocumentMoniker": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallPhysics.cs",
+              "DocumentMoniker": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallPhysics.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BallPhysics.cs",
-              "ToolTip": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallPhysics.cs",
+              "ToolTip": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallPhysics.cs",
               "RelativeToolTip": "Assets\\Scripts\\BallPhysics.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAD4AAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -79,11 +94,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "BallThrowController.cs",
-              "DocumentMoniker": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallThrowController.cs",
+              "DocumentMoniker": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallThrowController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BallThrowController.cs",
-              "ToolTip": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallThrowController.cs",
+              "ToolTip": "E:\\GitHub\\experimental\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BallThrowController.cs",
               "RelativeToolTip": "Assets\\Scripts\\BallThrowController.cs",
               "ViewState": "AgIAACcAAAAAAAAAAAAAAC0AAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -91,22 +106,22 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "BowlingControllerV1.cs",
               "DocumentMoniker": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BowlingControllerV1.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\BowlingControllerV1.cs",
               "ToolTip": "D:\\2026 Git\\physics_test\\bowling_physics_test\\Assets\\Scripts\\BowlingControllerV1.cs",
-              "RelativeToolTip": "Assets\\Scripts\\BowlingControllerV1.cs",
               "ViewState": "AgIAAEsAAAAAAAAAAAAAACQAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-16T08:51:30.842Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "MouseBallLauncherMVP.cs",
               "DocumentMoniker": "E:\\GitHub\\physics_test\\bowling_physics_test\\Assets\\Scripts\\MouseBallLauncherMVP.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\physics_test\\bowling_physics_test\\Assets\\Scripts\\MouseBallLauncherMVP.cs",
               "ToolTip": "E:\\GitHub\\physics_test\\bowling_physics_test\\Assets\\Scripts\\MouseBallLauncherMVP.cs",
+              "RelativeToolTip": "..\\..\\..\\physics_test\\bowling_physics_test\\Assets\\Scripts\\MouseBallLauncherMVP.cs",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-16T08:31:37.169Z"
             }

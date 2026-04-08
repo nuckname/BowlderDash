@@ -253,7 +253,6 @@ MonoBehaviour:
   hexSize: 0.51
   originOffset: {x: 0, y: 0, z: 0}
   spawnPrefab: {fileID: 11067060}
-  spawnOnStart: 0
   clearBeforeSpawn: 0
   childrenParent: {fileID: 1084961847}
   snapChildrenOnStart: 1
@@ -3635,7 +3634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1859365365871950418, guid: f8147d2eaf53ade419f3b54e4301f9a7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.028851
+      value: 10.97
       objectReference: {fileID: 0}
     - target: {fileID: 1859365365871950418, guid: f8147d2eaf53ade419f3b54e4301f9a7, type: 3}
       propertyPath: m_LocalRotation.w
