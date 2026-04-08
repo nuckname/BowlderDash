@@ -62,4 +62,11 @@ public class Pin : MonoBehaviour
         transform.position = _startPos;
         transform.rotation = _startRot;
     }
+
+
+    public void UpdateTransform()
+    {
+        _startPos = transform.position;
+        _startRot = transform.rotation;
+    }
 }
