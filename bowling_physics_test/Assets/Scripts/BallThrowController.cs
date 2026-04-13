@@ -72,7 +72,7 @@ public class BallThrowController : MonoBehaviour
         UpdateInstructionText("Bowling Setup: Move Mouse X to Position. Click to lock.");
     }
 
-    private void UpdateInstructionText(string message)
+    public void UpdateInstructionText(string message)
     {
         if (instructionText != null)
         {

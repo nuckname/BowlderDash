@@ -12,7 +12,17 @@ public class GameUIController : MonoBehaviour
 
     public void UpdateStandardUI(GameManager gm)
     {
-        if (frameText) frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}";
+        if (frameText) 
+        {
+            if (gm.GetCurrentState() == GameState.PinPlacement)
+            {
+                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=yellow>Review Pin Placement. Press TAB to Bowl!</color>";
+            }
+            else
+            {
+                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}";
+            }
+        }
         if (totalScoreText) totalScoreText.text = $"Total Score: {gm.totalScore}";
     }
 

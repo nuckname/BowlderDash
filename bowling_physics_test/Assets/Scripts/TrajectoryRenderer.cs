@@ -9,6 +9,12 @@ public class TrajectoryRenderer : MonoBehaviour
     [Tooltip("Maximum length the aiming line will draw down the lane.")]
     public float maxTrajectoryDistance = 15f; 
     public int segments = 30; 
+
+    [Header("Curve Tuning")]
+    [Tooltip("Adjusts how 'fast' the visual prediction travels down the lane for math comparisons.")]
+    public float timeSimulationSpeed = 0.1f;
+    [Tooltip("A general multiplier to widen or tighten the hook curve visually.")]
+    public float curveTweakMultiplier = 1.0f;
     
     private BallPhysics physicsData;
 
@@ -44,7 +50,7 @@ public class TrajectoryRenderer : MonoBehaviour
             float currentDist = i * stepSize;
             
             // We use 'currentDist' as a literal mock "Time" parameter (t).
-            float mockTime = currentDist * 0.1f; 
+            float mockTime = currentDist * timeSimulationSpeed; 
             
             float hookOffset = (spinValue * physicsData.hookMultiplier) * 0.5f * (mockTime * mockTime);
             
@@ -54,6 +60,8 @@ public class TrajectoryRenderer : MonoBehaviour
             {
                 hookOffset = Mathf.Sign(hookOffset) * maxVisualOffset;
             }
+            
+            hookOffset *= curveTweakMultiplier;
 
             Vector3 pointPos = startPos + (forwardDir * currentDist) + (rightDir * hookOffset);
             

@@ -426,13 +426,13 @@ MonoBehaviour:
   trajectoryRenderer: {fileID: 0}
   instructionText: {fileID: 598648735}
   spinGauge: {fileID: 1898976199}
-  laneWidth: 3
+  laneWidth: 4
   positioningSpeed: 30
-  maxAimAngle: 100
-  aimSpeed: 700
-  spinSelectionSpeed: 50
-  maxSpinValue: 2
-  powerMultiplier: 20
+  maxAimAngle: 50
+  aimSpeed: 400
+  spinSelectionSpeed: 60
+  maxSpinValue: 3
+  powerMultiplier: 10
 --- !u!114 &213346373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,7 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hookMultiplier: 15
-  maxHookSpeed: 10
+  maxHookSpeed: 15
 --- !u!114 &213346374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,6 +461,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxTrajectoryDistance: 10
   segments: 10
+  timeSimulationSpeed: 0.05
+  curveTweakMultiplier: 0.5
 --- !u!120 &213346375
 LineRenderer:
   serializedVersion: 2
@@ -482,7 +484,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4db5018e6f5d5ed48b4d76bd02d98d2e, type: 2}
+  - {fileID: 2100000, guid: d630626e534a7944280b7c269508dab3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -905,7 +907,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 600, y: 100}
+  m_SizeDelta: {x: 500, y: 200}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &598648735
 MonoBehaviour:
@@ -928,7 +930,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 4f36a3fa66ab1914c9749621394084bb, type: 3}
     m_FontSize: 40
     m_FontStyle: 0
     m_BestFit: 0
@@ -1380,6 +1382,7 @@ MonoBehaviour:
   throwController: {fileID: 213346372}
   scoreCalculator: {fileID: 752748298}
   uiController: {fileID: 752748297}
+  modeSwitcher: {fileID: 0}
   maxFrames: 10
   currentFrame: 1
   throwsThisFrame: 0
@@ -1507,7 +1510,7 @@ Transform:
   m_GameObject: {fileID: 756019030}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5289623, y: -0, z: -0, w: 0.8486453}
-  m_LocalPosition: {x: 0.35, y: 8.58, z: 23.88}
+  m_LocalPosition: {x: 0.35, y: 11.73, z: 23.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1627,11 +1630,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
-    m_FontStyle: 0
+    m_Font: {fileID: 12800000, guid: 4f36a3fa66ab1914c9749621394084bb, type: 3}
+    m_FontSize: 30
+    m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 4
+    m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0
@@ -2632,8 +2635,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -632, y: -212}
-  m_SizeDelta: {x: 600, y: 100}
+  m_AnchoredPosition: {x: -482, y: -212}
+  m_SizeDelta: {x: 900, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1315021564
 CanvasRenderer:
@@ -2664,11 +2667,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
-    m_FontStyle: 0
+    m_Font: {fileID: 12800000, guid: 4f36a3fa66ab1914c9749621394084bb, type: 3}
+    m_FontSize: 30
+    m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 4
+    m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0
@@ -3603,11 +3606,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 40
-    m_FontStyle: 0
+    m_Font: {fileID: 12800000, guid: 4f36a3fa66ab1914c9749621394084bb, type: 3}
+    m_FontSize: 30
+    m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 4
+    m_MinSize: 3
     m_MaxSize: 40
     m_Alignment: 3
     m_AlignByGeometry: 0

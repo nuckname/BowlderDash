@@ -70,14 +70,22 @@ public class BowlingModeSwitcher : MonoBehaviour
             originalCameraRotation = cam.transform.rotation;
         }
 
-        // Now apply the initial mode. Doing this after recording prevents ApplyMode
-        // from attempting to transition the camera back to an uninitialized pose.
-        ApplyMode(bowlingMode);
+        // Only apply initial mode if GameManager isn't driving the state
+        if (GameManager.Instance == null)
+        {
+            ApplyMode(bowlingMode);
+        }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(toggleKey)) ToggleMode();
+        if (Input.GetKeyDown(toggleKey))
+        {
+            if (GameManager.Instance == null || GameManager.Instance.CanToggleMode())
+            {
+                ToggleMode();
+            }
+        }
     }
 
     /// <summary>
@@ -140,6 +148,11 @@ public class BowlingModeSwitcher : MonoBehaviour
                     cameraTransitionCoroutine = StartCoroutine(TransitionCamera(cam.transform, cam.transform.position, cam.transform.rotation, originalCameraPosition, originalCameraRotation, cameraTransitionTime));
                 }
             }
+        }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnModeChanged(bowlingMode);
         }
     }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum GameState { FrameSetup, PlayerReady, Rolling, CalculatingScore, EndFrame, GameOver }
+public enum GameState { FrameSetup, PinPlacement, PlayerReady, Rolling, CalculatingScore, EndFrame, GameOver }
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public BallThrowController throwController;
     public ScoreCalculator scoreCalculator;
     public GameUIController uiController;
+    public BowlingModeSwitcher modeSwitcher;
     
     [Header("Game State")]
     public int maxFrames = 10;
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
     
     // Internal state tracking
     private GameState _currentState;
+
+    public GameState GetCurrentState() => _currentState;
     
     // An array of every pin loaded in the scene during Frame 1
     private Pin[] _allPinsPool;
@@ -33,6 +36,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        if (modeSwitcher == null) modeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
         _allPinsPool = Resources.FindObjectsOfTypeAll<Pin>();
         
         StartNewGame();
@@ -74,12 +78,33 @@ public class GameManager : MonoBehaviour
 
         if (uiController != null) uiController.UpdateStandardUI(this);
 
-        ReadyPlayer();
+        EnterPinPlacement();
+    }
+
+    private void EnterPinPlacement()
+    {
+        _currentState = GameState.PinPlacement;
+        
+        if (modeSwitcher != null) 
+        {
+            modeSwitcher.ApplyMode(false);
+        }
+        
+        if (throwController != null)
+        {
+            throwController.UpdateInstructionText("Place your pins! Press TAB when ready.");
+        }
+        if (uiController != null) uiController.UpdateStandardUI(this);
     }
 
     private void ReadyPlayer()
     {
         _currentState = GameState.PlayerReady;
+        
+        if (modeSwitcher != null)
+        {
+            modeSwitcher.ApplyMode(true);
+        }
         
         // Snap the Bowling Ball back into Position and turn its scripts back on
         if (throwController != null)
@@ -154,6 +179,24 @@ public class GameManager : MonoBehaviour
             {
                 p.gameObject.SetActive(false);
             }
+        }
+    }
+
+    public bool CanToggleMode()
+    {
+        // Only allow toggling mode before the first throw of a frame
+        return throwsThisFrame == 0 && (_currentState == GameState.PinPlacement || _currentState == GameState.PlayerReady);
+    }
+
+    public void OnModeChanged(bool isBowling)
+    {
+        if (isBowling && _currentState == GameState.PinPlacement)
+        {
+            ReadyPlayer();
+        }
+        else if (!isBowling && _currentState == GameState.PlayerReady)
+        {
+            EnterPinPlacement();
         }
     }
 }
