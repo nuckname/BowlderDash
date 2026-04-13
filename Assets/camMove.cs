@@ -9,7 +9,9 @@ public class camMove : MonoBehaviour
     public Vector3 offset = new Vector3(0, 2, -5);
     public float smoothSpeed = 0.125f;
     public float transitionDistance = 10f;
+    public float transitionSmoothness = 0.5f;
 
+    private float currentTransitionT = 0f;
     private Quaternion initialRotation;
 
     void Start()
@@ -34,10 +36,12 @@ public class camMove : MonoBehaviour
         if (finalTransform != null)
         {
             float distRemaining = finalTransform.position.z - followPosition.z;
+            float targetT = 1f - Mathf.Clamp01(distRemaining / transitionDistance);
             
-            float t = 1f - Mathf.Clamp01(distRemaining / transitionDistance);
+            currentTransitionT = Mathf.Lerp(currentTransitionT, targetT, transitionSmoothness * Time.deltaTime);
             
-            float smoothT = t * t * (3f - 2f * t);
+            float smoothT = currentTransitionT * currentTransitionT * (3f - 2f * currentTransitionT);
+            
             desiredPosition = Vector3.Lerp(followPosition, finalTransform.position, smoothT);
             desiredRotation = Quaternion.Slerp(initialRotation, finalTransform.rotation, smoothT);
         }

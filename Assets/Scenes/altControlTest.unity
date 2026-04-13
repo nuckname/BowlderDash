@@ -158,7 +158,7 @@ Light:
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
-    m_Resolution: -1
+    m_Resolution: 0
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
@@ -893,6 +893,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.079
       objectReference: {fileID: 0}
+    - target: {fileID: -5610832936595009893, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -53.95
+      objectReference: {fileID: 0}
+    - target: {fileID: -5610832936595009893, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: -5477749408508380018, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -50.11
@@ -921,6 +929,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: 51e7a4d24c46e224da901adaa42d7bc9, type: 2}
+    - target: {fileID: -3542852092398272455, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -63.11
+      objectReference: {fileID: 0}
     - target: {fileID: -3542852092398272455, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
       propertyPath: m_LocalPosition.y
       value: 5.2
@@ -977,6 +989,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: e50166486e8c0d94d9930696eb4258bc, type: 2}
+    - target: {fileID: -1538112130698044685, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -53.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -1538112130698044685, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: -1461304994638716399, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -1819,7 +1839,7 @@ Light:
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
-    m_Resolution: -1
+    m_Resolution: 0
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
@@ -1988,6 +2008,7 @@ MonoBehaviour:
   offset: {x: 0, y: 25, z: -18}
   smoothSpeed: 0.3
   transitionDistance: 25
+  transitionSmoothness: 0.5
 --- !u!114 &1588884245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2369,7 +2390,7 @@ Transform:
   m_GameObject: {fileID: 1906495012}
   serializedVersion: 2
   m_LocalRotation: {x: 0.23490623, y: -0, z: -0, w: 0.9720181}
-  m_LocalPosition: {x: -0.0048160553, y: 13.4, z: 41.4}
+  m_LocalPosition: {x: -0.0048160553, y: 13.4, z: 35.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
