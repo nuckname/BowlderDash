@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
         
         if (throwController != null)
         {
-            throwController.UpdateInstructionText("Place your pins! Press TAB when ready.");
+            throwController.UpdateInstructionText("Click and drag to arrange pins. Press TAB when ready.");
         }
         if (uiController != null) uiController.UpdateStandardUI(this);
     }
@@ -146,8 +146,23 @@ public class GameManager : MonoBehaviour
         
         if (uiController != null) uiController.UpdateStandardUI(this);
 
-        // Standard 10-pin bowling allows 2 throws.
-        if (throwsThisFrame >= 2)
+        // 1. Count active pins to determine if we got a Strike!
+        int totalPinsActiveAtStart = 0;
+        int fallenPinsThisThrow = 0;
+        
+        foreach(var p in _allPinsPool)
+        {
+            if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy)
+            {
+                totalPinsActiveAtStart++;
+                if (p.IsFallen()) fallenPinsThisThrow++;
+            }
+        }
+
+        bool isStrike = (throwsThisFrame == 1 && fallenPinsThisThrow == totalPinsActiveAtStart && totalPinsActiveAtStart > 0);
+
+        // Standard 10-pin bowling allows 2 throws, but a Strike finishes the round instantly!
+        if (throwsThisFrame >= 2 || isStrike)
         {
             // Frame is totally over, reset!
             currentFrame++;

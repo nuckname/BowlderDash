@@ -34,6 +34,8 @@ public class BallThrowController : MonoBehaviour
     [Header("Power Vector Settings")]
     [Tooltip("Multiplier to convert mouse speed to physical Rigidbody force.")]
     public float powerMultiplier = 350f; 
+    [Tooltip("Screen height fraction threshold to automatically release the throw.")]
+    public float autoReleaseThreshold = 0.25f;
     
     // Throw state variable tracking
     private ThrowState _state = ThrowState.Positioning;
@@ -69,7 +71,7 @@ public class BallThrowController : MonoBehaviour
         if (TryGetComponent<Rigidbody>(out var rb))
             rb.constraints = RigidbodyConstraints.FreezeAll;
             
-        UpdateInstructionText("Bowling Setup: Move Mouse X to Position. Click to lock.");
+        UpdateInstructionText("Move mouse to position, left click to lock.");
     }
 
     public void UpdateInstructionText(string message)
@@ -111,7 +113,7 @@ public class BallThrowController : MonoBehaviour
         {
             _state = ThrowState.Aiming;
             Input.GetAxis("Mouse X"); // Clear buffer
-            UpdateInstructionText("Position Locked. Move Mouse X to Rotate Aim. Click to lock.");
+            UpdateInstructionText("Move mouse to rotate aim. Click to lock.");
         }
     }
 
@@ -129,7 +131,7 @@ public class BallThrowController : MonoBehaviour
         {
             _state = ThrowState.SpinSelection;
             Input.GetAxis("Mouse X"); // Clear buffer
-            UpdateInstructionText($"Aim Locked ({_currentAimAngle:F1} deg). Move Mouse X to apply Spin (-{maxSpinValue} to {maxSpinValue}). Click to lock.");
+            UpdateInstructionText($"Aim Locked ({_currentAimAngle:F1} deg). Move Mouse to apply Spin (-{maxSpinValue} to {maxSpinValue}). Click to lock.");
             
             if (spinGauge != null) spinGauge.gameObject.SetActive(true); // Turn on the spin ui gauge visually!
         }
@@ -151,7 +153,7 @@ public class BallThrowController : MonoBehaviour
             if (trajectoryRenderer != null) trajectoryRenderer.Hide();
             if (spinGauge != null) spinGauge.gameObject.SetActive(false);
             
-            UpdateInstructionText($"Spin Locked! Click to hold, pull mouse DOWN, then rapidly swipe UP to throw!");
+            UpdateInstructionText($"Hold left click, then rapidly swipe up to throw!");
         }
     }
 
@@ -172,6 +174,30 @@ public class BallThrowController : MonoBehaviour
             {
                 _lowestYPosition = currentMouseY;
                 _pushStartTime = Time.time; // Reset timer whenever they slide lower
+            }
+            else
+            {
+                // Check if we reached the auto-release threshold
+                float pushDistance = currentMouseY - _lowestYPosition;
+                if (pushDistance >= Screen.height * autoReleaseThreshold)
+                {
+                    _isPulling = false;
+                    float timeTaken = Time.time - _pushStartTime;
+
+                    if (timeTaken > 0.01f) 
+                    {
+                        // Speed = Distance/Time, divide by screen height so resolution doesn't distort it.
+                        float pushSpeedNormalized = (pushDistance / Screen.height) / timeTaken;
+
+                        float throwPower = pushSpeedNormalized * powerMultiplier;
+                        
+                        ExecuteThrow(throwPower);
+                    }
+                    else
+                    {
+                        UpdateInstructionText("Throw too weak, swipe UP faster. Try again.");
+                    }
+                }
             }
         }
         else if (Input.GetMouseButtonUp(0) && _isPulling)
@@ -194,7 +220,7 @@ public class BallThrowController : MonoBehaviour
             }
             else
             {
-                UpdateInstructionText("Throw too weak. Pull back further and swipe UP faster. Try again.");
+                UpdateInstructionText("Throw cancelled or too weak. Swipe up past the threshold to throw.");
             }
         }
     }
@@ -245,6 +271,6 @@ public class BallThrowController : MonoBehaviour
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
         
-        UpdateInstructionText("Frame Ready: Move Mouse X to Position. Click to lock.");
+        UpdateInstructionText("Move mouse to position ball. Click to lock.");
     }
 }

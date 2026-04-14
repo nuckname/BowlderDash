@@ -1,13 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class bowlManyger : MonoBehaviour
 {
+    [Header("Dependencies")]
     public GameObject ball;
     public LayerMask floorLayer;
     public Camera mainCamera;
-    public LineRenderer lineRenderer;
+    public UnityEngine.LineRenderer lineRenderer;
+    
+    [Header("UI Integration")]
+    public Text instructionText;
+    public Slider powerSlider;
+    
+    [Header("Physics Curves")]
     public AnimationCurve swingCurve;
 
     public float forceMinSpeed = 5f;
@@ -50,9 +58,22 @@ public class bowlManyger : MonoBehaviour
             ballHeightOffset = startPos.y;
         }
 
+        
+
         if (lineRenderer != null)
         {
             lineRenderer.positionCount = 0;
+        }
+        
+        UpdateInstruction("Draw the ball's path! Start from the ball.");
+        if (powerSlider != null) powerSlider.value = 0f;
+    }
+
+    public void UpdateInstruction(string newText)
+    {
+        if (instructionText != null)
+        {
+            instructionText.text = newText;
         }
     }
 
@@ -96,11 +117,14 @@ public class bowlManyger : MonoBehaviour
                 isDrawing = true;
                 mouseDownTime = Time.time;
                 AddPoint(hit.point);
+                
+                UpdateInstruction("Drawing path... Release to bowl!");
             }
             else
             {
                 isValidDraw = false;
                 isDrawing = false;
+                UpdateInstruction("Draw from the ball!");
             }
         }
     }
@@ -124,6 +148,14 @@ public class bowlManyger : MonoBehaviour
             {
                 AddPoint(point);
             }
+        }
+        
+        // Track visual power accumulation
+        if (powerSlider != null && isValidDraw)
+        {
+            float currentDuration = Time.time - mouseDownTime;
+            float t = Mathf.InverseLerp(totalMinTime, totalMaxTime, currentDuration);
+            powerSlider.value = t;
         }
     }
 
@@ -172,6 +204,8 @@ public class bowlManyger : MonoBehaviour
         float duration = Time.time - mouseDownTime;
         float t = Mathf.InverseLerp(totalMinTime, totalMaxTime, duration);
         float launchSpeed = Mathf.Lerp(forceMinSpeed, forceMaxSpeed, t);
+        
+        UpdateInstruction("Ball Released!");
 
         StartCoroutine(ThrowSequence(launchSpeed));
     }
@@ -298,6 +332,9 @@ public class bowlManyger : MonoBehaviour
         ball.transform.position = startPos;
         processedCurve.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
+        
+        UpdateInstruction("Draw the ball's path! Start from the ball.");
+        if (powerSlider != null) powerSlider.value = 0f;
     }
 
     private void OnCollisionEnter(Collision collision)
