@@ -105,11 +105,12 @@ public class bowlManyger : MonoBehaviour
 
     private void StartDrawing()
     {
+        StopAllCoroutines();
         processedCurve.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
 
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, floorLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, floorLayer))
         {
             if (hit.point.z < minZ)
             {
@@ -127,12 +128,13 @@ public class bowlManyger : MonoBehaviour
                 UpdateInstruction("Draw from the ball!");
             }
         }
+        Debug.Log(isValidDraw + " " + isDrawing);
     }
 
     private void UpdateDrawing()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f, floorLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, floorLayer))
         {
             Vector3 point = hit.point;
 
@@ -323,18 +325,47 @@ public class bowlManyger : MonoBehaviour
     private void ResetBall()
     {
         StopAllCoroutines();
+        StartCoroutine(ResetSequence());
+    }
+
+    private IEnumerator ResetSequence()
+    {
+        // Immediate cleanup of states to prevent other logic from running
         isLaunched = false;
         isDrawing = false;
         isFollowingCurve = false;
-        ballRb.isKinematic = true;
-        ballRb.velocity = Vector3.zero;
-        ballRb.angularVelocity = Vector3.zero;
-        ball.transform.position = startPos;
+        
+        if (ballRb != null)
+        {
+            ballRb.isKinematic = true;
+            ballRb.velocity = Vector3.zero;
+            ballRb.angularVelocity = Vector3.zero;
+        }
+
+        // Clear curve and UI immediately
         processedCurve.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
-        
         UpdateInstruction("Draw the ball's path! Start from the ball.");
         if (powerSlider != null) powerSlider.value = 0f;
+
+        // First attempt at positioning
+        if (ball != null) ball.transform.position = startPos;
+
+        // Wait a small bit to ensure no other logic (like late-frame physics or other coroutines) 
+        // overwrites the position during this frame's processing
+        yield return new WaitForSeconds(0.05f);
+
+        // Final positioning and state enforcement to be absolutely sure
+        if (ball != null)
+        {
+            ball.transform.position = startPos;
+            if (ballRb != null)
+            {
+                ballRb.velocity = Vector3.zero;
+                ballRb.angularVelocity = Vector3.zero;
+                ballRb.isKinematic = true;
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
