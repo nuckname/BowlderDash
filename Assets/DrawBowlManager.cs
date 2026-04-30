@@ -166,13 +166,13 @@ public class DrawBowlManager : MonoBehaviour
         {
             Vector3 point = hit.point;
 
-            if (processedCurve.Count > 0 && point.z < processedCurve[processedCurve.Count - 1].position.z)
+            if (processedCurve.Count > 3 && point.z < processedCurve[processedCurve.Count - 1].position.z)
             {
                 EndDrawingAndLaunch();
                 return;
             }
 
-            if (point.z > maxZ) return;
+            // if (point.z > maxZ) return;
 
             if (processedCurve.Count == 0 || point.z > processedCurve[processedCurve.Count - 1].position.z + 0.1f)
             {
@@ -229,6 +229,7 @@ public class DrawBowlManager : MonoBehaviour
     private void EndDrawingAndLaunch()
     {
         isDrawing = false;
+        Debug.Log("end fucked");
         if (!isValidDraw || processedCurve.Count < 2) return;
 
         float duration = Time.time - mouseDownTime;
@@ -370,6 +371,7 @@ public class DrawBowlManager : MonoBehaviour
 
     private IEnumerator ResetSequence()
     {
+        Debug.Log("reset sequence");
         // Immediate cleanup of states to prevent other logic from running
         isLaunched = false;
         isDrawing = false;
