@@ -5,7 +5,7 @@ public class ScoreCalculator : MonoBehaviour
 {
     [Header("Current Frame Math (Read Only)")]
     public int currentFrameScore = 0;
-    public int currentFrameMult = 1;
+    public float currentFrameMult = 1f;
     
     private HashSet<Pin> scoredPinsThisFrame = new HashSet<Pin>();
 
@@ -22,7 +22,7 @@ public class ScoreCalculator : MonoBehaviour
     public void ResetFrameScore()
     {
         currentFrameScore = 0;
-        currentFrameMult = 1;
+        currentFrameMult = 1f;
         scoredPinsThisFrame.Clear();
     }
 
@@ -37,8 +37,13 @@ public class ScoreCalculator : MonoBehaviour
         Debug.Log($"Pin Scored! Added {fallenPin.score} Score / {fallenPin.mult} Mult. New Total: {GetFinalScore()}");
     }
 
+    public void ApplyStrikeBonus(float strikeMultiplier = 1.5f)
+    {
+        currentFrameMult = Mathf.Max(currentFrameMult, strikeMultiplier);
+    }
+
     public int GetFinalScore()
     {
-        return currentFrameScore * currentFrameMult;
+        return Mathf.RoundToInt(currentFrameScore * currentFrameMult);
     }
 }

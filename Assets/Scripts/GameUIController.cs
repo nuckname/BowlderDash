@@ -31,11 +31,12 @@ public class GameUIController : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.scoreCalculator != null)
         {
             int score = GameManager.Instance.scoreCalculator.currentFrameScore;
-            int mult = GameManager.Instance.scoreCalculator.currentFrameMult;
+            float mult = GameManager.Instance.scoreCalculator.currentFrameMult;
+            int finalScore = GameManager.Instance.scoreCalculator.GetFinalScore();
             
             if (currentMathText) 
             {
-                currentMathText.text = $"{score} Score X {mult} Mult\nRunning Frame Score: {score * mult}";
+                currentMathText.text = $"{score} Score X {mult:0.##} Mult\nRunning Frame Score: {finalScore}";
             }
         }
     }

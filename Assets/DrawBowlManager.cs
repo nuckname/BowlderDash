@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class bowlManyger : MonoBehaviour
+public class DrawBowlManager : MonoBehaviour
 {
     [Header("Dependencies")]
     public GameObject ball;
@@ -39,6 +39,7 @@ public class bowlManyger : MonoBehaviour
     private bool isLaunched = false;
     private bool isValidDraw = false;
     private bool isFollowingCurve = false;
+    private bool isInitialized = false;
     
     private const float jitterTolerance = 0.05f;
 
@@ -50,15 +51,7 @@ public class bowlManyger : MonoBehaviour
 
     void Start()
     {
-        if (ball != null)
-        {
-            startPos = ball.transform.position;
-            ballRb = ball.GetComponent<Rigidbody>();
-            ballRb.isKinematic = true;
-            ballHeightOffset = startPos.y;
-        }
-
-        
+        EnsureInitialized();
 
         if (lineRenderer != null)
         {
@@ -75,6 +68,40 @@ public class bowlManyger : MonoBehaviour
         {
             instructionText.text = newText;
         }
+    }
+
+    public void UpdateInstructionText(string newText)
+    {
+        UpdateInstruction(newText);
+    }
+
+    public void ResetThrowSetup()
+    {
+        EnsureInitialized();
+        ResetBall();
+    }
+
+    private void EnsureInitialized()
+    {
+        if (isInitialized) return;
+
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
+
+        if (ball != null)
+        {
+            startPos = ball.transform.position;
+            ballRb = ball.GetComponent<Rigidbody>();
+            if (ballRb != null)
+            {
+                ballRb.isKinematic = true;
+            }
+            ballHeightOffset = startPos.y;
+        }
+
+        isInitialized = true;
     }
 
     void Update()
@@ -105,6 +132,7 @@ public class bowlManyger : MonoBehaviour
 
     private void StartDrawing()
     {
+        EnsureInitialized();
         StopAllCoroutines();
         processedCurve.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
@@ -214,7 +242,13 @@ public class bowlManyger : MonoBehaviour
 
     private IEnumerator ThrowSequence(float speed)
     {
+        EnsureInitialized();
         isValidDraw = false;
+        if (ballRb == null)
+        {
+            yield break;
+        }
+
         ballRb.isKinematic = true;
 
         Vector3 firstPointRaw = processedCurve[0].position;
@@ -272,6 +306,11 @@ public class bowlManyger : MonoBehaviour
         ballRb.velocity = Vector3.forward * speed;
         isLaunched = true;
         isFollowingCurve = true;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.NotifyBallRolled();
+        }
     }
 
     void FixedUpdate()
@@ -324,6 +363,7 @@ public class bowlManyger : MonoBehaviour
 
     private void ResetBall()
     {
+        EnsureInitialized();
         StopAllCoroutines();
         StartCoroutine(ResetSequence());
     }
@@ -337,9 +377,12 @@ public class bowlManyger : MonoBehaviour
         
         if (ballRb != null)
         {
-            ballRb.isKinematic = true;
             ballRb.velocity = Vector3.zero;
-            ballRb.angularVelocity = Vector3.zero;
+            if (!ballRb.isKinematic)
+            {
+                ballRb.angularVelocity = Vector3.zero;
+            }
+            ballRb.isKinematic = true;
         }
 
         // Clear curve and UI immediately
@@ -362,7 +405,10 @@ public class bowlManyger : MonoBehaviour
             if (ballRb != null)
             {
                 ballRb.velocity = Vector3.zero;
-                ballRb.angularVelocity = Vector3.zero;
+                if (!ballRb.isKinematic)
+                {
+                    ballRb.angularVelocity = Vector3.zero;
+                }
                 ballRb.isKinematic = true;
             }
         }

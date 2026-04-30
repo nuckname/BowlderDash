@@ -8,6 +8,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class DraggableSnap : MonoBehaviour
 {
+    private static BowlingModeSwitcher cachedModeSwitcher;
+
     private Camera cam;
     private bool dragging = false;
     private Vector3 offset;
@@ -46,12 +48,15 @@ public class DraggableSnap : MonoBehaviour
 
     private void OnMouseDown()
     {
-        // Only allow grabbing in placement mode. If there's no mode switcher
-        // present, fall back to allowing grabs so existing scenes without a
-        // switcher keep previous behavior.
-        if (System.Type.GetType("BowlingModeSwitcher") != null)
+        // Only allow grabbing in placement mode when a mode switcher is actually present.
+        // Scenes still being wired up can fall back to unrestricted dragging.
+        if (cachedModeSwitcher == null)
         {
-            // check static flag; if false, ignore mouse down
+            cachedModeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
+        }
+
+        if (cachedModeSwitcher != null)
+        {
             if (!BowlingModeSwitcher.isPlacementMode)
                 return;
         }

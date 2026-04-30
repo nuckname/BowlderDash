@@ -97,3 +97,8 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+*.csproj
+Assets/Materials/vsOnMove.shadergraph
+Assets/Scenes/altControlTest.unity
+Assets/Scenes/SampleScene.unity.meta
+Assets/Scenes/SampleScene.unity

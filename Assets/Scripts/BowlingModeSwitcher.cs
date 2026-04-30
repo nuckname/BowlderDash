@@ -44,10 +44,10 @@ public class BowlingModeSwitcher : MonoBehaviour
 
     private bool bowlingMode = true;
 
-    // Camera transition state
+    // Fallback camera state when no camMove is present.
     private Vector3 originalCameraPosition;
     private Quaternion originalCameraRotation;
-    private Coroutine cameraTransitionCoroutine;
+    private camMove cameraFollowScript;
 
     private void Start()
     {
@@ -66,6 +66,7 @@ public class BowlingModeSwitcher : MonoBehaviour
         var cam = targetCamera != null ? targetCamera : Camera.main;
         if (cam != null)
         {
+            cameraFollowScript = cam.GetComponent<camMove>();
             originalCameraPosition = cam.transform.position;
             originalCameraRotation = cam.transform.rotation;
         }
@@ -125,27 +126,27 @@ public class BowlingModeSwitcher : MonoBehaviour
             grid.showGizmos = !bowlingMode;
         }
 
-        // Camera transition: when entering placement mode, move camera to placementCameraTarget.
-        // When leaving placement mode, move back to original pose.
-        if (placementCameraTarget != null)
+        var cam = targetCamera != null ? targetCamera : Camera.main;
+        if (cam != null)
         {
-            // resolve camera
-            var cam = targetCamera != null ? targetCamera : Camera.main;
-            if (cam != null)
+            if (cameraFollowScript == null)
             {
-                // stop any existing transition
-                if (cameraTransitionCoroutine != null)
-                    StopCoroutine(cameraTransitionCoroutine);
+                cameraFollowScript = cam.GetComponent<camMove>();
+            }
 
+            if (cameraFollowScript != null)
+            {
+                cameraFollowScript.SetPlacementMode(!bowlingMode, placementCameraTarget, cameraTransitionTime);
+            }
+            else if (placementCameraTarget != null)
+            {
                 if (!bowlingMode)
                 {
-                    // entering placement: move from current pose to placement target
-                    cameraTransitionCoroutine = StartCoroutine(TransitionCamera(cam.transform, cam.transform.position, cam.transform.rotation, placementCameraTarget.position, placementCameraTarget.rotation, cameraTransitionTime));
+                    cam.transform.SetPositionAndRotation(placementCameraTarget.position, placementCameraTarget.rotation);
                 }
                 else
                 {
-                    // returning to bowling: move back to the original pose captured at startup
-                    cameraTransitionCoroutine = StartCoroutine(TransitionCamera(cam.transform, cam.transform.position, cam.transform.rotation, originalCameraPosition, originalCameraRotation, cameraTransitionTime));
+                    cam.transform.SetPositionAndRotation(originalCameraPosition, originalCameraRotation);
                 }
             }
         }
@@ -154,30 +155,6 @@ public class BowlingModeSwitcher : MonoBehaviour
         {
             GameManager.Instance.OnModeChanged(bowlingMode);
         }
-    }
-
-    private System.Collections.IEnumerator TransitionCamera(Transform camT, Vector3 fromPos, Quaternion fromRot, Vector3 toPos, Quaternion toRot, float duration)
-    {
-        if (duration <= 0f)
-        {
-            camT.position = toPos;
-            camT.rotation = toRot;
-            yield break;
-        }
-
-        float t = 0f;
-        while (t < duration)
-        {
-            t += Time.deltaTime;
-            float alpha = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t / duration));
-            camT.position = Vector3.Lerp(fromPos, toPos, alpha);
-            camT.rotation = Quaternion.Slerp(fromRot, toRot, alpha);
-            yield return null;
-        }
-
-        camT.position = toPos;
-        camT.rotation = toRot;
-        cameraTransitionCoroutine = null;
     }
 
     /// <summary>

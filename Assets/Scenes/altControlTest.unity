@@ -246,6 +246,12 @@ MonoBehaviour:
   snapChildrenOnStart: 1
   allowOnePerCell: 1
   showGizmos: 1
+  showGridInPlay: 1
+  runtimeLineMaterial: {fileID: 0}
+  freeCellColor: {r: 0, g: 0.6, b: 1, a: 0.6}
+  occupiedCellColor: {r: 0, g: 1, b: 0, a: 0.6}
+  runtimeLineWidth: 0.08
+  runtimeLineHeightOffset: 0.05
 --- !u!4 &120957813
 Transform:
   m_ObjectHideFlags: 0
@@ -618,6 +624,7 @@ GameObject:
   - component: {fileID: 341304547}
   - component: {fileID: 341304546}
   - component: {fileID: 341304545}
+  - component: {fileID: 341304548}
   m_Layer: 0
   m_Name: manyger
   m_TagString: Untagged
@@ -689,7 +696,7 @@ MonoBehaviour:
   totalMinTime: 0.3
   totalMaxTime: 1
   minZ: 10
-  maxZ: 120
+  maxZ: 100
   pullbackYScale: 0.15
   pullbackZScale: 0.2
   oppositeXScale: 2
@@ -838,7 +845,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e73bc0b06153d4daabc4c5fda5de9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  throwController: {fileID: 0}
+  throwController: {fileID: 341304543}
   scoreCalculator: {fileID: 341304545}
   uiController: {fileID: 341304546}
   modeSwitcher: {fileID: 0}
@@ -846,6 +853,29 @@ MonoBehaviour:
   currentFrame: 1
   throwsThisFrame: 0
   totalScore: 0
+--- !u!114 &341304548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 341304541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa133144350d5ef499a4c2812e09ab74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bowlingControls: {fileID: 0}
+  placementControls: {fileID: 0}
+  bowlingBehaviours:
+  - {fileID: 341304543}
+  placementBehaviours: []
+  grid: {fileID: 120957812}
+  startInBowlingMode: 0
+  toggleKey: 9
+  targetCamera: {fileID: 1588884242}
+  placementCameraTarget: {fileID: 1906495015}
+  cameraTransitionTime: 1
 --- !u!64 &355338762
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -3323,6 +3353,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 5951265925120723548}
   finalTransform: {fileID: 1906495015}
+  placementTransform: {fileID: 0}
   offset: {x: 0, y: 25, z: -18}
   smoothSpeed: 0.3
   transitionDistance: 25

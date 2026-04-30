@@ -23,6 +23,16 @@ public class HexGridSnapper : MonoBehaviour
     public bool allowOnePerCell = true;
     public bool showGizmos = true;
 
+    [Header("Runtime Visuals")]
+    [Tooltip("Draw the grid for the player while the game is running.")]
+    public bool showGridInPlay = true;
+    [Tooltip("Optional material for runtime line renderers. Defaults to Sprites/Default if left empty.")]
+    public Material runtimeLineMaterial;
+    public Color freeCellColor = new Color(0f, 0.6f, 1f, 0.6f);
+    public Color occupiedCellColor = new Color(0f, 1f, 0f, 0.6f);
+    public float runtimeLineWidth = 0.08f;
+    public float runtimeLineHeightOffset = 0.05f;
+
     // internal cell representation
     public class Cell
     {
@@ -33,6 +43,9 @@ public class HexGridSnapper : MonoBehaviour
     }
 
     private List<Cell> cells = new List<Cell>();
+    private readonly List<LineRenderer> runtimeGridLines = new List<LineRenderer>();
+    private Material generatedRuntimeMaterial;
+    private bool runtimeGridVisible;
 
     private void Start()
     {
@@ -42,6 +55,22 @@ public class HexGridSnapper : MonoBehaviour
         {
             SnapChildrenToGrid(childrenParent != null ? childrenParent : this.transform);
         }
+
+        RebuildRuntimeGrid();
+        ApplyRuntimeGridVisibility(showGizmos);
+    }
+
+    private void Update()
+    {
+        if (!Application.isPlaying || !showGridInPlay) return;
+
+        if (runtimeGridLines.Count != cells.Count)
+        {
+            RebuildRuntimeGrid();
+        }
+
+        ApplyRuntimeGridVisibility(showGizmos);
+        UpdateRuntimeGridColors();
     }
 
     /// <summary>
@@ -133,6 +162,12 @@ public class HexGridSnapper : MonoBehaviour
                 };
                 cells.Add(cell);
             }
+        }
+
+        if (Application.isPlaying)
+        {
+            RebuildRuntimeGrid();
+            ApplyRuntimeGridVisibility(showGizmos);
         }
     }
 
@@ -289,7 +324,113 @@ public class HexGridSnapper : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        ClearRuntimeGrid();
+        if (generatedRuntimeMaterial != null)
+        {
+            Destroy(generatedRuntimeMaterial);
+            generatedRuntimeMaterial = null;
+        }
+    }
+
+    private void RebuildRuntimeGrid()
+    {
+        ClearRuntimeGrid();
+
+        if (!Application.isPlaying || !showGridInPlay || cells.Count == 0) return;
+
+        Material lineMat = GetRuntimeLineMaterial();
+        if (lineMat == null) return;
+
+        for (int i = 0; i < cells.Count; i++)
+        {
+            Cell cell = cells[i];
+            GameObject lineObject = new GameObject($"RuntimeHex_{cell.row}_{cell.col}");
+            lineObject.transform.SetParent(transform, false);
+
+            LineRenderer line = lineObject.AddComponent<LineRenderer>();
+            line.useWorldSpace = true;
+            line.loop = true;
+            line.positionCount = 6;
+            line.widthMultiplier = runtimeLineWidth;
+            line.material = lineMat;
+            line.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            line.receiveShadows = false;
+            line.textureMode = LineTextureMode.Stretch;
+
+            Vector3[] points = GetHexVertices(cell.center + Vector3.up * runtimeLineHeightOffset, hexSize);
+            line.SetPositions(points);
+
+            runtimeGridLines.Add(line);
+        }
+
+        UpdateRuntimeGridColors();
+    }
+
+    private void ClearRuntimeGrid()
+    {
+        for (int i = 0; i < runtimeGridLines.Count; i++)
+        {
+            if (runtimeGridLines[i] == null) continue;
+            Destroy(runtimeGridLines[i].gameObject);
+        }
+
+        runtimeGridLines.Clear();
+    }
+
+    private void ApplyRuntimeGridVisibility(bool visible)
+    {
+        bool shouldBeVisible = showGridInPlay && visible;
+        if (runtimeGridVisible == shouldBeVisible) return;
+
+        runtimeGridVisible = shouldBeVisible;
+        for (int i = 0; i < runtimeGridLines.Count; i++)
+        {
+            if (runtimeGridLines[i] != null)
+            {
+                runtimeGridLines[i].enabled = runtimeGridVisible;
+            }
+        }
+    }
+
+    private void UpdateRuntimeGridColors()
+    {
+        for (int i = 0; i < runtimeGridLines.Count && i < cells.Count; i++)
+        {
+            LineRenderer line = runtimeGridLines[i];
+            if (line == null) continue;
+
+            Color lineColor = cells[i].occupant != null ? occupiedCellColor : freeCellColor;
+            line.startColor = lineColor;
+            line.endColor = lineColor;
+        }
+    }
+
+    private Material GetRuntimeLineMaterial()
+    {
+        if (runtimeLineMaterial != null) return runtimeLineMaterial;
+        if (generatedRuntimeMaterial != null) return generatedRuntimeMaterial;
+
+        Shader shader = Shader.Find("Sprites/Default");
+        if (shader == null) return null;
+
+        generatedRuntimeMaterial = new Material(shader);
+        generatedRuntimeMaterial.name = "HexGridRuntimeMaterial";
+        return generatedRuntimeMaterial;
+    }
+
     private void DrawHex(Vector3 center, float size)
+    {
+        Vector3[] verts = GetHexVertices(center, size);
+        for (int i = 0; i < 6; i++)
+        {
+            Gizmos.DrawLine(verts[i], verts[(i + 1) % 6]);
+        }
+        Gizmos.DrawSphere(center, Mathf.Max(0.02f, size * 0.05f));
+    }
+
+    private Vector3[] GetHexVertices(Vector3 center, float size)
     {
         Vector3[] verts = new Vector3[6];
         // pointy-top hex: start angle 30 degrees so a point faces forward on Z
@@ -299,10 +440,7 @@ public class HexGridSnapper : MonoBehaviour
             float rad = Mathf.Deg2Rad * angleDeg;
             verts[i] = center + new Vector3(size * Mathf.Cos(rad), 0f, size * Mathf.Sin(rad));
         }
-        for (int i = 0; i < 6; i++)
-        {
-            Gizmos.DrawLine(verts[i], verts[(i + 1) % 6]);
-        }
-        Gizmos.DrawSphere(center, Mathf.Max(0.02f, size * 0.05f));
+
+        return verts;
     }
 }

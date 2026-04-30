@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [Header("Core Dependencies")]
-    public BallThrowController throwController;
+    public DrawBowlManager throwController;
     public ScoreCalculator scoreCalculator;
     public GameUIController uiController;
     public BowlingModeSwitcher modeSwitcher;
@@ -36,8 +36,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        if (throwController == null) throwController = FindObjectOfType<DrawBowlManager>();
         if (modeSwitcher == null) modeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
         _allPinsPool = Resources.FindObjectsOfTypeAll<Pin>();
+
+        if (modeSwitcher == null)
+        {
+            Debug.LogWarning("No BowlingModeSwitcher found. Falling back to GameManager TAB handling without camera or object-group toggles.");
+        }
         
         StartNewGame();
     }
@@ -49,6 +55,18 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Resetting Game...");
             StartNewGame();
+        }
+
+        if (modeSwitcher == null && Input.GetKeyDown(KeyCode.Tab) && CanToggleMode())
+        {
+            if (_currentState == GameState.PinPlacement)
+            {
+                ReadyPlayer();
+            }
+            else if (_currentState == GameState.PlayerReady)
+            {
+                EnterPinPlacement();
+            }
         }
     }
 
@@ -84,6 +102,12 @@ public class GameManager : MonoBehaviour
     private void EnterPinPlacement()
     {
         _currentState = GameState.PinPlacement;
+
+        if (throwController != null)
+        {
+            throwController.ResetThrowSetup();
+            throwController.enabled = false;
+        }
         
         if (modeSwitcher != null) 
         {
@@ -110,14 +134,16 @@ public class GameManager : MonoBehaviour
         if (throwController != null)
         {
             throwController.enabled = true;
-            throwController.ResetThrowSetup(); // We'll add this to the Throw controller to snap it back
+            throwController.ResetThrowSetup();
         }
+
+        if (uiController != null) uiController.UpdateStandardUI(this);
         
         Debug.Log($"Frame {currentFrame} Throw {throwsThisFrame + 1}: Player Ready.");
     }
     
     /// <summary>
-    /// Called directly by the BallThrowController's ExecuteThrow() method.
+    /// Called by the active bowling controller once the ball has been released.
     /// Locks out inputs and starts the timer.
     /// </summary>
     public void NotifyBallRolled()
@@ -134,17 +160,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(6f);
 
         _currentState = GameState.CalculatingScore;
-        
-        // Grab the math off the Event-Driven Score Engine
-        int frameScore = 0;
-        if (scoreCalculator != null) frameScore = scoreCalculator.GetFinalScore();
-        
-        // Update total
-        totalScore += frameScore;
-        
-        Debug.Log($"Tallying Frame! Points Earned: {frameScore}. Total: {totalScore}");
-        
-        if (uiController != null) uiController.UpdateStandardUI(this);
 
         // 1. Count active pins to determine if we got a Strike!
         int totalPinsActiveAtStart = 0;
@@ -160,6 +175,20 @@ public class GameManager : MonoBehaviour
         }
 
         bool isStrike = (throwsThisFrame == 1 && fallenPinsThisThrow == totalPinsActiveAtStart && totalPinsActiveAtStart > 0);
+
+        if (isStrike && scoreCalculator != null)
+        {
+            scoreCalculator.ApplyStrikeBonus();
+        }
+
+        int frameScore = 0;
+        if (scoreCalculator != null) frameScore = scoreCalculator.GetFinalScore();
+
+        totalScore += frameScore;
+        
+        Debug.Log($"Tallying Frame! Points Earned: {frameScore}. Total: {totalScore}");
+        
+        if (uiController != null) uiController.UpdateStandardUI(this);
 
         // Standard 10-pin bowling allows 2 throws, but a Strike finishes the round instantly!
         if (throwsThisFrame >= 2 || isStrike)
@@ -179,8 +208,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (scoreCalculator != null) scoreCalculator.ResetFrameScore(); 
-            
             ClearFallenPins();
             ReadyPlayer();
         }
