@@ -108,6 +108,7 @@ public class explodingPin : MonoBehaviour
         _isKnockedDown = false;
         _hasExploded = false;
         GetComponent<Renderer>().enabled = true;
-        _rb.isKinematic = false;
+        if (_rb != null) _rb.isKinematic = false;
+        
     }
 }

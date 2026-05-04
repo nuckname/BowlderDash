@@ -81,9 +81,13 @@ public class GameManager : MonoBehaviour
     {
         _currentState = GameState.FrameSetup;
         throwsThisFrame = 0;
+
+        
         
         // Zero out Math engine
         if (scoreCalculator != null) scoreCalculator.ResetFrameScore();
+
+        Debug.Log("Current State: Frame Setup");
         
         foreach(var p in _allPinsPool) 
         {
@@ -91,10 +95,14 @@ public class GameManager : MonoBehaviour
             {
                 p.gameObject.SetActive(true);
                 p.ResetPin();
+                
             }
         }
+        
 
         if (uiController != null) uiController.UpdateStandardUI(this);
+
+        
 
         EnterPinPlacement();
     }
@@ -102,6 +110,8 @@ public class GameManager : MonoBehaviour
     private void EnterPinPlacement()
     {
         _currentState = GameState.PinPlacement;
+
+        Debug.Log("Current State: Pin Placement");
 
         if (throwController != null)
         {
@@ -124,6 +134,8 @@ public class GameManager : MonoBehaviour
     private void ReadyPlayer()
     {
         _currentState = GameState.PlayerReady;
+
+        Debug.Log("Current State: Player Ready");
         
         if (modeSwitcher != null)
         {
@@ -150,6 +162,8 @@ public class GameManager : MonoBehaviour
     {
         _currentState = GameState.Rolling;
         throwsThisFrame++;
+
+        Debug.Log("Current State: Rolling");
         
         // Start waiting for the physics to settle down the lane
         StartCoroutine(WaitAndScore());
@@ -160,6 +174,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(6f);
 
         _currentState = GameState.CalculatingScore;
+        Debug.Log("Current State: Calculating Score");
 
         // 1. Count active pins to determine if we got a Strike!
         int totalPinsActiveAtStart = 0;
@@ -227,7 +242,9 @@ public class GameManager : MonoBehaviour
     public bool CanToggleMode()
     {
         // Only allow toggling mode before the first throw of a frame
+        Debug.Log($"Checking if mode can be toggled... Throws this frame: {throwsThisFrame}, Current State: {_currentState}");
         return throwsThisFrame == 0 && (_currentState == GameState.PinPlacement || _currentState == GameState.PlayerReady);
+    
     }
 
     public void OnModeChanged(bool isBowling)

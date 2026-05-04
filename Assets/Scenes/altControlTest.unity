@@ -1158,7 +1158,7 @@ MonoBehaviour:
   throwController: {fileID: 341304543}
   scoreCalculator: {fileID: 341304545}
   uiController: {fileID: 341304546}
-  modeSwitcher: {fileID: 0}
+  modeSwitcher: {fileID: 341304548}
   maxFrames: 10
   currentFrame: 1
   throwsThisFrame: 0
@@ -1175,8 +1175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa133144350d5ef499a4c2812e09ab74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bowlingControls: {fileID: 0}
-  placementControls: {fileID: 0}
+  bowlingControlScript: {fileID: 341304543}
+  placementControlScript: {fileID: 120957812}
   bowlingBehaviours:
   - {fileID: 341304543}
   placementBehaviours: []
@@ -2853,6 +2853,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: grenade
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f1a3783c681a79e469ae615939ba9d11, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f1a3783c681a79e469ae615939ba9d11, type: 3}
+      propertyPath: m_TagString
+      value: Pin
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3019,6 +3027,7 @@ Transform:
   - {fileID: 915614773}
   - {fileID: 944843627}
   - {fileID: 1263412859}
+  - {fileID: 1795304210}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &941743781
@@ -3089,6 +3098,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: dafdc5400c8e6cf47bcac9e99d439bce, type: 2}
+    - target: {fileID: -5117700066308340382, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
+      propertyPath: m_TagString
+      value: Ball
+      objectReference: {fileID: 0}
     - target: {fileID: -4683669308469848369, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
@@ -3365,6 +3378,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f1a3783c681a79e469ae615939ba9d11, type: 3}
       propertyPath: m_Name
       value: grenade (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f1a3783c681a79e469ae615939ba9d11, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f1a3783c681a79e469ae615939ba9d11, type: 3}
+      propertyPath: m_TagString
+      value: Pin
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4796,6 +4817,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: grenade (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f1a3783c681a79e469ae615939ba9d11, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f1a3783c681a79e469ae615939ba9d11, type: 3}
+      propertyPath: m_TagString
+      value: Pin
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6067,11 +6096,12 @@ GameObject:
   - component: {fileID: 1795304209}
   - component: {fileID: 1795304208}
   - component: {fileID: 1795304207}
+  - component: {fileID: 1795304212}
   - component: {fileID: 1795304206}
   - component: {fileID: 1795304205}
   - component: {fileID: 1795304211}
   m_Layer: 0
-  m_Name: Cylinder
+  m_Name: tumbler
   m_TagString: Pin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6086,7 +6116,7 @@ Rigidbody:
   m_GameObject: {fileID: 1795304204}
   serializedVersion: 4
   m_Mass: 10000
-  m_Drag: 100
+  m_Drag: 1
   m_AngularDrag: 100
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -6204,12 +6234,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1795304204}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.57, y: -7.7, z: 59.35}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 17.93, y: -18.2, z: 25.266602}
+  m_LocalScale: {x: 3.1513073, y: 1.2057922, z: 3.1513073}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 924312808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1795304211
 MonoBehaviour:
@@ -6223,6 +6253,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1795304212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795304204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  mult: 0
+  fallAngleThreshold: 45
 --- !u!1 &1906495012
 GameObject:
   m_ObjectHideFlags: 0
@@ -8186,7 +8231,6 @@ SceneRoots:
   - {fileID: 1320631406}
   - {fileID: 924312808}
   - {fileID: 120957813}
-  - {fileID: 1795304210}
   - {fileID: 941743781}
   - {fileID: 278456851}
   - {fileID: 1055481785}

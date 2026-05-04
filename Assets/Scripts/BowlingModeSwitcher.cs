@@ -15,10 +15,10 @@ public class BowlingModeSwitcher : MonoBehaviour
     public static bool isPlacementMode { get; private set; }
 
     [Header("Mode Targets")]
-    [Tooltip("Container GameObject that holds bowling-related controls / scripts. Will be enabled in bowling mode.")]
-    public GameObject bowlingControls;
-    [Tooltip("Container GameObject that holds pin-placement UI / scripts. Will be enabled in placement mode.")]
-    public GameObject placementControls;
+    [Tooltip("Primary component that provides bowling controls (enabled in bowling mode).")]
+    public DrawBowlManager bowlingControlScript;
+    [Tooltip("Primary component that provides placement controls (enabled in placement mode).")]
+    public HexGridSnapper placementControlScript;
 
     [Header("Behaviours (optional)")]
     [Tooltip("Individual behaviours to enable in bowling mode (will be disabled in placement mode)")]
@@ -85,7 +85,9 @@ public class BowlingModeSwitcher : MonoBehaviour
             if (GameManager.Instance == null || GameManager.Instance.CanToggleMode())
             {
                 ToggleMode();
+                Debug.Log("Mode Toggled");
             }
+            else Debug.LogError("Mode toggle attempted but blocked by GameManager.");
         }
     }
 
@@ -106,8 +108,6 @@ public class BowlingModeSwitcher : MonoBehaviour
         bowlingMode = bowling;
         // update global placement-mode indicator for other components
         isPlacementMode = !bowlingMode;
-        if (bowlingControls != null) bowlingControls.SetActive(bowlingMode);
-        if (placementControls != null) placementControls.SetActive(!bowlingMode);
 
         if (bowlingBehaviours != null)
         {
@@ -118,6 +118,16 @@ public class BowlingModeSwitcher : MonoBehaviour
         {
             foreach (var b in placementBehaviours)
                 if (b != null) b.enabled = !bowlingMode;
+        }
+
+        // enable/disable the primary control components (prefer component toggles over GameObject activation)
+        if (bowlingControlScript != null)
+        {
+            bowlingControlScript.enabled = bowlingMode;
+        }
+        if (placementControlScript != null)
+        {
+            placementControlScript.enabled = !bowlingMode;
         }
 
         if (grid != null)
