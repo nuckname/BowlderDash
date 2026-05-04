@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: wal
-  m_Shader: {fileID: -6465566751694194690, guid: 7af6bbdd979469e4eb77f3f0816ccd60, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 32893869e4e13c24ab84550d9801499b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -27,10 +27,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: 84af334cdae13534c8877475494f479e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _met:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
+    - _cellSize: 0.2
     - _exp: 2.3
     - _smoothness: 0
     m_Colors:
