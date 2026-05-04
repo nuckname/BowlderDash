@@ -46,4 +46,11 @@ public class ScoreCalculator : MonoBehaviour
     {
         return Mathf.RoundToInt(currentFrameScore * currentFrameMult);
     }
+
+    public void ModifyScore(int scoreDelta, float multDelta = 0f)
+    {
+        currentFrameScore += scoreDelta;
+        currentFrameMult += multDelta;
+        Debug.Log($"Score Modified! New Score: {GetFinalScore()}");
+    }
 }

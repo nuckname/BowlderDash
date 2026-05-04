@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "bowling_physics_test.sln"
+    "dotnet.defaultSolution": "physics_test.sln"
 }
