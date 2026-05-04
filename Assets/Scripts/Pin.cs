@@ -61,6 +61,11 @@ public class Pin : MonoBehaviour
 
         transform.position = _startPos;
         transform.rotation = _startRot;
+
+        if(GetComponent<explodingPin>() != null)
+        {
+            GetComponent<explodingPin>().ResetPin();
+        }
     }
 
 
