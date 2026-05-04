@@ -7,7 +7,7 @@ public class camMove : MonoBehaviour
     public Transform target;
     public Transform finalTransform;
     public Transform placementTransform;
-    public Vector3 offset = new Vector3(0, 2, -5);
+    private Vector3 offset = new Vector3(0, 2, -5);
     public float smoothSpeed = 0.125f;
     public float transitionDistance = 10f;
     public float transitionSmoothness = 0.5f;
@@ -21,10 +21,8 @@ public class camMove : MonoBehaviour
 
     void Start()
     {
-        if (target != null && (offset == Vector3.zero || offset.magnitude < 0.1f))
-        {
-            offset = transform.position - target.position;
-        }
+
+        offset = transform.position - target.position;
 
         initialRotation = transform.rotation;
     }
@@ -78,7 +76,7 @@ public class camMove : MonoBehaviour
 
     private void GetFollowPose(out Vector3 position, out Quaternion rotation)
     {
-        Vector3 followPosition = new Vector3(target.position.x + offset.x, offset.y, target.position.z + offset.z);
+        Vector3 followPosition = new Vector3(transform.position.x, offset.y, target.position.z + offset.z);
         position = followPosition;
         rotation = initialRotation;
 

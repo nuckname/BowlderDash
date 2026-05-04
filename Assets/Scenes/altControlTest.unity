@@ -238,7 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   columns: 5
   rows: 6
-  hexSize: 3.46
+  hexSize: 3.23
   originOffset: {x: 0, y: 0, z: 0}
   spawnPrefab: {fileID: 792178541}
   clearBeforeSpawn: 0
@@ -261,7 +261,7 @@ Transform:
   m_GameObject: {fileID: 120957811}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.68, y: -8.14, z: 58.52}
+  m_LocalPosition: {x: 0.68, y: -9.25, z: 58.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4105,7 +4105,7 @@ Transform:
   m_GameObject: {fileID: 1588884240}
   serializedVersion: 2
   m_LocalRotation: {x: 0.36126953, y: -0, z: -0, w: 0.9324615}
-  m_LocalPosition: {x: -0.004814148, y: 26.9, z: -22.954}
+  m_LocalPosition: {x: 0, y: 23.87, z: -21.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4126,7 +4126,6 @@ MonoBehaviour:
   target: {fileID: 1353803849}
   finalTransform: {fileID: 1906495015}
   placementTransform: {fileID: 0}
-  offset: {x: 0, y: 25, z: -18}
   smoothSpeed: 0.3
   transitionDistance: 25
   transitionSmoothness: 0.5
