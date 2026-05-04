@@ -8,7 +8,7 @@ PhysicMaterial:
   m_PrefabAsset: {fileID: 0}
   m_Name: highfric
   dynamicFriction: 0
-  staticFriction: 0
+  staticFriction: 0.7
   bounciness: 0.3
   frictionCombine: 3
   bounceCombine: 3

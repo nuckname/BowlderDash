@@ -172,7 +172,7 @@ public class DrawBowlManager : MonoBehaviour
                 return;
             }
 
-            // if (point.z > maxZ) return;
+            if (point.z > maxZ) return;
 
             if (processedCurve.Count == 0 || point.z > processedCurve[processedCurve.Count - 1].position.z + 0.1f)
             {
