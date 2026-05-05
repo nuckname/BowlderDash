@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class MoneyTreePin : MonoBehaviour
+public class MultPin : MonoBehaviour
 {
 
     [Header("Hit Settings")]

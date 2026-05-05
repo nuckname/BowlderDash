@@ -117,6 +117,15 @@ public class DraggableSnap : MonoBehaviour
     private void OnMouseUp()
     {
         dragging = false;
+
+        Pin pin = GetComponent<Pin>();
+        if (PinHandInventory.Instance != null && pin != null && PinHandInventory.Instance.TryReturnPinToInventory(pin, Input.mousePosition))
+        {
+            if (rb != null) rb.isKinematic = originalKinematic;
+            RestoreColliders();
+            return;
+        }
+
         if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
         if (grid == null)
         {

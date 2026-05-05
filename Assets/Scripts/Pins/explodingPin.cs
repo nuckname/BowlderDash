@@ -17,6 +17,7 @@ public class explodingPin : MonoBehaviour
     private bool _isKnockedDown = false;
     private bool _hasExploded = false;
     private Rigidbody _rb;
+    private Coroutine _detonationCoroutine;
 
     private void Start()
     {
@@ -56,12 +57,19 @@ public class explodingPin : MonoBehaviour
         if (_isKnockedDown) return;
         _isKnockedDown = true;
         
-        StartCoroutine(DetonationSequence());
+        _detonationCoroutine = StartCoroutine(DetonationSequence());
     }
 
     private IEnumerator DetonationSequence()
     {
         yield return new WaitForSeconds(detonationDelay);
+        _detonationCoroutine = null;
+
+        if (!_isKnockedDown || _hasExploded)
+        {
+            yield break;
+        }
+
         Detonate();
     }
 
@@ -105,10 +113,15 @@ public class explodingPin : MonoBehaviour
 
     public void ResetPin()
     {
+        if (_detonationCoroutine != null)
+        {
+            StopCoroutine(_detonationCoroutine);
+            _detonationCoroutine = null;
+        }
+
         _isKnockedDown = false;
         _hasExploded = false;
         GetComponent<Renderer>().enabled = true;
         if (_rb != null) _rb.isKinematic = false;
-        
     }
 }

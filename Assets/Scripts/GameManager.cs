@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public enum GameState { FrameSetup, PinPlacement, PlayerReady, Rolling, CalculatingScore, EndFrame, GameOver }
 
+[RequireComponent(typeof(PinHandInventory))]
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public ScoreCalculator scoreCalculator;
     public GameUIController uiController;
     public BowlingModeSwitcher modeSwitcher;
+    public PinHandInventory pinHandInventory;
     
     [Header("Game State")]
     public int maxFrames = 10;
@@ -27,18 +29,38 @@ public class GameManager : MonoBehaviour
     
     // An array of every pin loaded in the scene during Frame 1
     private Pin[] _allPinsPool;
-
+    private exploder[] _laneExploders;
     void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
+    private void OnValidate()
+    {
+        if (pinHandInventory == null)
+        {
+            pinHandInventory = GetComponent<PinHandInventory>();
+        }
+
+        if (pinHandInventory == null)
+        {
+            pinHandInventory = gameObject.AddComponent<PinHandInventory>();
+        }
+    }
+
     void Start()
     {
         if (throwController == null) throwController = FindObjectOfType<DrawBowlManager>();
         if (modeSwitcher == null) modeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
-        _allPinsPool = Resources.FindObjectsOfTypeAll<Pin>();
+        pinHandInventory = GetComponent<PinHandInventory>();
+        if (pinHandInventory == null)
+        {
+            pinHandInventory = gameObject.AddComponent<PinHandInventory>();
+        }
+
+        pinHandInventory.Configure(this, modeSwitcher != null ? modeSwitcher.grid : FindObjectOfType<HexGridSnapper>(), modeSwitcher);
+        RefreshRuntimePools();
 
         if (modeSwitcher == null)
         {
@@ -82,12 +104,14 @@ public class GameManager : MonoBehaviour
         _currentState = GameState.FrameSetup;
         throwsThisFrame = 0;
 
-        
-        
         // Zero out Math engine
         if (scoreCalculator != null) scoreCalculator.ResetFrameScore();
 
         Debug.Log("Current State: Frame Setup");
+
+        pinHandInventory?.ResetInventoryAndPins();
+        RefreshRuntimePools();
+        ResetLaneExploders();
         
         foreach(var p in _allPinsPool) 
         {
@@ -98,11 +122,9 @@ public class GameManager : MonoBehaviour
                 
             }
         }
-        
 
         if (uiController != null) uiController.UpdateStandardUI(this);
-
-        
+        pinHandInventory?.PrepareForPlacementPhase();
 
         EnterPinPlacement();
     }
@@ -129,6 +151,7 @@ public class GameManager : MonoBehaviour
             throwController.UpdateInstructionText("Click and drag to arrange pins. Press TAB when ready.");
         }
         if (uiController != null) uiController.UpdateStandardUI(this);
+        pinHandInventory?.PrepareForPlacementPhase();
     }
 
     private void ReadyPlayer()
@@ -179,6 +202,8 @@ public class GameManager : MonoBehaviour
         // 1. Count active pins to determine if we got a Strike!
         int totalPinsActiveAtStart = 0;
         int fallenPinsThisThrow = 0;
+
+        RefreshRuntimePools();
         
         foreach(var p in _allPinsPool)
         {
@@ -230,11 +255,27 @@ public class GameManager : MonoBehaviour
 
     private void ClearFallenPins()
     {
+        RefreshRuntimePools();
+
         foreach(var p in _allPinsPool)
         {
             if (p.gameObject.scene.isLoaded && p.IsFallen()) 
             {
                 p.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void ResetLaneExploders()
+    {
+        RefreshRuntimePools();
+        if (_laneExploders == null) return;
+
+        foreach (var laneExploder in _laneExploders)
+        {
+            if (laneExploder != null && laneExploder.gameObject.scene.isLoaded)
+            {
+                laneExploder.ResetMesh();
             }
         }
     }
@@ -257,5 +298,11 @@ public class GameManager : MonoBehaviour
         {
             EnterPinPlacement();
         }
+    }
+
+    private void RefreshRuntimePools()
+    {
+        _allPinsPool = FindObjectsOfType<Pin>(true);
+        _laneExploders = FindObjectsOfType<exploder>(true);
     }
 }

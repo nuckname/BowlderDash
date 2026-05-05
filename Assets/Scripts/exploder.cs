@@ -16,10 +16,35 @@ public class exploder : MonoBehaviour
     [SerializeField, HideInInspector] private Mesh sourceMesh;
     private Mesh runtimeMesh;
     private MeshFilter meshFilter;
+    private Vector3[] initialPoints;
+    private bool initialPointsCaptured;
+
+    private void Awake()
+    {
+        meshFilter = GetComponent<MeshFilter>();
+        CaptureInitialPoints();
+    }
 
     private void OnEnable()
     {
         meshFilter = GetComponent<MeshFilter>();
+        CaptureInitialPoints();
+    }
+
+    private void CaptureInitialPoints()
+    {
+        if (initialPointsCaptured) return;
+
+        if (points == null)
+        {
+            initialPoints = new Vector3[0];
+        }
+        else
+        {
+            initialPoints = (Vector3[])points.Clone();
+        }
+
+        initialPointsCaptured = true;
     }
 
     private void PrepareMeshes()
@@ -267,6 +292,11 @@ public class exploder : MonoBehaviour
     {
         PrepareMeshes();
         if (sourceMesh == null || runtimeMesh == null) return;
+
+        if (initialPointsCaptured)
+        {
+            points = (Vector3[])initialPoints.Clone();
+        }
 
         runtimeMesh.Clear();
         runtimeMesh.vertices = sourceMesh.vertices;

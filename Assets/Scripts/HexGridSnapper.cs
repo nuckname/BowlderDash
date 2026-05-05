@@ -57,7 +57,7 @@ public class HexGridSnapper : MonoBehaviour
         }
 
         RebuildRuntimeGrid();
-        ApplyRuntimeGridVisibility(showGizmos);
+        ApplyRuntimeGridVisibility(ShouldShowRuntimeGrid());
     }
 
     private void Update()
@@ -69,8 +69,31 @@ public class HexGridSnapper : MonoBehaviour
             RebuildRuntimeGrid();
         }
 
-        ApplyRuntimeGridVisibility(showGizmos);
+        ApplyRuntimeGridVisibility(ShouldShowRuntimeGrid());
         UpdateRuntimeGridColors();
+    }
+
+    private void OnEnable()
+    {
+        if (!Application.isPlaying) return;
+
+        if (cells == null || cells.Count == 0)
+        {
+            GenerateGrid();
+        }
+
+        if (runtimeGridLines.Count == 0)
+        {
+            RebuildRuntimeGrid();
+        }
+
+        ApplyRuntimeGridVisibility(ShouldShowRuntimeGrid());
+    }
+
+    private void OnDisable()
+    {
+        if (!Application.isPlaying) return;
+        ApplyRuntimeGridVisibility(false);
     }
 
     /// <summary>
@@ -167,7 +190,7 @@ public class HexGridSnapper : MonoBehaviour
         if (Application.isPlaying)
         {
             RebuildRuntimeGrid();
-            ApplyRuntimeGridVisibility(showGizmos);
+            ApplyRuntimeGridVisibility(ShouldShowRuntimeGrid());
         }
     }
 
@@ -392,6 +415,17 @@ public class HexGridSnapper : MonoBehaviour
                 runtimeGridLines[i].enabled = runtimeGridVisible;
             }
         }
+    }
+
+    private bool ShouldShowRuntimeGrid()
+    {
+        if (!Application.isPlaying) return showGizmos;
+
+        return showGridInPlay
+            && showGizmos
+            && isActiveAndEnabled
+            && gameObject.activeInHierarchy
+            && BowlingModeSwitcher.isPlacementMode;
     }
 
     private void UpdateRuntimeGridColors()
