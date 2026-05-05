@@ -32,6 +32,7 @@ public class explodingPin : MonoBehaviour
 
     private void Update()
     {
+        if (BowlingModeSwitcher.isPlacementMode) return;
         if (_hasExploded || _isKnockedDown) return;
 
         float angle = Vector3.Angle(transform.up, Vector3.up);
@@ -43,6 +44,7 @@ public class explodingPin : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (BowlingModeSwitcher.isPlacementMode) return;
         if (_hasExploded || _isKnockedDown) return;
 
         if (collision.relativeVelocity.magnitude > 3f)
@@ -105,6 +107,7 @@ public class explodingPin : MonoBehaviour
         Debug.Log($"<color=orange><b>[ExplodingPin]</b></color> Detonated at {transform.position}");
         GetComponent<Renderer>().enabled = false;
         _rb.isKinematic = true;
+        GetComponent<MeshCollider>().enabled = false;
 
         if (explosionParticles != null)
         {
@@ -130,6 +133,7 @@ public class explodingPin : MonoBehaviour
         _isKnockedDown = false;
         _hasExploded = false;
         GetComponent<Renderer>().enabled = true;
+        GetComponent<MeshCollider>().enabled = true;
         if (_rb != null) _rb.isKinematic = false;
 
         if (explosionParticles != null)

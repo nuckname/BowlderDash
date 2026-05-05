@@ -28,6 +28,7 @@ public class Pin : MonoBehaviour
 
     void Update()
     {
+        if (BowlingModeSwitcher.isPlacementMode) return;
         if (!_isFallen)
         {
             if (Vector3.Angle(Vector3.up, transform.up) > fallAngleThreshold)
