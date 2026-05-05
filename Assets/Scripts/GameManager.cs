@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
 
         pinHandInventory?.ResetInventoryAndPins();
         RefreshRuntimePools();
-        ResetLaneExploders();
+        // ResetLaneExploders();
         
         foreach(var p in _allPinsPool) 
         {

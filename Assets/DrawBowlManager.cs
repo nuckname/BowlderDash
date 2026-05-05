@@ -81,6 +81,11 @@ public class DrawBowlManager : MonoBehaviour
         ResetBall();
     }
 
+    public void StopFollowingCurve()
+    {
+        isFollowingCurve = false;
+    }
+
     private void EnsureInitialized()
     {
         if (isInitialized) return;
