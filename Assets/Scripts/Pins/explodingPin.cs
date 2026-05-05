@@ -10,6 +10,8 @@ public class explodingPin : MonoBehaviour
     public float explosionRadius = 5f;
     
     public float upwardModifier = 1.0f;
+    public ParticleSystem explosionParticles;
+
 
     public float tipAngleThreshold = 30f;
     public float detonationDelay = 1.0f;
@@ -103,6 +105,12 @@ public class explodingPin : MonoBehaviour
         Debug.Log($"<color=orange><b>[ExplodingPin]</b></color> Detonated at {transform.position}");
         GetComponent<Renderer>().enabled = false;
         _rb.isKinematic = true;
+
+        if (explosionParticles != null)
+        {
+            explosionParticles.Play();
+        }
+
     }
 
     private void OnDrawGizmosSelected()
@@ -123,5 +131,11 @@ public class explodingPin : MonoBehaviour
         _hasExploded = false;
         GetComponent<Renderer>().enabled = true;
         if (_rb != null) _rb.isKinematic = false;
+
+        if (explosionParticles != null)
+        {
+            explosionParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
     }
 }
