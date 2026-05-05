@@ -11,40 +11,12 @@ public enum PinHandCardType
 }
 
 [System.Serializable]
-public class PinPhysicsProfile
-{
-    public float mass = 5f;
-    public float drag = 1f;
-    public float angularDrag = 0.1f;
-    public bool useGravity = true;
-    public bool isKinematic = false;
-    public RigidbodyInterpolation interpolation = RigidbodyInterpolation.None;
-    public CollisionDetectionMode collisionDetection = CollisionDetectionMode.Discrete;
-    public RigidbodyConstraints constraints = RigidbodyConstraints.None;
-
-    public void ApplyTo(Rigidbody rb)
-    {
-        if (rb == null) return;
-
-        rb.mass = mass;
-        rb.drag = drag;
-        rb.angularDrag = angularDrag;
-        rb.useGravity = useGravity;
-        rb.isKinematic = isKinematic;
-        rb.interpolation = interpolation;
-        rb.collisionDetectionMode = collisionDetection;
-        rb.constraints = constraints;
-    }
-}
-
-[System.Serializable]
 public class PinTypeConfig
 {
     public string editorLabel;
     [TextArea(2, 4)]
     public string cardDescription;
     public GameObject prefab;
-    public PinPhysicsProfile physics = new PinPhysicsProfile();
 }
 
 public class PinHandInventory : MonoBehaviour
@@ -55,7 +27,7 @@ public class PinHandInventory : MonoBehaviour
     public int startingExplodingPins = 2;
     public int startingMultPins = 2;
 
-    [Header("Pin Type Prefabs & Physics")]
+    [Header("Pin Type Prefabs")]
     public PinTypeConfig standardPinConfig = new PinTypeConfig
     {
         editorLabel = "Standard Pin",
@@ -64,34 +36,12 @@ public class PinHandInventory : MonoBehaviour
     public PinTypeConfig explodingPinConfig = new PinTypeConfig
     {
         editorLabel = "Exploding Pin",
-        cardDescription = "Detonates nearby pins",
-        physics = new PinPhysicsProfile
-        {
-            mass = 5f,
-            drag = 1f,
-            angularDrag = 0.1f,
-            useGravity = true,
-            isKinematic = false,
-            interpolation = RigidbodyInterpolation.None,
-            collisionDetection = CollisionDetectionMode.Discrete,
-            constraints = RigidbodyConstraints.None
-        }
+        cardDescription = "Detonates nearby pins"
     };
     public PinTypeConfig multPinConfig = new PinTypeConfig
     {
-        editorLabel = "Multiplier Pin",
-        cardDescription = "Adds score multiplier",
-        physics = new PinPhysicsProfile
-        {
-            mass = 5f,
-            drag = 1f,
-            angularDrag = 0.1f,
-            useGravity = true,
-            isKinematic = false,
-            interpolation = RigidbodyInterpolation.None,
-            collisionDetection = CollisionDetectionMode.Discrete,
-            constraints = RigidbodyConstraints.None
-        }
+        editorLabel = "Tumbler Pin",
+        cardDescription = "Immovable, Adds score multiplier"
     };
 
     [Header("Hand Layout")]
@@ -249,7 +199,7 @@ public class PinHandInventory : MonoBehaviour
             case PinHandCardType.Exploding:
                 return "Exploding";
             case PinHandCardType.Mult:
-                return "Multiplier";
+                return "Tumbler";
             default:
                 return "Standard";
         }
@@ -456,11 +406,11 @@ public class PinHandInventory : MonoBehaviour
         GameObject cardContainerObject = new GameObject("Cards", typeof(RectTransform));
         cardContainerObject.transform.SetParent(handBackdrop.transform, false);
         cardContainer = cardContainerObject.GetComponent<RectTransform>();
-        cardContainer.anchorMin = new Vector2(0.5f, 0f);
-        cardContainer.anchorMax = new Vector2(0.5f, 0f);
-        cardContainer.pivot = new Vector2(0.5f, 0f);
-        cardContainer.sizeDelta = new Vector2(handSize.x - 40f, handSize.y - 44f);
-        cardContainer.anchoredPosition = new Vector2(0f, 10f);
+        cardContainer.anchorMin = new Vector2(0.5f, 0.5f);
+        cardContainer.anchorMax = new Vector2(0.5f, 0.5f);
+        cardContainer.pivot = new Vector2(0.5f, 0.5f);
+        cardContainer.sizeDelta = new Vector2(handSize.x - 40f, handSize.y - 56f);
+        cardContainer.anchoredPosition = new Vector2(0f, -6f);
 
         foreach (PinHandCardType type in orderedTypes)
         {
@@ -598,7 +548,8 @@ public class PinHandInventory : MonoBehaviour
             float centerOffset = i - (visibleCount - 1) * 0.5f;
             float x = centerOffset * cardSpacing;
             float normalized = visibleCount <= 1 ? 0f : centerOffset / Mathf.Max(1f, (visibleCount - 1) * 0.5f);
-            float y = -Mathf.Abs(normalized) * edgeDrop;
+            float fanStrength = Mathf.Clamp01(Mathf.Abs(fanAngle) / 14f);
+            float y = -Mathf.Abs(normalized) * edgeDrop * fanStrength;
             float bob = Mathf.Sin(Time.unscaledTime * bobSpeed + i * 0.75f) * bobAmplitude;
             float rotation = -normalized * fanAngle;
             float lift = 0f;
@@ -622,7 +573,7 @@ public class PinHandInventory : MonoBehaviour
                 scale += 0.06f;
             }
 
-            Vector2 targetPosition = new Vector2(x, 26f + y + bob + lift);
+            Vector2 targetPosition = new Vector2(x, -8f + y + bob + lift);
             view.ApplyLayout(targetPosition, rotation, scale);
             int siblingIndex = view.IsSelected || view.IsHovered
                 ? Mathf.Max(0, cardContainer.childCount - 1)
@@ -650,8 +601,6 @@ public class PinHandInventory : MonoBehaviour
         {
             Pin pin = pins[i];
             if (pin == null) continue;
-
-             ApplyConfiguredSettingsToPin(pin);
 
             if (pin.GetComponent<DraggableSnap>() == null)
             {
@@ -751,27 +700,13 @@ public class PinHandInventory : MonoBehaviour
     {
         if (pinObject == null) return;
 
-        Rigidbody rb = pinObject.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            Pin pin = pinObject.GetComponent<Pin>();
-            if (pin != null)
-            {
-                GetTypeConfig(DetectCardType(pin)).physics.ApplyTo(rb);
-            }
-
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-            rb.isKinematic = true;
-        }
-
         Collider[] colliders = pinObject.GetComponentsInChildren<Collider>(true);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i] != null)
             {
                 colliders[i].enabled = true;
-                colliders[i].isTrigger = true;
+               // colliders[i].isTrigger = true;
             }
         }
     }
@@ -780,26 +715,13 @@ public class PinHandInventory : MonoBehaviour
     {
         if (pinObject == null) return;
 
-        Rigidbody rb = pinObject.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            Pin pin = pinObject.GetComponent<Pin>();
-            if (pin != null)
-            {
-                GetTypeConfig(DetectCardType(pin)).physics.ApplyTo(rb);
-            }
-
-            rb.velocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
-
         Collider[] colliders = pinObject.GetComponentsInChildren<Collider>(true);
         for (int i = 0; i < colliders.Length; i++)
         {
             if (colliders[i] != null)
             {
                 colliders[i].enabled = true;
-                colliders[i].isTrigger = false;
+                //colliders[i].isTrigger = false; 
             }
         }
 
@@ -810,20 +732,6 @@ public class PinHandInventory : MonoBehaviour
         }
 
         draggable.enabled = true;
-    }
-
-    private void ApplyConfiguredSettingsToPin(Pin pin)
-    {
-        if (pin == null) return;
-
-        PinTypeConfig config = GetTypeConfig(DetectCardType(pin));
-        Rigidbody rb = pin.GetComponent<Rigidbody>();
-        if (rb == null)
-        {
-            rb = pin.gameObject.AddComponent<Rigidbody>();
-        }
-
-        config.physics.ApplyTo(rb);
     }
 
     private bool TryPlacePreviewPin(GameObject pinObject)
@@ -933,12 +841,6 @@ public class PinHandInventory : MonoBehaviour
         {
             GameObject instance = Instantiate(configuredPrefab);
             EnsureTypeComponents(instance, type);
-            Pin instancePin = instance.GetComponent<Pin>();
-            if (instancePin != null)
-            {
-                ApplyConfiguredSettingsToPin(instancePin);
-            }
-
             return instance;
         }
 
@@ -947,12 +849,6 @@ public class PinHandInventory : MonoBehaviour
 
         GameObject fallback = Instantiate(template.gameObject);
         EnsureTypeComponents(fallback, type);
-        Pin fallbackPin = fallback.GetComponent<Pin>();
-        if (fallbackPin != null)
-        {
-            ApplyConfiguredSettingsToPin(fallbackPin);
-        }
-
         return fallback;
     }
 

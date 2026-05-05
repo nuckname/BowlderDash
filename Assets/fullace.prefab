@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7900162485531804573}
   - component: {fileID: 6124087438814872490}
   - component: {fileID: 6789133947264784490}
-  - component: {fileID: 8505951246781483951}
   m_Layer: 0
   m_Name: ace
   m_TagString: Untagged
@@ -70,7 +69,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf55f57e60e12a4da55fac2dd6b1b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitterTag: Player
+  hitterTag: Ball
   scoreCalculator: {fileID: 0}
   scoreValue: 10
   multValue: 0.5
@@ -127,25 +126,6 @@ CapsuleCollider:
   m_Height: 5.58
   m_Direction: 1
   m_Center: {x: 0, y: 3.52, z: 0}
---- !u!114 &8505951246781483951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074125062021864172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daf55f57e60e12a4da55fac2dd6b1b74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hitterTag: Player
-  scoreCalculator: {fileID: 0}
-  scoreValue: 10
-  multValue: 0.5
-  onHit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &3811477678882886870
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,6 +138,7 @@ GameObject:
   - component: {fileID: 4654159578542557722}
   - component: {fileID: 5564525676392362196}
   - component: {fileID: 3144254737813204594}
+  - component: {fileID: -5814233890823803683}
   m_Layer: 0
   m_Name: fullace
   m_TagString: Untagged
@@ -231,6 +212,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5814233890823803683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811477678882886870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: daf55f57e60e12a4da55fac2dd6b1b74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitterTag: Ball
+  scoreCalculator: {fileID: 0}
+  scoreValue: 10
+  multValue: 0.5
+  onHit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5561499527254371229
 GameObject:
   m_ObjectHideFlags: 0

@@ -207,6 +207,63 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 469156209}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+--- !u!1001 &87709969
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4548911073050350972, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_Name
+      value: grenda (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.4975815
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -9.599987
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 46.77365
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
 --- !u!1 &120957811
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,7 +638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1204,50 +1261,24 @@ MonoBehaviour:
   startingMultPins: 2
   standardPinConfig:
     editorLabel: Standard Pin
-    cardDescription: Standard bowling pins...
+    cardDescription: Standard bowling pins. +10 Score on fall.
     prefab: {fileID: 8874797078365948057, guid: f8147d2eaf53ade419f3b54e4301f9a7, type: 3}
-    physics:
-      mass: 5
-      drag: 1
-      angularDrag: 0.1
-      useGravity: 1
-      isKinematic: 0
-      interpolation: 0
-      collisionDetection: 0
-      constraints: 0
   explodingPinConfig:
     editorLabel: Exploding Pin
     cardDescription: Explodes when hit, and leaves a hole in the ground!
-    prefab: {fileID: 8167711586080795727, guid: 402b47d64d45ff84a973f05063235174, type: 3}
-    physics:
-      mass: 5
-      drag: 1
-      angularDrag: 0.1
-      useGravity: 1
-      isKinematic: 0
-      interpolation: 0
-      collisionDetection: 0
-      constraints: 0
+    prefab: {fileID: 4548911073050350972, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
   multPinConfig:
-    editorLabel: Multiplier Pin
-    cardDescription: Immovable; On hit, adds multiplier to your score!
-    prefab: {fileID: 7831639506415705033, guid: a40ededc56d193d45bbe86b80e9a4001, type: 3}
-    physics:
-      mass: 10000
-      drag: 1
-      angularDrag: 0.1
-      useGravity: 1
-      isKinematic: 0
-      interpolation: 0
-      collisionDetection: 0
-      constraints: 0
-  handSize: {x: 660, y: 300}
-  cardSpacing: 170
-  fanAngle: 5
-  edgeDrop: 28
-  hoverLift: 18
-  selectedLift: 34
-  bobAmplitude: 6
+    editorLabel: Tumbler pin
+    cardDescription: Immovable, but tumbles around; On hit, adds multiplier to your
+      score!
+    prefab: {fileID: 1399592819}
+  handSize: {x: 640, y: 240}
+  cardSpacing: 160
+  fanAngle: 0
+  edgeDrop: 20
+  hoverLift: 10
+  selectedLift: 10
+  bobAmplitude: 3
   bobSpeed: 2
   handBackdropColor: {r: 0.05, g: 0.08, b: 0.12, a: 0.72}
   cardFaceColor: {r: 0.12, g: 0.16, b: 0.22, a: 0.96}
@@ -1624,7 +1655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4310,6 +4341,11 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &1399592819 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3811477678882886870, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
+  m_PrefabInstance: {fileID: 1516676396}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1516676396
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4322,13 +4358,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: fullace
       objectReference: {fileID: 0}
+    - target: {fileID: 3811477678882886870, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962861508623934600, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6573059936800584494, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.3987045
       objectReference: {fileID: 0}
     - target: {fileID: 6573059936800584494, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.599995
+      value: -8.52
       objectReference: {fileID: 0}
     - target: {fileID: 6573059936800584494, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4360,6 +4404,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6573059936800584494, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8799971190593285803, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
+      propertyPath: m_AutoConfigureConnectedAnchor
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -4417,7 +4465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5618,6 +5666,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: grenda
       objectReference: {fileID: 0}
+    - target: {fileID: 4548911073050350972, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5968209472644587980, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.4379082
@@ -6266,7 +6318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7638,3 +7690,4 @@ SceneRoots:
   - {fileID: 1058055205}
   - {fileID: 1848236375}
   - {fileID: 1516676396}
+  - {fileID: 87709969}
