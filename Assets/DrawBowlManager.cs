@@ -43,6 +43,8 @@ public class DrawBowlManager : MonoBehaviour
     
     private const float jitterTolerance = 0.05f;
 
+    public int framesSinceMousedown = 0;
+
     private struct CurvePoint
     {
         public Vector3 position;
@@ -123,15 +125,18 @@ public class DrawBowlManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            framesSinceMousedown = 0;
             StartDrawing();
         }
         else if (Input.GetMouseButton(0) && isDrawing)
         {
             UpdateDrawing();
         }
-        else if (Input.GetMouseButtonUp(0) && isDrawing)
-        {
-            EndDrawingAndLaunch();
+        else {
+            if (isDrawing) framesSinceMousedown++;
+            if (framesSinceMousedown > 3) {
+                EndDrawingAndLaunch();
+            }
         }
     }
 
