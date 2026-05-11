@@ -425,7 +425,7 @@ public class HexGridSnapper : MonoBehaviour
             && showGizmos
             && isActiveAndEnabled
             && gameObject.activeInHierarchy
-            && BowlingModeSwitcher.isPlacementMode;
+            && (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement);
     }
 
     private void UpdateRuntimeGridColors()

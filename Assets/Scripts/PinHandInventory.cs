@@ -76,8 +76,7 @@ public class PinHandInventory : MonoBehaviour
         PinHandCardType.Mult
     };
 
-    private GameManager gameManager;
-    private BowlingModeSwitcher modeSwitcher;
+    private GrandGameManager gameManager;
     private HexGridSnapper grid;
 
     private Canvas canvas;
@@ -105,8 +104,7 @@ public class PinHandInventory : MonoBehaviour
 
     private void Start()
     {
-        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
-        if (modeSwitcher == null) modeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
+        if (gameManager == null) gameManager = FindObjectOfType<GrandGameManager>();
         if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
 
         BuildRuntimeHand();
@@ -117,11 +115,11 @@ public class PinHandInventory : MonoBehaviour
 
     private void Update()
     {
-        if (modeSwitcher == null) modeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
+        if (gameManager == null) gameManager = FindObjectOfType<GrandGameManager>();
         if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
 
         bool shouldShow = Application.isPlaying
-            && BowlingModeSwitcher.isPlacementMode
+            && (gameManager != null && gameManager.GetCurrentState() == GameState.PinPlacement)
             && grid != null
             && grid.isActiveAndEnabled
             && grid.gameObject.activeInHierarchy;
@@ -144,11 +142,10 @@ public class PinHandInventory : MonoBehaviour
         UpdateCardLayout();
     }
 
-    public void Configure(GameManager gm, HexGridSnapper activeGrid, BowlingModeSwitcher activeModeSwitcher)
+    public void Configure(GrandGameManager gm, HexGridSnapper activeGrid, MonoBehaviour activeModeSwitcher = null)
     {
         gameManager = gm;
         grid = activeGrid;
-        modeSwitcher = activeModeSwitcher;
     }
 
     public void PrepareForPlacementPhase()

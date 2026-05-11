@@ -8,7 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider))]
 public class DraggableSnap : MonoBehaviour
 {
-    private static BowlingModeSwitcher cachedModeSwitcher;
+    // private static BowlingModeSwitcher cachedModeSwitcher; // REMOVED
 
     private Camera cam;
     private bool dragging = false;
@@ -18,10 +18,6 @@ public class DraggableSnap : MonoBehaviour
     private HexGridSnapper.Cell originalCell;
     private HexGridSnapper grid;
 
-    private Rigidbody[] rigidbodies;
-    private bool[] originalKinematicStates;
-    private bool[] originalUseGravityStates;
-    private bool placementPhysicsFrozen;
     private Collider[] colliders;
     private bool[] originalColliderEnabled;
     private bool[] originalColliderIsTrigger;
@@ -31,30 +27,10 @@ public class DraggableSnap : MonoBehaviour
         cam = Camera.main;
         grid = FindObjectOfType<HexGridSnapper>();
         CachePhysicsComponents();
-        ApplyPlacementPhysicsState(ShouldFreezeForPlacement());
-    }
-
-    private void Update()
-    {
-        bool shouldFreeze = ShouldFreezeForPlacement();
-        if (shouldFreeze != placementPhysicsFrozen)
-        {
-            ApplyPlacementPhysicsState(shouldFreeze);
-        }
     }
 
     private void CachePhysicsComponents()
     {
-        rigidbodies = GetComponentsInChildren<Rigidbody>(true);
-        originalKinematicStates = new bool[rigidbodies.Length];
-        originalUseGravityStates = new bool[rigidbodies.Length];
-        for (int i = 0; i < rigidbodies.Length; i++)
-        {
-            if (rigidbodies[i] == null) continue;
-            originalKinematicStates[i] = rigidbodies[i].isKinematic;
-            originalUseGravityStates[i] = rigidbodies[i].useGravity;
-        }
-
         colliders = GetComponentsInChildren<Collider>(true);
         originalColliderEnabled = new bool[colliders.Length];
         originalColliderIsTrigger = new bool[colliders.Length];
@@ -69,14 +45,9 @@ public class DraggableSnap : MonoBehaviour
     {
         // Only allow grabbing in placement mode when a mode switcher is actually present.
         // Scenes still being wired up can fall back to unrestricted dragging.
-        if (cachedModeSwitcher == null)
+        if (GrandGameManager.Instance != null)
         {
-            cachedModeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
-        }
-
-        if (cachedModeSwitcher != null)
-        {
-            if (!BowlingModeSwitcher.isPlacementMode)
+            if (GrandGameManager.Instance.GetCurrentState() != GameState.PinPlacement)
                 return;
         }
 
@@ -135,7 +106,6 @@ public class DraggableSnap : MonoBehaviour
         Pin pin = GetComponent<Pin>();
         if (PinHandInventory.Instance != null && pin != null && PinHandInventory.Instance.TryReturnPinToInventory(pin, Input.mousePosition))
         {
-            ApplyPlacementPhysicsState(ShouldFreezeForPlacement());
             RestoreColliders();
             return;
         }
@@ -144,7 +114,6 @@ public class DraggableSnap : MonoBehaviour
         if (grid == null)
         {
             // no grid: just stop dragging and restore rigidbody & colliders
-            ApplyPlacementPhysicsState(ShouldFreezeForPlacement());
             RestoreColliders();
             return;
         }
@@ -180,46 +149,8 @@ public class DraggableSnap : MonoBehaviour
             transform.position = originalPosition;
         }
 
-        // restore physics state and colliders
-        ApplyPlacementPhysicsState(ShouldFreezeForPlacement());
+        // restore colliders
         RestoreColliders();
-    }
-
-    private bool ShouldFreezeForPlacement()
-    {
-        if (cachedModeSwitcher == null)
-        {
-            cachedModeSwitcher = FindObjectOfType<BowlingModeSwitcher>();
-        }
-
-        return cachedModeSwitcher != null && BowlingModeSwitcher.isPlacementMode;
-    }
-
-    private void ApplyPlacementPhysicsState(bool freeze)
-    {
-        placementPhysicsFrozen = freeze;
-
-        if (rigidbodies == null) return;
-        for (int i = 0; i < rigidbodies.Length; i++)
-        {
-            Rigidbody body = rigidbodies[i];
-            if (body == null) continue;
-
-            if (freeze)
-            {
-                body.velocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
-                body.isKinematic = true;
-                body.useGravity = false;
-                body.Sleep();
-            }
-            else
-            {
-                body.isKinematic = originalKinematicStates[i];
-                body.useGravity = originalUseGravityStates[i];
-                body.WakeUp();
-            }
-        }
     }
 
     private void RestoreColliders()

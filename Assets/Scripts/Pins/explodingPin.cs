@@ -32,7 +32,7 @@ public class explodingPin : MonoBehaviour
 
     private void Update()
     {
-        if (BowlingModeSwitcher.isPlacementMode) return;
+        if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement) return;
         if (_hasExploded || _isKnockedDown) return;
 
         float angle = Vector3.Angle(transform.up, Vector3.up);
@@ -44,7 +44,7 @@ public class explodingPin : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (BowlingModeSwitcher.isPlacementMode) return;
+        if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement) return;
         if (_hasExploded || _isKnockedDown) return;
 
         if (collision.relativeVelocity.magnitude > 3f)

@@ -28,7 +28,7 @@ public class Pin : MonoBehaviour
 
     void Update()
     {
-        if (BowlingModeSwitcher.isPlacementMode) return;
+        if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement) return;
         if (!_isFallen)
         {
             if (Vector3.Angle(Vector3.up, transform.up) > fallAngleThreshold)
@@ -58,6 +58,11 @@ public class Pin : MonoBehaviour
         {
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
+            
+            if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+            {
+                _rb.isKinematic = true;
+            }
         }
 
         transform.position = _startPos;
@@ -74,5 +79,13 @@ public class Pin : MonoBehaviour
     {
         _startPos = transform.position;
         _startRot = transform.rotation;
+    }
+
+    public void SetPhysicsEnabled(bool enabled)
+    {
+        if (_rb != null)
+        {
+            _rb.isKinematic = !enabled;
+        }
     }
 }

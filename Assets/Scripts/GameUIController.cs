@@ -10,7 +10,7 @@ public class GameUIController : MonoBehaviour
     [Header("Real-Time Math Engine Visuals")]
     public Text currentMathText; 
 
-    public void UpdateStandardUI(GameManager gm)
+    public void UpdateStandardUI(GrandGameManager gm)
     {
         if (frameText) 
         {
@@ -28,11 +28,11 @@ public class GameUIController : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.scoreCalculator != null)
+        if (GrandGameManager.Instance != null && GrandGameManager.Instance.scoreCalculator != null)
         {
-            int score = GameManager.Instance.scoreCalculator.currentFrameScore;
-            float mult = GameManager.Instance.scoreCalculator.currentFrameMult;
-            int finalScore = GameManager.Instance.scoreCalculator.GetFinalScore();
+            int score = GrandGameManager.Instance.scoreCalculator.currentFrameScore;
+            float mult = GrandGameManager.Instance.scoreCalculator.currentFrameMult;
+            int finalScore = GrandGameManager.Instance.scoreCalculator.GetFinalScore();
             
             if (currentMathText) 
             {
