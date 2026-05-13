@@ -21,11 +21,24 @@ public class PinTypeConfig
 
 public class PinHandInventory : MonoBehaviour
 {
+    private struct SavedLayoutEntry
+    {
+        public PinHandCardType type;
+        public int col;
+        public int row;
+    }
+
     public static PinHandInventory Instance { get; private set; }
 
     [Header("Starting Inventory")]
+    public int startingStandardPins = 3;
     public int startingExplodingPins = 2;
     public int startingMultPins = 2;
+
+    [Header("Shop Limits")]
+    public int maxStandardPins = 3;
+    public int maxExplodingPins = 3;
+    public int maxMultPins = 3;
 
     [Header("Pin Type Prefabs")]
     public PinTypeConfig standardPinConfig = new PinTypeConfig
@@ -64,11 +77,16 @@ public class PinHandInventory : MonoBehaviour
 
     private const float CardWidth = 140f;
     private const float CardHeight = 180f;
+    private const float TopControlsHeight = 88f;
+    private const float StatusMessageDuration = 3.5f;
 
     private readonly Dictionary<PinHandCardType, int> availableCounts = new Dictionary<PinHandCardType, int>();
+    private readonly Dictionary<PinHandCardType, int> ownedCounts = new Dictionary<PinHandCardType, int>();
     private readonly Dictionary<PinHandCardType, PinHandCardView> cardViews = new Dictionary<PinHandCardType, PinHandCardView>();
+    private readonly List<SavedLayoutEntry> savedLastLayout = new List<SavedLayoutEntry>();
     private readonly List<Pin> returnedStandardPins = new List<Pin>();
     private readonly List<Pin> runtimePowerupPins = new List<Pin>();
+    private readonly List<Pin> standardPinPool = new List<Pin>();
     private readonly List<PinHandCardType> orderedTypes = new List<PinHandCardType>
     {
         PinHandCardType.Standard,
@@ -83,13 +101,16 @@ public class PinHandInventory : MonoBehaviour
     private CanvasGroup canvasGroup;
     private RectTransform handRoot;
     private RectTransform cardContainer;
+    private Text statusText;
     private Font uiFont;
+    private float statusMessageHideTime;
 
     private PinHandCardType? selectedType;
     private PinHandCardType? draggingType;
     private Pin reservedStandardPin;
     private GameObject previewPinObject;
     private bool handVisible;
+    private bool ownedInventoryInitialized;
 
     private void Awake()
     {
@@ -109,6 +130,13 @@ public class PinHandInventory : MonoBehaviour
 
         BuildRuntimeHand();
         EnsureEventSystemExists();
+        CollectStandardPinPool();
+
+        if (!ownedInventoryInitialized)
+        {
+            InitializeOwnedInventoryForNewGame();
+        }
+
         ResetInventoryAndPins();
         PrepareForPlacementPhase();
     }
@@ -139,6 +167,7 @@ public class PinHandInventory : MonoBehaviour
             return;
         }
 
+        UpdateStatusMessageVisibility();
         UpdateCardLayout();
     }
 
@@ -146,12 +175,69 @@ public class PinHandInventory : MonoBehaviour
     {
         gameManager = gm;
         grid = activeGrid;
+        CollectStandardPinPool();
     }
 
     public void PrepareForPlacementPhase()
     {
         SyncScenePinsForDragging();
+        if (grid != null)
+        {
+            grid.SyncPinsToGrid(GetPlacedPins());
+        }
+
         RefreshCards();
+    }
+
+    public void SaveCurrentLayoutAsLastUsed()
+    {
+        if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
+
+        savedLastLayout.Clear();
+        if (grid == null)
+        {
+            return;
+        }
+
+        foreach (Pin pin in GetPlacedPins())
+        {
+            if (pin == null || !pin.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            HexGridSnapper.Cell cell = grid.GetCellByOccupant(pin.transform);
+            if (cell == null)
+            {
+                cell = grid.GetNearestCell(pin.transform.position);
+            }
+
+            if (cell == null)
+            {
+                continue;
+            }
+
+            savedLastLayout.Add(new SavedLayoutEntry
+            {
+                type = DetectCardType(pin),
+                col = cell.col,
+                row = cell.row
+            });
+        }
+    }
+
+    public void ClearSavedLayout()
+    {
+        savedLastLayout.Clear();
+    }
+
+    public void InitializeOwnedInventoryForNewGame()
+    {
+        CollectStandardPinPool();
+        ownedCounts[PinHandCardType.Standard] = Mathf.Clamp(startingStandardPins, 0, Mathf.Max(0, maxStandardPins));
+        ownedCounts[PinHandCardType.Exploding] = Mathf.Clamp(startingExplodingPins, 0, Mathf.Max(0, maxExplodingPins));
+        ownedCounts[PinHandCardType.Mult] = Mathf.Clamp(startingMultPins, 0, Mathf.Max(0, maxMultPins));
+        ownedInventoryInitialized = true;
     }
 
     public void ResetInventoryAndPins()
@@ -160,9 +246,20 @@ public class PinHandInventory : MonoBehaviour
         ClearRuntimePowerups();
 
         selectedType = null;
-        availableCounts[PinHandCardType.Exploding] = startingExplodingPins;
-        availableCounts[PinHandCardType.Mult] = startingMultPins;
+        if (!ownedInventoryInitialized)
+        {
+            InitializeOwnedInventoryForNewGame();
+        }
+
+        CollectStandardPinPool();
+        PrepareStandardPinsForFrame();
+        availableCounts[PinHandCardType.Exploding] = GetOwnedCount(PinHandCardType.Exploding);
+        availableCounts[PinHandCardType.Mult] = GetOwnedCount(PinHandCardType.Mult);
         returnedStandardPins.Clear();
+        for (int i = 0; i < Mathf.Min(GetOwnedCount(PinHandCardType.Standard), standardPinPool.Count); i++)
+        {
+            returnedStandardPins.Add(standardPinPool[i]);
+        }
 
         RefreshCards();
     }
@@ -200,6 +297,58 @@ public class PinHandInventory : MonoBehaviour
             default:
                 return "Standard";
         }
+    }
+
+    public int GetOwnedCount(PinHandCardType type)
+    {
+        return ownedCounts.TryGetValue(type, out int count) ? count : 0;
+    }
+
+    public int GetMaxOwnedCount(PinHandCardType type)
+    {
+        switch (type)
+        {
+            case PinHandCardType.Exploding:
+                return Mathf.Max(0, maxExplodingPins);
+            case PinHandCardType.Mult:
+                return Mathf.Max(0, maxMultPins);
+            default:
+                return Mathf.Max(0, maxStandardPins);
+        }
+    }
+
+    public bool CanBuyPin(PinHandCardType type)
+    {
+        return GetOwnedCount(type) < GetMaxOwnedCount(type);
+    }
+
+    public bool CanSellPin(PinHandCardType type)
+    {
+        return GetOwnedCount(type) > 0;
+    }
+
+    public bool TryBuyPin(PinHandCardType type)
+    {
+        if (!CanBuyPin(type))
+        {
+            return false;
+        }
+
+        ownedCounts[type] = GetOwnedCount(type) + 1;
+        RefreshCards();
+        return true;
+    }
+
+    public bool TrySellPin(PinHandCardType type)
+    {
+        if (!CanSellPin(type))
+        {
+            return false;
+        }
+
+        ownedCounts[type] = Mathf.Max(0, GetOwnedCount(type) - 1);
+        RefreshCards();
+        return true;
     }
 
     public string GetCardSubtitle(PinHandCardType type)
@@ -384,12 +533,14 @@ public class PinHandInventory : MonoBehaviour
         backdropRect.anchorMin = new Vector2(0.5f, 0f);
         backdropRect.anchorMax = new Vector2(0.5f, 0f);
         backdropRect.pivot = new Vector2(0.5f, 0f);
-        backdropRect.sizeDelta = handSize;
+        backdropRect.sizeDelta = new Vector2(handSize.x, handSize.y + TopControlsHeight);
         backdropRect.anchoredPosition = new Vector2(0f, 24f);
 
         handRoot = backdropRect;
 
-        GameObject titleObject = CreateTextObject("PinHandTitle", "PIN HAND", 20, FontStyle.Bold, TextAnchor.UpperCenter);
+        BuildTopControls(handBackdrop.transform);
+
+        GameObject titleObject = CreateTextObject("PinHandTitle", "PIN INVENTORY", 20, FontStyle.Bold, TextAnchor.UpperCenter);
         titleObject.transform.SetParent(handBackdrop.transform, false);
         Text titleText = titleObject.GetComponent<Text>();
         titleText.color = new Color(cardTextColor.r, cardTextColor.g, cardTextColor.b, 0.82f);
@@ -398,16 +549,16 @@ public class PinHandInventory : MonoBehaviour
         titleRect.anchorMax = new Vector2(0.5f, 1f);
         titleRect.pivot = new Vector2(0.5f, 1f);
         titleRect.sizeDelta = new Vector2(240f, 30f);
-        titleRect.anchoredPosition = new Vector2(0f, -14f);
+        titleRect.anchoredPosition = new Vector2(0f, -72f);
 
         GameObject cardContainerObject = new GameObject("Cards", typeof(RectTransform));
         cardContainerObject.transform.SetParent(handBackdrop.transform, false);
         cardContainer = cardContainerObject.GetComponent<RectTransform>();
-        cardContainer.anchorMin = new Vector2(0.5f, 0.5f);
-        cardContainer.anchorMax = new Vector2(0.5f, 0.5f);
+        cardContainer.anchorMin = new Vector2(0.5f, 0f);
+        cardContainer.anchorMax = new Vector2(0.5f, 0f);
         cardContainer.pivot = new Vector2(0.5f, 0.5f);
         cardContainer.sizeDelta = new Vector2(handSize.x - 40f, handSize.y - 56f);
-        cardContainer.anchoredPosition = new Vector2(0f, -6f);
+        cardContainer.anchoredPosition = new Vector2(0f, 108f);
 
         foreach (PinHandCardType type in orderedTypes)
         {
@@ -415,6 +566,43 @@ public class PinHandInventory : MonoBehaviour
         }
 
         SetHandVisible(false);
+    }
+
+    private void BuildTopControls(Transform parent)
+    {
+        GameObject controlsRowObject = new GameObject("TopControls", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+        controlsRowObject.transform.SetParent(parent, false);
+
+        RectTransform controlsRect = controlsRowObject.GetComponent<RectTransform>();
+        controlsRect.anchorMin = new Vector2(0.5f, 1f);
+        controlsRect.anchorMax = new Vector2(0.5f, 1f);
+        controlsRect.pivot = new Vector2(0.5f, 1f);
+        controlsRect.sizeDelta = new Vector2(handSize.x - 32f, 34f);
+        controlsRect.anchoredPosition = new Vector2(0f, -12f);
+
+        HorizontalLayoutGroup controlsLayout = controlsRowObject.GetComponent<HorizontalLayoutGroup>();
+        controlsLayout.spacing = 12f;
+        controlsLayout.childAlignment = TextAnchor.UpperCenter;
+        controlsLayout.childControlWidth = false;
+        controlsLayout.childForceExpandWidth = false;
+        controlsLayout.childControlHeight = true;
+        controlsLayout.childForceExpandHeight = true;
+
+        CreateActionButton("PlaceLastLayoutButton", controlsRowObject.transform, "PLACE LAST LAYOUT", new Vector2(220f, 32f), OnPlaceLastLayoutPressed);
+        CreateActionButton("RandomiseButton", controlsRowObject.transform, "RANDOMISE", new Vector2(150f, 32f), OnRandomisePressed);
+        CreateActionButton("ReturnAllButton", controlsRowObject.transform, "RETURN ALL", new Vector2(160f, 32f), OnReturnAllPinsPressed);
+
+        GameObject statusObject = CreateTextObject("PinHandStatus", string.Empty, 13, FontStyle.Italic, TextAnchor.UpperCenter);
+        statusObject.transform.SetParent(parent, false);
+        statusText = statusObject.GetComponent<Text>();
+        statusText.color = new Color(1f, 0.78f, 0.34f, 0f);
+
+        RectTransform statusRect = statusObject.GetComponent<RectTransform>();
+        statusRect.anchorMin = new Vector2(0.5f, 1f);
+        statusRect.anchorMax = new Vector2(0.5f, 1f);
+        statusRect.pivot = new Vector2(0.5f, 1f);
+        statusRect.sizeDelta = new Vector2(handSize.x - 48f, 26f);
+        statusRect.anchoredPosition = new Vector2(0f, -46f);
     }
 
     private PinHandCardView CreateCard(PinHandCardType type)
@@ -498,6 +686,42 @@ public class PinHandInventory : MonoBehaviour
         return textObject;
     }
 
+    private Button CreateActionButton(string objectName, Transform parent, string label, Vector2 size, UnityEngine.Events.UnityAction onClick)
+    {
+        GameObject buttonObject = new GameObject(objectName, typeof(RectTransform), typeof(Image), typeof(Button), typeof(LayoutElement));
+        buttonObject.transform.SetParent(parent, false);
+
+        LayoutElement layout = buttonObject.GetComponent<LayoutElement>();
+        layout.preferredWidth = size.x;
+        layout.preferredHeight = size.y;
+
+        Image buttonImage = buttonObject.GetComponent<Image>();
+        buttonImage.color = new Color(0.92f, 0.73f, 0.2f, 1f);
+
+        Button button = buttonObject.GetComponent<Button>();
+        button.targetGraphic = buttonImage;
+        button.onClick.AddListener(onClick);
+
+        GameObject labelObject = new GameObject("Label", typeof(RectTransform), typeof(Text));
+        labelObject.transform.SetParent(buttonObject.transform, false);
+
+        RectTransform labelRect = labelObject.GetComponent<RectTransform>();
+        labelRect.anchorMin = Vector2.zero;
+        labelRect.anchorMax = Vector2.one;
+        labelRect.offsetMin = Vector2.zero;
+        labelRect.offsetMax = Vector2.zero;
+
+        Text labelText = labelObject.GetComponent<Text>();
+        labelText.font = GetUIFont();
+        labelText.text = label;
+        labelText.fontSize = 13;
+        labelText.fontStyle = FontStyle.Bold;
+        labelText.alignment = TextAnchor.MiddleCenter;
+        labelText.color = new Color(0.08f, 0.1f, 0.14f, 1f);
+        labelText.raycastTarget = false;
+        return button;
+    }
+
     private Font GetUIFont()
     {
         if (uiFont != null) return uiFont;
@@ -517,6 +741,142 @@ public class PinHandInventory : MonoBehaviour
 
         GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
         DontDestroyOnLoad(eventSystemObject);
+    }
+
+    private void OnPlaceLastLayoutPressed()
+    {
+        if (!handVisible)
+        {
+            return;
+        }
+
+        if (savedLastLayout.Count == 0)
+        {
+            ShowStatusMessage("No last layout is saved yet.", false);
+            return;
+        }
+
+        if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
+        if (grid == null)
+        {
+            ShowStatusMessage("The hex grid is unavailable right now.", true);
+            return;
+        }
+
+        ResetInventoryAndPins();
+        grid.ClearAllOccupants();
+
+        int placedCount = 0;
+        int missingCount = 0;
+
+        for (int i = 0; i < savedLastLayout.Count; i++)
+        {
+            SavedLayoutEntry entry = savedLastLayout[i];
+            HexGridSnapper.Cell targetCell = grid.GetCell(entry.col, entry.row);
+            if (targetCell == null)
+            {
+                continue;
+            }
+
+            if (GetCount(entry.type) <= 0)
+            {
+                missingCount++;
+                continue;
+            }
+
+            if (TryPlacePinOnCell(entry.type, targetCell))
+            {
+                placedCount++;
+            }
+        }
+
+        FinalizeBulkPlacement();
+
+        if (missingCount > 0)
+        {
+            ShowStatusMessage($"Restored {placedCount} pin(s). {missingCount} pin(s) from the last layout are missing from inventory.", true);
+        }
+        else
+        {
+            ShowStatusMessage($"Restored {placedCount} pin(s) from the last layout.", false);
+        }
+    }
+
+    private void OnRandomisePressed()
+    {
+        if (!handVisible)
+        {
+            return;
+        }
+
+        if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
+        if (grid == null)
+        {
+            ShowStatusMessage("The hex grid is unavailable right now.", true);
+            return;
+        }
+
+        ResetInventoryAndPins();
+        grid.ClearAllOccupants();
+
+        List<HexGridSnapper.Cell> cells = grid.GetCellsSnapshot();
+        if (cells.Count == 0)
+        {
+            ShowStatusMessage("The hex grid has no cells to place pins on.", true);
+            return;
+        }
+
+        ShuffleCells(cells);
+
+        List<PinHandCardType> pinsToPlace = BuildRandomPinSelection(cells.Count, out int overflowCount);
+        int placedCount = 0;
+
+        for (int i = 0; i < pinsToPlace.Count && i < cells.Count; i++)
+        {
+            if (TryPlacePinOnCell(pinsToPlace[i], cells[i]))
+            {
+                placedCount++;
+            }
+        }
+
+        FinalizeBulkPlacement();
+
+        if (overflowCount > 0)
+        {
+            ShowStatusMessage($"Randomised {placedCount} pin(s). {overflowCount} pin(s) stayed in inventory because the grid is full.", false);
+        }
+        else
+        {
+            ShowStatusMessage($"Randomised {placedCount} pin(s) on the grid.", false);
+        }
+    }
+
+    private void OnReturnAllPinsPressed()
+    {
+        if (!handVisible)
+        {
+            return;
+        }
+
+        int placedCount = 0;
+        foreach (Pin pin in GetPlacedPins())
+        {
+            if (pin != null && pin.gameObject.activeInHierarchy)
+            {
+                placedCount++;
+            }
+        }
+
+        ResetInventoryAndPins();
+        if (grid != null)
+        {
+            grid.ClearAllOccupants();
+        }
+
+        PrepareForPlacementPhase();
+        ShowStatusMessage(placedCount > 0
+            ? $"Returned {placedCount} pin(s) to inventory."
+            : "All pins are already in inventory.", false);
     }
 
     private void UpdateCardLayout()
@@ -591,6 +951,18 @@ public class PinHandInventory : MonoBehaviour
         }
     }
 
+    private void FinalizeBulkPlacement()
+    {
+        selectedType = null;
+        SyncScenePinsForDragging();
+        if (grid != null)
+        {
+            grid.SyncPinsToGrid(GetPlacedPins());
+        }
+
+        RefreshCards();
+    }
+
     private void SyncScenePinsForDragging()
     {
         Pin[] pins = FindObjectsOfType<Pin>(true);
@@ -616,6 +988,11 @@ public class PinHandInventory : MonoBehaviour
                 continue;
             }
 
+            if (grid != null)
+            {
+                grid.ReleaseCell(runtimePowerupPins[i].transform);
+            }
+
             Destroy(runtimePowerupPins[i].gameObject);
         }
 
@@ -624,71 +1001,10 @@ public class PinHandInventory : MonoBehaviour
 
     private GameObject CreatePreviewPin(PinHandCardType type)
     {
-        Pin pinComponent = null;
-        GameObject pinObject = null;
-
-        if (type == PinHandCardType.Standard)
-        {
-            for (int i = returnedStandardPins.Count - 1; i >= 0; i--)
-            {
-                Pin candidate = returnedStandardPins[i];
-                returnedStandardPins.RemoveAt(i);
-
-                if (candidate == null) continue;
-
-                reservedStandardPin = candidate;
-                pinComponent = candidate;
-                pinObject = candidate.gameObject;
-                pinObject.SetActive(true);
-                break;
-            }
-        }
-        else
-        {
-            pinObject = CreateConfiguredPinInstance(type);
-            if (pinObject == null) return null;
-
-            pinObject.name = type == PinHandCardType.Exploding ? "ExplodingPin_Runtime" : "MultPin_Runtime";
-            pinComponent = pinObject.GetComponent<Pin>();
-
-            DraggableSnap existingDrag = pinObject.GetComponent<DraggableSnap>();
-            if (existingDrag == null)
-            {
-                existingDrag = pinObject.AddComponent<DraggableSnap>();
-            }
-            existingDrag.enabled = false;
-
-            if (type == PinHandCardType.Exploding)
-            {
-                if (pinObject.GetComponent<explodingPin>() == null)
-                {
-                    pinObject.AddComponent<explodingPin>();
-                }
-            }
-            else if (type == PinHandCardType.Mult)
-            {
-                MultPin multPin = pinObject.GetComponent<MultPin>();
-                if (multPin == null)
-                {
-                    multPin = pinObject.AddComponent<MultPin>();
-                }
-
-                multPin.scoreCalculator = gameManager != null ? gameManager.scoreCalculator : null;
-            }
-
-            if (pinComponent != null && !runtimePowerupPins.Contains(pinComponent))
-            {
-                runtimePowerupPins.Add(pinComponent);
-            }
-        }
-
+        GameObject pinObject = TakePinInstance(type, out Pin standardReservation);
         if (pinObject == null) return null;
 
-        if (pinComponent != null)
-        {
-            pinComponent.ResetPin();
-        }
-
+        reservedStandardPin = standardReservation;
         PreparePinForPreview(pinObject);
         return pinObject;
     }
@@ -748,6 +1064,31 @@ public class PinHandInventory : MonoBehaviour
         return true;
     }
 
+    private bool TryPlacePinOnCell(PinHandCardType type, HexGridSnapper.Cell targetCell)
+    {
+        if (grid == null || targetCell == null)
+        {
+            return false;
+        }
+
+        GameObject pinObject = TakePinInstance(type, out Pin standardReservation);
+        if (pinObject == null)
+        {
+            return false;
+        }
+
+        if (!grid.TryReserveCell(targetCell, pinObject.transform))
+        {
+            ReturnPinInstance(type, pinObject, standardReservation);
+            return false;
+        }
+
+        pinObject.transform.position = targetCell.center;
+        PreparePinForPlacement(pinObject);
+        ConsumePinnedCard(type);
+        return true;
+    }
+
     private void ConsumePinnedCard(PinHandCardType type)
     {
         if (type == PinHandCardType.Exploding)
@@ -764,28 +1105,7 @@ public class PinHandInventory : MonoBehaviour
     {
         if (draggingType.HasValue && previewPinObject != null)
         {
-            if (draggingType.Value == PinHandCardType.Standard)
-            {
-                if (reservedStandardPin != null)
-                {
-                    reservedStandardPin.ResetPin();
-                    reservedStandardPin.gameObject.SetActive(false);
-                    if (!returnedStandardPins.Contains(reservedStandardPin))
-                    {
-                        returnedStandardPins.Add(reservedStandardPin);
-                    }
-                }
-            }
-            else
-            {
-                Pin previewPin = previewPinObject.GetComponent<Pin>();
-                if (previewPin != null)
-                {
-                    runtimePowerupPins.Remove(previewPin);
-                }
-
-                Destroy(previewPinObject);
-            }
+            ReturnPinInstance(draggingType.Value, previewPinObject, reservedStandardPin);
         }
 
         previewPinObject = null;
@@ -811,6 +1131,245 @@ public class PinHandInventory : MonoBehaviour
         if (dragPlane.Raycast(ray, out float enter))
         {
             previewPinObject.transform.position = ray.GetPoint(enter);
+        }
+    }
+
+    private void CollectStandardPinPool()
+    {
+        Pin[] pins = FindObjectsOfType<Pin>(true);
+        standardPinPool.Clear();
+
+        for (int i = 0; i < pins.Length; i++)
+        {
+            Pin pin = pins[i];
+            if (pin == null) continue;
+            if (pin.GetComponent<explodingPin>() != null) continue;
+            if (pin.GetComponent<MultPin>() != null) continue;
+            if (!standardPinPool.Contains(pin))
+            {
+                standardPinPool.Add(pin);
+            }
+        }
+
+        EnsureStandardPinPoolSize(GetMaxOwnedCount(PinHandCardType.Standard));
+    }
+
+    private GameObject TakePinInstance(PinHandCardType type, out Pin standardReservation)
+    {
+        standardReservation = null;
+
+        Pin pinComponent = null;
+        GameObject pinObject = null;
+
+        if (type == PinHandCardType.Standard)
+        {
+            for (int i = returnedStandardPins.Count - 1; i >= 0; i--)
+            {
+                Pin candidate = returnedStandardPins[i];
+                returnedStandardPins.RemoveAt(i);
+
+                if (candidate == null)
+                {
+                    continue;
+                }
+
+                standardReservation = candidate;
+                pinComponent = candidate;
+                pinObject = candidate.gameObject;
+                pinObject.SetActive(true);
+                break;
+            }
+        }
+        else
+        {
+            pinObject = CreateConfiguredPinInstance(type);
+            if (pinObject == null)
+            {
+                return null;
+            }
+
+            pinObject.name = type == PinHandCardType.Exploding ? "ExplodingPin_Runtime" : "MultPin_Runtime";
+            pinComponent = pinObject.GetComponent<Pin>();
+
+            DraggableSnap existingDrag = pinObject.GetComponent<DraggableSnap>();
+            if (existingDrag == null)
+            {
+                existingDrag = pinObject.AddComponent<DraggableSnap>();
+            }
+
+            existingDrag.enabled = false;
+
+            if (type == PinHandCardType.Exploding)
+            {
+                if (pinObject.GetComponent<explodingPin>() == null)
+                {
+                    pinObject.AddComponent<explodingPin>();
+                }
+            }
+            else if (type == PinHandCardType.Mult)
+            {
+                MultPin multPin = pinObject.GetComponent<MultPin>();
+                if (multPin == null)
+                {
+                    multPin = pinObject.AddComponent<MultPin>();
+                }
+
+                multPin.scoreCalculator = gameManager != null ? gameManager.scoreCalculator : null;
+            }
+
+            if (pinComponent != null && !runtimePowerupPins.Contains(pinComponent))
+            {
+                runtimePowerupPins.Add(pinComponent);
+            }
+        }
+
+        if (pinComponent != null)
+        {
+            pinComponent.ResetPin();
+        }
+
+        return pinObject;
+    }
+
+    private void ReturnPinInstance(PinHandCardType type, GameObject pinObject, Pin standardReservation)
+    {
+        if (type == PinHandCardType.Standard)
+        {
+            if (standardReservation == null)
+            {
+                return;
+            }
+
+            standardReservation.ResetPin();
+            standardReservation.gameObject.SetActive(false);
+            if (!returnedStandardPins.Contains(standardReservation))
+            {
+                returnedStandardPins.Add(standardReservation);
+            }
+
+            return;
+        }
+
+        Pin runtimePin = pinObject != null ? pinObject.GetComponent<Pin>() : null;
+        if (runtimePin != null)
+        {
+            runtimePowerupPins.Remove(runtimePin);
+        }
+
+        if (pinObject != null)
+        {
+            Destroy(pinObject);
+        }
+    }
+
+    private void EnsureStandardPinPoolSize(int requiredCount)
+    {
+        requiredCount = Mathf.Max(0, requiredCount);
+
+        while (standardPinPool.Count < requiredCount)
+        {
+            GameObject instance = CreateConfiguredPinInstance(PinHandCardType.Standard);
+            if (instance == null)
+            {
+                break;
+            }
+
+            Pin pin = instance.GetComponent<Pin>();
+            if (pin == null)
+            {
+                Destroy(instance);
+                break;
+            }
+
+            instance.name = "StandardPin_RuntimePool";
+            instance.SetActive(false);
+            standardPinPool.Add(pin);
+        }
+    }
+
+    private void PrepareStandardPinsForFrame()
+    {
+        for (int i = 0; i < standardPinPool.Count; i++)
+        {
+            Pin pin = standardPinPool[i];
+            if (pin == null)
+            {
+                continue;
+            }
+
+            if (grid != null)
+            {
+                grid.ReleaseCell(pin.transform);
+            }
+
+            pin.ResetPin();
+            pin.gameObject.SetActive(false);
+        }
+    }
+
+    private List<PinHandCardType> BuildRandomPinSelection(int maxPinsToPlace, out int overflowCount)
+    {
+        List<PinHandCardType> pinTypes = new List<PinHandCardType>();
+        foreach (PinHandCardType type in orderedTypes)
+        {
+            int count = GetCount(type);
+            for (int i = 0; i < count; i++)
+            {
+                pinTypes.Add(type);
+            }
+        }
+
+        ShuffleTypes(pinTypes);
+
+        overflowCount = Mathf.Max(0, pinTypes.Count - Mathf.Max(0, maxPinsToPlace));
+        if (pinTypes.Count > maxPinsToPlace)
+        {
+            pinTypes.RemoveRange(maxPinsToPlace, pinTypes.Count - maxPinsToPlace);
+        }
+
+        return pinTypes;
+    }
+
+    private IEnumerable<Pin> GetPlacedPins()
+    {
+        for (int i = 0; i < standardPinPool.Count; i++)
+        {
+            Pin pin = standardPinPool[i];
+            if (pin != null && pin.gameObject.activeInHierarchy)
+            {
+                yield return pin;
+            }
+        }
+
+        for (int i = 0; i < runtimePowerupPins.Count; i++)
+        {
+            Pin pin = runtimePowerupPins[i];
+            if (pin != null && pin.gameObject.activeInHierarchy)
+            {
+                yield return pin;
+            }
+        }
+    }
+
+    private void ShuffleCells(List<HexGridSnapper.Cell> cells)
+    {
+        for (int i = 0; i < cells.Count; i++)
+        {
+            int swapIndex = Random.Range(i, cells.Count);
+            HexGridSnapper.Cell temp = cells[i];
+            cells[i] = cells[swapIndex];
+            cells[swapIndex] = temp;
+        }
+    }
+
+    private void ShuffleTypes(List<PinHandCardType> pinTypes)
+    {
+        for (int i = 0; i < pinTypes.Count; i++)
+        {
+            int swapIndex = Random.Range(i, pinTypes.Count);
+            PinHandCardType temp = pinTypes[i];
+            pinTypes[i] = pinTypes[swapIndex];
+            pinTypes[swapIndex] = temp;
         }
     }
 
@@ -920,6 +1479,36 @@ public class PinHandInventory : MonoBehaviour
             default:
                 return standardPinConfig;
         }
+    }
+
+    private void ShowStatusMessage(string message, bool warning)
+    {
+        if (statusText == null)
+        {
+            return;
+        }
+
+        statusText.text = message;
+        statusText.color = warning
+            ? new Color(1f, 0.76f, 0.34f, 1f)
+            : new Color(0.72f, 0.94f, 0.86f, 1f);
+        statusMessageHideTime = Time.unscaledTime + StatusMessageDuration;
+    }
+
+    private void UpdateStatusMessageVisibility()
+    {
+        if (statusText == null || string.IsNullOrEmpty(statusText.text))
+        {
+            return;
+        }
+
+        if (Time.unscaledTime < statusMessageHideTime)
+        {
+            return;
+        }
+
+        statusText.text = string.Empty;
+        statusText.color = new Color(statusText.color.r, statusText.color.g, statusText.color.b, 0f);
     }
 
     private void OnDestroy()

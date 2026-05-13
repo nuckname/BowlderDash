@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum GameState { FrameSetup, PinPlacement, PlayerReady, Drawing, Rolling, CalculatingScore, EndFrame, GameOver }
+public enum GameState { FrameSetup, PinPlacement, PlayerReady, Drawing, Rolling, CalculatingScore, Shop, EndFrame, GameOver }
 
 [RequireComponent(typeof(PinHandInventory))]
 public class GrandGameManager : MonoBehaviour
@@ -14,6 +14,7 @@ public class GrandGameManager : MonoBehaviour
     public ScoreCalculator scoreCalculator;
     public GameUIController uiController;
     public PinHandInventory pinHandInventory;
+    public PinShopController shopController;
     public HexGridSnapper grid;
 
     [Header("Game State")]
@@ -21,6 +22,16 @@ public class GrandGameManager : MonoBehaviour
     public int currentFrame = 1;
     public int throwsThisFrame = 0;
     public int totalScore = 0;
+
+    [Header("Ticket Economy")]
+    public int startingTickets = 0;
+    public int currentTickets = 0;
+    public int ticketsEarnedThisFrame = 0;
+    public int ticketsEarnedLastFrame = 0;
+    public bool lastFrameUsedTicketBonus = false;
+
+    [Header("Exploder Settings")]
+    public bool resetExploderDeformationEachFrame = true;
 
     [Header("Ball & Throw Setup")]
     public GameObject ball;
@@ -34,6 +45,8 @@ public class GrandGameManager : MonoBehaviour
     public float forceMaxSpeed = 20f;
     public float totalMinTime = 0.1f;
     public float totalMaxTime = 1.0f;
+    [Tooltip("Extra hold time after the minimum draw duration before launch power starts tapering off")]
+    public float powerFalloffDelay = 0.2f;
     public float minZ = -5f;
     public float maxZ = 15f;
     public float pullbackYScale = 0.15f;
@@ -54,11 +67,14 @@ public class GrandGameManager : MonoBehaviour
     public float cameraTransitionSmoothness = 0.5f;
     public float cameraReturnSmoothness = 5f;
     public float cameraPlacementTransitionTime = 1f;
+    public Transform shopCameraTarget;
+    public float cameraShopTransitionTime = 1f;
 
     private Vector3 cameraOffset;
     private Quaternion cameraInitialRotation;
     private float currentCameraTransitionT = 0f;
     private float placementBlend = 0f;
+    private float shopBlend = 0f;
 
     // Game state
     private GameState _currentState;
@@ -95,6 +111,18 @@ public class GrandGameManager : MonoBehaviour
     {
         if (pinHandInventory == null)
             pinHandInventory = GetComponent<PinHandInventory>();
+        if (shopController == null)
+            shopController = GetComponent<PinShopController>();
+    }
+
+    private void OnEnable()
+    {
+        Pin.OnPinFallenGlobal += HandlePinFallenForTickets;
+    }
+
+    private void OnDisable()
+    {
+        Pin.OnPinFallenGlobal -= HandlePinFallenForTickets;
     }
 
     void Start()
@@ -102,6 +130,16 @@ public class GrandGameManager : MonoBehaviour
         pinHandInventory = GetComponent<PinHandInventory>();
         if (pinHandInventory == null)
             pinHandInventory = gameObject.AddComponent<PinHandInventory>();
+
+        if (shopController == null)
+        {
+            shopController = GetComponent<PinShopController>();
+        }
+
+        if (shopController == null)
+        {
+            shopController = gameObject.AddComponent<PinShopController>();
+        }
 
         if (targetCamera == null) targetCamera = Camera.main;
         if (targetCamera != null && ball != null)
@@ -122,6 +160,7 @@ public class GrandGameManager : MonoBehaviour
         if (powerSlider != null) powerSlider.value = 0f;
 
         pinHandInventory.Configure(this, grid, null); // passing null for modeSwitcher since it's removed
+        shopController.Configure(this, pinHandInventory);
         
         RefreshRuntimePools();
         StartNewGame();
@@ -151,6 +190,13 @@ public class GrandGameManager : MonoBehaviour
     {
         totalScore = 0;
         currentFrame = 1;
+        currentTickets = startingTickets;
+        ticketsEarnedThisFrame = 0;
+        ticketsEarnedLastFrame = 0;
+        lastFrameUsedTicketBonus = false;
+        pinHandInventory?.InitializeOwnedInventoryForNewGame();
+        pinHandInventory?.ClearSavedLayout();
+        shopController?.HideShop();
         StartFrame();
     }
 
@@ -158,22 +204,20 @@ public class GrandGameManager : MonoBehaviour
     {
         _currentState = GameState.FrameSetup;
         throwsThisFrame = 0;
+        ticketsEarnedThisFrame = 0;
+        ticketsEarnedLastFrame = 0;
+        lastFrameUsedTicketBonus = false;
 
         if (scoreCalculator != null) scoreCalculator.ResetFrameScore();
 
         Debug.Log("Current State: Frame Setup");
 
+        ResetLaneExploders();
         pinHandInventory?.ResetInventoryAndPins();
+        shopController?.HideShop();
         RefreshRuntimePools();
-        
-        foreach(var p in _allPinsPool) 
-        {
-            if (p.gameObject.scene.isLoaded)
-            {
-                p.gameObject.SetActive(true);
-                p.ResetPin();
-            }
-        }
+        grid?.ClearAllOccupants();
+        grid?.SpawnTicketsForFrame();
 
         if (uiController != null) uiController.UpdateStandardUI(this);
         pinHandInventory?.PrepareForPlacementPhase();
@@ -190,14 +234,35 @@ public class GrandGameManager : MonoBehaviour
         ResetBall();
         
         if (grid != null) grid.showGizmos = true;
-        UpdateInstructionText("Click and drag to arrange pins. Press TAB when ready.");
+        UpdateInstructionText("Drag pin cards onto the grid, then press TAB when ready.");
         
         if (uiController != null) uiController.UpdateStandardUI(this);
         pinHandInventory?.PrepareForPlacementPhase();
     }
 
+    private void EnterShopPhase()
+    {
+        _currentState = GameState.Shop;
+        Debug.Log("Current State: Shop");
+
+        TogglePinsPhysics(false);
+        ResetBall();
+
+        if (grid != null)
+        {
+            grid.showGizmos = false;
+            grid.ClearTickets();
+        }
+
+        UpdateInstructionText("Shop phase. Spend tickets, then continue to the next frame.");
+        if (uiController != null) uiController.UpdateStandardUI(this);
+        shopController?.ShowShop();
+    }
+
     private void ReadyPlayer()
     {
+        pinHandInventory?.SaveCurrentLayoutAsLastUsed();
+
         _currentState = GameState.PlayerReady;
         Debug.Log("Current State: Player Ready");
 
@@ -282,15 +347,19 @@ public class GrandGameManager : MonoBehaviour
 
         if (throwsThisFrame >= 2 || isStrike)
         {
-            currentFrame++;
-            if (currentFrame > maxFrames)
+            bool clearedAllPlacedPins = grid != null && grid.AreAllPlacedPinsCleared();
+            FinalizeFrameTickets(clearedAllPlacedPins);
+
+            if (currentFrame >= maxFrames)
             {
                 _currentState = GameState.GameOver;
                 Debug.Log($"Game Over! Final Score: {totalScore}");
+                UpdateInstructionText($"Game Over! Final Score: {totalScore}");
+                if (uiController != null) uiController.UpdateStandardUI(this);
             }
             else
             {
-                StartFrame();
+                EnterShopPhase();
             }
         }
         else
@@ -304,6 +373,89 @@ public class GrandGameManager : MonoBehaviour
     {
         _allPinsPool = FindObjectsOfType<Pin>(true);
         _laneExploders = FindObjectsOfType<exploder>(true);
+    }
+
+    private void ResetLaneExploders()
+    {
+        if (!resetExploderDeformationEachFrame)
+        {
+            return;
+        }
+
+        RefreshRuntimePools();
+        foreach (var laneExploder in _laneExploders)
+        {
+            if (laneExploder != null)
+            {
+                laneExploder.ResetMesh();
+            }
+        }
+    }
+
+    public void CompleteShopPhase()
+    {
+        if (_currentState != GameState.Shop)
+        {
+            return;
+        }
+
+        currentFrame++;
+        StartFrame();
+    }
+
+    public bool TrySpendTickets(int amount)
+    {
+        int safeAmount = Mathf.Max(0, amount);
+        if (currentTickets < safeAmount)
+        {
+            return false;
+        }
+
+        currentTickets -= safeAmount;
+        if (uiController != null) uiController.UpdateStandardUI(this);
+        shopController?.RefreshShop();
+        return true;
+    }
+
+    public void AddTickets(int amount)
+    {
+        currentTickets += Mathf.Max(0, amount);
+        if (uiController != null) uiController.UpdateStandardUI(this);
+        shopController?.RefreshShop();
+    }
+
+    private void FinalizeFrameTickets(bool clearedAllPlacedPins)
+    {
+        int rawTickets = Mathf.Max(0, ticketsEarnedThisFrame);
+        lastFrameUsedTicketBonus = clearedAllPlacedPins && rawTickets > 0;
+        ticketsEarnedLastFrame = lastFrameUsedTicketBonus ? rawTickets * 2 : rawTickets;
+        currentTickets += ticketsEarnedLastFrame;
+
+        if (uiController != null) uiController.UpdateStandardUI(this);
+        shopController?.RefreshShop();
+
+        string bonusText = lastFrameUsedTicketBonus ? " Clear bonus x2 applied!" : string.Empty;
+        UpdateInstructionText($"Frame complete. Earned {ticketsEarnedLastFrame} tickets.{bonusText}");
+    }
+
+    private void HandlePinFallenForTickets(Pin fallenPin)
+    {
+        if (_currentState != GameState.Rolling && _currentState != GameState.CalculatingScore)
+        {
+            return;
+        }
+
+        if (grid == null)
+        {
+            return;
+        }
+
+        if (grid.TryCollectTicketForPin(fallenPin, out int collectedValue))
+        {
+            ticketsEarnedThisFrame += collectedValue;
+            if (uiController != null) uiController.UpdateStandardUI(this);
+            shopController?.RefreshShop();
+        }
     }
 
     // --- INPUT & THROWING LOGIC ---
@@ -418,8 +570,7 @@ public class GrandGameManager : MonoBehaviour
         if (powerSlider != null && isValidDraw)
         {
             float currentDuration = Time.time - mouseDownTime;
-            float t = Mathf.InverseLerp(totalMinTime, totalMaxTime, currentDuration);
-            powerSlider.value = t;
+            powerSlider.value = GetLaunchPowerNormalized(currentDuration);
         }
     }
 
@@ -471,13 +622,26 @@ public class GrandGameManager : MonoBehaviour
         }
 
         float duration = Time.time - mouseDownTime;
-        float t = Mathf.InverseLerp(totalMinTime, totalMaxTime, duration);
+        float t = GetLaunchPowerNormalized(duration);
         float launchSpeed = Mathf.Lerp(forceMinSpeed, forceMaxSpeed, t);
         
         UpdateInstructionText("Ball Released!");
         _currentState = GameState.Rolling; // Instantly lock out further drawing
         Debug.Log($"<b>[GrandGameManager]</b> Launching ball with speed {launchSpeed} and {processedCurve.Count} curve points.");
         StartCoroutine(ThrowSequence(launchSpeed));
+    }
+
+    private float GetLaunchPowerNormalized(float drawDuration)
+    {
+        float taperStartTime = totalMinTime + Mathf.Max(0f, powerFalloffDelay);
+        float taperEndTime = Mathf.Max(taperStartTime + 0.0001f, totalMaxTime);
+
+        if (drawDuration <= taperStartTime)
+        {
+            return 1f;
+        }
+
+        return 1f - Mathf.InverseLerp(taperStartTime, taperEndTime, drawDuration);
     }
 
     private IEnumerator ThrowSequence(float speed)
@@ -644,12 +808,20 @@ public class GrandGameManager : MonoBehaviour
         if (targetCamera == null) return;
 
         bool placementModeActive = (_currentState == GameState.FrameSetup || _currentState == GameState.PinPlacement);
-        float targetPlacementBlend = (placementModeActive && placementCameraTarget != null) ? 1f : 0f;
+        bool shopModeActive = _currentState == GameState.Shop;
+        float targetPlacementBlend = (!shopModeActive && placementModeActive && placementCameraTarget != null) ? 1f : 0f;
+        float targetShopBlend = (shopModeActive && shopCameraTarget != null) ? 1f : 0f;
         
         if (!Mathf.Approximately(placementBlend, targetPlacementBlend))
         {
             float duration = Mathf.Max(0.0001f, cameraPlacementTransitionTime);
             placementBlend = Mathf.MoveTowards(placementBlend, targetPlacementBlend, Time.deltaTime / duration);
+        }
+
+        if (!Mathf.Approximately(shopBlend, targetShopBlend))
+        {
+            float duration = Mathf.Max(0.0001f, cameraShopTransitionTime);
+            shopBlend = Mathf.MoveTowards(shopBlend, targetShopBlend, Time.deltaTime / duration);
         }
 
         Vector3 followPosition = targetCamera.transform.position;
@@ -670,13 +842,26 @@ public class GrandGameManager : MonoBehaviour
             desiredRotation = Quaternion.Slerp(followRotation, placementCameraTarget.rotation, smoothPlacementBlend);
         }
 
+        if (shopCameraTarget != null && shopBlend > 0f)
+        {
+            float smoothShopBlend = shopBlend * shopBlend * (3f - 2f * shopBlend);
+            desiredPosition = Vector3.Lerp(desiredPosition, shopCameraTarget.position, smoothShopBlend);
+            desiredRotation = Quaternion.Slerp(desiredRotation, shopCameraTarget.rotation, smoothShopBlend);
+        }
+
         targetCamera.transform.position = Vector3.Lerp(targetCamera.transform.position, desiredPosition, cameraSmoothSpeed);
         targetCamera.transform.rotation = Quaternion.Slerp(targetCamera.transform.rotation, desiredRotation, cameraSmoothSpeed);
     }
 
     private void GetFollowPose(out Vector3 position, out Quaternion rotation)
     {
-        Vector3 followPosition = new Vector3(targetCamera.transform.position.x, cameraOffset.y, ball.transform.position.z + cameraOffset.z);
+        float rawFollowZ = ball.transform.position.z + cameraOffset.z;
+        if (placementCameraTarget != null)
+        {
+            rawFollowZ = Mathf.Min(rawFollowZ, placementCameraTarget.position.z);
+        }
+
+        Vector3 followPosition = new Vector3(targetCamera.transform.position.x, cameraOffset.y, rawFollowZ);
         position = followPosition;
         rotation = cameraInitialRotation;
 

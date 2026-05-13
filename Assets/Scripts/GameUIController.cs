@@ -6,6 +6,7 @@ public class GameUIController : MonoBehaviour
     [Header("Frame Sheet Components")]
     public Text frameText;
     public Text totalScoreText;
+    public Text ticketText;
     
     [Header("Real-Time Math Engine Visuals")]
     public Text currentMathText; 
@@ -16,7 +17,15 @@ public class GameUIController : MonoBehaviour
         {
             if (gm.GetCurrentState() == GameState.PinPlacement)
             {
-                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=yellow>Review Pin Placement. Press TAB to Bowl!</color>";
+                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=yellow>Place pins from your hand, then press TAB to bowl.</color>";
+            }
+            else if (gm.GetCurrentState() == GameState.Shop)
+            {
+                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=cyan>Shop Phase. Spend tickets on the TV.</color>";
+            }
+            else if (gm.GetCurrentState() == GameState.GameOver)
+            {
+                frameText.text = $"Game Complete\nFinal Frame: {gm.currentFrame} / {gm.maxFrames}";
             }
             else
             {
@@ -24,6 +33,11 @@ public class GameUIController : MonoBehaviour
             }
         }
         if (totalScoreText) totalScoreText.text = $"Total Score: {gm.totalScore}";
+        if (ticketText)
+        {
+            string bonusSuffix = gm.lastFrameUsedTicketBonus ? " (2x clear bonus)" : string.Empty;
+            ticketText.text = $"Tickets: {gm.currentTickets}\nLast Frame: +{gm.ticketsEarnedLastFrame}{bonusSuffix}";
+        }
     }
 
     void Update()

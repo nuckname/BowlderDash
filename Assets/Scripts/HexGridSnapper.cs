@@ -33,6 +33,16 @@ public class HexGridSnapper : MonoBehaviour
     public float runtimeLineWidth = 0.08f;
     public float runtimeLineHeightOffset = 0.05f;
 
+    [Header("Tickets")]
+    public bool enableFrameTickets = true;
+    public int minTicketsPerFrame = 2;
+    public int maxTicketsPerFrame = 4;
+    public int ticketValue = 1;
+    public float ticketHeightOffset = 0.08f;
+    public float ticketVisualScale = 0.18f;
+    public Color ticketCellColor = new Color(1f, 0.82f, 0.18f, 0.92f);
+    public GameObject ticketVisualPrefab;
+
     // internal cell representation
     public class Cell
     {
@@ -42,8 +52,16 @@ public class HexGridSnapper : MonoBehaviour
         public Transform occupant;
     }
 
+    private class TicketCell
+    {
+        public Cell cell;
+        public int value;
+        public GameObject visual;
+    }
+
     private List<Cell> cells = new List<Cell>();
     private readonly List<LineRenderer> runtimeGridLines = new List<LineRenderer>();
+    private readonly List<TicketCell> activeTickets = new List<TicketCell>();
     private Material generatedRuntimeMaterial;
     private bool runtimeGridVisible;
 
@@ -71,6 +89,7 @@ public class HexGridSnapper : MonoBehaviour
 
         ApplyRuntimeGridVisibility(ShouldShowRuntimeGrid());
         UpdateRuntimeGridColors();
+        UpdateTicketVisuals();
     }
 
     private void OnEnable()
@@ -255,6 +274,35 @@ public class HexGridSnapper : MonoBehaviour
         return bestCell;
     }
 
+    public Cell GetCell(int col, int row)
+    {
+        if (cells == null || cells.Count == 0)
+        {
+            GenerateGrid();
+        }
+
+        for (int i = 0; i < cells.Count; i++)
+        {
+            Cell cell = cells[i];
+            if (cell.col == col && cell.row == row)
+            {
+                return cell;
+            }
+        }
+
+        return null;
+    }
+
+    public List<Cell> GetCellsSnapshot()
+    {
+        if (cells == null || cells.Count == 0)
+        {
+            GenerateGrid();
+        }
+
+        return new List<Cell>(cells);
+    }
+
     /// <summary>
     /// Attempts to reserve the cell for the requester. If allowOnePerCell is true and the cell is occupied by another, fails.
     /// If the requester already occupies a different cell, that previous cell will be released.
@@ -284,6 +332,46 @@ public class HexGridSnapper : MonoBehaviour
         return false;
     }
 
+    public void ClearAllOccupants()
+    {
+        for (int i = 0; i < cells.Count; i++)
+        {
+            cells[i].occupant = null;
+        }
+    }
+
+    public void SyncPinsToGrid(IEnumerable<Pin> pins)
+    {
+        if (pins == null)
+        {
+            return;
+        }
+
+        if (cells == null || cells.Count == 0)
+        {
+            GenerateGrid();
+        }
+
+        ClearAllOccupants();
+
+        foreach (Pin pin in pins)
+        {
+            if (pin == null || !pin.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            Cell nearestCell = GetNearestCell(pin.transform.position);
+            if (nearestCell == null)
+            {
+                continue;
+            }
+
+            TryReserveCell(nearestCell, pin.transform);
+            pin.transform.position = nearestCell.center;
+        }
+    }
+
     /// <summary>
     /// Releases any cell currently occupied by requester.
     /// </summary>
@@ -310,6 +398,143 @@ public class HexGridSnapper : MonoBehaviour
             if (cells[i].occupant == t) return cells[i];
         }
         return null;
+    }
+
+    public void SpawnTicketsForFrame()
+    {
+        ClearTickets();
+
+        if (!Application.isPlaying || !enableFrameTickets)
+        {
+            return;
+        }
+
+        if (cells == null || cells.Count == 0)
+        {
+            GenerateGrid();
+        }
+
+        if (cells.Count == 0)
+        {
+            return;
+        }
+
+        int clampedMin = Mathf.Clamp(minTicketsPerFrame, 0, cells.Count);
+        int clampedMax = Mathf.Clamp(maxTicketsPerFrame, clampedMin, cells.Count);
+        int ticketCount = Random.Range(clampedMin, clampedMax + 1);
+
+        List<int> indices = new List<int>(cells.Count);
+        for (int i = 0; i < cells.Count; i++)
+        {
+            indices.Add(i);
+        }
+
+        for (int i = 0; i < indices.Count; i++)
+        {
+            int swapIndex = Random.Range(i, indices.Count);
+            int temp = indices[i];
+            indices[i] = indices[swapIndex];
+            indices[swapIndex] = temp;
+        }
+
+        for (int i = 0; i < ticketCount; i++)
+        {
+            Cell cell = cells[indices[i]];
+            TicketCell ticket = new TicketCell
+            {
+                cell = cell,
+                value = Mathf.Max(1, ticketValue),
+                visual = CreateTicketVisual(cell)
+            };
+
+            activeTickets.Add(ticket);
+        }
+
+        UpdateRuntimeGridColors();
+    }
+
+    public bool TryCollectTicketForPin(Pin pin, out int collectedValue)
+    {
+        collectedValue = 0;
+        if (pin == null)
+        {
+            return false;
+        }
+
+        Cell occupantCell = GetCellByOccupant(pin.transform);
+        if (occupantCell == null)
+        {
+            occupantCell = GetNearestCell(pin.transform.position);
+        }
+
+        if (occupantCell == null)
+        {
+            return false;
+        }
+
+        TicketCell ticket = GetTicketAtCell(occupantCell);
+        if (ticket == null)
+        {
+            return false;
+        }
+
+        collectedValue = ticket.value;
+        if (ticket.visual != null)
+        {
+            Destroy(ticket.visual);
+        }
+
+        activeTickets.Remove(ticket);
+        UpdateRuntimeGridColors();
+        return true;
+    }
+
+    public bool AreAllPlacedPinsCleared()
+    {
+        bool foundPlacedPin = false;
+
+        for (int i = 0; i < cells.Count; i++)
+        {
+            Transform occupant = cells[i].occupant;
+            if (occupant == null)
+            {
+                continue;
+            }
+
+            Pin pin = occupant.GetComponent<Pin>();
+            if (pin == null)
+            {
+                continue;
+            }
+
+            foundPlacedPin = true;
+
+            if (!occupant.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            if (!pin.IsFallen())
+            {
+                return false;
+            }
+        }
+
+        return foundPlacedPin;
+    }
+
+    public void ClearTickets()
+    {
+        for (int i = 0; i < activeTickets.Count; i++)
+        {
+            if (activeTickets[i].visual != null)
+            {
+                Destroy(activeTickets[i].visual);
+            }
+        }
+
+        activeTickets.Clear();
+        UpdateRuntimeGridColors();
     }
 
     private void OnDrawGizmos()
@@ -349,6 +574,7 @@ public class HexGridSnapper : MonoBehaviour
 
     private void OnDestroy()
     {
+        ClearTickets();
         ClearRuntimeGrid();
         if (generatedRuntimeMaterial != null)
         {
@@ -435,10 +661,20 @@ public class HexGridSnapper : MonoBehaviour
             LineRenderer line = runtimeGridLines[i];
             if (line == null) continue;
 
-            Color lineColor = cells[i].occupant != null ? occupiedCellColor : freeCellColor;
+            Color lineColor = GetCellColor(cells[i]);
             line.startColor = lineColor;
             line.endColor = lineColor;
         }
+    }
+
+    private Color GetCellColor(Cell cell)
+    {
+        if (GetTicketAtCell(cell) != null)
+        {
+            return ticketCellColor;
+        }
+
+        return cell.occupant != null ? occupiedCellColor : freeCellColor;
     }
 
     private Material GetRuntimeLineMaterial()
@@ -476,5 +712,81 @@ public class HexGridSnapper : MonoBehaviour
         }
 
         return verts;
+    }
+
+    private TicketCell GetTicketAtCell(Cell cell)
+    {
+        if (cell == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < activeTickets.Count; i++)
+        {
+            TicketCell ticket = activeTickets[i];
+            if (ticket.cell.col == cell.col && ticket.cell.row == cell.row)
+            {
+                return ticket;
+            }
+        }
+
+        return null;
+    }
+
+    private GameObject CreateTicketVisual(Cell cell)
+    {
+        if (cell == null)
+        {
+            return null;
+        }
+
+        GameObject visual;
+        if (ticketVisualPrefab != null)
+        {
+            visual = Instantiate(ticketVisualPrefab, transform);
+        }
+        else
+        {
+            visual = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            Collider collider = visual.GetComponent<Collider>();
+            if (collider != null)
+            {
+                Destroy(collider);
+            }
+
+            Renderer renderer = visual.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.color = ticketCellColor;
+            }
+        }
+
+        visual.name = $"Ticket_{cell.row}_{cell.col}";
+        visual.transform.SetParent(transform, true);
+        visual.transform.position = cell.center + Vector3.up * ticketHeightOffset;
+        visual.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        visual.transform.localScale = new Vector3(ticketVisualScale, ticketVisualScale * 0.1f, ticketVisualScale);
+        return visual;
+    }
+
+    private void UpdateTicketVisuals()
+    {
+        if (!Application.isPlaying)
+        {
+            return;
+        }
+
+        for (int i = 0; i < activeTickets.Count; i++)
+        {
+            TicketCell ticket = activeTickets[i];
+            if (ticket.visual == null)
+            {
+                continue;
+            }
+
+            float bob = Mathf.Sin((Time.time * 3f) + i) * 0.025f;
+            ticket.visual.transform.position = ticket.cell.center + Vector3.up * (ticketHeightOffset + bob);
+            ticket.visual.transform.Rotate(Vector3.up, 60f * Time.deltaTime, Space.World);
+        }
     }
 }
