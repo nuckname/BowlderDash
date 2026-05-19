@@ -70,7 +70,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitterTag: Ball
-  scoreCalculator: {fileID: 0}
+  gameManager: {fileID: 0}
+  scoreCalculatorOverride: {fileID: 0}
   scoreValue: 10
   multValue: 0.5
   onHit:
@@ -225,8 +226,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitterTag: Ball
-  scoreCalculator: {fileID: 0}
-  scoreValue: 10
+  gameManager: {fileID: 0}
+  scoreCalculatorOverride: {fileID: 0}
+  scoreValue: 0
   multValue: 0.5
   onHit:
     m_PersistentCalls:

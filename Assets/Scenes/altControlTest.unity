@@ -1084,6 +1084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentFrameScore: 0
   currentFrameMult: 1
+  floatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
 --- !u!114 &341304546
 MonoBehaviour:
   m_ObjectHideFlags: 0

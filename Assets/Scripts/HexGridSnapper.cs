@@ -507,6 +507,11 @@ public class HexGridSnapper : MonoBehaviour
                 continue;
             }
 
+            if (occupant.GetComponent<MultPin>() != null)
+            {
+                continue;
+            }
+
             foundPlacedPin = true;
 
             if (!occupant.gameObject.activeInHierarchy)

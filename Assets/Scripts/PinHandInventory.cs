@@ -1214,7 +1214,8 @@ public class PinHandInventory : MonoBehaviour
                     multPin = pinObject.AddComponent<MultPin>();
                 }
 
-                multPin.scoreCalculator = gameManager != null ? gameManager.scoreCalculator : null;
+                multPin.gameManager = gameManager;
+                multPin.scoreCalculatorOverride = gameManager != null ? gameManager.scoreCalculator : null;
             }
 
             if (pinComponent != null && !runtimePowerupPins.Contains(pinComponent))
@@ -1439,7 +1440,8 @@ public class PinHandInventory : MonoBehaviour
                 multComponent = pinObject.AddComponent<MultPin>();
             }
 
-            multComponent.scoreCalculator = gameManager != null ? gameManager.scoreCalculator : null;
+            multComponent.gameManager = gameManager;
+            multComponent.scoreCalculatorOverride = gameManager != null ? gameManager.scoreCalculator : null;
 
             if (explodingComponent != null)
             {

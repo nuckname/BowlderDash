@@ -1,54 +1,122 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class MultPin : MonoBehaviour
 {
-
     [Header("Hit Settings")]
-    public string hitterTag = "Player";
-    public ScoreCalculator scoreCalculator;
+    public string hitterTag = "Ball";
+    public GrandGameManager gameManager;
+    public ScoreCalculator scoreCalculatorOverride;
     public int scoreValue = 10;
     public float multValue = 0.5f;
-
 
     [Header("Events")]
     public UnityEvent onHit;
 
-    void Start()
-    {
+    private bool hasAwardedThisFrame;
 
+    private void OnEnable()
+    {
+        ResetFrameState();
     }
 
-    void Update()
+    private void Update()
     {
+        if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+        {
+            ResetFrameState();
+        }
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag(hitterTag))
-            HandleHit(collision.gameObject);
+        if (hasAwardedThisFrame)
+        {
+            return;
+        }
+
+        if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+        {
+            return;
+        }
+
+        if (!IsValidHitter(collision.gameObject))
+        {
+            return;
+        }
+
+        HandleHit(collision.gameObject);
     }
 
-
-    void HandleHit(GameObject hitter)
+    private bool IsValidHitter(GameObject hitter)
     {
+        if (hitter == null)
+        {
+            return false;
+        }
+
+        if (!string.IsNullOrEmpty(hitterTag) && hitter.CompareTag(hitterTag))
+        {
+            return true;
+        }
+
+        GrandGameManager resolvedGameManager = ResolveGameManager();
+        return resolvedGameManager != null && resolvedGameManager.ball == hitter;
+    }
+
+    private void HandleHit(GameObject hitter)
+    {
+        hasAwardedThisFrame = true;
         AddScore();
         OnHit(hitter);
     }
 
-    void AddScore()
+    private void AddScore()
     {
-        if (scoreCalculator != null)
+        ScoreCalculator resolvedScoreCalculator = ResolveScoreCalculator();
+        if (resolvedScoreCalculator != null)
         {
-            scoreCalculator.ModifyScore(scoreValue, multValue); // Example: Add scoreValue to score, no multiplier change
+            resolvedScoreCalculator.QueueScoreModification(scoreValue, multValue, transform.position);
         }
+    }
+
+    private GrandGameManager ResolveGameManager()
+    {
+        if (gameManager != null)
+        {
+            return gameManager;
+        }
+
+        gameManager = GrandGameManager.Instance;
+        return gameManager;
+    }
+
+    private ScoreCalculator ResolveScoreCalculator()
+    {
+        if (scoreCalculatorOverride != null)
+        {
+            return scoreCalculatorOverride;
+        }
+
+        GrandGameManager resolvedGameManager = ResolveGameManager();
+        if (resolvedGameManager != null)
+        {
+            return resolvedGameManager.scoreCalculator;
+        }
+
+        return GrandGameManager.Instance != null ? GrandGameManager.Instance.scoreCalculator : null;
+    }
+
+    private void ResetFrameState()
+    {
+        hasAwardedThisFrame = false;
     }
 
     protected virtual void OnHit(GameObject hitter)
     {
         if (onHit != null)
+        {
             onHit.Invoke();
+        }
     }
 }

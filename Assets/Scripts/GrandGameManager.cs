@@ -234,6 +234,7 @@ public class GrandGameManager : MonoBehaviour
         ResetBall();
         
         if (grid != null) grid.showGizmos = true;
+        uiController?.SetPlacementWarning(string.Empty);
         UpdateInstructionText("Drag pin cards onto the grid, then press TAB when ready.");
         
         if (uiController != null) uiController.UpdateStandardUI(this);
@@ -261,7 +262,10 @@ public class GrandGameManager : MonoBehaviour
 
     private void ReadyPlayer()
     {
-        pinHandInventory?.SaveCurrentLayoutAsLastUsed();
+        if (throwsThisFrame == 0)
+        {
+            pinHandInventory?.SaveCurrentLayoutAsLastUsed();
+        }
 
         _currentState = GameState.PlayerReady;
         Debug.Log("Current State: Player Ready");
@@ -310,7 +314,8 @@ public class GrandGameManager : MonoBehaviour
 
     private IEnumerator WaitAndScore()
     {
-        yield return new WaitForSeconds(6f);
+        // Wait for physics to settle
+        yield return new WaitForSeconds(7f);
 
         _currentState = GameState.CalculatingScore;
         Debug.Log("Current State: Calculating Score");
@@ -321,11 +326,16 @@ public class GrandGameManager : MonoBehaviour
         RefreshRuntimePools();
         foreach(var p in _allPinsPool)
         {
-            if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy)
+            if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy && CountsTowardFrameClear(p))
             {
                 totalPinsActiveAtStart++;
                 if (p.IsFallen()) fallenPinsThisThrow++;
             }
+        }
+
+        if (scoreCalculator != null)
+        {
+            yield return StartCoroutine(scoreCalculator.CalculateScoringSequence());
         }
 
         bool isStrike = (throwsThisFrame == 1 && fallenPinsThisThrow == totalPinsActiveAtStart && totalPinsActiveAtStart > 0);
@@ -343,7 +353,7 @@ public class GrandGameManager : MonoBehaviour
         
         if (uiController != null) uiController.UpdateStandardUI(this);
 
-        // TODO: UI Scoring feedback script goes here later
+        // UI Feedback completed during CalculateScoringSequence
 
         if (throwsThisFrame >= 2 || isStrike)
         {
@@ -466,7 +476,20 @@ public class GrandGameManager : MonoBehaviour
         {
             if (throwsThisFrame == 0 && (_currentState == GameState.PinPlacement || _currentState == GameState.PlayerReady))
             {
-                if (_currentState == GameState.PinPlacement) ReadyPlayer();
+                if (_currentState == GameState.PinPlacement)
+                {
+                    if (!HasPinsPlacedForCurrentFrame())
+                    {
+                        const string noPinsWarning = "Place at least one pin on the board before bowling.";
+                        uiController?.SetPlacementWarning(noPinsWarning);
+                        uiController?.UpdateStandardUI(this);
+                        UpdateInstructionText(noPinsWarning);
+                        return;
+                    }
+
+                    uiController?.SetPlacementWarning(string.Empty);
+                    ReadyPlayer();
+                }
                 else EnterPinPlacement();
             }
         }
@@ -799,6 +822,39 @@ public class GrandGameManager : MonoBehaviour
     public void StopFollowingCurve()
     {
         isFollowingCurve = false;
+    }
+
+    private bool HasPinsPlacedForCurrentFrame()
+    {
+        RefreshRuntimePools();
+        for (int i = 0; i < _allPinsPool.Length; i++)
+        {
+            Pin pin = _allPinsPool[i];
+            if (pin == null || !pin.gameObject.scene.isLoaded || !pin.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            if (grid != null)
+            {
+                HexGridSnapper.Cell occupantCell = grid.GetCellByOccupant(pin.transform);
+                if (occupantCell != null)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool CountsTowardFrameClear(Pin pin)
+    {
+        return pin != null && pin.GetComponent<MultPin>() == null;
     }
 
     // --- CAMERA LOGIC ---

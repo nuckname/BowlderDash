@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class GameUIController : MonoBehaviour
 {
+    private string placementWarningMessage;
+
     [Header("Frame Sheet Components")]
     public Text frameText;
     public Text totalScoreText;
@@ -17,7 +19,13 @@ public class GameUIController : MonoBehaviour
         {
             if (gm.GetCurrentState() == GameState.PinPlacement)
             {
-                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=yellow>Place pins from your hand, then press TAB to bowl.</color>";
+                string placementCopy = "Place pins from your hand, then press TAB to bowl.";
+                if (!string.IsNullOrEmpty(placementWarningMessage))
+                {
+                    placementCopy += $"\n<color=#ff8a65>{placementWarningMessage}</color>";
+                }
+
+                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=yellow>{placementCopy}</color>";
             }
             else if (gm.GetCurrentState() == GameState.Shop)
             {
@@ -38,6 +46,11 @@ public class GameUIController : MonoBehaviour
             string bonusSuffix = gm.lastFrameUsedTicketBonus ? " (2x clear bonus)" : string.Empty;
             ticketText.text = $"Tickets: {gm.currentTickets}\nLast Frame: +{gm.ticketsEarnedLastFrame}{bonusSuffix}";
         }
+    }
+
+    public void SetPlacementWarning(string warningMessage)
+    {
+        placementWarningMessage = warningMessage;
     }
 
     void Update()
