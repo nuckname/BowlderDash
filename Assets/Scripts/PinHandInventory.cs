@@ -505,11 +505,8 @@ public class PinHandInventory : MonoBehaviour
     {
         if (canvasGroup != null) return;
 
-        Canvas hostCanvas = FindObjectOfType<Canvas>();
-        Transform hostParent = hostCanvas != null ? hostCanvas.transform : null;
-
         GameObject handCanvasObject = new GameObject("PinHandCanvas");
-        handCanvasObject.transform.SetParent(hostParent, false);
+        handCanvasObject.transform.SetParent(null, false);
 
         canvas = handCanvasObject.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;

@@ -20,6 +20,23 @@ public class PinShopController : MonoBehaviour
         public Text actionButtonText;
     }
 
+    [Header("Scene Shop References")]
+    [SerializeField] private Canvas shopCanvas;
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private CanvasScaler canvasScaler;
+    [SerializeField] private Text titleText;
+    [SerializeField] private Text summaryText;
+    [SerializeField] private Text pageTitleText;
+    [SerializeField] private Text footerText;
+    [SerializeField] private Button prevPageButton;
+    [SerializeField] private Button nextPageButton;
+    [SerializeField] private Button continueButton;
+    [SerializeField] private RectTransform buyPageRoot;
+    [SerializeField] private RectTransform sellPageRoot;
+    [SerializeField] private RectTransform upgradesPageRoot;
+    [SerializeField] private ScrollRect buyScrollRect;
+    [SerializeField] private ScrollRect sellScrollRect;
+
     [Header("TV Shop Anchors")]
     public Transform worldSpaceScreenAnchor;
     public Vector2 canvasSize = new Vector2(760f, 460f);
@@ -45,26 +62,12 @@ public class PinShopController : MonoBehaviour
     private GrandGameManager gameManager;
     private PinHandInventory inventory;
 
-    private Canvas shopCanvas;
-    private CanvasGroup canvasGroup;
-    private CanvasScaler canvasScaler;
-    private Text titleText;
-    private Text summaryText;
-    private Text pageTitleText;
-    private Text footerText;
-    private Button prevPageButton;
-    private Button nextPageButton;
-    private Button continueButton;
     private RectTransform pageHost;
-    private RectTransform buyPageRoot;
     private RectTransform buyPageContent;
-    private RectTransform sellPageRoot;
     private RectTransform sellPageContent;
-    private RectTransform upgradesPageRoot;
-    private ScrollRect buyScrollRect;
-    private ScrollRect sellScrollRect;
     private Font uiFont;
     private ShopPage currentPage;
+    private bool createdRuntimeCanvas;
 
     public void Configure(GrandGameManager owner, PinHandInventory pinInventory)
     {
@@ -72,14 +75,14 @@ public class PinShopController : MonoBehaviour
         inventory = pinInventory;
 
         EnsureEventSystemExists();
-        BuildRuntimeShop();
+        EnsureShopReferences();
         RefreshShop();
         HideShop();
     }
 
     public void ShowShop()
     {
-        BuildRuntimeShop();
+        EnsureShopReferences();
         RefreshCanvasPlacement();
         currentPage = ShopPage.Buy;
         SetVisible(true);
@@ -98,7 +101,13 @@ public class PinShopController : MonoBehaviour
 
     public void RefreshShop()
     {
-        if (gameManager == null || inventory == null || titleText == null)
+        if (gameManager == null || inventory == null)
+        {
+            return;
+        }
+
+        EnsureShopReferences();
+        if (titleText == null)
         {
             return;
         }
@@ -112,9 +121,9 @@ public class PinShopController : MonoBehaviour
             frameSummary += $"\nLast frame payout: +{gameManager.ticketsEarnedLastFrame}{bonusTag}";
         }
 
-        summaryText.text = frameSummary;
-        pageTitleText.text = GetPageTitle(currentPage);
-        footerText.text = GetFooterCopy(currentPage);
+        if (summaryText != null) summaryText.text = frameSummary;
+        if (pageTitleText != null) pageTitleText.text = GetPageTitle(currentPage);
+        if (footerText != null) footerText.text = GetFooterCopy(currentPage);
 
         RefreshRows(buyRows, isBuyPage: true);
         RefreshRows(sellRows, isBuyPage: false);
@@ -136,6 +145,125 @@ public class PinShopController : MonoBehaviour
         }
     }
 
+    private void EnsureShopReferences()
+    {
+        if (!TryBindSceneShop())
+        {
+            BuildRuntimeShop();
+        }
+
+        RegisterButtonListeners();
+    }
+
+    private bool TryBindSceneShop()
+    {
+        if (shopCanvas == null)
+        {
+            if (worldSpaceScreenAnchor != null)
+            {
+                shopCanvas = worldSpaceScreenAnchor.GetComponentInChildren<Canvas>(true);
+            }
+
+            if (shopCanvas == null)
+            {
+                shopCanvas = FindNamedComponentInChildren<Canvas>("PinShopCanvas");
+            }
+        }
+
+        if (shopCanvas == null)
+        {
+            return false;
+        }
+
+        canvasGroup = canvasGroup != null ? canvasGroup : shopCanvas.GetComponent<CanvasGroup>();
+        canvasScaler = canvasScaler != null ? canvasScaler : shopCanvas.GetComponent<CanvasScaler>();
+
+        titleText = titleText != null ? titleText : FindNamedComponentInChildren<Text>("Title", shopCanvas.transform);
+        summaryText = summaryText != null ? summaryText : FindNamedComponentInChildren<Text>("Summary", shopCanvas.transform);
+        pageTitleText = pageTitleText != null ? pageTitleText : FindNamedComponentInChildren<Text>("PageTitle", shopCanvas.transform);
+        footerText = footerText != null ? footerText : FindNamedComponentInChildren<Text>("Footer", shopCanvas.transform);
+        prevPageButton = prevPageButton != null ? prevPageButton : FindNamedComponentInChildren<Button>("PrevPageButton", shopCanvas.transform);
+        nextPageButton = nextPageButton != null ? nextPageButton : FindNamedComponentInChildren<Button>("NextPageButton", shopCanvas.transform);
+        continueButton = continueButton != null ? continueButton : FindNamedComponentInChildren<Button>("ContinueButton", shopCanvas.transform);
+        buyPageRoot = buyPageRoot != null ? buyPageRoot : FindNamedComponentInChildren<RectTransform>("BuyPage", shopCanvas.transform);
+        sellPageRoot = sellPageRoot != null ? sellPageRoot : FindNamedComponentInChildren<RectTransform>("SellPage", shopCanvas.transform);
+        upgradesPageRoot = upgradesPageRoot != null ? upgradesPageRoot : FindNamedComponentInChildren<RectTransform>("UpgradesPage", shopCanvas.transform);
+        buyScrollRect = buyScrollRect != null ? buyScrollRect : FindNamedComponentInChildren<ScrollRect>("BuyPage", shopCanvas.transform);
+        sellScrollRect = sellScrollRect != null ? sellScrollRect : FindNamedComponentInChildren<ScrollRect>("SellPage", shopCanvas.transform);
+
+        BindSceneRows();
+        return canvasGroup != null;
+    }
+
+    private void RegisterButtonListeners()
+    {
+        RegisterButton(prevPageButton, ShowPreviousPage);
+        RegisterButton(nextPageButton, ShowNextPage);
+        RegisterButton(continueButton, OnContinuePressed);
+    }
+
+    private void RegisterButton(Button button, UnityEngine.Events.UnityAction action)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(action);
+    }
+
+    private void BindSceneRows()
+    {
+        if (shopCanvas == null)
+        {
+            return;
+        }
+
+        buyRows.Clear();
+        sellRows.Clear();
+
+        BindRow(buyPageRoot, buyRows, PinHandCardType.Standard, true, "Standard_BuyRow");
+        BindRow(buyPageRoot, buyRows, PinHandCardType.Exploding, true, "Exploding_BuyRow");
+        BindRow(buyPageRoot, buyRows, PinHandCardType.Mult, true, "Mult_BuyRow");
+
+        BindRow(sellPageRoot, sellRows, PinHandCardType.Standard, false, "Standard_SellRow");
+        BindRow(sellPageRoot, sellRows, PinHandCardType.Exploding, false, "Exploding_SellRow");
+        BindRow(sellPageRoot, sellRows, PinHandCardType.Mult, false, "Mult_SellRow");
+    }
+
+    private void BindRow(RectTransform pageRoot, Dictionary<PinHandCardType, ShopRow> targetRows, PinHandCardType type, bool isBuyPage, string rowObjectName)
+    {
+        if (pageRoot == null)
+        {
+            return;
+        }
+
+        RectTransform rowRoot = FindNamedComponentInChildren<RectTransform>(rowObjectName, pageRoot);
+        if (rowRoot == null)
+        {
+            return;
+        }
+
+        ShopRow row = new ShopRow
+        {
+            ownedText = FindNamedComponentInChildren<Text>("Owned", rowRoot),
+            priceText = FindNamedComponentInChildren<Text>("Price", rowRoot),
+            actionButton = FindNamedComponentInChildren<Button>(isBuyPage ? "BuyButton" : "SellButton", rowRoot)
+        };
+
+        if (row.actionButton != null)
+        {
+            row.actionButtonText = row.actionButton.GetComponentInChildren<Text>(true);
+            RegisterButton(row.actionButton, isBuyPage ? (() => OnBuyPressed(type)) : (() => OnSellPressed(type)));
+        }
+
+        if (row.ownedText != null && row.priceText != null && row.actionButton != null)
+        {
+            targetRows[type] = row;
+        }
+    }
+
     private void BuildRuntimeShop()
     {
         if (shopCanvas != null)
@@ -148,6 +276,7 @@ public class PinShopController : MonoBehaviour
         shopCanvas = canvasObject.GetComponent<Canvas>();
         canvasScaler = canvasObject.GetComponent<CanvasScaler>();
         canvasGroup = canvasObject.GetComponent<CanvasGroup>();
+        createdRuntimeCanvas = true;
         shopCanvas.sortingOrder = 80;
         canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         canvasScaler.referenceResolution = canvasSize;
@@ -479,6 +608,11 @@ public class PinShopController : MonoBehaviour
             return;
         }
 
+        if (!createdRuntimeCanvas)
+        {
+            return;
+        }
+
         RectTransform canvasRect = shopCanvas.GetComponent<RectTransform>();
         shopCanvas.worldCamera = gameManager != null ? gameManager.targetCamera : Camera.main;
 
@@ -717,5 +851,50 @@ public class PinShopController : MonoBehaviour
 
         GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
         DontDestroyOnLoad(eventSystemObject);
+    }
+
+    private T FindNamedComponentInChildren<T>(string objectName) where T : Component
+    {
+        return FindNamedComponentInChildren<T>(objectName, transform);
+    }
+
+    private T FindNamedComponentInChildren<T>(string objectName, Transform root) where T : Component
+    {
+        if (root == null)
+        {
+            return null;
+        }
+
+        Transform target = FindChildRecursive(root, objectName);
+        if (target == null)
+        {
+            return null;
+        }
+
+        return target.GetComponent<T>();
+    }
+
+    private Transform FindChildRecursive(Transform root, string objectName)
+    {
+        if (root == null)
+        {
+            return null;
+        }
+
+        if (root.name == objectName)
+        {
+            return root;
+        }
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform result = FindChildRecursive(root.GetChild(i), objectName);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        return null;
     }
 }
