@@ -111,6 +111,7 @@ public class PinHandInventory : MonoBehaviour
     private GameObject previewPinObject;
     private bool handVisible;
     private bool ownedInventoryInitialized;
+    private bool legacyScenePinsDisabled;
 
     private void Awake()
     {
@@ -1133,21 +1134,8 @@ public class PinHandInventory : MonoBehaviour
 
     private void CollectStandardPinPool()
     {
-        Pin[] pins = FindObjectsOfType<Pin>(true);
-        standardPinPool.Clear();
-
-        for (int i = 0; i < pins.Length; i++)
-        {
-            Pin pin = pins[i];
-            if (pin == null) continue;
-            if (pin.GetComponent<explodingPin>() != null) continue;
-            if (pin.GetComponent<MultPin>() != null) continue;
-            if (!standardPinPool.Contains(pin))
-            {
-                standardPinPool.Add(pin);
-            }
-        }
-
+        DisableLegacyScenePinsOnce();
+        standardPinPool.RemoveAll(pin => pin == null);
         EnsureStandardPinPoolSize(GetMaxOwnedCount(PinHandCardType.Standard));
     }
 
@@ -1285,6 +1273,34 @@ public class PinHandInventory : MonoBehaviour
         }
     }
 
+    private void DisableLegacyScenePinsOnce()
+    {
+        if (legacyScenePinsDisabled)
+        {
+            return;
+        }
+
+        legacyScenePinsDisabled = true;
+
+        Pin[] pins = FindObjectsOfType<Pin>(true);
+        for (int i = 0; i < pins.Length; i++)
+        {
+            Pin pin = pins[i];
+            if (pin == null)
+            {
+                continue;
+            }
+
+            if (grid != null)
+            {
+                grid.ReleaseCell(pin.transform);
+            }
+
+            pin.ResetPin();
+            pin.gameObject.SetActive(false);
+        }
+    }
+
     private void PrepareStandardPinsForFrame()
     {
         for (int i = 0; i < standardPinPool.Count; i++)
@@ -1371,39 +1387,36 @@ public class PinHandInventory : MonoBehaviour
         }
     }
 
-    private Pin FindStandardTemplatePin()
+    private GameObject CreateConfiguredPinInstance(PinHandCardType type)
     {
-        Pin[] pins = FindObjectsOfType<Pin>(true);
-        for (int i = 0; i < pins.Length; i++)
+        GameObject configuredPrefab = GetConfiguredPrefabAsset(type);
+        if (configuredPrefab == null)
         {
-            Pin pin = pins[i];
-            if (pin == null) continue;
-            if (pin.GetComponent<explodingPin>() != null) continue;
-            if (pin.GetComponent<MultPin>() != null) continue;
-            return pin;
+            return null;
         }
 
-        return null;
+        GameObject instance = Instantiate(configuredPrefab);
+        EnsureTypeComponents(instance, type);
+        return instance;
     }
 
-    private GameObject CreateConfiguredPinInstance(PinHandCardType type)
+    private GameObject GetConfiguredPrefabAsset(PinHandCardType type)
     {
         PinTypeConfig config = GetTypeConfig(type);
         GameObject configuredPrefab = config != null ? config.prefab : null;
-
-        if (configuredPrefab != null)
+        if (configuredPrefab == null)
         {
-            GameObject instance = Instantiate(configuredPrefab);
-            EnsureTypeComponents(instance, type);
-            return instance;
+            Debug.LogWarning($"[PinHandInventory] Missing prefab for {GetDisplayName(type)} pins. Assign a prefab asset in PinHandInventory.");
+            return null;
         }
 
-        Pin template = FindStandardTemplatePin();
-        if (template == null) return null;
+        if (configuredPrefab.scene.IsValid())
+        {
+            Debug.LogWarning($"[PinHandInventory] {GetDisplayName(type)} pin source must be a prefab asset, not a scene object.");
+            return null;
+        }
 
-        GameObject fallback = Instantiate(template.gameObject);
-        EnsureTypeComponents(fallback, type);
-        return fallback;
+        return configuredPrefab;
     }
 
     private void EnsureTypeComponents(GameObject pinObject, PinHandCardType type)

@@ -102,3 +102,4 @@ Assets/Materials/vsOnMove.shadergraph
 Assets/Scenes/altControlTest.unity
 Assets/Scenes/SampleScene.unity.meta
 Assets/Scenes/SampleScene.unity
+*.dwlt

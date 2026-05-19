@@ -117,8 +117,7 @@ public class PinShopController : MonoBehaviour
         string frameSummary = $"Tickets: {gameManager.currentTickets}";
         if (gameManager.ticketsEarnedLastFrame > 0)
         {
-            string bonusTag = gameManager.lastFrameUsedTicketBonus ? " (2x clear bonus)" : string.Empty;
-            frameSummary += $"\nLast frame payout: +{gameManager.ticketsEarnedLastFrame}{bonusTag}";
+            frameSummary += $"\nLast frame payout: +{gameManager.ticketsEarnedLastFrame}{gameManager.GetLastFrameTicketBonusSummary()}";
         }
 
         if (summaryText != null) summaryText.text = frameSummary;

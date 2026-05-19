@@ -179,7 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToRotate: {fileID: 7987226714514892799}
   lookTowards: {fileID: 5270511962058577666}
-  lessIntensity: 8
+  lessIntensity: 3
 --- !u!65 &5564525676392362196
 BoxCollider:
   m_ObjectHideFlags: 0

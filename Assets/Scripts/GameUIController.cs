@@ -15,6 +15,9 @@ public class GameUIController : MonoBehaviour
 
     public void UpdateStandardUI(GrandGameManager gm)
     {
+        int throwDisplay = gm.GetCurrentThrowDisplayNumber();
+        string progressHeader = $"Frame: {gm.currentFrame} / {gm.maxFrames}\nThrow: {throwDisplay} / {Mathf.Max(1, gm.maxThrowsPerFrame)}\nScore To Beat: {gm.currentFrameScoreTarget}";
+
         if (frameText) 
         {
             if (gm.GetCurrentState() == GameState.PinPlacement)
@@ -25,25 +28,25 @@ public class GameUIController : MonoBehaviour
                     placementCopy += $"\n<color=#ff8a65>{placementWarningMessage}</color>";
                 }
 
-                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=yellow>{placementCopy}</color>";
+                frameText.text = $"{progressHeader}\n<color=yellow>{placementCopy}</color>";
             }
             else if (gm.GetCurrentState() == GameState.Shop)
             {
-                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}\n<color=cyan>Shop Phase. Spend tickets on the TV.</color>";
+                frameText.text = $"{progressHeader}\n<color=cyan>Shop Phase. Spend tickets on the TV.</color>";
             }
             else if (gm.GetCurrentState() == GameState.GameOver)
             {
-                frameText.text = $"Game Complete\nFinal Frame: {gm.currentFrame} / {gm.maxFrames}";
+                frameText.text = $"Game Complete\n{progressHeader}";
             }
             else
             {
-                frameText.text = $"Frame: {gm.currentFrame} / {gm.maxFrames}";
+                frameText.text = progressHeader;
             }
         }
         if (totalScoreText) totalScoreText.text = $"Total Score: {gm.totalScore}";
         if (ticketText)
         {
-            string bonusSuffix = gm.lastFrameUsedTicketBonus ? " (2x clear bonus)" : string.Empty;
+            string bonusSuffix = gm.GetLastFrameTicketBonusSummary();
             ticketText.text = $"Tickets: {gm.currentTickets}\nLast Frame: +{gm.ticketsEarnedLastFrame}{bonusSuffix}";
         }
     }
@@ -55,15 +58,21 @@ public class GameUIController : MonoBehaviour
 
     void Update()
     {
-        if (GrandGameManager.Instance != null && GrandGameManager.Instance.scoreCalculator != null)
+        GrandGameManager gm = GrandGameManager.Instance;
+        if (gm != null && gm.scoreCalculator != null)
         {
-            int score = GrandGameManager.Instance.scoreCalculator.currentFrameScore;
-            float mult = GrandGameManager.Instance.scoreCalculator.currentFrameMult;
-            int finalScore = GrandGameManager.Instance.scoreCalculator.GetFinalScore();
+            int score = gm.scoreCalculator.currentFrameScore;
+            float mult = gm.scoreCalculator.currentFrameMult;
+            int finalScore = gm.scoreCalculator.GetFinalScore();
+            int targetScore = Mathf.Max(1, gm.currentFrameScoreTarget);
+            int targetMultiplier = finalScore >= targetScore ? Mathf.Max(1, finalScore / targetScore) : 0;
             
             if (currentMathText) 
             {
-                currentMathText.text = $"{score} Score X {mult:0.##} Mult\nRunning Frame Score: {finalScore}";
+                currentMathText.text =
+                    $"Round Score: {finalScore} / {targetScore}\n" +
+                    $"Base {score} x {mult:0.##} Mult\n" +
+                    $"Target Tickets: +{targetMultiplier}";
             }
         }
     }

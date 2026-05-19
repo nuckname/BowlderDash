@@ -19,6 +19,7 @@ public class GrandGameManager : MonoBehaviour
 
     [Header("Game State")]
     public int maxFrames = 10;
+    public int maxThrowsPerFrame = 2;
     public int currentFrame = 1;
     public int throwsThisFrame = 0;
     public int totalScore = 0;
@@ -26,9 +27,24 @@ public class GrandGameManager : MonoBehaviour
     [Header("Ticket Economy")]
     public int startingTickets = 0;
     public int currentTickets = 0;
-    public int ticketsEarnedThisFrame = 0;
+    public int gridTicketsEarnedThisFrame = 0;
+    public int scoreTargetTicketsEarnedThisFrame = 0;
     public int ticketsEarnedLastFrame = 0;
     public bool lastFrameUsedTicketBonus = false;
+    public bool lastFrameUsedStrikeTicketBonus = false;
+
+    [Header("Frame Score Targets")]
+    public int baseFrameScoreTarget = 30;
+    public int flatFrameScoreTargetBonus = 0;
+    public float frameScoreTargetGrowthScale = 1f;
+    public float strikeTicketMultiplier = 2f;
+    public int currentFrameScoreTarget = 30;
+    public AnimationCurve frameScoreTargetCurve = new AnimationCurve(
+        new Keyframe(0f, 1f),
+        new Keyframe(0.45f, 2f),
+        new Keyframe(0.8f, 3.8f),
+        new Keyframe(1f, 6f)
+    );
 
     [Header("Exploder Settings")]
     public bool resetExploderDeformationEachFrame = true;
@@ -100,6 +116,7 @@ public class GrandGameManager : MonoBehaviour
     private bool isFollowingCurve = false;
     private float mouseUpTimer = 0f;
     private const float jitterTolerance = 0.05f;
+    private int scoreAppliedToTotalThisFrame = 0;
 
     void Awake()
     {
@@ -189,11 +206,14 @@ public class GrandGameManager : MonoBehaviour
     public void StartNewGame()
     {
         totalScore = 0;
+        scoreAppliedToTotalThisFrame = 0;
         currentFrame = 1;
         currentTickets = startingTickets;
-        ticketsEarnedThisFrame = 0;
+        gridTicketsEarnedThisFrame = 0;
+        scoreTargetTicketsEarnedThisFrame = 0;
         ticketsEarnedLastFrame = 0;
         lastFrameUsedTicketBonus = false;
+        lastFrameUsedStrikeTicketBonus = false;
         pinHandInventory?.InitializeOwnedInventoryForNewGame();
         pinHandInventory?.ClearSavedLayout();
         shopController?.HideShop();
@@ -204,9 +224,13 @@ public class GrandGameManager : MonoBehaviour
     {
         _currentState = GameState.FrameSetup;
         throwsThisFrame = 0;
-        ticketsEarnedThisFrame = 0;
+        gridTicketsEarnedThisFrame = 0;
+        scoreTargetTicketsEarnedThisFrame = 0;
         ticketsEarnedLastFrame = 0;
         lastFrameUsedTicketBonus = false;
+        lastFrameUsedStrikeTicketBonus = false;
+        scoreAppliedToTotalThisFrame = 0;
+        currentFrameScoreTarget = CalculateFrameScoreTarget(currentFrame);
 
         if (scoreCalculator != null) scoreCalculator.ResetFrameScore();
 
@@ -277,7 +301,7 @@ public class GrandGameManager : MonoBehaviour
         UpdateInstructionText("Draw the ball's path! Start from the ball.");
         
         if (uiController != null) uiController.UpdateStandardUI(this);
-        Debug.Log($"Frame {currentFrame} Throw {throwsThisFrame + 1}: Player Ready.");
+        Debug.Log($"Frame {currentFrame} Throw {GetCurrentThrowDisplayNumber()}: Player Ready.");
     }
 
     private void TogglePinsPhysics(bool enable)
@@ -348,19 +372,29 @@ public class GrandGameManager : MonoBehaviour
         int frameScore = 0;
         if (scoreCalculator != null) frameScore = scoreCalculator.GetFinalScore();
 
-        totalScore += frameScore;
-        Debug.Log($"Tallying Frame! Points Earned: {frameScore}. Total: {totalScore}");
+        int totalScoreDelta = frameScore - scoreAppliedToTotalThisFrame;
+        totalScore += totalScoreDelta;
+        scoreAppliedToTotalThisFrame = frameScore;
+        Debug.Log($"Tallying Frame! Added {totalScoreDelta} points to total. Frame Total: {frameScore}. Total: {totalScore}");
         
         if (uiController != null) uiController.UpdateStandardUI(this);
 
         // UI Feedback completed during CalculateScoringSequence
 
-        if (throwsThisFrame >= 2 || isStrike)
+        if (throwsThisFrame >= maxThrowsPerFrame || isStrike)
         {
             bool clearedAllPlacedPins = grid != null && grid.AreAllPlacedPinsCleared();
-            FinalizeFrameTickets(clearedAllPlacedPins);
+            bool passedScoreTarget = frameScore >= currentFrameScoreTarget;
+            FinalizeFrameTickets(clearedAllPlacedPins, isStrike, frameScore, passedScoreTarget);
 
-            if (currentFrame >= maxFrames)
+            if (!passedScoreTarget)
+            {
+                _currentState = GameState.GameOver;
+                Debug.Log($"Game Over! Missed frame target. Scored {frameScore} / {currentFrameScoreTarget}");
+                UpdateInstructionText($"Game Over! Missed the target: {frameScore} / {currentFrameScoreTarget}");
+                if (uiController != null) uiController.UpdateStandardUI(this);
+            }
+            else if (currentFrame >= maxFrames)
             {
                 _currentState = GameState.GameOver;
                 Debug.Log($"Game Over! Final Score: {totalScore}");
@@ -434,18 +468,40 @@ public class GrandGameManager : MonoBehaviour
         shopController?.RefreshShop();
     }
 
-    private void FinalizeFrameTickets(bool clearedAllPlacedPins)
+    private void FinalizeFrameTickets(bool clearedAllPlacedPins, bool isStrike, int frameScore, bool passedScoreTarget)
     {
-        int rawTickets = Mathf.Max(0, ticketsEarnedThisFrame);
-        lastFrameUsedTicketBonus = clearedAllPlacedPins && rawTickets > 0;
-        ticketsEarnedLastFrame = lastFrameUsedTicketBonus ? rawTickets * 2 : rawTickets;
+        int targetTickets = 0;
+        if (passedScoreTarget && currentFrameScoreTarget > 0)
+        {
+            targetTickets = Mathf.Max(1, frameScore / currentFrameScoreTarget);
+        }
+
+        lastFrameUsedStrikeTicketBonus = passedScoreTarget && isStrike && targetTickets > 0;
+        if (lastFrameUsedStrikeTicketBonus)
+        {
+            targetTickets = Mathf.Max(1, Mathf.RoundToInt(targetTickets * Mathf.Max(1f, strikeTicketMultiplier)));
+        }
+
+        scoreTargetTicketsEarnedThisFrame = targetTickets;
+
+        int gridTickets = Mathf.Max(0, gridTicketsEarnedThisFrame);
+        lastFrameUsedTicketBonus = clearedAllPlacedPins && gridTickets > 0;
+        if (lastFrameUsedTicketBonus)
+        {
+            gridTickets *= 2;
+        }
+
+        ticketsEarnedLastFrame = gridTickets + scoreTargetTicketsEarnedThisFrame;
         currentTickets += ticketsEarnedLastFrame;
 
         if (uiController != null) uiController.UpdateStandardUI(this);
         shopController?.RefreshShop();
 
-        string bonusText = lastFrameUsedTicketBonus ? " Clear bonus x2 applied!" : string.Empty;
-        UpdateInstructionText($"Frame complete. Earned {ticketsEarnedLastFrame} tickets.{bonusText}");
+        string bonusText = GetLastFrameTicketBonusSummary();
+        string passText = passedScoreTarget
+            ? $"Target cleared: {frameScore} / {currentFrameScoreTarget}."
+            : $"Target missed: {frameScore} / {currentFrameScoreTarget}.";
+        UpdateInstructionText($"Frame complete. {passText} Earned {ticketsEarnedLastFrame} tickets.{bonusText}");
     }
 
     private void HandlePinFallenForTickets(Pin fallenPin)
@@ -462,7 +518,7 @@ public class GrandGameManager : MonoBehaviour
 
         if (grid.TryCollectTicketForPin(fallenPin, out int collectedValue))
         {
-            ticketsEarnedThisFrame += collectedValue;
+            gridTicketsEarnedThisFrame += collectedValue;
             if (uiController != null) uiController.UpdateStandardUI(this);
             shopController?.RefreshShop();
         }
@@ -824,6 +880,32 @@ public class GrandGameManager : MonoBehaviour
         isFollowingCurve = false;
     }
 
+    public int GetCurrentThrowDisplayNumber()
+    {
+        if (_currentState == GameState.PinPlacement || _currentState == GameState.PlayerReady || _currentState == GameState.Drawing)
+        {
+            return Mathf.Clamp(throwsThisFrame + 1, 1, Mathf.Max(1, maxThrowsPerFrame));
+        }
+
+        return Mathf.Clamp(Mathf.Max(throwsThisFrame, 1), 1, Mathf.Max(1, maxThrowsPerFrame));
+    }
+
+    public string GetLastFrameTicketBonusSummary()
+    {
+        string summary = string.Empty;
+        if (lastFrameUsedTicketBonus)
+        {
+            summary += " Clear bonus x2 applied!";
+        }
+
+        if (lastFrameUsedStrikeTicketBonus)
+        {
+            summary += " Strike ticket bonus x2 applied!";
+        }
+
+        return summary;
+    }
+
     private bool HasPinsPlacedForCurrentFrame()
     {
         RefreshRuntimePools();
@@ -855,6 +937,19 @@ public class GrandGameManager : MonoBehaviour
     private bool CountsTowardFrameClear(Pin pin)
     {
         return pin != null && pin.GetComponent<MultPin>() == null;
+    }
+
+    private int CalculateFrameScoreTarget(int frameNumber)
+    {
+        if (frameNumber <= 1 || maxFrames <= 1)
+        {
+            return Mathf.Max(1, Mathf.RoundToInt((baseFrameScoreTarget * Mathf.Max(0.1f, frameScoreTargetGrowthScale)) + flatFrameScoreTargetBonus));
+        }
+
+        float normalizedFrame = Mathf.InverseLerp(1f, Mathf.Max(1f, maxFrames), frameNumber);
+        float curveValue = Mathf.Max(0.1f, frameScoreTargetCurve.Evaluate(normalizedFrame));
+        float scaledTarget = (baseFrameScoreTarget * curveValue * Mathf.Max(0.1f, frameScoreTargetGrowthScale)) + flatFrameScoreTargetBonus;
+        return Mathf.Max(1, Mathf.RoundToInt(scaledTarget));
     }
 
     // --- CAMERA LOGIC ---
