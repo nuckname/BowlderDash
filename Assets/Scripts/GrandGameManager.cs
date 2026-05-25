@@ -294,6 +294,7 @@ public class GrandGameManager : MonoBehaviour
         _currentState = GameState.PlayerReady;
         Debug.Log("Current State: Player Ready");
 
+        ResetVaseThrowState();
         TogglePinsPhysics(true);
         if (grid != null) grid.showGizmos = false;
         
@@ -356,6 +357,9 @@ public class GrandGameManager : MonoBehaviour
                 if (p.IsFallen()) fallenPinsThisThrow++;
             }
         }
+
+        AwardVaseIntactBonuses();
+        ResetVaseThrowState();
 
         if (scoreCalculator != null)
         {
@@ -464,6 +468,18 @@ public class GrandGameManager : MonoBehaviour
     public void AddTickets(int amount)
     {
         currentTickets += Mathf.Max(0, amount);
+        if (uiController != null) uiController.UpdateStandardUI(this);
+        shopController?.RefreshShop();
+    }
+
+    public void AddGridTicketsThisFrame(int amount)
+    {
+        if (amount <= 0)
+        {
+            return;
+        }
+        Debug.Log($"<color=orange><b>[GrandGameManager]</b></color> Adding {amount} grid tickets this frame");
+        gridTicketsEarnedThisFrame += amount;
         if (uiController != null) uiController.UpdateStandardUI(this);
         shopController?.RefreshShop();
     }
@@ -936,7 +952,42 @@ public class GrandGameManager : MonoBehaviour
 
     private bool CountsTowardFrameClear(Pin pin)
     {
-        return pin != null && pin.GetComponent<MultPin>() == null;
+        return pin != null
+            && pin.GetComponent<MultPin>() == null
+            && pin.GetComponent<TicketPin>() == null
+            && pin.GetComponent<vasePin>() == null;
+    }
+
+    private void AwardVaseIntactBonuses()
+    {
+        if (scoreCalculator == null)
+        {
+            return;
+        }
+
+        vasePin[] vasePins = FindObjectsOfType<vasePin>(true);
+        for (int i = 0; i < vasePins.Length; i++)
+        {
+            vasePin vase = vasePins[i];
+            if (vase == null || !vase.gameObject.scene.isLoaded || !vase.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            vase.TryAwardIntactBonus(scoreCalculator);
+        }
+    }
+
+    private void ResetVaseThrowState()
+    {
+        vasePin[] vasePins = FindObjectsOfType<vasePin>(true);
+        for (int i = 0; i < vasePins.Length; i++)
+        {
+            if (vasePins[i] != null)
+            {
+                vasePins[i].ResetThrowState();
+            }
+        }
     }
 
     private int CalculateFrameScoreTarget(int frameNumber)

@@ -87,6 +87,18 @@ public class explodingPin : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius);
         foreach (Collider hit in colliders)
         {
+            vasePin vase = hit.GetComponentInParent<vasePin>();
+            if (vase != null)
+            {
+                vase.TryShatterFromExplosion();
+            }
+
+            TicketPin ticketPin = hit.GetComponentInParent<TicketPin>();
+            if (ticketPin != null)
+            {
+                ticketPin.TryAwardFromExplosion(hit);
+            }
+
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             if (rb != null && rb != _rb) //avoid self blow
             {

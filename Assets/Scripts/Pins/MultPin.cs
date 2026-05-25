@@ -3,6 +3,7 @@ using UnityEngine.Events;
 
 public class MultPin : MonoBehaviour
 {
+    public ParticleSystem particleSystem;
     [Header("Hit Settings")]
     public string hitterTag = "Ball";
     public GrandGameManager gameManager;
@@ -12,11 +13,13 @@ public class MultPin : MonoBehaviour
 
     [Header("Events")]
     public UnityEvent onHit;
+    public UnityEvent onReset;
 
     private bool hasAwardedThisFrame;
 
     private void OnEnable()
     {
+        particleSystem = GetComponent<ParticleSystem>();
         ResetFrameState();
     }
 
@@ -25,6 +28,8 @@ public class MultPin : MonoBehaviour
         if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
         {
             ResetFrameState();
+            // invoke reset event
+            onReset?.Invoke();
         }
     }
 
@@ -77,6 +82,7 @@ public class MultPin : MonoBehaviour
         if (resolvedScoreCalculator != null)
         {
             resolvedScoreCalculator.QueueScoreModification(scoreValue, multValue, transform.position);
+
         }
     }
 
@@ -110,6 +116,10 @@ public class MultPin : MonoBehaviour
     private void ResetFrameState()
     {
         hasAwardedThisFrame = false;
+        if (particleSystem != null)
+        {
+            particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
     }
 
     protected virtual void OnHit(GameObject hitter)
@@ -117,6 +127,10 @@ public class MultPin : MonoBehaviour
         if (onHit != null)
         {
             onHit.Invoke();
+        }
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
         }
     }
 }

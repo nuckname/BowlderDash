@@ -72,6 +72,12 @@ public class Pin : MonoBehaviour
         {
             GetComponent<explodingPin>().ResetPin();
         }
+
+        vasePin vasePinComponent = GetComponent<vasePin>();
+        if (vasePinComponent != null)
+        {
+            vasePinComponent.ResetPin();
+        }
     }
 
 

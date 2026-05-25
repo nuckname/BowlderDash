@@ -31,6 +31,7 @@ public class HexGridSnapper : MonoBehaviour
     public Color freeCellColor = new Color(0f, 0.6f, 1f, 0.6f);
     public Color occupiedCellColor = new Color(0f, 1f, 0f, 0.6f);
     public float runtimeLineWidth = 0.08f;
+    public float ticketLineWidthOffset = 0.1f;
     public float runtimeLineHeightOffset = 0.05f;
 
     [Header("Tickets")]
@@ -39,6 +40,8 @@ public class HexGridSnapper : MonoBehaviour
     public int maxTicketsPerFrame = 4;
     public int ticketValue = 1;
     public float ticketHeightOffset = 0.08f;
+    [Tooltip("ticket cells prevent z fighting")]
+    public float ticketCellLineYOffset = 0.1f;
     public float ticketVisualScale = 0.18f;
     public Color ticketCellColor = new Color(1f, 0.82f, 0.18f, 0.92f);
     public GameObject ticketVisualPrefab;
@@ -451,6 +454,7 @@ public class HexGridSnapper : MonoBehaviour
         }
 
         UpdateRuntimeGridColors();
+        RefreshTicketCellLinePositions();
     }
 
     public bool TryCollectTicketForPin(Pin pin, out int collectedValue)
@@ -486,6 +490,7 @@ public class HexGridSnapper : MonoBehaviour
 
         activeTickets.Remove(ticket);
         UpdateRuntimeGridColors();
+        RefreshTicketCellLinePositions();
         return true;
     }
 
@@ -507,7 +512,9 @@ public class HexGridSnapper : MonoBehaviour
                 continue;
             }
 
-            if (occupant.GetComponent<MultPin>() != null)
+            if (occupant.GetComponent<MultPin>() != null
+                || occupant.GetComponent<TicketPin>() != null
+                || occupant.GetComponent<vasePin>() != null)
             {
                 continue;
             }
@@ -540,6 +547,7 @@ public class HexGridSnapper : MonoBehaviour
 
         activeTickets.Clear();
         UpdateRuntimeGridColors();
+        RefreshTicketCellLinePositions();
     }
 
     private void OnDrawGizmos()
@@ -620,6 +628,7 @@ public class HexGridSnapper : MonoBehaviour
         }
 
         UpdateRuntimeGridColors();
+        RefreshTicketCellLinePositions();
     }
 
     private void ClearRuntimeGrid()
@@ -669,6 +678,26 @@ public class HexGridSnapper : MonoBehaviour
             Color lineColor = GetCellColor(cells[i]);
             line.startColor = lineColor;
             line.endColor = lineColor;
+        }
+    }
+
+    private void RefreshTicketCellLinePositions()
+    {
+        for (int i = 0; i < runtimeGridLines.Count && i < cells.Count; i++)
+        {
+            LineRenderer line = runtimeGridLines[i];
+            if (line == null) continue;
+
+            Vector3 center = cells[i].center + Vector3.up * runtimeLineHeightOffset;
+            if (GetTicketAtCell(cells[i]) != null)
+            {
+                center += Vector3.up * ticketCellLineYOffset;
+                line.widthMultiplier = runtimeLineWidth + ticketLineWidthOffset;
+            }
+
+            Vector3[] points = GetHexVertices(center, hexSize);
+            line.SetPositions(points);
+            
         }
     }
 
@@ -769,8 +798,8 @@ public class HexGridSnapper : MonoBehaviour
         visual.name = $"Ticket_{cell.row}_{cell.col}";
         visual.transform.SetParent(transform, true);
         visual.transform.position = cell.center + Vector3.up * ticketHeightOffset;
-        visual.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-        visual.transform.localScale = new Vector3(ticketVisualScale, ticketVisualScale * 0.1f, ticketVisualScale);
+        // visual.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        // visual.transform.localScale = new Vector3(ticketVisualScale, ticketVisualScale * 0.1f, ticketVisualScale);
         return visual;
     }
 

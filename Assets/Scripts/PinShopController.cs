@@ -48,6 +48,7 @@ public class PinShopController : MonoBehaviour
     public int standardBuyPrice = 2;
     public int explodingBuyPrice = 5;
     public int multBuyPrice = 4;
+    public int vaseBuyPrice = 6;
 
     [Header("Style")]
     public Color backdropColor = new Color(0.03f, 0.05f, 0.08f, 0.92f);
@@ -225,10 +226,57 @@ public class PinShopController : MonoBehaviour
         BindRow(buyPageRoot, buyRows, PinHandCardType.Standard, true, "Standard_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Exploding, true, "Exploding_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Mult, true, "Mult_BuyRow");
+        BindRow(buyPageRoot, buyRows, PinHandCardType.Vase, true, "Vase_BuyRow");
 
         BindRow(sellPageRoot, sellRows, PinHandCardType.Standard, false, "Standard_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Exploding, false, "Exploding_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Mult, false, "Mult_SellRow");
+        BindRow(sellPageRoot, sellRows, PinHandCardType.Vase, false, "Vase_SellRow");
+
+        EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.Vase, true);
+        EnsureMissingSceneRow(sellPageRoot, sellScrollRect, sellRows, PinHandCardType.Vase, false);
+    }
+
+    private void EnsureMissingSceneRow(
+        RectTransform pageRoot,
+        ScrollRect scrollRect,
+        Dictionary<PinHandCardType, ShopRow> targetRows,
+        PinHandCardType type,
+        bool isBuyPage)
+    {
+        if (targetRows.ContainsKey(type))
+        {
+            return;
+        }
+
+        Transform pageContent = GetPageContent(pageRoot, scrollRect);
+        if (pageContent == null)
+        {
+            return;
+        }
+
+        CreateRow(pageContent, targetRows, type, isBuyPage);
+    }
+
+    private Transform GetPageContent(RectTransform pageRoot, ScrollRect scrollRect)
+    {
+        if (scrollRect != null && scrollRect.content != null)
+        {
+            return scrollRect.content;
+        }
+
+        if (pageRoot == null)
+        {
+            return null;
+        }
+
+        Transform content = pageRoot.Find("Viewport/Content");
+        if (content != null)
+        {
+            return content;
+        }
+
+        return pageRoot.Find("Content");
     }
 
     private void BindRow(RectTransform pageRoot, Dictionary<PinHandCardType, ShopRow> targetRows, PinHandCardType type, bool isBuyPage, string rowObjectName)
@@ -438,6 +486,7 @@ public class PinShopController : MonoBehaviour
         CreateRow(parent, targetRows, PinHandCardType.Standard, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Exploding, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Mult, isBuyPage);
+        CreateRow(parent, targetRows, PinHandCardType.Vase, isBuyPage);
     }
 
     private void CreateUpgradePage(Transform parent)
@@ -797,6 +846,8 @@ public class PinShopController : MonoBehaviour
                 return Mathf.Max(1, explodingBuyPrice);
             case PinHandCardType.Mult:
                 return Mathf.Max(1, multBuyPrice);
+            case PinHandCardType.Vase:
+                return Mathf.Max(1, vaseBuyPrice);
             default:
                 return Mathf.Max(1, standardBuyPrice);
         }
