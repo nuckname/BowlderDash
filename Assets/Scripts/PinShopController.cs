@@ -49,6 +49,8 @@ public class PinShopController : MonoBehaviour
     public int explodingBuyPrice = 5;
     public int multBuyPrice = 4;
     public int vaseBuyPrice = 6;
+    public int smallBuyPrice = 4;
+    public int bananaBuyPrice = 5;
 
     [Header("Style")]
     public Color backdropColor = new Color(0.03f, 0.05f, 0.08f, 0.92f);
@@ -227,14 +229,22 @@ public class PinShopController : MonoBehaviour
         BindRow(buyPageRoot, buyRows, PinHandCardType.Exploding, true, "Exploding_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Mult, true, "Mult_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Vase, true, "Vase_BuyRow");
+        BindRow(buyPageRoot, buyRows, PinHandCardType.Small, true, "Small_BuyRow");
+        BindRow(buyPageRoot, buyRows, PinHandCardType.Banana, true, "Banana_BuyRow");
 
         BindRow(sellPageRoot, sellRows, PinHandCardType.Standard, false, "Standard_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Exploding, false, "Exploding_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Mult, false, "Mult_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Vase, false, "Vase_SellRow");
+        BindRow(sellPageRoot, sellRows, PinHandCardType.Small, false, "Small_SellRow");
+        BindRow(sellPageRoot, sellRows, PinHandCardType.Banana, false, "Banana_SellRow");
 
         EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.Vase, true);
         EnsureMissingSceneRow(sellPageRoot, sellScrollRect, sellRows, PinHandCardType.Vase, false);
+        EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.Small, true);
+        EnsureMissingSceneRow(sellPageRoot, sellScrollRect, sellRows, PinHandCardType.Small, false);
+        EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.Banana, true);
+        EnsureMissingSceneRow(sellPageRoot, sellScrollRect, sellRows, PinHandCardType.Banana, false);
     }
 
     private void EnsureMissingSceneRow(
@@ -487,6 +497,8 @@ public class PinShopController : MonoBehaviour
         CreateRow(parent, targetRows, PinHandCardType.Exploding, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Mult, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Vase, isBuyPage);
+        CreateRow(parent, targetRows, PinHandCardType.Small, isBuyPage);
+        CreateRow(parent, targetRows, PinHandCardType.Banana, isBuyPage);
     }
 
     private void CreateUpgradePage(Transform parent)
@@ -848,6 +860,10 @@ public class PinShopController : MonoBehaviour
                 return Mathf.Max(1, multBuyPrice);
             case PinHandCardType.Vase:
                 return Mathf.Max(1, vaseBuyPrice);
+            case PinHandCardType.Small:
+                return Mathf.Max(1, smallBuyPrice);
+            case PinHandCardType.Banana:
+                return Mathf.Max(1, bananaBuyPrice);
             default:
                 return Mathf.Max(1, standardBuyPrice);
         }

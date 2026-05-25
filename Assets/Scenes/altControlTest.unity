@@ -2276,10 +2276,14 @@ MonoBehaviour:
   startingExplodingPins: 2
   startingMultPins: 2
   startingVasePins: 1
+  startingSmallPins: 0
+  startingBananaPins: 0
   maxStandardPins: 15
   maxExplodingPins: 5
   maxMultPins: 5
   maxVasePins: 3
+  maxSmallPins: 3
+  maxBananaPins: 3
   standardPinConfig:
     editorLabel: Standard Pin
     cardDescription: Just a pin, +10 Score on fall.
@@ -2296,6 +2300,14 @@ MonoBehaviour:
     editorLabel: Vase Pin
     cardDescription: Survive the throw for bonus score; shatters when hit
     prefab: {fileID: 8935457865669160150, guid: aaef52980d8e54b46bee9f5f3f3867e4, type: 3}
+  smallPinConfig:
+    editorLabel: Small Pin
+    cardDescription: Can't touch this :)
+    prefab: {fileID: 5919451674846626430, guid: 4eb09489445ecd042a6c0d18d9adb519, type: 3}
+  bananaPinConfig:
+    editorLabel: Banana Pin
+    cardDescription: Let it rot, doubles your score when destoryed
+    prefab: {fileID: 6299056834546878227, guid: 69285f65d752eb14eb0c822340fdb42d, type: 3}
   handSize: {x: 500, y: 200}
   cardSpacing: 160
   fanAngle: 5
@@ -2311,6 +2323,8 @@ MonoBehaviour:
   explodingAccentColor: {r: 1, g: 0.47, b: 0.21, a: 1}
   multAccentColor: {r: 0.2, g: 0.86, b: 0.68, a: 1}
   vaseAccentColor: {r: 0.78, g: 0.55, b: 0.95, a: 1}
+  smallAccentColor: {r: 0.95, g: 0.82, b: 0.38, a: 1}
+  bananaAccentColor: {r: 0.98, g: 0.88, b: 0.22, a: 1}
 --- !u!114 &341304550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2477,6 +2491,8 @@ MonoBehaviour:
   explodingBuyPrice: 3
   multBuyPrice: 3
   vaseBuyPrice: 6
+  smallBuyPrice: 4
+  bananaBuyPrice: 5
   backdropColor: {r: 0.03, g: 0.05, b: 0.08, a: 0.92}
   panelColor: {r: 0.12, g: 0.15, b: 0.2, a: 0.98}
   highlightColor: {r: 0.11459595, g: 0.28786933, b: 0.5471698, a: 1}

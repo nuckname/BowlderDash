@@ -8,7 +8,17 @@ public enum PinHandCardType
     Standard,
     Exploding,
     Mult,
-    Vase
+    Vase,
+    Small,
+    Banana
+}
+
+/// <summary>
+/// Inventory-only tag for pin types that do not yet have dedicated behaviour scripts.
+/// </summary>
+public class PinHandRuntimeCardMarker : MonoBehaviour
+{
+    public PinHandCardType cardType;
 }
 
 [System.Serializable]
@@ -36,12 +46,16 @@ public class PinHandInventory : MonoBehaviour
     public int startingExplodingPins = 2;
     public int startingMultPins = 2;
     public int startingVasePins = 0;
+    public int startingSmallPins = 0;
+    public int startingBananaPins = 0;
 
     [Header("Shop Limits")]
     public int maxStandardPins = 3;
     public int maxExplodingPins = 3;
     public int maxMultPins = 3;
     public int maxVasePins = 3;
+    public int maxSmallPins = 3;
+    public int maxBananaPins = 3;
 
     [Header("Pin Type Prefabs")]
     public PinTypeConfig standardPinConfig = new PinTypeConfig
@@ -64,6 +78,16 @@ public class PinHandInventory : MonoBehaviour
         editorLabel = "Vase Pin",
         cardDescription = "Survive the throw for bonus score; shatters when hit"
     };
+    public PinTypeConfig smallPinConfig = new PinTypeConfig
+    {
+        editorLabel = "Small Pin",
+        cardDescription = "Compact pin (behaviour coming soon)"
+    };
+    public PinTypeConfig bananaPinConfig = new PinTypeConfig
+    {
+        editorLabel = "Banana Pin",
+        cardDescription = "Banana pin (behaviour coming soon)"
+    };
 
     [Header("Hand Layout")]
     public Vector2 handSize = new Vector2(760f, 240f);
@@ -83,6 +107,8 @@ public class PinHandInventory : MonoBehaviour
     public Color explodingAccentColor = new Color(1f, 0.47f, 0.21f, 1f);
     public Color multAccentColor = new Color(0.2f, 0.86f, 0.68f, 1f);
     public Color vaseAccentColor = new Color(0.78f, 0.55f, 0.95f, 1f);
+    public Color smallAccentColor = new Color(0.95f, 0.82f, 0.38f, 1f);
+    public Color bananaAccentColor = new Color(0.98f, 0.88f, 0.22f, 1f);
 
     private const float CardWidth = 140f;
     private const float CardHeight = 180f;
@@ -102,7 +128,9 @@ public class PinHandInventory : MonoBehaviour
         PinHandCardType.Standard,
         PinHandCardType.Exploding,
         PinHandCardType.Mult,
-        PinHandCardType.Vase
+        PinHandCardType.Vase,
+        PinHandCardType.Small,
+        PinHandCardType.Banana
     };
 
     private GrandGameManager gameManager;
@@ -250,6 +278,8 @@ public class PinHandInventory : MonoBehaviour
         ownedCounts[PinHandCardType.Exploding] = Mathf.Clamp(startingExplodingPins, 0, Mathf.Max(0, maxExplodingPins));
         ownedCounts[PinHandCardType.Mult] = Mathf.Clamp(startingMultPins, 0, Mathf.Max(0, maxMultPins));
         ownedCounts[PinHandCardType.Vase] = Mathf.Clamp(startingVasePins, 0, Mathf.Max(0, maxVasePins));
+        ownedCounts[PinHandCardType.Small] = Mathf.Clamp(startingSmallPins, 0, Mathf.Max(0, maxSmallPins));
+        ownedCounts[PinHandCardType.Banana] = Mathf.Clamp(startingBananaPins, 0, Mathf.Max(0, maxBananaPins));
         ownedInventoryInitialized = true;
     }
 
@@ -269,6 +299,8 @@ public class PinHandInventory : MonoBehaviour
         availableCounts[PinHandCardType.Exploding] = GetOwnedCount(PinHandCardType.Exploding);
         availableCounts[PinHandCardType.Mult] = GetOwnedCount(PinHandCardType.Mult);
         availableCounts[PinHandCardType.Vase] = GetOwnedCount(PinHandCardType.Vase);
+        availableCounts[PinHandCardType.Small] = GetOwnedCount(PinHandCardType.Small);
+        availableCounts[PinHandCardType.Banana] = GetOwnedCount(PinHandCardType.Banana);
         returnedStandardPins.Clear();
         for (int i = 0; i < Mathf.Min(GetOwnedCount(PinHandCardType.Standard), standardPinPool.Count); i++)
         {
@@ -310,6 +342,10 @@ public class PinHandInventory : MonoBehaviour
                 return "Pinata";
             case PinHandCardType.Vase:
                 return "Vase";
+            case PinHandCardType.Small:
+                return "Small";
+            case PinHandCardType.Banana:
+                return "Banana";
             default:
                 return "Standard";
         }
@@ -330,6 +366,10 @@ public class PinHandInventory : MonoBehaviour
                 return Mathf.Max(0, maxMultPins);
             case PinHandCardType.Vase:
                 return Mathf.Max(0, maxVasePins);
+            case PinHandCardType.Small:
+                return Mathf.Max(0, maxSmallPins);
+            case PinHandCardType.Banana:
+                return Mathf.Max(0, maxBananaPins);
             default:
                 return Mathf.Max(0, maxStandardPins);
         }
@@ -387,6 +427,8 @@ public class PinHandInventory : MonoBehaviour
             case PinHandCardType.Exploding: return "Detonates nearby pins";
             case PinHandCardType.Mult: return "Adds score multiplier";
             case PinHandCardType.Vase: return "Bonus if untouched; lost forever when shattered";
+            case PinHandCardType.Small: return "Compact pin (behaviour coming soon)";
+            case PinHandCardType.Banana: return "Banana pin (behaviour coming soon)";
             default: return "Return field pins here";
         }
     }
@@ -401,6 +443,10 @@ public class PinHandInventory : MonoBehaviour
                 return multAccentColor;
             case PinHandCardType.Vase:
                 return vaseAccentColor;
+            case PinHandCardType.Small:
+                return smallAccentColor;
+            case PinHandCardType.Banana:
+                return bananaAccentColor;
             default:
                 return standardAccentColor;
         }
@@ -508,7 +554,7 @@ public class PinHandInventory : MonoBehaviour
             runtimePowerupPins.Remove(pin);
             Destroy(pin.gameObject);
         }
-        else
+        else if (!TryReturnMarkedPowerupToInventory(pin))
         {
             if (!returnedStandardPins.Contains(pin))
             {
@@ -1157,6 +1203,10 @@ public class PinHandInventory : MonoBehaviour
         {
             availableCounts[PinHandCardType.Vase] = Mathf.Max(0, GetCount(PinHandCardType.Vase) - 1);
         }
+        else if (UsesAvailableCountInventory(type))
+        {
+            availableCounts[type] = Mathf.Max(0, GetCount(type) - 1);
+        }
     }
 
     public void ConsumePlacedVaseInstance(Pin pin)
@@ -1305,6 +1355,10 @@ public class PinHandInventory : MonoBehaviour
                 {
                     pinObject.AddComponent<vasePin>();
                 }
+            }
+            else if (type == PinHandCardType.Small || type == PinHandCardType.Banana)
+            {
+                EnsureRuntimeCardMarker(pinObject, type);
             }
 
             if (pinComponent != null && !runtimePowerupPins.Contains(pinComponent))
@@ -1543,15 +1597,7 @@ public class PinHandInventory : MonoBehaviour
                 pinObject.AddComponent<explodingPin>();
             }
 
-            if (multComponent != null)
-            {
-                Destroy(multComponent);
-            }
-
-            if (vaseComponent != null)
-            {
-                Destroy(vaseComponent);
-            }
+            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, vaseComponent, type);
         }
         else if (type == PinHandCardType.Mult)
         {
@@ -1563,15 +1609,7 @@ public class PinHandInventory : MonoBehaviour
             multComponent.gameManager = gameManager;
             multComponent.scoreCalculatorOverride = gameManager != null ? gameManager.scoreCalculator : null;
 
-            if (explodingComponent != null)
-            {
-                Destroy(explodingComponent);
-            }
-
-            if (vaseComponent != null)
-            {
-                Destroy(vaseComponent);
-            }
+            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, vaseComponent, type);
         }
         else if (type == PinHandCardType.Vase)
         {
@@ -1580,32 +1618,80 @@ public class PinHandInventory : MonoBehaviour
                 vaseComponent = pinObject.AddComponent<vasePin>();
             }
 
-            if (explodingComponent != null)
-            {
-                Destroy(explodingComponent);
-            }
-
-            if (multComponent != null)
-            {
-                Destroy(multComponent);
-            }
+            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, vaseComponent, type);
+        }
+        else if (type == PinHandCardType.Small || type == PinHandCardType.Banana)
+        {
+            EnsureRuntimeCardMarker(pinObject, type);
+            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, vaseComponent, type);
         }
         else
         {
-            if (explodingComponent != null)
-            {
-                Destroy(explodingComponent);
-            }
+            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, vaseComponent, type);
+        }
+    }
 
-            if (multComponent != null)
-            {
-                Destroy(multComponent);
-            }
+    private static bool UsesAvailableCountInventory(PinHandCardType type)
+    {
+        return type == PinHandCardType.Small || type == PinHandCardType.Banana;
+    }
 
-            if (vaseComponent != null)
-            {
-                Destroy(vaseComponent);
-            }
+    private static void EnsureRuntimeCardMarker(GameObject pinObject, PinHandCardType type)
+    {
+        if (pinObject == null)
+        {
+            return;
+        }
+
+        PinHandRuntimeCardMarker marker = pinObject.GetComponent<PinHandRuntimeCardMarker>();
+        if (marker == null)
+        {
+            marker = pinObject.AddComponent<PinHandRuntimeCardMarker>();
+        }
+
+        marker.cardType = type;
+    }
+
+    private bool TryReturnMarkedPowerupToInventory(Pin pin)
+    {
+        PinHandRuntimeCardMarker marker = pin.GetComponent<PinHandRuntimeCardMarker>();
+        if (marker == null || !UsesAvailableCountInventory(marker.cardType))
+        {
+            return false;
+        }
+
+        availableCounts[marker.cardType] = GetCount(marker.cardType) + 1;
+        runtimePowerupPins.Remove(pin);
+        Destroy(pin.gameObject);
+        return true;
+    }
+
+    private void ClearConflictingPowerupComponents(
+        GameObject pinObject,
+        explodingPin explodingComponent,
+        MultPin multComponent,
+        vasePin vaseComponent,
+        PinHandCardType type)
+    {
+        if (explodingComponent != null && type != PinHandCardType.Exploding)
+        {
+            Destroy(explodingComponent);
+        }
+
+        if (multComponent != null && type != PinHandCardType.Mult)
+        {
+            Destroy(multComponent);
+        }
+
+        if (vaseComponent != null && type != PinHandCardType.Vase)
+        {
+            Destroy(vaseComponent);
+        }
+
+        PinHandRuntimeCardMarker marker = pinObject.GetComponent<PinHandRuntimeCardMarker>();
+        if (marker != null && type != PinHandCardType.Small && type != PinHandCardType.Banana)
+        {
+            Destroy(marker);
         }
     }
 
@@ -1619,6 +1705,10 @@ public class PinHandInventory : MonoBehaviour
                 return "MultPin_Runtime";
             case PinHandCardType.Vase:
                 return "VasePin_Runtime";
+            case PinHandCardType.Small:
+                return "SmallPin_Runtime";
+            case PinHandCardType.Banana:
+                return "BananaPin_Runtime";
             default:
                 return "Pin_Runtime";
         }
@@ -1627,6 +1717,13 @@ public class PinHandInventory : MonoBehaviour
     private PinHandCardType DetectCardType(Pin pin)
     {
         if (pin == null) return PinHandCardType.Standard;
+
+        PinHandRuntimeCardMarker marker = pin.GetComponent<PinHandRuntimeCardMarker>();
+        if (marker != null)
+        {
+            return marker.cardType;
+        }
+
         if (pin.GetComponent<vasePin>() != null) return PinHandCardType.Vase;
         if (pin.GetComponent<explodingPin>() != null) return PinHandCardType.Exploding;
         if (pin.GetComponent<MultPin>() != null) return PinHandCardType.Mult;
@@ -1643,6 +1740,10 @@ public class PinHandInventory : MonoBehaviour
                 return multPinConfig;
             case PinHandCardType.Vase:
                 return vasePinConfig;
+            case PinHandCardType.Small:
+                return smallPinConfig;
+            case PinHandCardType.Banana:
+                return bananaPinConfig;
             default:
                 return standardPinConfig;
         }
