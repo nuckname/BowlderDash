@@ -310,7 +310,7 @@ public class GrandGameManager : MonoBehaviour
         RefreshRuntimePools();
         foreach (var pin in _allPinsPool)
         {
-            if (pin.gameObject.scene.isLoaded)
+            if (pin != null && pin.gameObject.scene.isLoaded)
             {
                 pin.SetPhysicsEnabled(enable);
             }

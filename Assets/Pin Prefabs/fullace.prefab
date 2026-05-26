@@ -342,7 +342,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5270511962058577666}
   - component: {fileID: 5524843853521091701}
-  - component: {fileID: 7900162485531804573}
   - component: {fileID: 6124087438814872490}
   - component: {fileID: 6789133947264784490}
   - component: {fileID: 81167309451728291}
@@ -376,7 +375,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1074125062021864172}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3431604cc8f26684986f38b43fa0a06d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -391,30 +390,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -7055619067759339669, guid: 9192c901fa35744439d718b5d0ecc4c2, type: 3}
---- !u!114 &7900162485531804573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1074125062021864172}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daf55f57e60e12a4da55fac2dd6b1b74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  particleSystem: {fileID: 6131355113909808092}
-  hitterTag: Ball
-  gameManager: {fileID: 0}
-  scoreCalculatorOverride: {fileID: 0}
-  scoreValue: 0
-  multValue: 0
-  onHit:
-    m_PersistentCalls:
-      m_Calls: []
-  onReset:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!54 &6124087438814872490
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -449,7 +424,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1074125062021864172}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3431604cc8f26684986f38b43fa0a06d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6497,41 +6472,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db02cf6752e05134d8359be057cbe918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  particleSystem: {fileID: 0}
   hitterTag: Ball
-  gameManager: {fileID: 0}
+  minHitVelocity: 3
   ticketValue: 1
   ballHitCooldown: 0.5
-  onHit:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6131355113909808092}
-        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onReset:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6131355113909808092}
-        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
-        m_MethodName: Stop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  particleSystem: {fileID: 6131355113909808092}
 --- !u!1 &4199497254964305983
 GameObject:
   m_ObjectHideFlags: 0
@@ -7707,7 +7652,7 @@ SpringJoint:
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
   m_Spring: 100
-  m_Damper: 2
+  m_Damper: 10
   m_MinDistance: 0
   m_MaxDistance: 0
   m_Tolerance: 0.025

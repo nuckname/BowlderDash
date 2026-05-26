@@ -1113,30 +1113,15 @@ public class PinHandInventory : MonoBehaviour
     {
         if (pinObject == null) return;
 
-        Collider[] colliders = pinObject.GetComponentsInChildren<Collider>(true);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i] != null)
-            {
-                colliders[i].enabled = true;
-               // colliders[i].isTrigger = true;
-            }
-        }
+        EnablePinColliders(pinObject);
+        SyncPinPhysics(pinObject);
     }
 
     private void PreparePinForPlacement(GameObject pinObject)
     {
         if (pinObject == null) return;
 
-        Collider[] colliders = pinObject.GetComponentsInChildren<Collider>(true);
-        for (int i = 0; i < colliders.Length; i++)
-        {
-            if (colliders[i] != null)
-            {
-                colliders[i].enabled = true;
-                //colliders[i].isTrigger = false; 
-            }
-        }
+        EnablePinColliders(pinObject);
 
         DraggableSnap draggable = pinObject.GetComponent<DraggableSnap>();
         if (draggable == null)
@@ -1145,6 +1130,30 @@ public class PinHandInventory : MonoBehaviour
         }
 
         draggable.enabled = true;
+        SyncPinPhysics(pinObject);
+    }
+
+    private static void EnablePinColliders(GameObject pinObject)
+    {
+        Collider[] colliders = pinObject.GetComponentsInChildren<Collider>(true);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i] != null)
+            {
+                colliders[i].enabled = true;
+            }
+        }
+    }
+
+    private static void SyncPinPhysics(GameObject pinObject)
+    {
+        if (pinObject == null) return;
+
+        Pin pin = pinObject.GetComponent<Pin>();
+        if (pin != null)
+        {
+            pin.SyncPhysicsToGameState();
+        }
     }
 
     private bool TryPlacePreviewPin(GameObject pinObject)

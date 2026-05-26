@@ -59,10 +59,6 @@ public class Pin : MonoBehaviour
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             
-            if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
-            {
-                _rb.isKinematic = true;
-            }
         }
 
         transform.position = _startPos;
@@ -78,8 +74,21 @@ public class Pin : MonoBehaviour
         {
             vasePinComponent.ResetPin();
         }
+
+        SyncPhysicsToGameState();
     }
 
+    public void SyncPhysicsToGameState()
+    {
+        bool physicsEnabled = true;
+        if (GrandGameManager.Instance != null)
+        {
+            GameState state = GrandGameManager.Instance.GetCurrentState();
+            physicsEnabled = state != GameState.PinPlacement && state != GameState.Shop;
+        }
+
+        SetPhysicsEnabled(physicsEnabled);
+    }
 
     public void UpdateTransform()
     {
@@ -92,6 +101,14 @@ public class Pin : MonoBehaviour
         if (_rb != null)
         {
             _rb.isKinematic = !enabled;
+        }
+        Tumbling[] tumblingParts = GetComponentsInChildren<Tumbling>(true);
+        for (int i = 0; i < tumblingParts.Length; i++)
+        {
+            if (tumblingParts[i] != null)
+            {
+                tumblingParts[i].setTumbling(enabled);
+            }
         }
     }
 }

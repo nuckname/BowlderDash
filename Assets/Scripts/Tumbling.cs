@@ -3,7 +3,7 @@ using UnityEngine;
 public class Tumbling : MonoBehaviour
 {
     public GameObject objectToRotate;
-    
+
     public Transform lookTowards;
     public float lessIntensity = 1f;
 
@@ -26,5 +26,13 @@ public class Tumbling : MonoBehaviour
         {
             objectToRotate.transform.rotation = Quaternion.identity;
         }
+    }
+
+    public void setTumbling(bool enabled)
+    {
+        lookTowards.gameObject.GetComponent<Rigidbody>().isKinematic = !enabled;
+        lookTowards.gameObject.GetComponent<Collider>().enabled = enabled;
+        lookTowards.gameObject.GetComponent<MeshCollider>().enabled = enabled;
+        Debug.Log($"<color=orange><b>[Tumbling]</b></color> Setting tumbling to {enabled}");
     }
 }

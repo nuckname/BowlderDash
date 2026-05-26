@@ -6,10 +6,10 @@ public class TicketPin : MonoBehaviour
     public float minHitVelocity = 3f;
     public int ticketValue = 1;
     public float ballHitCooldown = 0f;
-    public ParticleSystem particleSystem;
 
     private BoxCollider awardCollider;
     private float lastBallHitTime = -999f;
+    public ParticleSystem particleSystem;
 
     private void Awake()
     {
@@ -46,6 +46,10 @@ public class TicketPin : MonoBehaviour
         }
 
         Award();
+        if (particleSystem != null)
+        {
+            particleSystem.Play();
+        }
     }
 
     private bool CanAward()
@@ -87,6 +91,14 @@ public class TicketPin : MonoBehaviour
         if (particleSystem != null)
         {
             particleSystem.Play();
+        }
+    }
+
+    private void ResetFrameState()
+    {
+        if (particleSystem != null)
+        {
+            particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
 }
