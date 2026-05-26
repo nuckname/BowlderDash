@@ -91,6 +91,12 @@ public class PinHandInventory : MonoBehaviour
 
     [Header("Hand Layout")]
     public Vector2 handSize = new Vector2(760f, 240f);
+    [Tooltip("Normalized viewport anchor for the inventory root. (0,0) is bottom-left, (1,1) is top-right.")]
+    public Vector2 inventoryViewportAnchor = new Vector2(0.5f, 0f);
+    [Tooltip("Pivot used when positioning the inventory root.")]
+    public Vector2 inventoryPivot = new Vector2(0.5f, 0f);
+    [Tooltip("Pixel offset applied after the viewport anchor is resolved.")]
+    public Vector2 inventoryScreenOffset = new Vector2(0f, 24f);
     public float cardSpacing = 170f;
     public float fanAngle = 14f;
     public float edgeDrop = 28f;
@@ -109,6 +115,18 @@ public class PinHandInventory : MonoBehaviour
     public Color vaseAccentColor = new Color(0.78f, 0.55f, 0.95f, 1f);
     public Color smallAccentColor = new Color(0.95f, 0.82f, 0.38f, 1f);
     public Color bananaAccentColor = new Color(0.98f, 0.88f, 0.22f, 1f);
+
+    [Header("Fonts")]
+    [Tooltip("Shared fallback font for the inventory UI.")]
+    public Font defaultInventoryFont;
+    [Tooltip("Optional override for the inventory header title.")]
+    public Font inventoryTitleFont;
+    [Tooltip("Optional override for card titles.")]
+    public Font cardTitleFont;
+    [Tooltip("Optional override for descriptions, status text, and button labels.")]
+    public Font bodyFont;
+    [Tooltip("Optional override for count labels.")]
+    public Font countFont;
 
     private const float CardWidth = 140f;
     private const float CardHeight = 180f;
@@ -141,7 +159,7 @@ public class PinHandInventory : MonoBehaviour
     private RectTransform handRoot;
     private RectTransform cardContainer;
     private Text statusText;
-    private Font uiFont;
+    private Font builtInFallbackFont;
     private float statusMessageHideTime;
 
     private PinHandCardType? selectedType;
@@ -151,6 +169,19 @@ public class PinHandInventory : MonoBehaviour
     private bool handVisible;
     private bool ownedInventoryInitialized;
     private bool legacyScenePinsDisabled;
+
+    private void OnValidate()
+    {
+        inventoryViewportAnchor = new Vector2(
+            Mathf.Clamp01(inventoryViewportAnchor.x),
+            Mathf.Clamp01(inventoryViewportAnchor.y));
+
+        inventoryPivot = new Vector2(
+            Mathf.Clamp01(inventoryPivot.x),
+            Mathf.Clamp01(inventoryPivot.y));
+
+        ApplyHandRootLayout();
+    }
 
     private void Awake()
     {
@@ -208,6 +239,7 @@ public class PinHandInventory : MonoBehaviour
         }
 
         UpdateStatusMessageVisibility();
+        ApplyHandRootLayout();
         UpdateCardLayout();
     }
 
@@ -611,17 +643,14 @@ public class PinHandInventory : MonoBehaviour
         backdropImage.raycastTarget = false;
 
         RectTransform backdropRect = handBackdrop.GetComponent<RectTransform>();
-        backdropRect.anchorMin = new Vector2(0.5f, 0f);
-        backdropRect.anchorMax = new Vector2(0.5f, 0f);
-        backdropRect.pivot = new Vector2(0.5f, 0f);
         backdropRect.sizeDelta = new Vector2(handSize.x, handSize.y + TopControlsHeight);
-        backdropRect.anchoredPosition = new Vector2(0f, 24f);
 
         handRoot = backdropRect;
+        ApplyHandRootLayout();
 
         BuildTopControls(handBackdrop.transform);
 
-        GameObject titleObject = CreateTextObject("PinHandTitle", "PIN INVENTORY", 20, FontStyle.Bold, TextAnchor.UpperCenter);
+        GameObject titleObject = CreateTextObject("PinHandTitle", "PIN INVENTORY", 20, FontStyle.Bold, TextAnchor.UpperCenter, GetInventoryTitleFont());
         titleObject.transform.SetParent(handBackdrop.transform, false);
         Text titleText = titleObject.GetComponent<Text>();
         titleText.color = new Color(cardTextColor.r, cardTextColor.g, cardTextColor.b, 0.82f);
@@ -649,6 +678,19 @@ public class PinHandInventory : MonoBehaviour
         SetHandVisible(false);
     }
 
+    private void ApplyHandRootLayout()
+    {
+        if (handRoot == null)
+        {
+            return;
+        }
+
+        handRoot.anchorMin = inventoryViewportAnchor;
+        handRoot.anchorMax = inventoryViewportAnchor;
+        handRoot.pivot = inventoryPivot;
+        handRoot.anchoredPosition = inventoryScreenOffset;
+    }
+
     private void BuildTopControls(Transform parent)
     {
         GameObject controlsRowObject = new GameObject("TopControls", typeof(RectTransform), typeof(HorizontalLayoutGroup));
@@ -673,7 +715,7 @@ public class PinHandInventory : MonoBehaviour
         CreateActionButton("RandomiseButton", controlsRowObject.transform, "RANDOMISE", new Vector2(150f, 32f), OnRandomisePressed);
         CreateActionButton("ReturnAllButton", controlsRowObject.transform, "RETURN ALL", new Vector2(160f, 32f), OnReturnAllPinsPressed);
 
-        GameObject statusObject = CreateTextObject("PinHandStatus", string.Empty, 13, FontStyle.Italic, TextAnchor.UpperCenter);
+        GameObject statusObject = CreateTextObject("PinHandStatus", string.Empty, 13, FontStyle.Italic, TextAnchor.UpperCenter, GetBodyFont());
         statusObject.transform.SetParent(parent, false);
         statusText = statusObject.GetComponent<Text>();
         statusText.color = new Color(1f, 0.78f, 0.34f, 0f);
@@ -714,7 +756,7 @@ public class PinHandInventory : MonoBehaviour
         accentRect.sizeDelta = new Vector2(0f, 14f);
         accentRect.anchoredPosition = Vector2.zero;
 
-        GameObject nameObject = CreateTextObject("Title", GetDisplayName(type).ToUpperInvariant(), 18, FontStyle.Bold, TextAnchor.UpperLeft);
+        GameObject nameObject = CreateTextObject("Title", GetDisplayName(type).ToUpperInvariant(), 18, FontStyle.Bold, TextAnchor.UpperLeft, GetCardTitleFont());
         nameObject.transform.SetParent(cardObject.transform, false);
         Text nameText = nameObject.GetComponent<Text>();
         nameText.color = cardTextColor;
@@ -725,7 +767,7 @@ public class PinHandInventory : MonoBehaviour
         nameRect.offsetMin = new Vector2(14f, -54f);
         nameRect.offsetMax = new Vector2(-14f, -20f);
 
-        GameObject subtitleObject = CreateTextObject("Subtitle", GetCardSubtitle(type), 13, FontStyle.Normal, TextAnchor.UpperLeft);
+        GameObject subtitleObject = CreateTextObject("Subtitle", GetCardSubtitle(type), 13, FontStyle.Normal, TextAnchor.UpperLeft, GetBodyFont());
         subtitleObject.transform.SetParent(cardObject.transform, false);
         Text subtitleText = subtitleObject.GetComponent<Text>();
         subtitleText.color = new Color(cardTextColor.r, cardTextColor.g, cardTextColor.b, 0.82f);
@@ -736,7 +778,7 @@ public class PinHandInventory : MonoBehaviour
         subtitleRect.offsetMin = new Vector2(14f, -108f);
         subtitleRect.offsetMax = new Vector2(-14f, -56f);
 
-        GameObject countObject = CreateTextObject("Count", "x0", 30, FontStyle.Bold, TextAnchor.LowerRight);
+        GameObject countObject = CreateTextObject("Count", "x0", 30, FontStyle.Bold, TextAnchor.LowerRight, GetCountFont());
         countObject.transform.SetParent(cardObject.transform, false);
         Text countText = countObject.GetComponent<Text>();
         countText.color = GetAccentColor(type);
@@ -752,11 +794,11 @@ public class PinHandInventory : MonoBehaviour
         return cardView;
     }
 
-    private GameObject CreateTextObject(string objectName, string content, int fontSize, FontStyle fontStyle, TextAnchor alignment)
+    private GameObject CreateTextObject(string objectName, string content, int fontSize, FontStyle fontStyle, TextAnchor alignment, Font fontOverride = null)
     {
         GameObject textObject = new GameObject(objectName, typeof(Text));
         Text text = textObject.GetComponent<Text>();
-        text.font = GetUIFont();
+        text.font = GetResolvedFont(fontOverride);
         text.text = content;
         text.fontSize = fontSize;
         text.fontStyle = fontStyle;
@@ -793,7 +835,7 @@ public class PinHandInventory : MonoBehaviour
         labelRect.offsetMax = Vector2.zero;
 
         Text labelText = labelObject.GetComponent<Text>();
-        labelText.font = GetUIFont();
+        labelText.font = GetBodyFont();
         labelText.text = label;
         labelText.fontSize = 13;
         labelText.fontStyle = FontStyle.Bold;
@@ -803,17 +845,44 @@ public class PinHandInventory : MonoBehaviour
         return button;
     }
 
-    private Font GetUIFont()
+    private Font GetResolvedFont(Font overrideFont = null)
     {
-        if (uiFont != null) return uiFont;
+        if (overrideFont != null) return overrideFont;
+        if (defaultInventoryFont != null) return defaultInventoryFont;
+        return GetBuiltInFallbackFont();
+    }
 
-        uiFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        if (uiFont == null)
+    private Font GetBuiltInFallbackFont()
+    {
+        if (builtInFallbackFont != null) return builtInFallbackFont;
+
+        builtInFallbackFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        if (builtInFallbackFont == null)
         {
-            uiFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            builtInFallbackFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
 
-        return uiFont;
+        return builtInFallbackFont;
+    }
+
+    private Font GetInventoryTitleFont()
+    {
+        return GetResolvedFont(inventoryTitleFont);
+    }
+
+    private Font GetCardTitleFont()
+    {
+        return GetResolvedFont(cardTitleFont != null ? cardTitleFont : inventoryTitleFont);
+    }
+
+    private Font GetBodyFont()
+    {
+        return GetResolvedFont(bodyFont);
+    }
+
+    private Font GetCountFont()
+    {
+        return GetResolvedFont(countFont != null ? countFont : cardTitleFont);
     }
 
     private void EnsureEventSystemExists()
