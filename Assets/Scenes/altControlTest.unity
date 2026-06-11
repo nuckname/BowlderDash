@@ -2515,45 +2515,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingStandardPins: 2
   startingExplodingPins: 1
-  startingMultPins: 1
+  startingTicketPins: 1
   startingMultiplierTumblingPins: 1
   startingVasePins: 1
   startingSmallPins: 1
   startingBananaPins: 0
   maxStandardPins: 15
   maxExplodingPins: 5
-  maxMultPins: 5
+  maxTicketPins: 5
   maxMultiplierTumblingPins: 3
   maxVasePins: 3
   maxSmallPins: 3
   maxBananaPins: 3
   standardPinConfig:
-    editorLabel: Standard Pin
+    cardTitle: Pin
     cardDescription: Just a pin, +10 Score on fall.
     prefab: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}
   explodingPinConfig:
-    editorLabel: Exploding Pin
+    cardTitle: Explodin' Pin
     cardDescription: Explodes when hit, and leaves a hole in the ground! +10 Score
       on fall.
     prefab: {fileID: 4548911073050350972, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
-  multPinConfig:
-    editorLabel: Tumbler pin
+  ticketPinConfig:
+    cardTitle: Ticket Pin
     cardDescription: Immovable money tree; One ticket per hit!
     prefab: {fileID: 3811477678882886870, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
   multiplierTumblingPinConfig:
-    editorLabel: Mult Pin
+    cardTitle: Mult Pin
     cardDescription: Hit this pin to multiply your score!
     prefab: {fileID: 3811477678882886870, guid: b433a7fb2d489564b9620c4bf8f9c878, type: 3}
   vasePinConfig:
-    editorLabel: Vase Pin
+    cardTitle: Vase Pin
     cardDescription: Survive the throw for bonus score; shatters when hit
     prefab: {fileID: 8935457865669160150, guid: aaef52980d8e54b46bee9f5f3f3867e4, type: 3}
   smallPinConfig:
-    editorLabel: Small Pin
+    cardTitle: Small Pin
     cardDescription: Can't touch this :) (+15 Score on fall)
     prefab: {fileID: 5919451674846626430, guid: 4eb09489445ecd042a6c0d18d9adb519, type: 3}
   bananaPinConfig:
-    editorLabel: Banana Pin
+    cardTitle: Banana Pin
     cardDescription: Let it rot, doubles your score when destroyed
     prefab: {fileID: 6299056834546878227, guid: 69285f65d752eb14eb0c822340fdb42d, type: 3}
   handSize: {x: 900, y: 220}
@@ -2572,7 +2572,7 @@ MonoBehaviour:
   cardTextColor: {r: 0.96, g: 0.94, b: 0.88, a: 1}
   standardAccentColor: {r: 0.82, g: 0.88, b: 0.96, a: 1}
   explodingAccentColor: {r: 1, g: 0.47, b: 0.21, a: 1}
-  multAccentColor: {r: 0.2, g: 0.86, b: 0.68, a: 1}
+  ticketAccentColor: {r: 0.2, g: 0.86, b: 0.68, a: 1}
   multiplierTumblingAccentColor: {r: 0.34, g: 0.74, b: 1, a: 1}
   vaseAccentColor: {r: 0.78, g: 0.55, b: 0.95, a: 1}
   smallAccentColor: {r: 0.95, g: 0.82, b: 0.38, a: 1}
@@ -2746,7 +2746,8 @@ MonoBehaviour:
   canvasLocalScale: {x: 0.0015, y: 0.0015, z: 0.0015}
   standardBuyPrice: 2
   explodingBuyPrice: 3
-  multBuyPrice: 3
+  ticketBuyPrice: 3
+  multiplierTumblingBuyPrice: 4
   vaseBuyPrice: 6
   smallBuyPrice: 4
   bananaBuyPrice: 5
@@ -7362,8 +7363,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: This page is reserved for future pin stat upgrades. The page flow is now
-    separated, so we can drop upgrade cards here later without crowding buy and sell.
+  m_Text: This page is reserved for future pin stat upgrades
 --- !u!222 &1002029488
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PinShopController : MonoBehaviour
@@ -47,7 +48,9 @@ public class PinShopController : MonoBehaviour
     [Header("Prices")]
     public int standardBuyPrice = 2;
     public int explodingBuyPrice = 5;
-    public int multBuyPrice = 4;
+    [FormerlySerializedAs("multBuyPrice")]
+    public int ticketBuyPrice = 4;
+    public int multiplierTumblingBuyPrice = 4;
     public int vaseBuyPrice = 6;
     public int smallBuyPrice = 4;
     public int bananaBuyPrice = 5;
@@ -104,6 +107,11 @@ public class PinShopController : MonoBehaviour
 
     public void RefreshShop()
     {
+        RefreshShop(resetCurrentPageScroll: false);
+    }
+
+    private void RefreshShop(bool resetCurrentPageScroll)
+    {
         if (gameManager == null || inventory == null)
         {
             return;
@@ -129,7 +137,7 @@ public class PinShopController : MonoBehaviour
 
         RefreshRows(buyRows, isBuyPage: true);
         RefreshRows(sellRows, isBuyPage: false);
-        RefreshPageVisibility();
+        RefreshPageVisibility(resetCurrentPageScroll);
 
         if (prevPageButton != null)
         {
@@ -227,18 +235,26 @@ public class PinShopController : MonoBehaviour
 
         BindRow(buyPageRoot, buyRows, PinHandCardType.Standard, true, "Standard_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Exploding, true, "Exploding_BuyRow");
-        BindRow(buyPageRoot, buyRows, PinHandCardType.Mult, true, "Mult_BuyRow");
+        BindRow(buyPageRoot, buyRows, PinHandCardType.Ticket, true, "Ticket_BuyRow");
+        BindRowIfMissing(buyPageRoot, buyRows, PinHandCardType.Ticket, true, "Mult_BuyRow");
+        BindRow(buyPageRoot, buyRows, PinHandCardType.MultiplierTumbling, true, "MultiplierTumbling_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Vase, true, "Vase_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Small, true, "Small_BuyRow");
         BindRow(buyPageRoot, buyRows, PinHandCardType.Banana, true, "Banana_BuyRow");
 
         BindRow(sellPageRoot, sellRows, PinHandCardType.Standard, false, "Standard_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Exploding, false, "Exploding_SellRow");
-        BindRow(sellPageRoot, sellRows, PinHandCardType.Mult, false, "Mult_SellRow");
+        BindRow(sellPageRoot, sellRows, PinHandCardType.Ticket, false, "Ticket_SellRow");
+        BindRowIfMissing(sellPageRoot, sellRows, PinHandCardType.Ticket, false, "Mult_SellRow");
+        BindRow(sellPageRoot, sellRows, PinHandCardType.MultiplierTumbling, false, "MultiplierTumbling_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Vase, false, "Vase_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Small, false, "Small_SellRow");
         BindRow(sellPageRoot, sellRows, PinHandCardType.Banana, false, "Banana_SellRow");
 
+        EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.MultiplierTumbling, true);
+        EnsureMissingSceneRow(sellPageRoot, sellScrollRect, sellRows, PinHandCardType.MultiplierTumbling, false);
+        EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.Ticket, true);
+        EnsureMissingSceneRow(sellPageRoot, sellScrollRect, sellRows, PinHandCardType.Ticket, false);
         EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.Vase, true);
         EnsureMissingSceneRow(sellPageRoot, sellScrollRect, sellRows, PinHandCardType.Vase, false);
         EnsureMissingSceneRow(buyPageRoot, buyScrollRect, buyRows, PinHandCardType.Small, true);
@@ -495,7 +511,8 @@ public class PinShopController : MonoBehaviour
     {
         CreateRow(parent, targetRows, PinHandCardType.Standard, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Exploding, isBuyPage);
-        CreateRow(parent, targetRows, PinHandCardType.Mult, isBuyPage);
+        CreateRow(parent, targetRows, PinHandCardType.Ticket, isBuyPage);
+        CreateRow(parent, targetRows, PinHandCardType.MultiplierTumbling, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Vase, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Small, isBuyPage);
         CreateRow(parent, targetRows, PinHandCardType.Banana, isBuyPage);
@@ -548,6 +565,22 @@ public class PinShopController : MonoBehaviour
         targetRows[type] = row;
     }
 
+    private void BindRowIfMissing(RectTransform pageRoot, Dictionary<PinHandCardType, ShopRow> targetRows, PinHandCardType type, bool isBuyPage, string rowObjectName)
+    {
+        if (targetRows.ContainsKey(type))
+        {
+            RectTransform duplicateRow = FindNamedComponentInChildren<RectTransform>(rowObjectName, pageRoot);
+            if (duplicateRow != null)
+            {
+                duplicateRow.gameObject.SetActive(false);
+            }
+
+            return;
+        }
+
+        BindRow(pageRoot, targetRows, type, isBuyPage, rowObjectName);
+    }
+
     private void RefreshRows(Dictionary<PinHandCardType, ShopRow> sourceRows, bool isBuyPage)
     {
         foreach (KeyValuePair<PinHandCardType, ShopRow> kvp in sourceRows)
@@ -583,20 +616,25 @@ public class PinShopController : MonoBehaviour
     private void ShowPreviousPage()
     {
         currentPage = (ShopPage)(((int)currentPage + 2) % 3);
-        RefreshShop();
+        RefreshShop(resetCurrentPageScroll: true);
     }
 
     private void ShowNextPage()
     {
         currentPage = (ShopPage)(((int)currentPage + 1) % 3);
-        RefreshShop();
+        RefreshShop(resetCurrentPageScroll: true);
     }
 
-    private void RefreshPageVisibility()
+    private void RefreshPageVisibility(bool resetCurrentPageScroll)
     {
         if (buyPageRoot != null) buyPageRoot.gameObject.SetActive(currentPage == ShopPage.Buy);
         if (sellPageRoot != null) sellPageRoot.gameObject.SetActive(currentPage == ShopPage.Sell);
         if (upgradesPageRoot != null) upgradesPageRoot.gameObject.SetActive(currentPage == ShopPage.Upgrades);
+
+        if (!resetCurrentPageScroll)
+        {
+            return;
+        }
 
         if (buyScrollRect != null && currentPage == ShopPage.Buy)
         {
@@ -856,8 +894,10 @@ public class PinShopController : MonoBehaviour
         {
             case PinHandCardType.Exploding:
                 return Mathf.Max(1, explodingBuyPrice);
-            case PinHandCardType.Mult:
-                return Mathf.Max(1, multBuyPrice);
+            case PinHandCardType.Ticket:
+                return Mathf.Max(1, ticketBuyPrice);
+            case PinHandCardType.MultiplierTumbling:
+                return Mathf.Max(1, multiplierTumblingBuyPrice);
             case PinHandCardType.Vase:
                 return Mathf.Max(1, vaseBuyPrice);
             case PinHandCardType.Small:

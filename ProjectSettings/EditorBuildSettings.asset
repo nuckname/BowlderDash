@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenuScene.unity
     guid: c65b3b058e2536b45ae6d49eeab1bf78
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/Scenes/altControlTest.unity
+    guid: 99e61596477ed5742bf313cec0249c78
   m_configObjects: {}

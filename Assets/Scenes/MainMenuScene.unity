@@ -1054,7 +1054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6adb7df8d6b04f24690731f51e18d49d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSceneName: SampleScene
+  gameSceneName: altControlTest
 --- !u!4 &1641762120
 Transform:
   m_ObjectHideFlags: 0
