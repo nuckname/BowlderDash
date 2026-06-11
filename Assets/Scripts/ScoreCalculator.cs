@@ -11,6 +11,8 @@ public class ScoreCalculator : MonoBehaviour
 
     [Header("UI Preferences")]
     public GameObject floatingTextPrefab;
+    [SerializeField] private Vector3 scoreFloatingTextOffset = new Vector3(0f, 1.5f, 0f);
+    [SerializeField] private Vector3 multFloatingTextOffset = new Vector3(0f, 2.1f, 0f);
     
     private HashSet<Pin> scoredPinsThisFrame = new HashSet<Pin>();
     private List<Pin> pendingScoredPins = new List<Pin>();
@@ -57,7 +59,7 @@ public class ScoreCalculator : MonoBehaviour
             if (p.score != 0)
             {
                 currentFrameScore += p.score;
-                SpawnFloatingText(p.transform.position, $"+{p.score}", Color.white);
+                SpawnFloatingText(p.transform.position, $"+{p.score}", Color.white, false);
                 yield return new WaitForSeconds(0.3f);
             }
         }
@@ -66,7 +68,7 @@ public class ScoreCalculator : MonoBehaviour
             if (def.score != 0)
             {
                 currentFrameScore += def.score;
-                SpawnFloatingText(def.position, $"+{def.score}", Color.white);
+                SpawnFloatingText(def.position, $"+{def.score}", Color.white, false);
                 yield return new WaitForSeconds(0.3f);
             }
         }
@@ -77,7 +79,7 @@ public class ScoreCalculator : MonoBehaviour
             if (p.mult != 0)
             {
                 currentFrameMult += p.mult;
-                SpawnFloatingText(p.transform.position, $"+{p.mult} Mult", Color.red);
+                SpawnFloatingText(p.transform.position, $"+{p.mult} Mult", Color.red, true);
                 yield return new WaitForSeconds(0.3f);
             }
         }
@@ -86,7 +88,7 @@ public class ScoreCalculator : MonoBehaviour
             if (def.mult != 0)
             {
                 currentFrameMult += def.mult;
-                SpawnFloatingText(def.position, $"+{def.mult} Mult", Color.red);
+                SpawnFloatingText(def.position, $"+{def.mult} Mult", Color.red, true);
                 yield return new WaitForSeconds(0.3f);
             }
         }
@@ -95,11 +97,16 @@ public class ScoreCalculator : MonoBehaviour
         pendingDeferredScores.Clear();
     }
 
-    private void SpawnFloatingText(Vector3 position, string text, Color color)
+    public Vector3 GetFloatingTextSpawnPosition(Vector3 worldPosition, bool isMultiplierText)
+    {
+        return worldPosition + (isMultiplierText ? multFloatingTextOffset : scoreFloatingTextOffset);
+    }
+
+    private void SpawnFloatingText(Vector3 position, string text, Color color, bool isMultiplierText)
     {
         if (floatingTextPrefab == null) return;
 
-        GameObject textObj = Instantiate(floatingTextPrefab, position + Vector3.up * 1.5f, Quaternion.identity);
+        GameObject textObj = Instantiate(floatingTextPrefab, GetFloatingTextSpawnPosition(position, isMultiplierText), Quaternion.identity);
         TMP_Text tmpText = textObj.GetComponent<TMP_Text>();
         if (tmpText != null)
         {

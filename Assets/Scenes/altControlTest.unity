@@ -2476,6 +2476,8 @@ MonoBehaviour:
   currentFrameScore: 0
   currentFrameMult: 1
   floatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
+  scoreFloatingTextOffset: {x: 0, y: 7, z: 0}
+  multFloatingTextOffset: {x: 0, y: 7, z: 0}
 --- !u!114 &341304546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2489,7 +2491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   frameText: {fileID: 617657972}
-  ballText: {fileID: 0}
+  ballText: {fileID: 634051133}
   scoreToBeatText: {fileID: 1268858253}
   totalScoreText: {fileID: 228924946}
   ticketText: {fileID: 1079256880}
@@ -2511,15 +2513,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d7ad23bd1b34f5bb9af684dcf8e7b46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingStandardPins: 3
-  startingExplodingPins: 2
-  startingMultPins: 2
+  startingStandardPins: 2
+  startingExplodingPins: 1
+  startingMultPins: 1
+  startingMultiplierTumblingPins: 1
   startingVasePins: 1
-  startingSmallPins: 0
+  startingSmallPins: 1
   startingBananaPins: 0
   maxStandardPins: 15
   maxExplodingPins: 5
   maxMultPins: 5
+  maxMultiplierTumblingPins: 3
   maxVasePins: 3
   maxSmallPins: 3
   maxBananaPins: 3
@@ -2529,19 +2533,24 @@ MonoBehaviour:
     prefab: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}
   explodingPinConfig:
     editorLabel: Exploding Pin
-    cardDescription: Explodes when hit, and leaves a hole in the ground!
+    cardDescription: Explodes when hit, and leaves a hole in the ground! +10 Score
+      on fall.
     prefab: {fileID: 4548911073050350972, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
   multPinConfig:
     editorLabel: Tumbler pin
     cardDescription: Immovable money tree; One ticket per hit!
     prefab: {fileID: 3811477678882886870, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
+  multiplierTumblingPinConfig:
+    editorLabel: Mult Pin
+    cardDescription: Hit this pin to multiply your score!
+    prefab: {fileID: 3811477678882886870, guid: b433a7fb2d489564b9620c4bf8f9c878, type: 3}
   vasePinConfig:
     editorLabel: Vase Pin
     cardDescription: Survive the throw for bonus score; shatters when hit
     prefab: {fileID: 8935457865669160150, guid: aaef52980d8e54b46bee9f5f3f3867e4, type: 3}
   smallPinConfig:
     editorLabel: Small Pin
-    cardDescription: Can't touch this :) (Gives more points than regular pin)
+    cardDescription: Can't touch this :) (+15 Score on fall)
     prefab: {fileID: 5919451674846626430, guid: 4eb09489445ecd042a6c0d18d9adb519, type: 3}
   bananaPinConfig:
     editorLabel: Banana Pin
@@ -2564,6 +2573,7 @@ MonoBehaviour:
   standardAccentColor: {r: 0.82, g: 0.88, b: 0.96, a: 1}
   explodingAccentColor: {r: 1, g: 0.47, b: 0.21, a: 1}
   multAccentColor: {r: 0.2, g: 0.86, b: 0.68, a: 1}
+  multiplierTumblingAccentColor: {r: 0.34, g: 0.74, b: 1, a: 1}
   vaseAccentColor: {r: 0.78, g: 0.55, b: 0.95, a: 1}
   smallAccentColor: {r: 0.95, g: 0.82, b: 0.38, a: 1}
   bananaAccentColor: {r: 0.98, g: 0.88, b: 0.22, a: 1}
@@ -11329,13 +11339,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588884240}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.36126953, y: -0, z: -0, w: 0.9324615}
-  m_LocalPosition: {x: -6.77, y: 23.87, z: -21.4}
+  m_LocalRotation: {x: 0.35707712, y: -0.013009246, z: -0.0074886065, w: 0.9339543}
+  m_LocalPosition: {x: -4.7, y: 23.87, z: -21.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 42.356, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 41.82, y: -2.28, z: -1.79}
 --- !u!114 &1588884245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11991,7 +12001,7 @@ RectTransform:
   m_GameObject: {fileID: 1704388470}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 602475722}
@@ -12034,7 +12044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.11459595, g: 0.28786933, b: 0.5471698, a: 1}
+  m_Color: {r: 0.93207544, g: 0.7337592, b: 0.20224266, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12043,10 +12053,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 4f36a3fa66ab1914c9749621394084bb, type: 3}
-    m_FontSize: 15
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0

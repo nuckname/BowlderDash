@@ -259,8 +259,10 @@ public class GrandGameManager : MonoBehaviour
         
         if (grid != null) grid.showGizmos = true;
         uiController?.SetPlacementWarning(string.Empty);
-        UpdateInstructionText("Drag pin cards onto the grid, then press TAB when ready.");
-        
+        UpdateInstructionText("Drag pin cards onto the grid, then press TAB when ready." +
+            "To earn tickets, drag pins onto them and hit them over!");
+
+
         if (uiController != null) uiController.UpdateStandardUI(this);
         pinHandInventory?.PrepareForPlacementPhase();
     }
@@ -299,7 +301,7 @@ public class GrandGameManager : MonoBehaviour
         if (grid != null) grid.showGizmos = false;
         
         ResetBall();
-        UpdateInstructionText("Draw the ball's path! Start from the ball.");
+        UpdateInstructionText("Draw the ball's path! Left click to draw on the ground. Keep in mind the shorter you hold, the more powerful your shot!");
         
         if (uiController != null) uiController.UpdateStandardUI(this);
         Debug.Log($"Frame {currentFrame} Throw {GetCurrentThrowDisplayNumber()}: Player Ready.");
