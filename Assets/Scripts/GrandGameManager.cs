@@ -3,18 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum GameState
-{
-    FrameSetup, 
-    PinPlacement, 
-    PlayerReady, 
-    Drawing, 
-    Rolling, 
-    CalculatingScore, 
-    Shop, 
-    EndFrame, 
-    GameOver
-}
+public enum GameState { FrameSetup, PinPlacement, PlayerReady, Drawing, Rolling, CalculatingScore, Shop, EndFrame, GameOver }
 
 [RequireComponent(typeof(PinHandInventory))]
 public class GrandGameManager : MonoBehaviour
@@ -107,7 +96,7 @@ public class GrandGameManager : MonoBehaviour
     private GameState _currentState;
     public GameState GetCurrentState() => _currentState;
 
-    [SerializeField] private Pin[] allPinsPool;
+    private Pin[] _allPinsPool;
     private exploder[] _laneExploders;
 
     // Throwing internal state
@@ -321,7 +310,7 @@ public class GrandGameManager : MonoBehaviour
     private void TogglePinsPhysics(bool enable)
     {
         RefreshRuntimePools();
-        foreach (var pin in allPinsPool)
+        foreach (var pin in _allPinsPool)
         {
             if (pin != null && pin.gameObject.scene.isLoaded)
             {
@@ -333,7 +322,7 @@ public class GrandGameManager : MonoBehaviour
     private void ClearFallenPins()
     {
         RefreshRuntimePools();
-        foreach(var p in allPinsPool)
+        foreach(var p in _allPinsPool)
         {
             if (p.gameObject.scene.isLoaded && p.IsFallen()) 
             {
@@ -362,7 +351,7 @@ public class GrandGameManager : MonoBehaviour
         int fallenPinsThisThrow = 0;
 
         RefreshRuntimePools();
-        foreach(var p in allPinsPool)
+        foreach(var p in _allPinsPool)
         {
             if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy && CountsTowardFrameClear(p))
             {
@@ -432,7 +421,7 @@ public class GrandGameManager : MonoBehaviour
 
     private void RefreshRuntimePools()
     {
-        allPinsPool = FindObjectsOfType<Pin>(true);
+        _allPinsPool = FindObjectsOfType<Pin>(true);
         _laneExploders = FindObjectsOfType<exploder>(true);
     }
 
@@ -938,9 +927,9 @@ public class GrandGameManager : MonoBehaviour
     private bool HasPinsPlacedForCurrentFrame()
     {
         RefreshRuntimePools();
-        for (int i = 0; i < allPinsPool.Length; i++)
+        for (int i = 0; i < _allPinsPool.Length; i++)
         {
-            Pin pin = allPinsPool[i];
+            Pin pin = _allPinsPool[i];
             if (pin == null || !pin.gameObject.scene.isLoaded || !pin.gameObject.activeInHierarchy)
             {
                 continue;
