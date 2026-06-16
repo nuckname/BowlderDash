@@ -1,67 +1,73 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-public class explodingPin : MonoBehaviour
+public class ExplodingPin : PinBase
 {
-    public exploder targetExploder;
-    
-    public float explosionForce = 15f;
+    // Slightly more complex pin so going to have states.
+    private enum ExplodeState { Idle, KnockedDown, Detonating, Exploded }
+    private ExplodeState _state = ExplodeState.Idle;
+
+    [Header("Explosion Settings")]
+    public float explosionForce  = 15f;
     public float explosionRadius = 5f;
-    
-    public float upwardModifier = 1.0f;
+    public float upwardModifier  = 1.0f;
+
+    [Header("Trigger Settings")]
+    public float tipAngleThreshold = 30f;
+    public float detonationDelay   = 1.0f;
+
+    [Header("FX")]
     public ParticleSystem explosionParticles;
 
+    private exploder   _targetExploder;
+    private Coroutine  _detonationCoroutine;
+    private Renderer   _renderer;
+    private MeshCollider _meshCollider;
 
-    public float tipAngleThreshold = 30f;
-    public float detonationDelay = 1.0f;
-
-    private bool _isKnockedDown = false;
-    private bool _hasExploded = false;
-    private Rigidbody _rb;
-    private Coroutine _detonationCoroutine;
-
-    private void Start()
+    protected override void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
-        if (targetExploder == null)
-        {
-            targetExploder = Object.FindAnyObjectByType<exploder>();
-        }
+        base.Awake();
+        _renderer = GetComponent<Renderer>();
+        _meshCollider = GetComponent<MeshCollider>();
+
+        GameObject exploderObj = GameObject.FindGameObjectWithTag("Exploder");
+        _targetExploder = exploderObj.GetComponent<exploder>();
     }
 
     private void Update()
     {
-        if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement) return;
-        if (_hasExploded || _isKnockedDown) return;
+        if (IsInPlacementMode() || _state != ExplodeState.Idle) return;
 
-        float angle = Vector3.Angle(transform.up, Vector3.up);
-        if (angle > tipAngleThreshold)
-        {
-            TriggerKnockdown();
-        }
+        if (Vector3.Angle(transform.up, Vector3.up) > tipAngleThreshold)
+            TransitionTo(ExplodeState.KnockedDown);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement) return;
-        if (_hasExploded || _isKnockedDown) return;
+        if (IsInPlacementMode() || _state != ExplodeState.Idle) return;
 
-        if (collision.relativeVelocity.magnitude > 3f)
+        if (collision.relativeVelocity.magnitude > 3f
+            && Vector3.Angle(transform.up, Vector3.up) > 10f)
         {
-            if (Vector3.Angle(transform.up, Vector3.up) > 10f)
-            {
-                TriggerKnockdown();
-            }
+            TransitionTo(ExplodeState.KnockedDown);
         }
     }
 
-    private void TriggerKnockdown()
+    // Small State Machine 
+    private void TransitionTo(ExplodeState next)
     {
-        if (_isKnockedDown) return;
-        _isKnockedDown = true;
-        
-        _detonationCoroutine = StartCoroutine(DetonationSequence());
+        _state = next;
+
+        switch (next)
+        {
+            case ExplodeState.KnockedDown:
+                _detonationCoroutine = StartCoroutine(DetonationSequence());
+                break;
+
+            case ExplodeState.Detonating:
+                Detonate();
+                break;
+        }
     }
 
     private IEnumerator DetonationSequence()
@@ -69,72 +75,43 @@ public class explodingPin : MonoBehaviour
         yield return new WaitForSeconds(detonationDelay);
         _detonationCoroutine = null;
 
-        if (!_isKnockedDown || _hasExploded)
-        {
-            yield break;
-        }
-
-        Detonate();
+        if (_state == ExplodeState.KnockedDown)
+            TransitionTo(ExplodeState.Detonating);
     }
 
     private void Detonate()
     {
-        if (_hasExploded) return;
-        _hasExploded = true;
+        _state = ExplodeState.Exploded;
 
-        Vector3 explosionPos = transform.position;
+        Vector3 pos = transform.position;
 
-        Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius);
-        foreach (Collider hit in colliders)
+        foreach (Collider hit in Physics.OverlapSphere(pos, explosionRadius))
         {
-            vasePin vase = hit.GetComponentInParent<vasePin>();
-            if (vase != null)
-            {
-                vase.TryShatterFromExplosion();
-            }
-
-            TicketPin ticketPin = hit.GetComponentInParent<TicketPin>();
-            if (ticketPin != null)
-            {
-                ticketPin.TryAwardFromExplosion(hit);
-            }
+            hit.GetComponentInParent<vasePin>()?.TryShatterFromExplosion();
+            hit.GetComponentInParent<TicketPin>()?.TryAwardFromExplosion(hit);
 
             Rigidbody rb = hit.GetComponent<Rigidbody>();
-            if (rb != null && rb != _rb) //avoid self blow
-            {
-                rb.AddExplosionForce(explosionForce, explosionPos, explosionRadius, upwardModifier, ForceMode.Impulse);
-            }
+            if (rb != null && rb != _rb)
+                rb.AddExplosionForce(explosionForce, pos, explosionRadius,
+                                     upwardModifier, ForceMode.Impulse);
         }
 
-        if (targetExploder != null)
-        {
-            targetExploder.AddExplosionPoint(explosionPos);
-        }
-
-        CreateExplosionFeedback();
+        _targetExploder?.AddExplosionPoint(pos);
+        ApplyExplosionFeedback();
     }
 
-    private void CreateExplosionFeedback()
+    private void ApplyExplosionFeedback()
     {
         Debug.Log($"<color=orange><b>[ExplodingPin]</b></color> Detonated at {transform.position}");
-        GetComponent<Renderer>().enabled = false;
-        _rb.isKinematic = true;
-        GetComponent<MeshCollider>().enabled = false;
 
-        if (explosionParticles != null)
-        {
-            explosionParticles.Play();
-        }
+        if (_renderer)     _renderer.enabled     = false;
+        if (_meshCollider) _meshCollider.enabled  = false;
+        if (_rb)           _rb.isKinematic        = true;
 
+        explosionParticles?.Play();
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(1, 0, 0, 0.3f);
-        Gizmos.DrawSphere(transform.position, explosionRadius);
-    }
-
-    public void ResetPin()
+    public override void ResetPin()
     {
         if (_detonationCoroutine != null)
         {
@@ -142,16 +119,35 @@ public class explodingPin : MonoBehaviour
             _detonationCoroutine = null;
         }
 
-        _isKnockedDown = false;
-        _hasExploded = false;
-        GetComponent<Renderer>().enabled = true;
-        GetComponent<MeshCollider>().enabled = true;
-        if (_rb != null) _rb.isKinematic = false;
+        _state = ExplodeState.Idle;
 
-        if (explosionParticles != null)
+        if (_renderer)     _renderer.enabled    = true;
+        if (_meshCollider) _meshCollider.enabled = true;
+
+        StopParticles(explosionParticles);
+
+        base.ResetPin();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(1f, 0f, 0f, 0.3f);
+        Gizmos.DrawSphere(transform.position, explosionRadius);
+    }
+
+    public bool HasExploded
+    {
+        get
         {
-            explosionParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            return _state == ExplodeState.Exploded;
         }
+    }
 
+    public bool IsKnockedDown
+    {
+        get
+        {
+            return _state == ExplodeState.KnockedDown || _state == ExplodeState.Detonating;
+        }
     }
 }

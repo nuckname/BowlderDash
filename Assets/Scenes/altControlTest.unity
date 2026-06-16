@@ -1748,8 +1748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98628a09731f90f4dbf44e4d649f35dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points:
-  - {x: 0, y: 0, z: 0}
+  points: []
   radius: 5
   sinkRadiusExt: 5
   yOffset: 0.2
@@ -5298,16 +5297,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 802519812}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -66.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 930433113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.9, y: -11.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &927045765
@@ -5516,6 +5515,7 @@ Transform:
   - {fileID: 1320631406}
   - {fileID: 1670341956}
   - {fileID: 1001227117}
+  - {fileID: 912394429}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &954940805
@@ -12340,8 +12340,8 @@ GameObject:
   - component: {fileID: 273124770}
   - component: {fileID: 273124769}
   m_Layer: 6
-  m_Name: Plane
-  m_TagString: Untagged
+  m_Name: Exploder (Plane)
+  m_TagString: Exploder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13627,7 +13627,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1951707966}
-  - {fileID: 912394429}
   - {fileID: 683764256}
   - {fileID: 930433113}
   - {fileID: 543450652758292814}

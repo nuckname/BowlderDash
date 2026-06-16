@@ -600,7 +600,7 @@ public class PinHandInventory : MonoBehaviour
             return true;
         }
 
-        if (pin.GetComponent<explodingPin>() != null)
+        if (pin.GetComponent<ExplodingPin>() != null)
         {
             availableCounts[PinHandCardType.Exploding] = GetCount(PinHandCardType.Exploding) + 1;
             runtimePowerupPins.Remove(pin);
@@ -1455,9 +1455,9 @@ public class PinHandInventory : MonoBehaviour
 
             if (type == PinHandCardType.Exploding)
             {
-                if (pinObject.GetComponent<explodingPin>() == null)
+                if (pinObject.GetComponent<ExplodingPin>() == null)
                 {
-                    pinObject.AddComponent<explodingPin>();
+                    pinObject.AddComponent<ExplodingPin>();
                 }
             }
             else if (type == PinHandCardType.Ticket)
@@ -1716,7 +1716,7 @@ public class PinHandInventory : MonoBehaviour
             pinObject.AddComponent<Pin>();
         }
 
-        explodingPin explodingComponent = pinObject.GetComponent<explodingPin>();
+        ExplodingPin explodingComponent = pinObject.GetComponent<ExplodingPin>();
         MultPin multComponent = pinObject.GetComponent<MultPin>();
         TicketPin ticketComponent = pinObject.GetComponent<TicketPin>();
         vasePin vaseComponent = pinObject.GetComponent<vasePin>();
@@ -1725,7 +1725,7 @@ public class PinHandInventory : MonoBehaviour
         {
             if (explodingComponent == null)
             {
-                pinObject.AddComponent<explodingPin>();
+                pinObject.AddComponent<ExplodingPin>();
             }
 
             ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
@@ -1811,7 +1811,7 @@ public class PinHandInventory : MonoBehaviour
 
     private void ClearConflictingPowerupComponents(
         GameObject pinObject,
-        explodingPin explodingComponent,
+        ExplodingPin explodingComponent,
         MultPin multComponent,
         TicketPin ticketComponent,
         vasePin vaseComponent,
@@ -1879,7 +1879,7 @@ public class PinHandInventory : MonoBehaviour
         }
 
         if (pin.GetComponent<vasePin>() != null) return PinHandCardType.Vase;
-        if (pin.GetComponent<explodingPin>() != null) return PinHandCardType.Exploding;
+        if (pin.GetComponent<ExplodingPin>() != null) return PinHandCardType.Exploding;
         if (pin.GetComponent<TicketPin>() != null) return PinHandCardType.Ticket;
         if (pin.GetComponent<MultPin>() != null) return PinHandCardType.MultiplierTumbling;
         return PinHandCardType.Standard;

@@ -134,12 +134,12 @@ public class GrandGameManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Pin.OnPinFallenGlobal += HandlePinFallenForTickets;
+        //Pin.OnPinFallenGlobal += HandlePinFallenForTickets;
     }
 
     private void OnDisable()
     {
-        Pin.OnPinFallenGlobal -= HandlePinFallenForTickets;
+        //Pin.OnPinFallenGlobal -= HandlePinFallenForTickets;
     }
 
     void Start()

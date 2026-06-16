@@ -27,12 +27,12 @@ public class ScoreCalculator : MonoBehaviour
 
     void OnEnable()
     {
-        Pin.OnPinFallenGlobal += HandlePinFallen;
+        //Pin.OnPinFallenGlobal += HandlePinFallen;
     }
 
     void OnDisable()
     {
-        Pin.OnPinFallenGlobal -= HandlePinFallen;
+        //Pin.OnPinFallenGlobal -= HandlePinFallen;
     }
 
     public void ResetFrameScore()

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pin
   - Ball
+  - Exploder
   layers:
   - Default
   - TransparentFX
