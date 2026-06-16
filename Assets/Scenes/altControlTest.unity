@@ -921,7 +921,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 1951707966}
+=======
+  m_Father: {fileID: 2123277058}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &121324095
 GameObject:
@@ -1094,7 +1098,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 50, y: -6.693, z: 0}
 --- !u!1 &157920142
 GameObject:
@@ -1712,7 +1720,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!64 &246818631
 MeshCollider:
@@ -1918,7 +1930,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &341304541
 GameObject:
@@ -1955,7 +1971,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 1951707966}
+=======
+  m_Father: {fileID: 2123277058}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &341304544
 LineRenderer:
@@ -2312,6 +2332,7 @@ MonoBehaviour:
   cameraPlacementTransitionTime: 1
   shopCameraTarget: {fileID: 811070809}
   cameraShopTransitionTime: 1
+  allPinsPool: []
 --- !u!114 &341304551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3571,6 +3592,94 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 634051131}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
+=======
+--- !u!1001 &645360752
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 924312808}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8086963
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8086963
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8086963
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.5782
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -20.533
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 29.949
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1b0af173faa2ec943bda9b1d149018c8, type: 2}
+    - target: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_Name
+      value: pin (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1314960786}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1314960785}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1314960788}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1314960787}
+  m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &662534020
 GameObject:
   m_ObjectHideFlags: 0
@@ -4940,7 +5049,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &890437773
 GameObject:
@@ -5309,6 +5422,50 @@ RectTransform:
   m_AnchoredPosition: {x: -0.9, y: -11.6}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+<<<<<<< HEAD
+=======
+--- !u!1 &924312807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 924312808}
+  m_Layer: 0
+  m_Name: Pins
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &924312808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924312807}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -13.29, y: 18.223, z: 25.38}
+  m_LocalScale: {x: 1.4066, y: 1.4066, z: 1.4066}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 792178541}
+  - {fileID: 1314960783}
+  - {fileID: 554984926}
+  - {fileID: 571860807}
+  - {fileID: 1932945584}
+  - {fileID: 1592147903}
+  - {fileID: 543456462}
+  - {fileID: 1030591485}
+  - {fileID: 469156205}
+  - {fileID: 1244040021}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &927045765
 GameObject:
   m_ObjectHideFlags: 0
@@ -5483,6 +5640,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927463711}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
 --- !u!1 &930433112
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,6 +5676,8 @@ Transform:
   - {fileID: 912394429}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &954940805
 GameObject:
   m_ObjectHideFlags: 0
@@ -6011,6 +6171,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1002029484}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
+=======
+--- !u!1 &1030591484 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+  m_PrefabInstance: {fileID: 1714627209}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1030591485 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+  m_PrefabInstance: {fileID: 1714627209}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1030591487
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030591484}
+  serializedVersion: 4
+  m_Mass: 2
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0.2, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1030591488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030591484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 10
+  mult: 0
+  fallAngleThreshold: 45
+--- !u!114 &1030591489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030591484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!64 &1030591490
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030591484}
+  m_Material: {fileID: 13400000, guid: e47ea1482cce2ea4db90bd47561f93b1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &1047286568
 GameObject:
   m_ObjectHideFlags: 0
@@ -6245,7 +6494,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1001 &1058055205
 PrefabInstance:
@@ -6607,7 +6860,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1118342109
 GameObject:
@@ -6891,12 +7148,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1137028392}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.68, y: 9.25, z: -58.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 2123277058}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1155569975
 GameObject:
@@ -8718,7 +8975,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 50, y: -6.693, z: 0}
 --- !u!1 &1566292669
 GameObject:
@@ -9103,7 +9364,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1586753120
 GameObject:
@@ -10057,6 +10322,94 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1713532032}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
+=======
+--- !u!1001 &1714627209
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 924312808}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8086963
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8086963
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8086963
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.501
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -20.533
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 21.98
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1b0af173faa2ec943bda9b1d149018c8, type: 2}
+    - target: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      propertyPath: m_Name
+      value: pin (7)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1030591488}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1030591487}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1030591490}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1030591489}
+  m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &1729114336
 GameObject:
   m_ObjectHideFlags: 0
@@ -10249,7 +10602,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1763444448
 GameObject:
@@ -10546,6 +10903,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805533689}
   m_CullTransparentMesh: 1
+--- !u!1 &1828555599
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1828555600}
+  m_Layer: 0
+  m_Name: Lights
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1828555600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828555599}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -83.7, y: 28.7, z: 93.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 278456851}
+  - {fileID: 1055481785}
+  - {fileID: 1111529229}
+  - {fileID: 1584533235}
+  - {fileID: 1972190275}
+  - {fileID: 880788242}
+  - {fileID: 229888227}
+  - {fileID: 1741298480}
+  - {fileID: 134377293}
+  - {fileID: 1546402770}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1844744557
 GameObject:
   m_ObjectHideFlags: 0
@@ -11006,6 +11404,95 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.090171315, y: 1.9999996, z: 2.555555}
   m_Center: {x: -0.9549152, y: -4.7467633e-15, z: -0.74561393}
+<<<<<<< HEAD
+=======
+--- !u!1 &1932945583 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+  m_PrefabInstance: {fileID: 189591076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1932945584 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+  m_PrefabInstance: {fileID: 189591076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1932945586
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932945583}
+  serializedVersion: 4
+  m_Mass: 2
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_CenterOfMass: {x: 0, y: 0.2, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1932945587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932945583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 10
+  mult: 0
+  fallAngleThreshold: 45
+--- !u!114 &1932945588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932945583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!64 &1932945589
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932945583}
+  m_Material: {fileID: 13400000, guid: e47ea1482cce2ea4db90bd47561f93b1, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2534964839176971238, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &1944107432
 GameObject:
   m_ObjectHideFlags: 0
@@ -11231,7 +11718,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 2140304003}
+=======
+  m_Father: {fileID: 1828555600}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1985604344
 GameObject:
@@ -11632,6 +12123,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075444651}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
+=======
+--- !u!1 &2123277057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2123277058}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2123277058
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123277057}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.68, y: -9.25, z: 58.52}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1137028395}
+  - {fileID: 120957813}
+  - {fileID: 341304542}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &2136088508
 GameObject:
   m_ObjectHideFlags: 0
@@ -11874,7 +12402,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2140282220}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
 --- !u!1 &2140304002
+=======
+--- !u!1 &50754953876635019
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11882,6 +12414,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+<<<<<<< HEAD
   - component: {fileID: 2140304003}
   m_Layer: 0
   m_Name: Lights
@@ -11924,6 +12457,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
+=======
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   - component: {fileID: 8622353167706169753}
   - component: {fileID: 4356012028573056248}
   - component: {fileID: 220048891220528508}
@@ -12041,9 +12576,32 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+<<<<<<< HEAD
   - {fileID: 2140304003}
   - {fileID: 509060600}
   - {fileID: 753584030}
+=======
+  - {fileID: 3745622627677479467}
+  - {fileID: 4083501150756243208}
+  - {fileID: 5680519943787634332}
+  - {fileID: 7967766325814584645}
+  - {fileID: 4865064391202975562}
+  - {fileID: 4306643202382787540}
+  - {fileID: 7129599248450071908}
+  - {fileID: 1398618388846940989}
+  - {fileID: 4418473097937243109}
+  - {fileID: 8448302367454923613}
+  - {fileID: 5951265925158591572}
+  - {fileID: 4931218026928093841}
+  - {fileID: 7685259906293154902}
+  - {fileID: 3612539099586531390}
+  - {fileID: 5811517545600373558}
+  - {fileID: 8616562852642518321}
+  - {fileID: 8622353167706169753}
+  - {fileID: 4005393329832434674}
+  - {fileID: 1578115774606108816}
+  - {fileID: 3441818840204397452}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &763392349860867474
@@ -12217,12 +12775,20 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 281855665305901682}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalPosition: {x: -85.94, y: 17.5792, z: 120}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 509060600}
+=======
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1558643249397765512
 MeshRenderer:
@@ -12274,12 +12840,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1069904014532269438}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: -56, y: 12, z: 14.600002}
   m_LocalScale: {x: 1, y: 1.0999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -56, y: 12, z: 14.599999}
+  m_LocalScale: {x: 1, y: 1.1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1582813066406383303
 GameObject:
@@ -12532,6 +13107,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 921391926280939931}
+<<<<<<< HEAD
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: 31.660004, y: 36.0792, z: 140}
@@ -12600,6 +13176,133 @@ Transform:
   m_Children: []
   m_Father: {fileID: 509060600}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+=======
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 31.660004, y: 36.0792, z: 140}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &3612539099586531390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262012782683058177}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.50000006, y: 0.50000006, z: -0.49999997, w: -0.49999994}
+  m_LocalPosition: {x: -54.217377, y: 21.5, z: 0}
+  m_LocalScale: {x: 7.2576003, y: 18.446402, z: 12.6}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &3745622627677479467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832149485137423553}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071063, y: 0.0006719529, z: -0.0006716251, w: 0.70710677}
+  m_LocalPosition: {x: -50.7, y: 20.14, z: 0.12}
+  m_LocalScale: {x: 4.212, y: 4.2120004, z: 4.212}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+  m_LocalEulerAnglesHint: {x: -89.897, y: 0, z: -0.109}
+--- !u!1001 &3799978132690067235
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 924312808}
+    m_Modifications:
+    - target: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_Name
+      value: pin
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.4066
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -20.533
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 29.949
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6444032329800440004, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+--- !u!4 &4005393329832434674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7366062190064611409}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -11, y: -2, z: 0}
+  m_LocalScale: {x: 44.544003, y: 14.307151, z: 8.7}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4083501150756243208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8707273952415096501}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 22.7, y: -0.042492777, z: -15.328796}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
 --- !u!1 &4105671971215449031
 GameObject:
   m_ObjectHideFlags: 0
@@ -12628,12 +13331,20 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7623545440162591322}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalPosition: {x: -57.94, y: 12.379201, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 509060600}
+=======
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4321851933409994487
 MeshFilter:
@@ -12659,12 +13370,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7178114112369169293}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: 32.290848, y: -0.8042736, z: -0.099998474}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 32.290848, y: -0.8042731, z: -0.10000014}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &4539702727447447658
 MeshRenderer:
@@ -12743,12 +13463,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1582813066406383303}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: -62.6, y: 11.1, z: -18.57}
   m_LocalScale: {x: 8.33, y: 15.47, z: 11.9}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -62.6, y: 11.1, z: -18.570002}
+  m_LocalScale: {x: 8.33, y: 15.470001, z: 11.900001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4876933053290217618
 MeshFilter:
@@ -12766,12 +13495,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2193423313461085151}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: -10.889999, y: -1.6000004, z: 0}
   m_LocalScale: {x: 44.544003, y: 14.476801, z: 8.699999}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -10.89, y: -1.6, z: 0}
+  m_LocalScale: {x: 44.544003, y: 14.476802, z: 8.7}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5334037120266589365
 MeshFilter:
@@ -12831,12 +13569,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8416272008860606272}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: -62.600002, y: 10.1, z: 0}
   m_LocalScale: {x: 1, y: 1.1999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -62.6, y: 10.1, z: 0}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &5811517545600373558
 Transform:
@@ -12846,12 +13593,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4767400413453061398}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: 31.660004, y: -1.8000002, z: 140}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 31.660004, y: -1.8, z: 140}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5873270184790161782
 MeshFilter:
@@ -12869,12 +13625,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4105671971215449031}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: 26.16, y: 0.69299984, z: 0}
   m_LocalScale: {x: 1.5840001, y: 1.584, z: 1.584}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 26.16, y: 0.6930001, z: -0}
+  m_LocalScale: {x: 1.5840001, y: 1.5840001, z: 1.5840001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6507901978389917088
 GameObject:
@@ -13028,12 +13793,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8757042445449788865}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: -57.72404, y: 0.079200745, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -57.724037, y: 0.079200566, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7178114112369169293
 GameObject:
@@ -13181,12 +13955,20 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6507901978389917088}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: 0.50000006, y: 0.50000006, z: -0.49999994, w: -0.49999994}
+=======
+  m_LocalRotation: {x: 0.50000006, y: 0.50000006, z: -0.49999997, w: -0.49999994}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalPosition: {x: -54.3, y: 20, z: 0}
   m_LocalScale: {x: 8.64, y: 8.64, z: 6.0480003}
   m_ConstrainProportionsScale: 0
   m_Children: []
+<<<<<<< HEAD
   m_Father: {fileID: 509060600}
+=======
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &7762067043157802164
 MeshRenderer:
@@ -13238,12 +14020,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2076850631024866004}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: 0.50000006, y: 0.50000006, z: -0.49999994, w: -0.49999994}
   m_LocalPosition: {x: -55.096523, y: 27.300003, z: 0}
   m_LocalScale: {x: 8.33, y: 18.564003, z: 11.900001}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: 0.50000006, y: 0.50000006, z: -0.49999997, w: -0.49999994}
+  m_LocalPosition: {x: -55.096527, y: 27.300003, z: 0}
+  m_LocalScale: {x: 8.33, y: 18.564003, z: 11.900001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8160168807456044281
 GameObject:
@@ -13390,12 +14181,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2459513672320439873}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: -62.600002, y: 10.1857195, z: 0}
   m_LocalScale: {x: 8.82, y: 17.698792, z: 12.599999}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: -62.6, y: 10.1857195, z: 0}
+  m_LocalScale: {x: 8.82, y: 17.698793, z: 12.6}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8482381505570912654
 MeshFilter:
@@ -13507,10 +14307,17 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: -11, y: -2, z: 0}
+<<<<<<< HEAD
   m_LocalScale: {x: 44.544003, y: 17.597795, z: 8.699999}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalScale: {x: 44.544003, y: 17.597797, z: 8.7}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &8622353167706169753
 Transform:
@@ -13520,12 +14327,21 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50754953876635019}
   serializedVersion: 2
+<<<<<<< HEAD
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
   m_LocalPosition: {x: 8.290848, y: 0.16074371, z: -3.1000004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 509060600}
+=======
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+  m_LocalPosition: {x: 8.290848, y: 0.16074371, z: -3.1000001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 543450652758292814}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8707273952415096501
 GameObject:
@@ -13626,9 +14442,28 @@ MeshRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+<<<<<<< HEAD
   - {fileID: 1951707966}
   - {fileID: 683764256}
   - {fileID: 930433113}
   - {fileID: 543450652758292814}
   - {fileID: 1058055205}
   - {fileID: 1137028395}
+=======
+  - {fileID: 2123277058}
+  - {fileID: 912394429}
+  - {fileID: 1588884243}
+  - {fileID: 1799454501}
+  - {fileID: 811070809}
+  - {fileID: 1906495015}
+  - {fileID: 904041423}
+  - {fileID: 683764256}
+  - {fileID: 1320631406}
+  - {fileID: 924312808}
+  - {fileID: 1670341956}
+  - {fileID: 1001227117}
+  - {fileID: 543450652758292814}
+  - {fileID: 1828555600}
+  - {fileID: 1058055205}
+  - {fileID: 478450783}
+>>>>>>> parent of ad871414 (Revert "added boilerplate state machine")

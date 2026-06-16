@@ -6,8 +6,6 @@ public class BallCollisionCurvatureStopper : MonoBehaviour
     [Tooltip("The layer(s) that should trigger stopping the curvature force on collision.")]
     public LayerMask stopForceLayer;
 
-
-
     private void OnCollisionEnter(Collision collision)
     {
         if (((1 << collision.gameObject.layer) & stopForceLayer) != 0)
