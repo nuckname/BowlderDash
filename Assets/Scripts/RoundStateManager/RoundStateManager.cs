@@ -12,6 +12,7 @@ public class RoundStateManager : MonoBehaviour
     public ThrowingBallState ThrowingBall = new ThrowingBallState();
     public PinPlacementState PinPlacement = new PinPlacementState();
     public ShopState Shop = new ShopState();
+    public ScoringState ScoringState = new ScoringState();
 
     public Text instructionText;
     
@@ -31,10 +32,19 @@ public class RoundStateManager : MonoBehaviour
         }
     }
 
-    public void SwitchState(RoundBaseState state)
+    public void SwitchState(RoundBaseState newState)
     {
-        currentState = state;
-        currentState.EnterState(this);
+        if (currentState != null)
+        {
+            currentState.ExitState(this);
+        }
+
+        currentState = newState;
+
+        if (currentState != null)
+        {
+            currentState.EnterState(this);
+        }
     }
 
     void OnCollisionEnter(Collision collision)

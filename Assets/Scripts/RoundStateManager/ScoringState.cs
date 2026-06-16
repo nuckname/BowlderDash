@@ -16,4 +16,6 @@ public class ScoringState : RoundBaseState
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }
     public override void OnTriggerEnter(RoundStateManager manager, Collider other) { }
     public override void OnTriggerExit(RoundStateManager manager, Collider other) { }
+    public override void ExitState(RoundStateManager manager) {}
+    
 }
