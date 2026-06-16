@@ -46,7 +46,7 @@ public class TicketPin : PinBase
         if (other == null) return false;
         if (!string.IsNullOrEmpty(hitterTag) && other.CompareTag(hitterTag)) return true;
 
-        GameObject ball = GrandGameManager.Instance?.ball;
+        GameObject ball = GameManager.Instance?.ball;
         if (ball == null) return false;
 
         return other.transform == ball.transform
@@ -55,7 +55,7 @@ public class TicketPin : PinBase
 
     private void Award()
     {
-        GrandGameManager.Instance?.AddGridTicketsThisFrame(ticketValue);
+        GameManager.Instance?.AddGridTicketsThisFrame(ticketValue);
         particleSystem?.Play();
     }
 

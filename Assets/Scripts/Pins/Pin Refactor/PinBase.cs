@@ -12,6 +12,7 @@ public abstract class PinBase : MonoBehaviour
     protected Vector3 _startPos;
     protected Quaternion _startRot;
 
+    // Refactor event system
     public static event Action<PinBase> OnPinFallenGlobal;
 
     protected virtual void Awake()
@@ -24,8 +25,8 @@ public abstract class PinBase : MonoBehaviour
     // Make State machine later
     protected bool IsInPlacementMode()
     {
-        return GrandGameManager.Instance != null
-            && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement;
+        return GameManager.Instance != null
+            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement;
     }
 
     protected void NotifyFallen()
@@ -42,9 +43,9 @@ public abstract class PinBase : MonoBehaviour
     public void SyncPhysicsToGameState()
     {
         bool active = true;
-        if (GrandGameManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            GameState s = GrandGameManager.Instance.GetCurrentState();
+            GameState s = GameManager.Instance.GetCurrentState();
             active = s != GameState.PinPlacement && s != GameState.Shop;
         }
         SetPhysicsEnabled(active);

@@ -15,6 +15,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         currentManager = manager;
         ballController.ResetBall();
         
+        manager.AllowPinsToFallOver(true);
+        
         manager.UpdateInstructionText("Draw the ball's path! Start from the ball.");
         
         // Hand ourselves over as the Listener via strict contract

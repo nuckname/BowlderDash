@@ -11,7 +11,7 @@ public class MultPin : PinBase
     public float multValue  = 0.5f;
 
     [Header("Overrides")]
-    public GrandGameManager gameManager;
+    public GameManager gameManager;
     public ScoreCalculator scoreCalculatorOverride;
 
     [Header("Events")]
@@ -51,14 +51,14 @@ public class MultPin : PinBase
         if (hitter == null) return false;
         if (!string.IsNullOrEmpty(hitterTag) && hitter.CompareTag(hitterTag)) return true;
 
-        GrandGameManager gm = gameManager ?? GrandGameManager.Instance;
+        GameManager gm = gameManager ?? GameManager.Instance;
         return gm != null && gm.ball == hitter;
     }
 
     private ScoreCalculator ResolveScoreCalculator()
     {
         if (scoreCalculatorOverride != null) return scoreCalculatorOverride;
-        GrandGameManager gm = gameManager ?? GrandGameManager.Instance;
+        GameManager gm = gameManager ?? GameManager.Instance;
         return gm?.scoreCalculator;
     }
 

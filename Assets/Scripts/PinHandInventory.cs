@@ -168,7 +168,7 @@ public class PinHandInventory : MonoBehaviour
         PinHandCardType.Banana
     };
 
-    private GrandGameManager gameManager;
+    private GameManager gameManager;
     private HexGridSnapper grid;
 
     private Canvas canvas;
@@ -213,7 +213,7 @@ public class PinHandInventory : MonoBehaviour
 
     private void Start()
     {
-        if (gameManager == null) gameManager = FindObjectOfType<GrandGameManager>();
+        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
         if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
 
         BuildRuntimeHand();
@@ -231,7 +231,7 @@ public class PinHandInventory : MonoBehaviour
 
     private void Update()
     {
-        if (gameManager == null) gameManager = FindObjectOfType<GrandGameManager>();
+        if (gameManager == null) gameManager = FindObjectOfType<GameManager>();
         if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
 
         bool shouldShow = Application.isPlaying
@@ -260,7 +260,7 @@ public class PinHandInventory : MonoBehaviour
         UpdateCardLayout();
     }
 
-    public void Configure(GrandGameManager gm, HexGridSnapper activeGrid, MonoBehaviour activeModeSwitcher = null)
+    public void Configure(GameManager gm, HexGridSnapper activeGrid, MonoBehaviour activeModeSwitcher = null)
     {
         gameManager = gm;
         grid = activeGrid;

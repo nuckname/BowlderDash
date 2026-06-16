@@ -17,9 +17,9 @@ public enum GameState
 }
 
 [RequireComponent(typeof(PinHandInventory))]
-public class GrandGameManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public static GrandGameManager Instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
     [Header("Core Dependencies")]
     public ScoreCalculator scoreCalculator;
@@ -340,7 +340,7 @@ public class GrandGameManager : MonoBehaviour
 
     private IEnumerator WaitAndScore()
     {
-        // Wait for physics to settle
+        // Wait for pins to settle
         yield return new WaitForSeconds(7f);
 
         _currentState = GameState.CalculatingScore;

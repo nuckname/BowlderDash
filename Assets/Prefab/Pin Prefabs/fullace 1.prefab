@@ -69,12 +69,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf55f57e60e12a4da55fac2dd6b1b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleSystem: {fileID: 0}
   hitterTag: Ball
-  gameManager: {fileID: 0}
-  scoreCalculatorOverride: {fileID: 0}
   scoreValue: 10
   multValue: 0.5
+  gameManager: {fileID: 0}
+  scoreCalculatorOverride: {fileID: 0}
   onHit:
+    m_PersistentCalls:
+      m_Calls: []
+  onReset:
     m_PersistentCalls:
       m_Calls: []
 --- !u!54 &6124087438814872490
@@ -140,9 +144,10 @@ GameObject:
   - component: {fileID: 5564525676392362196}
   - component: {fileID: 3144254737813204594}
   - component: {fileID: -5814233890823803683}
+  - component: {fileID: 5830415736669713464}
   m_Layer: 0
   m_Name: fullace 1
-  m_TagString: Untagged
+  m_TagString: Pin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -225,14 +230,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf55f57e60e12a4da55fac2dd6b1b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleSystem: {fileID: 0}
   hitterTag: Ball
-  gameManager: {fileID: 0}
-  scoreCalculatorOverride: {fileID: 0}
   scoreValue: 0
   multValue: 0.5
+  gameManager: {fileID: 0}
+  scoreCalculatorOverride: {fileID: 0}
   onHit:
     m_PersistentCalls:
       m_Calls: []
+  onReset:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!54 &5830415736669713464
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811477678882886870}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5561499527254371229
 GameObject:
   m_ObjectHideFlags: 0

@@ -665,7 +665,7 @@ public class HexGridSnapper : MonoBehaviour
             && showGizmos
             && isActiveAndEnabled
             && gameObject.activeInHierarchy
-            && (GrandGameManager.Instance != null && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement);
+            && (GameManager.Instance != null && GameManager.Instance.GetCurrentState() == GameState.PinPlacement);
     }
 
     private void UpdateRuntimeGridColors()

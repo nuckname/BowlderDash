@@ -10,9 +10,9 @@ public class BallCollisionCurvatureStopper : MonoBehaviour
     {
         if (((1 << collision.gameObject.layer) & stopForceLayer) != 0)
         {
-            if (GrandGameManager.Instance != null)
+            if (GameManager.Instance != null)
             {
-                GrandGameManager.Instance.StopFollowingCurve();
+                GameManager.Instance.StopFollowingCurve();
                 Debug.Log("<color=orange><b>[BallCollisionCurvatureStopper]</b></color> Pin hit");
             }
         }

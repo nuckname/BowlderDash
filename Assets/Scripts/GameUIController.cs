@@ -27,7 +27,7 @@ public class GameUIController : MonoBehaviour
     [SerializeField] private float flyPastScale = 3.2f;
     [SerializeField] [Range(0f, 1f)] private float hiddenHudAlpha = 0f;
 
-    public void UpdateStandardUI(GrandGameManager gm)
+    public void UpdateStandardUI(GameManager gm)
     {
         EnsureGameplayHudReferences();
 
@@ -51,7 +51,7 @@ public class GameUIController : MonoBehaviour
 
     void Update()
     {
-        GrandGameManager gm = GrandGameManager.Instance;
+        GameManager gm = GameManager.Instance;
         if (gm != null && gm.scoreCalculator != null)
         {
             int finalScore = gm.scoreCalculator.GetFinalScore();
@@ -61,7 +61,7 @@ public class GameUIController : MonoBehaviour
         UpdateGameplayHudTransition(gm);
     }
 
-    private void UpdateGameplayHudTransition(GrandGameManager gm)
+    private void UpdateGameplayHudTransition(GameManager gm)
     {
         EnsureGameplayHudReferences();
         if (gameplayHudRoot == null)
@@ -89,7 +89,7 @@ public class GameUIController : MonoBehaviour
         ApplyGameplayHudPose(1f - gameplayHudVisibility);
     }
 
-    private float GetHudTransitionDuration(GrandGameManager gm, bool shouldShowGameplayHud)
+    private float GetHudTransitionDuration(GameManager gm, bool shouldShowGameplayHud)
     {
         if (gm == null)
         {

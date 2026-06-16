@@ -44,8 +44,8 @@ public class vasePin : MonoBehaviour
 
     private void Update()
     {
-        if (GrandGameManager.Instance != null
-            && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+        if (GameManager.Instance != null
+            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
         {
             _hasHandledHitThisFrame = false;
             return;
@@ -66,8 +66,8 @@ public class vasePin : MonoBehaviour
             return;
         }
 
-        if (GrandGameManager.Instance != null
-            && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+        if (GameManager.Instance != null
+            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
         {
             Debug.Log($"<color=orange><b>[VasePin]</b></color> In pin placement state");
             return;
@@ -101,7 +101,7 @@ public class vasePin : MonoBehaviour
             return true;
         }
 
-        GrandGameManager gameManager = GrandGameManager.Instance;
+        GameManager gameManager = GameManager.Instance;
         return gameManager != null && gameManager.ball == hitter;
     }
 
@@ -142,8 +142,8 @@ public class vasePin : MonoBehaviour
             return;
         }
 
-        if (GrandGameManager.Instance != null
-            && GrandGameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+        if (GameManager.Instance != null
+            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
         {
             return;
         }

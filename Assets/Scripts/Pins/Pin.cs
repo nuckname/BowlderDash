@@ -11,13 +11,17 @@ public class Pin : PinBase
 
     private bool _isFallen = false;
 
+    public bool allowPinToFallOver = false;
+
     void Update()
     {
-        if (IsInPlacementMode()) return;
+        if (!allowPinToFallOver) return;
         if (_isFallen) return;
 
         if (Vector3.Angle(Vector3.up, transform.up) > fallAngleThreshold)
+        {
             TriggerFall();
+        }
     }
 
     private void TriggerFall()

@@ -45,9 +45,9 @@ public class DraggableSnap : MonoBehaviour
     {
         // Only allow grabbing in placement mode when a mode switcher is actually present.
         // Scenes still being wired up can fall back to unrestricted dragging.
-        if (GrandGameManager.Instance != null)
+        if (GameManager.Instance != null)
         {
-            if (GrandGameManager.Instance.GetCurrentState() != GameState.PinPlacement)
+            if (GameManager.Instance.GetCurrentState() != GameState.PinPlacement)
                 return;
         }
 

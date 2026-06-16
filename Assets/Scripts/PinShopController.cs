@@ -65,7 +65,7 @@ public class PinShopController : MonoBehaviour
     private readonly Dictionary<PinHandCardType, ShopRow> buyRows = new Dictionary<PinHandCardType, ShopRow>();
     private readonly Dictionary<PinHandCardType, ShopRow> sellRows = new Dictionary<PinHandCardType, ShopRow>();
 
-    private GrandGameManager gameManager;
+    private GameManager gameManager;
     private PinHandInventory inventory;
 
     private RectTransform pageHost;
@@ -75,7 +75,7 @@ public class PinShopController : MonoBehaviour
     private ShopPage currentPage;
     private bool createdRuntimeCanvas;
 
-    public void Configure(GrandGameManager owner, PinHandInventory pinInventory)
+    public void Configure(GameManager owner, PinHandInventory pinInventory)
     {
         gameManager = owner;
         inventory = pinInventory;
