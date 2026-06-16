@@ -13,6 +13,9 @@ public class FrameStartState : RoundBaseState
     }
 
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
+
+    public override void FixedUpdateState(RoundStateManager manager) { }
+
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }
 
     public override void OnTriggerEnter(RoundStateManager manager, Collider other)

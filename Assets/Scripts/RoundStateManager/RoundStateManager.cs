@@ -1,15 +1,21 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoundStateManager : MonoBehaviour
 {
-    [SerializeReference] private RoundBaseState currentState;
+    public RoundBaseState currentState;
 
+    public Camera targetCamera;
+    
     // Instantiate all available states
     public FrameStartState FrameStart = new FrameStartState();
     public ThrowingBallState ThrowingBall = new ThrowingBallState();
     public PinPlacementState PinPlacement = new PinPlacementState();
     public ShopState Shop = new ShopState();
 
+    public Text instructionText;
+    
+    
     void Start()
     {
         // Set the initial state
@@ -49,6 +55,11 @@ public class RoundStateManager : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         currentState?.OnTriggerExit(this, other);
+    }
+    
+    public void UpdateInstructionText(string newText)
+    {
+        instructionText.text = newText;
     }
     
     // debug what currrent state we are in. 

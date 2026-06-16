@@ -110,6 +110,7 @@ public class GrandGameManager : MonoBehaviour
     [SerializeField] private Pin[] allPinsPool;
     private exploder[] _laneExploders;
 
+   
     // Throwing internal state
     private struct CurvePoint
     {
@@ -155,21 +156,8 @@ public class GrandGameManager : MonoBehaviour
 
     void Start()
     {
-        pinHandInventory = GetComponent<PinHandInventory>();
-        if (pinHandInventory == null)
-            pinHandInventory = gameObject.AddComponent<PinHandInventory>();
-
-        if (shopController == null)
-        {
-            shopController = GetComponent<PinShopController>();
-        }
-
-        if (shopController == null)
-        {
-            shopController = gameObject.AddComponent<PinShopController>();
-        }
-
-        if (targetCamera == null) targetCamera = Camera.main;
+        targetCamera = Camera.main;
+        
         if (targetCamera != null && ball != null)
         {
             cameraOffset = targetCamera.transform.position - ball.transform.position;
@@ -584,6 +572,7 @@ public class GrandGameManager : MonoBehaviour
             ResetBall();
         }
 
+        /*
         if (_currentState == GameState.PlayerReady || _currentState == GameState.Drawing)
         {
             if (Input.GetMouseButtonDown(0))
@@ -612,6 +601,7 @@ public class GrandGameManager : MonoBehaviour
                 }
             }
         }
+        */
     }
 
     private void StartDrawing()
@@ -653,35 +643,6 @@ public class GrandGameManager : MonoBehaviour
         }
     }
 
-    private void UpdateDrawing()
-    {
-        Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, floorLayer))
-        {
-            Vector3 point = hit.point;
-
-            // Position tolerance: if dragged back beyond tolerance, launch
-            if (processedCurve.Count > 3 && point.z < processedCurve[processedCurve.Count - 1].position.z - drawPositionTolerance)
-            {
-                EndDrawingAndLaunch();
-                return;
-            }
-
-            if (point.z > maxZ) return;
-
-            if (processedCurve.Count == 0 || point.z > processedCurve[processedCurve.Count - 1].position.z + 0.1f)
-            {
-                AddPoint(point);
-            }
-        }
-        
-        if (powerSlider != null && isValidDraw)
-        {
-            float currentDuration = Time.time - mouseDownTime;
-            powerSlider.value = GetLaunchPowerNormalized(currentDuration);
-        }
-    }
-
     private void AddPoint(Vector3 pos)
     {
         CurvePoint cp = new CurvePoint { position = pos, directionIndex = 0 };
@@ -718,6 +679,37 @@ public class GrandGameManager : MonoBehaviour
             lineRenderer.SetPosition(processedCurve.Count - 1, pos + Vector3.up * 0.05f);
         }
     }
+    
+    private void UpdateDrawing()
+    {
+        Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, floorLayer))
+        {
+            Vector3 point = hit.point;
+
+            // Position tolerance: if dragged back beyond tolerance, launch
+            if (processedCurve.Count > 3 && point.z < processedCurve[processedCurve.Count - 1].position.z - drawPositionTolerance)
+            {
+                EndDrawingAndLaunch();
+                return;
+            }
+
+            if (point.z > maxZ) return;
+
+            if (processedCurve.Count == 0 || point.z > processedCurve[processedCurve.Count - 1].position.z + 0.1f)
+            {
+                AddPoint(point);
+            }
+        }
+        
+        if (powerSlider != null && isValidDraw)
+        {
+            float currentDuration = Time.time - mouseDownTime;
+            powerSlider.value = GetLaunchPowerNormalized(currentDuration);
+        }
+    }
+
+    
 
     private void EndDrawingAndLaunch()
     {
@@ -901,7 +893,7 @@ public class GrandGameManager : MonoBehaviour
 
     public void UpdateInstructionText(string newText)
     {
-        if (instructionText != null) instructionText.text = newText;
+        instructionText.text = newText;
     }
 
     public void StopFollowingCurve()

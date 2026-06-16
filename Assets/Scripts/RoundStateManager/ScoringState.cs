@@ -10,6 +10,7 @@ public class ScoringState : RoundBaseState
     {
         
     }
+    public override void FixedUpdateState(RoundStateManager manager) { }
 
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }
