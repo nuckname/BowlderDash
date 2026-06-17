@@ -87,7 +87,8 @@ public class ExplodingPin : PinBase
 
         foreach (Collider hit in Physics.OverlapSphere(pos, explosionRadius))
         {
-            hit.GetComponentInParent<vasePin>()?.TryShatterFromExplosion();
+            Debug.LogWarning("Explosion hard coded breaks vase");
+            //hit.GetComponentInParent<VaseEffect>()?.TryShatterFromExplosion();
             hit.GetComponentInParent<TicketPin>()?.TryAwardFromExplosion(hit);
 
             Rigidbody rb = hit.GetComponent<Rigidbody>();

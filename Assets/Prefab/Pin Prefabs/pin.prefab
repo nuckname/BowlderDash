@@ -110,9 +110,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 10
-  mult: 0
   fallAngleThreshold: 45
+  hitterTag: Ball
+  minHitVelocity: 3
+  onHitEffects: []
+  onFallEffects:
+  - rid: 4911452856340709378
+  allowPinToFallOver: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4911452856340709378
+      type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
+      data:
+        scoreValue: 10
+        multValue: 0
+        particleSystem: {fileID: 0}
 --- !u!54 &2186308725401229125
 Rigidbody:
   m_ObjectHideFlags: 0

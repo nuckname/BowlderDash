@@ -258,7 +258,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3807620440654293509}
-  - component: {fileID: 7073836673071833814}
   - component: {fileID: -2074743486072760131}
   - component: {fileID: 8812345678901234567}
   - component: {fileID: 8812345678901234568}
@@ -288,26 +287,6 @@ Transform:
   - {fileID: 3630196961346510869}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7073836673071833814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8935457865669160150}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43ee7c7ac946b0445a639a0efb145bb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shatteredVasePrefab: {fileID: 5233888619542058040, guid: 6112ee614a8e7db4bb3d12838b9d6194, type: 3}
-  vase: {fileID: 114782181947271798}
-  flower1: {fileID: 594026184152654567}
-  flower2: {fileID: 3125624124259819643}
-  hitterTag: Ball
-  intactBonusScore: 10
-  flowerShrinkDuration: 1
-  tipAngleThreshold: 65
 --- !u!114 &-2074743486072760131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,9 +311,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
-  mult: 0
   fallAngleThreshold: 180
+  hitterTag: Ball
+  minHitVelocity: 3
+  onHitEffects:
+  - rid: -2
+  onFallEffects:
+  - rid: -2
+  allowPinToFallOver: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!54 &8812345678901234568
 Rigidbody:
   m_ObjectHideFlags: 0

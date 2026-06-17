@@ -15,8 +15,8 @@ public class ScoreCalculator : MonoBehaviour
     [SerializeField] private Vector3 multFloatingTextOffset = new Vector3(0f, 2.1f, 0f);
     
     private HashSet<Pin> scoredPinsThisFrame = new HashSet<Pin>();
-    private List<Pin> pendingScoredPins = new List<Pin>();
-
+    
+    // We unified all scoring into DeferredScore, removing the need for pendingScoredPins.
     public struct DeferredScore
     {
         public int score;
@@ -40,7 +40,6 @@ public class ScoreCalculator : MonoBehaviour
         currentFrameScore = 0;
         currentFrameMult = 1f;
         scoredPinsThisFrame.Clear();
-        pendingScoredPins.Clear();
         pendingDeferredScores.Clear();
     }
 
@@ -48,21 +47,14 @@ public class ScoreCalculator : MonoBehaviour
     {
         if (scoredPinsThisFrame.Contains(fallenPin)) return;
         scoredPinsThisFrame.Add(fallenPin);
-        pendingScoredPins.Add(fallenPin);
+        
+        // Note: We no longer queue the physical pin here. 
+        // The Pin's "ScoreEffect" will handle queuing the actual math.
     }
 
     public IEnumerator CalculateScoringSequence()
     {
-        // Pass 1: Score
-        foreach (Pin p in pendingScoredPins)
-        {
-            if (p.score != 0)
-            {
-                currentFrameScore += p.score;
-                SpawnFloatingText(p.transform.position, $"+{p.score}", Color.white, false);
-                yield return new WaitForSeconds(0.3f);
-            }
-        }
+        // Score
         foreach (var def in pendingDeferredScores)
         {
             if (def.score != 0)
@@ -73,16 +65,7 @@ public class ScoreCalculator : MonoBehaviour
             }
         }
 
-        // Pass 2: Multiplier
-        foreach (Pin p in pendingScoredPins)
-        {
-            if (p.mult != 0)
-            {
-                currentFrameMult += p.mult;
-                SpawnFloatingText(p.transform.position, $"+{p.mult} Mult", Color.red, true);
-                yield return new WaitForSeconds(0.3f);
-            }
-        }
+        // Multiplier
         foreach (var def in pendingDeferredScores)
         {
             if (def.mult != 0)
@@ -93,7 +76,6 @@ public class ScoreCalculator : MonoBehaviour
             }
         }
 
-        pendingScoredPins.Clear();
         pendingDeferredScores.Clear();
     }
 

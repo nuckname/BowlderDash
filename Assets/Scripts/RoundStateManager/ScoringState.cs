@@ -18,6 +18,8 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator ScoringSequence(RoundStateManager manager)
     {
+        // Have an array of every pin that has fallen over.
+        // then we cycle though each pin giving them one second until we run out of pins.
         yield return new WaitForSeconds(7f);
 
         manager.UpdateInstructionText("Tallying Score...");
@@ -29,12 +31,13 @@ public class ScoringState : RoundBaseState
         // can find all Game objects with a tag.
         Pin[] allPins = Object.FindObjectsOfType<Pin>(true);
 
-        foreach (var p in allPins)
+        foreach (Pin p in allPins)
         {
             if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy && CountsTowardFrameClear(p))
             {
+                Debug.LogWarning("how to check for if pin has fallen over");
                 totalPinsActiveAtStart++;
-                if (p.IsFallen()) fallenPinsThisThrow++;
+                //if (p.IsFallen()) fallenPinsThisThrow++;
             }
         }
 
@@ -104,14 +107,15 @@ public class ScoringState : RoundBaseState
         return pin != null
             && pin.GetComponent<MultPin>() == null
             && pin.GetComponent<TicketPin>() == null
-            && pin.GetComponent<vasePin>() == null;
+            && pin.GetComponent<VaseEffect>() == null;
     }
 
     private void AwardVaseIntactBonuses(ScoreCalculator calculator)
     {
         if (calculator == null) return;
 
-        vasePin[] vasePins = Object.FindObjectsOfType<vasePin>(true);
+        /*
+        //VaseEffect[] vasePins = Object.FindObjectsOfType<VaseEffect>(true);
         foreach (var vase in vasePins)
         {
             if (vase != null && vase.gameObject.scene.isLoaded && vase.gameObject.activeInHierarchy)
@@ -119,15 +123,19 @@ public class ScoringState : RoundBaseState
                 vase.TryAwardIntactBonus(calculator);
             }
         }
+        */
     }
 
     private void ResetVaseThrowState()
     {
-        vasePin[] vasePins = Object.FindObjectsOfType<vasePin>(true);
+        // some sort of vase effect
+        /*
+        VaseEffect[] vasePins = Object.FindObjectsOfType<VaseEffect>(true);
         foreach (var vase in vasePins)
         {
             if (vase != null) vase.ResetThrowState();
         }
+        */
     }
 
     private void FinalizeFrameTickets(RoundStateManager manager, bool clearedAllPlacedPins, bool isStrike, int frameScore, bool passedScoreTarget)
@@ -171,14 +179,18 @@ public class ScoringState : RoundBaseState
         manager.UpdateInstructionText($"Frame complete. {passText} Earned {manager.ticketEconomy.ticketsEarnedLastFrame} tickets.{bonusText}");
     }
 
+    // Refactor to somewhere else
     private void ClearFallenPins(Pin[] allPins)
     {
         foreach(var p in allPins)
         {
+            Debug.unityLogger.Log("Disable pins");
+            /*
             if (p.gameObject.scene.isLoaded && p.IsFallen()) 
             {
                 p.gameObject.SetActive(false);
             }
+            */
         }
     }
 

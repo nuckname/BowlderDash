@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
-public class vasePin : MonoBehaviour
+[Serializable]
+public class VaseEffect : PinEffect
 {
     [Header("References")]
     public GameObject shatteredVasePrefab;
@@ -10,10 +12,8 @@ public class vasePin : MonoBehaviour
     public GameObject flower2;
 
     [Header("Hit Settings")]
-    public string hitterTag = "Ball";
     public int intactBonusScore = 10;
     public float flowerShrinkDuration = 0.4f;
-    public float tipAngleThreshold = 65f;
 
     private GameObject shatteredVaseInstance;
     private bool _wasHit;
@@ -25,91 +25,30 @@ public class vasePin : MonoBehaviour
     private Vector3 _flower2StartScale;
     private Coroutine _flower1ShrinkCoroutine;
     private Coroutine _flower2ShrinkCoroutine;
+    private bool _scalesCached = false;
 
-    private void Awake()
+    private void CacheScalesIfNeeded()
     {
+        if (_scalesCached) return;
         CacheFlowerScale(flower1, out _flower1StartScale);
         CacheFlowerScale(flower2, out _flower2StartScale);
-
-        Pin pin = GetComponent<Pin>();
-        if (pin != null)
-        {
-            pin.score = 0;
-            pin.mult = 0;
-            pin.fallAngleThreshold = 180f;
-        }
-
-        ApplyIntactVisualState();
+        _scalesCached = true;
     }
 
-    private void Update()
+    public override void Execute(Pin context, Collider instigator = null)
     {
-        if (GameManager.Instance != null
-            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
-        {
-            _hasHandledHitThisFrame = false;
-            return;
-        }
+        CacheScalesIfNeeded();
 
-        if (!_wasHit && Vector3.Angle(transform.up, Vector3.up) > tipAngleThreshold)
-        {
-            Debug.Log($"<color=orange><b>[VasePin]</b></color> Toppled over");
-            TryShatterFromExternalCause();
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
         if (_hasHandledHitThisFrame || _wasHit)
         {
             Debug.Log($"<color=orange><b>[VasePin]</b></color> Collision entered but already handled or was hit");
             return;
         }
 
-        if (GameManager.Instance != null
-            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+        if (GameManager.Instance != null && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
         {
             Debug.Log($"<color=orange><b>[VasePin]</b></color> In pin placement state");
             return;
-        }
-
-        if (!IsValidHitter(collision.gameObject))
-        {
-            Debug.Log($"<color=orange><b>[VasePin]</b></color> Invalid hitter");
-            return;
-        }
-
-        if (!IsVaseCollision(collision))
-        {
-            Debug.Log($"<color=orange><b>[VasePin]</b></color> Not a vase collision");
-            return;
-        }
-
-        Debug.Log($"<color=orange><b>[VasePin]</b></color> Handling hit");
-        HandleHit();
-    }
-
-    private bool IsValidHitter(GameObject hitter)
-    {
-        if (hitter == null)
-        {
-            return false;
-        }
-
-        if (!string.IsNullOrEmpty(hitterTag) && hitter.CompareTag(hitterTag))
-        {
-            return true;
-        }
-
-        GameManager gameManager = GameManager.Instance;
-        return gameManager != null && gameManager.ball == hitter;
-    }
-
-    private bool IsVaseCollision(Collision collision)
-    {
-        if (vase == null)
-        {
-            return false;
         }
 
         // if (collision.gameObject == vase)
@@ -126,32 +65,33 @@ public class vasePin : MonoBehaviour
         //     }
         // }
 
-        return true;
+        Debug.Log($"<color=orange><b>[VasePin]</b></color> Handling hit");
+        HandleHit(context);
     }
 
-    public void TryShatterFromExplosion()
+    public void TryShatterFromExplosion(Pin context)
     {
         Debug.Log($"<color=orange><b>[VasePin]</b></color> Shattered by nearby explosion");
-        TryShatterFromExternalCause();
+        TryShatterFromExternalCause(context);
     }
 
-    public void TryShatterFromExternalCause()
+    public void TryShatterFromExternalCause(Pin context)
     {
         if (_wasHit || _removedFromInventory)
         {
             return;
         }
 
-        if (GameManager.Instance != null
-            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
+        if (GameManager.Instance != null && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
         {
             return;
         }
 
-        HandleHit();
+        Debug.Log($"<color=orange><b>[VasePin]</b></color> Toppled over");
+        HandleHit(context);
     }
 
-    private void HandleHit()
+    private void HandleHit(Pin context)
     {
         if (_wasHit)
         {
@@ -166,23 +106,22 @@ public class vasePin : MonoBehaviour
         {
             if (shatteredVasePrefab != null)
             {
-                shatteredVaseInstance = Instantiate(
+                shatteredVaseInstance = UnityEngine.Object.Instantiate(
                     shatteredVasePrefab,
                     vase.transform.position,
                     vase.transform.rotation,
-                    transform);
+                    context.transform);
             }
 
             vase.SetActive(false);
         }
 
-        ShrinkFlower(flower1, _flower1StartScale, ref _flower1ShrinkCoroutine);
-        ShrinkFlower(flower2, _flower2StartScale, ref _flower2ShrinkCoroutine);
+        ShrinkFlower(context, flower1, _flower1StartScale, ref _flower1ShrinkCoroutine);
+        ShrinkFlower(context, flower2, _flower2StartScale, ref _flower2ShrinkCoroutine);
 
-        Pin pin = GetComponent<Pin>();
-        if (PinHandInventory.Instance != null && pin != null)
+        if (PinHandInventory.Instance != null && context != null)
         {
-            PinHandInventory.Instance.ConsumePlacedVaseInstance(pin);
+            PinHandInventory.Instance.ConsumePlacedVaseInstance(context);
         }
     }
 
@@ -206,7 +145,8 @@ public class vasePin : MonoBehaviour
         return _hitThisThrow;
     }
 
-    public bool TryAwardIntactBonus(ScoreCalculator scoreCalculator)
+    // This can be called globally at the end of the frame by looping through the Pin's onHitEffects
+    public bool TryAwardIntactBonus(Pin context, ScoreCalculator scoreCalculator)
     {
         if (_wasHit || _hitThisThrow || intactBonusScore == 0)
         {
@@ -218,7 +158,7 @@ public class vasePin : MonoBehaviour
             return false;
         }
 
-        scoreCalculator.QueueScoreModification(intactBonusScore, 0f, transform.position);
+        scoreCalculator.QueueScoreModification(intactBonusScore, 0f, context.transform.position);
         return true;
     }
 
@@ -228,7 +168,7 @@ public class vasePin : MonoBehaviour
         _hasHandledHitThisFrame = false;
     }
 
-    public void ResetPin()
+    public override void ResetEffect()
     {
         if (_removedFromInventory)
         {
@@ -241,7 +181,7 @@ public class vasePin : MonoBehaviour
 
         if (shatteredVaseInstance != null)
         {
-            Destroy(shatteredVaseInstance);
+            UnityEngine.Object.Destroy(shatteredVaseInstance);
             shatteredVaseInstance = null;
         }
 
@@ -261,7 +201,7 @@ public class vasePin : MonoBehaviour
         RestoreFlowerScale(flower2, _flower2StartScale);
     }
 
-    private void ShrinkFlower(GameObject flower, Vector3 startScale, ref Coroutine runningCoroutine)
+    private void ShrinkFlower(Pin context, GameObject flower, Vector3 startScale, ref Coroutine runningCoroutine)
     {
         if (flower == null)
         {
@@ -270,10 +210,10 @@ public class vasePin : MonoBehaviour
 
         if (runningCoroutine != null)
         {
-            StopCoroutine(runningCoroutine);
+            context.StopCoroutine(runningCoroutine);
         }
 
-        runningCoroutine = StartCoroutine(ShrinkFlowerRoutine(flower.transform, startScale));
+        runningCoroutine = context.StartCoroutine(ShrinkFlowerRoutine(flower.transform, startScale));
     }
 
     private IEnumerator ShrinkFlowerRoutine(Transform flowerTransform, Vector3 startScale)
@@ -295,12 +235,7 @@ public class vasePin : MonoBehaviour
 
     private void ResetFlower(GameObject flower, Vector3 startScale, ref Coroutine runningCoroutine)
     {
-        if (runningCoroutine != null)
-        {
-            StopCoroutine(runningCoroutine);
-            runningCoroutine = null;
-        }
-
+        runningCoroutine = null; 
         RestoreFlowerScale(flower, startScale);
     }
 

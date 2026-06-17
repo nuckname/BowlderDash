@@ -514,7 +514,7 @@ public class HexGridSnapper : MonoBehaviour
 
             if (occupant.GetComponent<MultPin>() != null
                 || occupant.GetComponent<TicketPin>() != null
-                || occupant.GetComponent<vasePin>() != null)
+                || occupant.GetComponent<VaseEffect>() != null)
             {
                 continue;
             }
@@ -526,10 +526,13 @@ public class HexGridSnapper : MonoBehaviour
                 continue;
             }
 
+            Debug.LogError("Need to check for fallen pin here");
+            /*
             if (!pin.IsFallen())
             {
                 return false;
             }
+            */
         }
 
         return foundPlacedPin;

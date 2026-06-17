@@ -618,9 +618,9 @@ public class PinHandInventory : MonoBehaviour
             runtimePowerupPins.Remove(pin);
             Destroy(pin.gameObject);
         }
-        else if (pin.GetComponent<vasePin>() != null)
+        else if (pin.GetComponent<VaseEffect>() != null)
         {
-            vasePin vaseComponent = pin.GetComponent<vasePin>();
+            VaseEffect vaseComponent = pin.GetComponent<VaseEffect>();
             if (vaseComponent != null && vaseComponent.IsRemovedFromInventory())
             {
                 return false;
@@ -1338,7 +1338,7 @@ public class PinHandInventory : MonoBehaviour
             return;
         }
 
-        vasePin vaseComponent = pin.GetComponent<vasePin>();
+        VaseEffect vaseComponent = pin.GetComponent<VaseEffect>();
         if (vaseComponent == null || vaseComponent.IsRemovedFromInventory())
         {
             return;
@@ -1481,9 +1481,9 @@ public class PinHandInventory : MonoBehaviour
             }
             else if (type == PinHandCardType.Vase)
             {
-                if (pinObject.GetComponent<vasePin>() == null)
+                if (pinObject.GetComponent<VaseEffect>() == null)
                 {
-                    pinObject.AddComponent<vasePin>();
+                    //pinObject.AddComponent<VaseEffect>();
                 }
             }
             else if (type == PinHandCardType.Small || type == PinHandCardType.Banana)
@@ -1719,7 +1719,7 @@ public class PinHandInventory : MonoBehaviour
         ExplodingPin explodingComponent = pinObject.GetComponent<ExplodingPin>();
         MultPin multComponent = pinObject.GetComponent<MultPin>();
         TicketPin ticketComponent = pinObject.GetComponent<TicketPin>();
-        vasePin vaseComponent = pinObject.GetComponent<vasePin>();
+        VaseEffect vaseComponent = pinObject.GetComponent<VaseEffect>();
 
         if (type == PinHandCardType.Exploding)
         {
@@ -1756,7 +1756,7 @@ public class PinHandInventory : MonoBehaviour
         {
             if (vaseComponent == null)
             {
-                vaseComponent = pinObject.AddComponent<vasePin>();
+                //vaseComponent = pinObject.AddComponent<VaseEffect>();
             }
 
             ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
@@ -1814,7 +1814,7 @@ public class PinHandInventory : MonoBehaviour
         ExplodingPin explodingComponent,
         MultPin multComponent,
         TicketPin ticketComponent,
-        vasePin vaseComponent,
+        VaseEffect vaseComponent,
         PinHandCardType type)
     {
         if (explodingComponent != null && type != PinHandCardType.Exploding)
@@ -1834,7 +1834,7 @@ public class PinHandInventory : MonoBehaviour
 
         if (vaseComponent != null && type != PinHandCardType.Vase)
         {
-            Destroy(vaseComponent);
+            //Destroy(vaseComponent);
         }
 
         PinHandRuntimeCardMarker marker = pinObject.GetComponent<PinHandRuntimeCardMarker>();
@@ -1878,7 +1878,7 @@ public class PinHandInventory : MonoBehaviour
             return marker.cardType;
         }
 
-        if (pin.GetComponent<vasePin>() != null) return PinHandCardType.Vase;
+        if (pin.GetComponent<VaseEffect>() != null) return PinHandCardType.Vase;
         if (pin.GetComponent<ExplodingPin>() != null) return PinHandCardType.Exploding;
         if (pin.GetComponent<TicketPin>() != null) return PinHandCardType.Ticket;
         if (pin.GetComponent<MultPin>() != null) return PinHandCardType.MultiplierTumbling;

@@ -323,10 +323,11 @@ public class GameManager : MonoBehaviour
         RefreshRuntimePools();
         foreach(var p in allPinsPool)
         {
+            /*
             if (p.gameObject.scene.isLoaded && p.IsFallen()) 
             {
                 p.gameObject.SetActive(false);
-            }
+            }*/
         }
     }
 
@@ -355,7 +356,7 @@ public class GameManager : MonoBehaviour
             if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy && CountsTowardFrameClear(p))
             {
                 totalPinsActiveAtStart++;
-                if (p.IsFallen()) fallenPinsThisThrow++;
+              //  if (p.IsFallen()) fallenPinsThisThrow++;
             }
         }
 
@@ -960,7 +961,7 @@ public class GameManager : MonoBehaviour
         return pin != null
             && pin.GetComponent<MultPin>() == null
             && pin.GetComponent<TicketPin>() == null
-            && pin.GetComponent<vasePin>() == null;
+            && pin.GetComponent<VaseEffect>() == null;
     }
 
     private void AwardVaseIntactBonuses()
@@ -969,11 +970,12 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-
-        vasePin[] vasePins = FindObjectsOfType<vasePin>(true);
+        
+        /*
+        VaseEffect[] vasePins = FindObjectsOfType<VaseEffect>(true);
         for (int i = 0; i < vasePins.Length; i++)
         {
-            vasePin vase = vasePins[i];
+            VaseEffect vase = vasePins[i];
             if (vase == null || !vase.gameObject.scene.isLoaded || !vase.gameObject.activeInHierarchy)
             {
                 continue;
@@ -981,11 +983,13 @@ public class GameManager : MonoBehaviour
 
             vase.TryAwardIntactBonus(scoreCalculator);
         }
+        */
     }
 
     private void ResetVaseThrowState()
     {
-        vasePin[] vasePins = FindObjectsOfType<vasePin>(true);
+        /*
+        VaseEffect[] vasePins = FindObjectsOfType<VaseEffect>(true);
         for (int i = 0; i < vasePins.Length; i++)
         {
             if (vasePins[i] != null)
@@ -993,6 +997,7 @@ public class GameManager : MonoBehaviour
                 vasePins[i].ResetThrowState();
             }
         }
+        */
     }
 
     private int CalculateFrameScoreTarget(int frameNumber)
