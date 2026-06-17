@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 // https://gist.github.com/adammyhre/8e6f57d24e96d33738273ed0570828be
 
+// So we can draw abstract classes to list.
 [CustomPropertyDrawer(typeof(PinEffect), true)]
 public class PinEffectDrawer : PropertyDrawer {
     static Dictionary<string, Type> typeMap;
