@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -10,10 +11,10 @@ using UnityEngine.UI;
 
 public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
-    private Canvas canvas;
-    private Image imageComponent;
+    private Canvas _canvas;
+    private Image _imageComponent;
     [SerializeField] private bool instantiateVisual = true;
-    private VisualCardsHandler visualHandler;
+    private VisualCardsHandler _visualHandler;
     
     private Vector3 offset; 
 
@@ -23,8 +24,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [Header("Selection")]
     public bool selected;
     public float selectionOffset = 50;
-    private float pointerDownTime;
-    private float pointerUpTime;
+    private float _pointerDownTime;
+    private float _pointerUpTime;
 
     [Header("Visual")]
     [SerializeField] private GameObject cardVisualPrefab;
@@ -54,16 +55,24 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [HideInInspector] public UnityEvent<CardMovement> EndDragEvent;
     [HideInInspector] public UnityEvent<CardMovement, bool> SelectEvent;
 
+    private HexGridSnapper _hexGrid;
+
+    private void Awake()
+    {
+        _canvas = GetComponentInParent<Canvas>();
+        _imageComponent = GetComponent<Image>();
+        _visualHandler = GameObject.FindGameObjectWithTag("VisualCardHandler").GetComponent<VisualCardsHandler>();
+
+        _hexGrid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<HexGridSnapper>();
+    }
+
     void Start()
     {
-        canvas = GetComponentInParent<Canvas>();
-        imageComponent = GetComponent<Image>();
-
         if (!instantiateVisual)
             return;
 
-        visualHandler = FindObjectOfType<VisualCardsHandler>();
-        cardAnimator = Instantiate(cardVisualPrefab, visualHandler ? visualHandler.transform : canvas.transform).GetComponent<CardAnimator>();
+        cardAnimator = Instantiate(cardVisualPrefab, _visualHandler.transform).GetComponent<CardAnimator>();
+        
         cardAnimator.Initialize(this);
     }
 
@@ -81,7 +90,11 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
                 {
-                    spawnedWorldObject.transform.position = hit.point;
+                    HexGridSnapper.Cell nearestCell = _hexGrid.GetNearestCell(hit.point);
+                    if (nearestCell != null)
+                    {
+                        spawnedWorldObject.transform.position = nearestCell.center;
+                    }
                 }
             }
             else
@@ -107,7 +120,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             // TRANSITION TO WORLD
             isPreviewingInWorld = true;
             
-            imageComponent.enabled = false;
+            _imageComponent.enabled = false;
             if (cardAnimator != null) 
                 cardAnimator.gameObject.SetActive(false);
 
@@ -121,7 +134,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             // TRANSITION BACK TO HAND
             isPreviewingInWorld = false;
 
-            imageComponent.enabled = true;
+            _imageComponent.enabled = true;
             if (cardAnimator != null) 
                 cardAnimator.gameObject.SetActive(true);
 
@@ -150,8 +163,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         offset = Input.mousePosition - transform.position;
         isDragging = true;
         
-        canvas.GetComponent<GraphicRaycaster>().enabled = false;
-        imageComponent.raycastTarget = false;
+        _canvas.GetComponent<GraphicRaycaster>().enabled = false;
+        _imageComponent.raycastTarget = false;
 
         wasDragged = true;
     }
@@ -168,14 +181,45 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         
         if (isPreviewingInWorld)
         {
-            spawnedWorldObject = null;
-            Destroy(gameObject);
-            return; 
+            bool successfullyPlaced = false;
+       
+            HexGridSnapper.Cell targetCell = _hexGrid.GetNearestCell(spawnedWorldObject.transform.position);
+            
+            // Attempt to reserve the cell for our spawned object
+            if (targetCell != null)
+            {
+                successfullyPlaced = _hexGrid.TryReserveCell(targetCell, spawnedWorldObject.transform);
+            }
+    
+
+            if (successfullyPlaced)
+            {
+                // CARD SUCCESSFULLY PLAYED ON GRID
+
+                spawnedWorldObject = null;
+                Destroy(gameObject);
+                return; 
+            }
+            else
+            {
+                // FAILED TO PLACE (Cell occupied or invalid) - Return to Hand
+                isPreviewingInWorld = false;
+
+                _imageComponent.enabled = true;
+                if (cardAnimator != null) 
+                    cardAnimator.gameObject.SetActive(true);
+
+                if (spawnedWorldObject != null)
+                {
+                    Destroy(spawnedWorldObject);
+                    spawnedWorldObject = null;
+                }
+            }
         }
 
         // RETURNED TO HAND
-        canvas.GetComponent<GraphicRaycaster>().enabled = true;
-        imageComponent.raycastTarget = true;
+        _canvas.GetComponent<GraphicRaycaster>().enabled = true;
+        _imageComponent.raycastTarget = true;
 
         StartCoroutine(FrameWait());
 
@@ -185,7 +229,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             wasDragged = false;
         }
     }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         PointerEnterEvent.Invoke(this);
@@ -204,7 +247,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             return;
 
         PointerDownEvent.Invoke(this);
-        pointerDownTime = Time.time;
+        _pointerDownTime = Time.time;
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -212,11 +255,11 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
 
-        pointerUpTime = Time.time;
+        _pointerUpTime = Time.time;
 
-        PointerUpEvent.Invoke(this, pointerUpTime - pointerDownTime > .2f);
+        PointerUpEvent.Invoke(this, _pointerUpTime - _pointerDownTime > .2f);
 
-        if (pointerUpTime - pointerDownTime > .2f)
+        if (_pointerUpTime - _pointerDownTime > .2f)
             return;
 
         if (wasDragged)
