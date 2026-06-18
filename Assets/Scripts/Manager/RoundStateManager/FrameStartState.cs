@@ -6,8 +6,6 @@ public class FrameStartState : RoundBaseState
     public override void EnterState(RoundStateManager manager)
     {
         // Reset frame-specific variables via the Scriptable Objects
-        HandleGameState(manager);
-
         manager.AllowPinsToFallOver(false);
         
         GetAllPinsInCurrentFrame(manager);
@@ -16,6 +14,8 @@ public class FrameStartState : RoundBaseState
 
         manager.scoreCalculator.ResetFrameScore();
 
+        manager.currentRound++;
+        
         HandleMap(manager);
 
         HandleGrid(manager);
@@ -34,12 +34,6 @@ public class FrameStartState : RoundBaseState
         manager.allActivePinsInTheFrame = GameObject.FindGameObjectsWithTag("Pin");
     }
 
-    private void HandleGameState(RoundStateManager manager)
-    {
-        manager.gameState.throwsThisFrame = 0;
-        manager.gameState.scoreAppliedToTotalThisFrame = 0;
-        manager.gameState.currentFrameScoreTarget = manager.CalculateFrameScoreTarget(manager.gameState.currentFrame);
-    }
 
     private void HandleGrid(RoundStateManager manager)
     {

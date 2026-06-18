@@ -14,6 +14,10 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         currentManager = manager;
         ballController.ResetBall();
+
+        manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
+        
+        manager.TurnOnCardHand(false);
         
         manager.AllowPinsToFallOver(true);
         

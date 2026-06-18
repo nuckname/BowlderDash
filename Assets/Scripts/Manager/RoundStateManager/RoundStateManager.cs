@@ -8,6 +8,8 @@ public class RoundStateManager : MonoBehaviour
     public GameObject[] allActivePinsInTheFrame;
     
     public Camera targetCamera;
+
+    public CameraManager cameraManager;
     
     public FrameStartState FrameStart = new FrameStartState();
     public ThrowingBallState ThrowingBall = new ThrowingBallState();
@@ -27,7 +29,12 @@ public class RoundStateManager : MonoBehaviour
     [Header("Data Objects")]
     public GameStateData gameState;
     public TicketEconomyData ticketEconomy;
+    
+    [Header("Round Vars")]
+    public int amountOfBallsThrown = 0;
+    public int currentRound = 0;
 
+    public GameObject cardHand;
     void Start()
     {
         StartNewGame();
@@ -38,6 +45,15 @@ public class RoundStateManager : MonoBehaviour
         if (currentState != null)
         {
             currentState.UpdateState(this);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (currentState == FrameStart) SwitchState(PinPlacement);
+            else if (currentState == PinPlacement) SwitchState(ThrowingBall);
+            else if (currentState == ThrowingBall) SwitchState(ScoringState);
+            else if (currentState == ScoringState) SwitchState(Shop);
+            else if (currentState == Shop) SwitchState(FrameStart);
         }
     }
 
@@ -102,4 +118,14 @@ public class RoundStateManager : MonoBehaviour
 
     public void ResetLaneExploders() { }
     public void RefreshRuntimePools() { }
+
+    public void TurnOnCardHand(bool turnOn)
+    {
+        cardHand.SetActive(turnOn);
+    }
+    
+    public void MoveCamera(CameraLocation location)
+    {
+        cameraManager.MoveCameraTo(location);
+    }
 }

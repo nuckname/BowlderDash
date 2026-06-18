@@ -4,20 +4,13 @@ using UnityEngine;
 public class GameStateData : ScriptableObject
 {
     public int maxFrames = 10;
-    public int maxThrowsPerFrame = 2;
 
-    public int currentFrame = 1;
-    public int throwsThisFrame = 0;
-    public int totalScore = 0;
-    public int scoreAppliedToTotalThisFrame = 0;
-    public int currentFrameScoreTarget = 30;
+    public int startingRound = 1;
+    public int startingRoundScoreTarget = 30;
 
     public void ResetState()
     {
-        currentFrame = 1;
-        throwsThisFrame = 0;
-        totalScore = 0;
-        scoreAppliedToTotalThisFrame = 0;
-        currentFrameScoreTarget = 30;
+        startingRound = 1;
+        startingRoundScoreTarget = 30;
     }
 }

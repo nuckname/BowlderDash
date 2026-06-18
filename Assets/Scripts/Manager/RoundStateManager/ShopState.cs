@@ -1,18 +1,15 @@
 using UnityEngine;
 
-public class PinPlacementState : RoundBaseState
+[System.Serializable]
+public class ShopState : RoundBaseState
 {
     public override void EnterState(RoundStateManager manager)
     {
-        Debug.Log("Entering Pin Placement State");
+        manager.MoveCamera(CameraLocation.ShopCameraLocation);
     }
 
     public override void UpdateState(RoundStateManager manager)
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            manager.SwitchState(manager.ThrowingBall);
-        }
         
     }
     public override void FixedUpdateState(RoundStateManager manager) { }
