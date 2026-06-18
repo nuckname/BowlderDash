@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\Tumbling.cs" />
     <Compile Include="Assets\Scripts\Ball\BallController.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Card.cs" />
+    <Compile Include="Assets\Scripts\Manager\ShopUIManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\PinPlacementState.cs" />
     <Compile Include="Assets\Scripts\Interface\IPathListener.cs" />

@@ -4,11 +4,8 @@ using UnityEngine.UI;
 public class RoundStateManager : MonoBehaviour
 {
     public RoundBaseState currentState;
-
     public GameObject[] allActivePinsInTheFrame;
-    
     public Camera targetCamera;
-
     public CameraManager cameraManager;
     
     public FrameStartState FrameStart = new FrameStartState();
@@ -20,11 +17,10 @@ public class RoundStateManager : MonoBehaviour
     public Text instructionText;
 
     [Header("Core Dependencies")]
-    // Temp, refactor these later
     public ScoreCalculator scoreCalculator;
-    //public PinHandInventory pinHandInventory;
-    public PinShopController shopController;
     public HexGridSnapper grid;
+    
+    public ShopUIManager shopUI;
 
     [Header("Data Objects")]
     public GameStateData gameState;
@@ -35,8 +31,15 @@ public class RoundStateManager : MonoBehaviour
     public int currentRound = 0;
 
     public GameObject cardHand;
+
     void Start()
     {
+        // Initialize the UI so it knows about this State Manager
+        if (shopUI != null)
+        {
+            shopUI.Initialize(this);
+        }
+        
         StartNewGame();
     }
 
@@ -47,6 +50,7 @@ public class RoundStateManager : MonoBehaviour
             currentState.UpdateState(this);
         }
         
+        // Debug testing
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (currentState == FrameStart) SwitchState(PinPlacement);
@@ -59,13 +63,8 @@ public class RoundStateManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        // Reset the data in the Scriptable Objects
         gameState.ResetState();
         ticketEconomy.ResetState();
-        
-       // pinHandInventory?.InitializeOwnedInventoryForNewGame();
-       // pinHandInventory?.ClearSavedLayout();
-        shopController?.HideShop();
         
         SwitchState(FrameStart);
     }
@@ -102,11 +101,7 @@ public class RoundStateManager : MonoBehaviour
         GUI.Label(new Rect(300, 10, 300, 20), $"Current State: {stateName}");
     }
 
-    public int CalculateFrameScoreTarget(int frame)
-    {
-        // Placeholder
-        return 30;
-    }
+    public int CalculateFrameScoreTarget(int frame) { return 30; }
     
     public void AllowPinsToFallOver(bool allow)
     {

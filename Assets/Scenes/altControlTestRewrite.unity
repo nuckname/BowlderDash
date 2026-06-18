@@ -2553,8 +2553,8 @@ MonoBehaviour:
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
   instructionText: {fileID: 538931267}
   scoreCalculator: {fileID: 341304545}
-  shopController: {fileID: 341304551}
   grid: {fileID: 120957812}
+  shopUI: {fileID: 1168153561}
   gameState: {fileID: 11400000, guid: 34b497f35e2f48d4f87bfca0a0bb8cc7, type: 2}
   ticketEconomy: {fileID: 11400000, guid: 17f1c2355522ff343ad3cbb278aaeb0c, type: 2}
   amountOfBallsThrown: 0
@@ -6435,7 +6435,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!223 &1001227116
 Canvas:
   m_ObjectHideFlags: 0
@@ -6445,8 +6445,8 @@ Canvas:
   m_GameObject: {fileID: 1001227112}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
-  m_Camera: {fileID: 1799454500}
+  m_RenderMode: 2
+  m_Camera: {fileID: 1588884242}
   m_PlaneDistance: 3.13
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -6466,19 +6466,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001227112}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.0006825304, y: -0.014824071, z: -0.0023591158, w: 0.99988717}
+  m_LocalPosition: {x: 0, y: 0, z: 5.49}
+  m_LocalScale: {x: 0.0076194294, y: 0.0076194294, z: 0.0076194294}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 500127146}
   m_Father: {fileID: 930433113}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.074, y: -1.699, z: -0.271}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.16, y: 1.04}
+  m_SizeDelta: {x: 843.27405, y: 474.34164}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1002029484
 GameObject:
   m_ObjectHideFlags: 0
@@ -7568,6 +7568,66 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1168153559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1168153560}
+  - component: {fileID: 1168153561}
+  - component: {fileID: 1168153562}
+  m_Layer: 0
+  m_Name: UiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1168153560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168153559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1346736464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1168153561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168153559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 785f8d5b5176b5a43b8b4d4fae2996b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 1001227113}
+  continueButton: {fileID: 1047286571}
+  ticketText: {fileID: 0}
+--- !u!225 &1168153562
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168153559}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!43 &1176472340
 Mesh:
   m_ObjectHideFlags: 0
@@ -8573,6 +8633,7 @@ Transform:
   m_Children:
   - {fileID: 374269888}
   - {fileID: 1439520102}
+  - {fileID: 1168153560}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1348361069
@@ -11323,8 +11384,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 797099238}
   m_HandleRect: {fileID: 797099237}
   m_Direction: 2
-  m_Value: 0.99966234
-  m_Size: 0.9102004
+  m_Value: 0.9996618
+  m_Size: 0.9102
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

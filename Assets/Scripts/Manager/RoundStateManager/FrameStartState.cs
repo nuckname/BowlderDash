@@ -45,7 +45,6 @@ public class FrameStartState : RoundBaseState
     {
         manager.ResetLaneExploders();
         //manager.pinHandInventory?.ResetInventoryAndPins();
-        manager.shopController?.HideShop();
         manager.RefreshRuntimePools();
     }
 
