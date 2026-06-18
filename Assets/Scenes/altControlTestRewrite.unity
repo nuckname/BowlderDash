@@ -2552,8 +2552,6 @@ MonoBehaviour:
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
   instructionText: {fileID: 538931267}
   scoreCalculator: {fileID: 341304545}
-  uiController: {fileID: 341304546}
-  pinHandInventory: {fileID: 341304549}
   shopController: {fileID: 341304551}
   grid: {fileID: 120957812}
   gameState: {fileID: 11400000, guid: 34b497f35e2f48d4f87bfca0a0bb8cc7, type: 2}
@@ -2988,9 +2986,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 967875292}
   - {fileID: 1545294216}
-  m_Father: {fileID: 0}
+  - {fileID: 967875292}
+  m_Father: {fileID: 930433113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -4460,7 +4458,7 @@ PrefabInstance:
       objectReference: {fileID: 3655645598659960977, guid: 1a3ad9d9b2384a947b444dbe77a47914, type: 3}
     - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: cardsToSpawn
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_Pivot.x
@@ -4536,11 +4534,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 171
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 101
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6031,6 +6029,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1320631406}
+  - {fileID: 516170651}
   - {fileID: 1670341956}
   - {fileID: 1001227117}
   - {fileID: 912394429}
@@ -11914,7 +11913,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1951707966
 Transform:
   m_ObjectHideFlags: 0
@@ -14560,4 +14559,3 @@ SceneRoots:
   - {fileID: 543450652758292814}
   - {fileID: 1058055205}
   - {fileID: 1137028395}
-  - {fileID: 516170651}

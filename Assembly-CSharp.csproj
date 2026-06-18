@@ -50,6 +50,7 @@
     <Compile Include="Assets\Scripts\Pins\MultPin.cs" />
     <Compile Include="Assets\PathDrawer.cs" />
     <Compile Include="Assets\Scripts\HexGridSnapper.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\CardAnimator.cs" />
     <Compile Include="Assets\Scripts\RoundStateManager\ShopState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\PinEffect.cs" />
@@ -77,11 +78,11 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\Scripts\RoundStateManager\PinPlacementState.cs" />
     <Compile Include="Assets\BallCollisionTrigger.cs" />
-    <Compile Include="Assets\Scripts\Card Scripts\CardVisual.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\ScriptableObjects\PinCardsSO\PinCardData.cs" />
     <Compile Include="Assets\ScriptableObjects\GameStateData.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\CardMovement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\PinBase.cs" />
     <Compile Include="Assets\Scripts\Pins\VaseEffect.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\exploder.cs" />
     <Compile Include="Assets\Scripts\PinHandCardView.cs" />
+    <Compile Include="Assets\CardManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\ScriptableObjects\TicketEconomyData.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
@@ -106,6 +108,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\Scripts\DraggableSnap.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\CardView.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scripts\RoundStateManager\FrameStartState.cs" />
     <Compile Include="Assets\Scripts\Pins\explodingPin.cs" />

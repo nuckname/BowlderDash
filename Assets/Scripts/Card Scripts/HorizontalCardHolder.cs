@@ -9,15 +9,15 @@ using System.Linq;
 public class HorizontalCardHolder : MonoBehaviour
 {
 
-    [SerializeField] private Card selectedCard;
-    [SerializeReference] private Card hoveredCard;
+    [SerializeField] private CardMovement selectedCardMovement;
+    [SerializeReference] private CardMovement hoveredCardMovement;
 
     [SerializeField] private GameObject slotPrefab;
     private RectTransform rect;
 
     [Header("Spawn Settings")]
     [SerializeField] private int cardsToSpawn = 7;
-    public List<Card> cards;
+    public List<CardMovement> cards;
 
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
@@ -30,11 +30,11 @@ public class HorizontalCardHolder : MonoBehaviour
         }
 
         rect = GetComponent<RectTransform>();
-        cards = GetComponentsInChildren<Card>().ToList();
+        cards = GetComponentsInChildren<CardMovement>().ToList();
 
         int cardCount = 0;
 
-        foreach (Card card in cards)
+        foreach (CardMovement card in cards)
         {
             card.PointerEnterEvent.AddListener(CardPointerEnter);
             card.PointerExitEvent.AddListener(CardPointerExit);
@@ -51,63 +51,63 @@ public class HorizontalCardHolder : MonoBehaviour
             yield return new WaitForSecondsRealtime(.1f);
             for (int i = 0; i < cards.Count; i++)
             {
-                if (cards[i].cardVisual != null)
-                    cards[i].cardVisual.UpdateIndex(transform.childCount);
+                if (cards[i].cardAnimator != null)
+                    cards[i].cardAnimator.UpdateIndex(transform.childCount);
             }
         }
     }
 
-    private void BeginDrag(Card card)
+    private void BeginDrag(CardMovement cardMovement)
     {
-        selectedCard = card;
+        selectedCardMovement = cardMovement;
     }
 
 
-    void EndDrag(Card card)
+    void EndDrag(CardMovement cardMovement)
     {
-        if (selectedCard == null)
+        if (selectedCardMovement == null)
             return;
 
-        selectedCard.transform.DOLocalMove(selectedCard.selected ? new Vector3(0,selectedCard.selectionOffset,0) : Vector3.zero, tweenCardReturn ? .15f : 0).SetEase(Ease.OutBack);
+        selectedCardMovement.transform.DOLocalMove(selectedCardMovement.selected ? new Vector3(0,selectedCardMovement.selectionOffset,0) : Vector3.zero, tweenCardReturn ? .15f : 0).SetEase(Ease.OutBack);
 
         rect.sizeDelta += Vector2.right;
         rect.sizeDelta -= Vector2.right;
 
-        selectedCard = null;
+        selectedCardMovement = null;
 
     }
 
-    void CardPointerEnter(Card card)
+    void CardPointerEnter(CardMovement cardMovement)
     {
-        hoveredCard = card;
+        hoveredCardMovement = cardMovement;
     }
 
-    void CardPointerExit(Card card)
+    void CardPointerExit(CardMovement cardMovement)
     {
-        hoveredCard = null;
+        hoveredCardMovement = null;
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            if (hoveredCard != null)
+            if (hoveredCardMovement != null)
             {
-                Destroy(hoveredCard.transform.parent.gameObject);
-                cards.Remove(hoveredCard);
+                Destroy(hoveredCardMovement.transform.parent.gameObject);
+                cards.Remove(hoveredCardMovement);
 
             }
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            foreach (Card card in cards)
+            foreach (CardMovement card in cards)
             {
                 card.Deselect();
             }
         }
 
-        if (selectedCard == null)
+        if (selectedCardMovement == null)
             return;
 
         if (isCrossing)
@@ -116,18 +116,18 @@ public class HorizontalCardHolder : MonoBehaviour
         for (int i = 0; i < cards.Count; i++)
         {
 
-            if (selectedCard.transform.position.x > cards[i].transform.position.x)
+            if (selectedCardMovement.transform.position.x > cards[i].transform.position.x)
             {
-                if (selectedCard.ParentIndex() < cards[i].ParentIndex())
+                if (selectedCardMovement.ParentIndex() < cards[i].ParentIndex())
                 {
                     Swap(i);
                     break;
                 }
             }
 
-            if (selectedCard.transform.position.x < cards[i].transform.position.x)
+            if (selectedCardMovement.transform.position.x < cards[i].transform.position.x)
             {
-                if (selectedCard.ParentIndex() > cards[i].ParentIndex())
+                if (selectedCardMovement.ParentIndex() > cards[i].ParentIndex())
                 {
                     Swap(i);
                     break;
@@ -140,25 +140,25 @@ public class HorizontalCardHolder : MonoBehaviour
     {
         isCrossing = true;
 
-        Transform focusedParent = selectedCard.transform.parent;
+        Transform focusedParent = selectedCardMovement.transform.parent;
         Transform crossedParent = cards[index].transform.parent;
 
         cards[index].transform.SetParent(focusedParent);
         cards[index].transform.localPosition = cards[index].selected ? new Vector3(0, cards[index].selectionOffset, 0) : Vector3.zero;
-        selectedCard.transform.SetParent(crossedParent);
+        selectedCardMovement.transform.SetParent(crossedParent);
 
         isCrossing = false;
 
-        if (cards[index].cardVisual == null)
+        if (cards[index].cardAnimator == null)
             return;
 
-        bool swapIsRight = cards[index].ParentIndex() > selectedCard.ParentIndex();
-        cards[index].cardVisual.Swap(swapIsRight ? -1 : 1);
+        bool swapIsRight = cards[index].ParentIndex() > selectedCardMovement.ParentIndex();
+        cards[index].cardAnimator.Swap(swapIsRight ? -1 : 1);
 
         //Updated Visual Indexes
-        foreach (Card card in cards)
+        foreach (CardMovement card in cards)
         {
-            card.cardVisual.UpdateIndex(transform.childCount);
+            card.cardAnimator.UpdateIndex(transform.childCount);
         }
     }
 

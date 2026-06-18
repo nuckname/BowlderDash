@@ -23,7 +23,7 @@ public class FrameStartState : RoundBaseState
         // Need to refactor UI
         //manager.uiController.UpdateStandardUI(manager); 
             
-        manager.pinHandInventory?.PrepareForPlacementPhase();
+        // manager.pinHandInventory?.PrepareForPlacementPhase();
 
         manager.SwitchState(manager.PinPlacement);
     }
@@ -50,7 +50,7 @@ public class FrameStartState : RoundBaseState
     private void HandleMap(RoundStateManager manager)
     {
         manager.ResetLaneExploders();
-        manager.pinHandInventory?.ResetInventoryAndPins();
+        //manager.pinHandInventory?.ResetInventoryAndPins();
         manager.shopController?.HideShop();
         manager.RefreshRuntimePools();
     }

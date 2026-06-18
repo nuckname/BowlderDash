@@ -20,8 +20,7 @@ public class RoundStateManager : MonoBehaviour
     [Header("Core Dependencies")]
     // Temp, refactor these later
     public ScoreCalculator scoreCalculator;
-    public GameUIController uiController;
-    public PinHandInventory pinHandInventory;
+    //public PinHandInventory pinHandInventory;
     public PinShopController shopController;
     public HexGridSnapper grid;
 
@@ -48,8 +47,8 @@ public class RoundStateManager : MonoBehaviour
         gameState.ResetState();
         ticketEconomy.ResetState();
         
-        pinHandInventory?.InitializeOwnedInventoryForNewGame();
-        pinHandInventory?.ClearSavedLayout();
+       // pinHandInventory?.InitializeOwnedInventoryForNewGame();
+       // pinHandInventory?.ClearSavedLayout();
         shopController?.HideShop();
         
         SwitchState(FrameStart);

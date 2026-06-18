@@ -10,6 +10,6 @@ public class PinCardData : ScriptableObject
     
     [Header("Game Data")]
     public GameObject pinPrefab;
-    public int startingCount = 0;
-    public int maxShopLimit = 3;
+    public Sprite sprite;
+    public int cost = 0;
 }
