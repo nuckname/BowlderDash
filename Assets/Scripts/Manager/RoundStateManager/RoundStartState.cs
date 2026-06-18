@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class FrameStartState : RoundBaseState
+public class RoundStartState : RoundBaseState
 {
     public override void EnterState(RoundStateManager manager)
     {

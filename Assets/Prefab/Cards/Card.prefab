@@ -151,7 +151,12 @@ MonoBehaviour:
   selected: 0
   selectionOffset: 25
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
-  cardVisual: {fileID: 0}
+  cardAnimator: {fileID: 0}
+  worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}
+  playAreaThresholdY: 500
+  worldPlacementMask:
+    serializedVersion: 2
+    m_Bits: 0
   isHovering: 0
   isDragging: 0
   wasDragged: 0

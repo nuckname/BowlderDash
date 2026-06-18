@@ -8,7 +8,7 @@ public class RoundStateManager : MonoBehaviour
     public Camera targetCamera;
     public CameraManager cameraManager;
     
-    public FrameStartState FrameStart = new FrameStartState();
+    public RoundStartState roundStart = new RoundStartState();
     public ThrowingBallState ThrowingBall = new ThrowingBallState();
     public PinPlacementState PinPlacement = new PinPlacementState();
     public ShopState Shop = new ShopState();
@@ -53,11 +53,11 @@ public class RoundStateManager : MonoBehaviour
         // Debug testing
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if (currentState == FrameStart) SwitchState(PinPlacement);
+            if (currentState == roundStart) SwitchState(PinPlacement);
             else if (currentState == PinPlacement) SwitchState(ThrowingBall);
             else if (currentState == ThrowingBall) SwitchState(ScoringState);
             else if (currentState == ScoringState) SwitchState(Shop);
-            else if (currentState == Shop) SwitchState(FrameStart);
+            else if (currentState == Shop) SwitchState(roundStart);
         }
     }
 
@@ -66,7 +66,7 @@ public class RoundStateManager : MonoBehaviour
         gameState.ResetState();
         ticketEconomy.ResetState();
         
-        SwitchState(FrameStart);
+        SwitchState(roundStart);
     }
 
     public void SwitchState(RoundBaseState newState)

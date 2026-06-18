@@ -49,7 +49,7 @@ public class ShopUIManager : MonoBehaviour
     {
         if (stateManager != null)
         {
-            stateManager.SwitchState(stateManager.FrameStart);
+            stateManager.SwitchState(stateManager.roundStart);
         }
     }
 

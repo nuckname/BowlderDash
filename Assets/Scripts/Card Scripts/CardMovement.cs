@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.UI;
 
-//https://www.youtube.com/watch?v=I1dAZuWurw4
-//https://github.com/mixandjam/balatro-feel
+// https://www.youtube.com/watch?v=I1dAZuWurw4
+// https://github.com/mixandjam/balatro-feel
 
 public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
@@ -15,7 +15,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [SerializeField] private bool instantiateVisual = true;
     private VisualCardsHandler visualHandler;
     
-    // Kept as Vector3 to match UI transform positions perfectly
     private Vector3 offset; 
 
     [Header("Movement")]
@@ -30,6 +29,16 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [Header("Visual")]
     [SerializeField] private GameObject cardVisualPrefab;
     [HideInInspector] public CardAnimator cardAnimator;
+
+    [Header("World Interaction")]
+    // Object we want to spawn
+    [SerializeField] private GameObject worldGameObjectPrefab; 
+    [Tooltip("How high up the screen we the spawn the pin, in pixels")]
+    [SerializeField] private float playAreaThresholdY = 500f; 
+    [SerializeField] private LayerMask worldPlacementMask; 
+
+    private GameObject spawnedWorldObject;
+    private bool isPreviewingInWorld = false;
 
     [Header("States")]
     public bool isHovering;
@@ -64,14 +73,63 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         if (isDragging)
         {
-            Vector3 targetPosition = Input.mousePosition - offset;
-            Vector3 direction = (targetPosition - transform.position).normalized;
+            HandlePlayAreaTransition();
+
+            if (isPreviewingInWorld && spawnedWorldObject != null)
+            {
+                // Move the WORLD object using Raycasting
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
+                {
+                    spawnedWorldObject.transform.position = hit.point;
+                }
+            }
+            else
+            {
+                // Move the UI card using original velocity logic
+                Vector3 targetPosition = Input.mousePosition - offset;
+                Vector3 direction = (targetPosition - transform.position).normalized;
+                
+                float distance = Vector3.Distance(transform.position, targetPosition);
+                Vector3 velocity = direction * Mathf.Min(moveSpeedLimit, distance / Time.deltaTime);
+                
+                transform.Translate(velocity * Time.deltaTime, Space.World);
+            }
+        }
+    }
+
+    private void HandlePlayAreaTransition()
+    {
+        bool isMouseInPlayArea = Input.mousePosition.y > playAreaThresholdY;
+
+        if (isMouseInPlayArea && !isPreviewingInWorld)
+        {
+            // TRANSITION TO WORLD
+            isPreviewingInWorld = true;
             
-            // Calculate velocity in pixel space
-            float distance = Vector3.Distance(transform.position, targetPosition);
-            Vector3 velocity = direction * Mathf.Min(moveSpeedLimit, distance / Time.deltaTime);
-            
-            transform.Translate(velocity * Time.deltaTime, Space.World);
+            imageComponent.enabled = false;
+            if (cardAnimator != null) 
+                cardAnimator.gameObject.SetActive(false);
+
+            if (spawnedWorldObject == null && worldGameObjectPrefab != null)
+            {
+                spawnedWorldObject = Instantiate(worldGameObjectPrefab);
+            }
+        }
+        else if (!isMouseInPlayArea && isPreviewingInWorld)
+        {
+            // TRANSITION BACK TO HAND
+            isPreviewingInWorld = false;
+
+            imageComponent.enabled = true;
+            if (cardAnimator != null) 
+                cardAnimator.gameObject.SetActive(true);
+
+            if (spawnedWorldObject != null)
+            {
+                Destroy(spawnedWorldObject);
+                spawnedWorldObject = null;
+            }
         }
     }
 
@@ -79,7 +137,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         Vector3 clampedPosition = transform.position;
         
-        // In Screen Space, 0 is the bottom/left edge, and Screen.width/height is the top/right edge
         clampedPosition.x = Mathf.Clamp(clampedPosition.x, 0, Screen.width);
         clampedPosition.y = Mathf.Clamp(clampedPosition.y, 0, Screen.height);
         
@@ -90,11 +147,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         BeginDragEvent.Invoke(this);
         
-        // Find offset using raw screen pixels
         offset = Input.mousePosition - transform.position;
         isDragging = true;
         
-        // Disable raycaster so we don't block things behind the card while dragging
         canvas.GetComponent<GraphicRaycaster>().enabled = false;
         imageComponent.raycastTarget = false;
 
@@ -103,7 +158,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Drag logic is handled in Update for smooth velocity
+        // Drag logic handled in Update
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -111,7 +166,14 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         EndDragEvent.Invoke(this);
         isDragging = false;
         
-        // Re-enable raycaster
+        if (isPreviewingInWorld)
+        {
+            spawnedWorldObject = null;
+            Destroy(gameObject);
+            return; 
+        }
+
+        // RETURNED TO HAND
         canvas.GetComponent<GraphicRaycaster>().enabled = true;
         imageComponent.raycastTarget = true;
 
@@ -197,6 +259,10 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         if(cardAnimator != null)
             Destroy(cardAnimator.gameObject);
+            
+        // Clean up preview if destroyed mid-drag
+        if (spawnedWorldObject != null)
+            Destroy(spawnedWorldObject);
     }
 }
 
