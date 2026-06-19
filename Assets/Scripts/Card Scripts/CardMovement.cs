@@ -11,7 +11,6 @@ using UnityEngine.UI;
 
 public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
-    private Canvas _canvas;
     private Image _imageComponent;
     [SerializeField] private bool instantiateVisual = true;
     private VisualCardsHandler _visualHandler;
@@ -57,7 +56,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     private void Awake()
     {
-        _canvas = GetComponentInParent<Canvas>();
         _imageComponent = GetComponent<Image>();
         _visualHandler = GameObject.FindGameObjectWithTag("VisualCardHandler").GetComponent<VisualCardsHandler>();
     }
@@ -127,7 +125,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         offset = Input.mousePosition - transform.position;
         isDragging = true;
         
-        _canvas.GetComponent<GraphicRaycaster>().enabled = false;
         _imageComponent.raycastTarget = false;
 
         wasDragged = true;
@@ -166,7 +163,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             cardAnimator.gameObject.SetActive(true);
 
         // RETURNED TO HAND
-        _canvas.GetComponent<GraphicRaycaster>().enabled = true;
         _imageComponent.raycastTarget = true;
 
         StartCoroutine(FrameWait());
@@ -180,11 +176,22 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void SuccessfulPlay()
     {
-        // Instantly unparent the slot so that childCount updates immediately for remaining cards
+        if (HorizontalCardHolder.Instance != null)
+        {
+            HorizontalCardHolder.Instance.cards.Remove(this);
+        }
+
+        // Instantly unparent the slot so childCount updates immediately
         if (transform.parent != null && transform.parent.CompareTag("Slot"))
         {
             transform.parent.SetParent(null);
             Destroy(transform.parent.gameObject);
+        }
+        
+        // Tell the manager to update the visuals for the REMAINING cards
+        if (HorizontalCardHolder.Instance != null)
+        {
+            HorizontalCardHolder.Instance.RebuildHandVisuals();
         }
 
         Destroy(gameObject);
@@ -203,15 +210,20 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         isHovering = false;
     }
 
+    // Select a card
     public void OnPointerDown(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left)
+        {
+            Debug.LogError("returned");
             return;
+        }
 
         PointerDownEvent.Invoke(this);
         _pointerDownTime = Time.time;
     }
 
+    // Placing pin
     public void OnPointerUp(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left)
@@ -264,13 +276,5 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         if(cardAnimator != null)
             Destroy(cardAnimator.gameObject);
-    }
-}
-
-public static class ExtensionMethods
-{
-    public static float Remap(this float value, float from1, float to1, float from2, float to2)
-    {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 }

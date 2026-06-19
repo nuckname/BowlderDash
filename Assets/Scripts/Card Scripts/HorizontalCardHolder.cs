@@ -171,9 +171,10 @@ public class HorizontalCardHolder : MonoBehaviour
     /// </summary>
     public void RebuildHandVisuals()
     {
-        // Clean out any null references from the list (cards that were destroyed)
-        cards.RemoveAll(c => c == null);
+        // Wipe the list completely clean
+        cards.Clear();
 
+        // Count the physical slots remaining in the hand
         int currentLength = transform.childCount;
 
         for (int i = 0; i < currentLength; i++)
@@ -181,13 +182,19 @@ public class HorizontalCardHolder : MonoBehaviour
             Transform slot = transform.GetChild(i);
             CardMovement cardSlot = slot.GetComponentInChildren<CardMovement>();
 
-            if (cardSlot != null && cardSlot.cardAnimator != null)
+            // Re-add only the valid cards that are actually in the slots right now
+            if (cardSlot != null)
             {
-                // Update the visual's sibling index to match the slot's order
-                cardSlot.cardAnimator.transform.SetSiblingIndex(i);
+                cards.Add(cardSlot);
 
-                // Pass the new length to the animator for curve/spacing math
-                cardSlot.cardAnimator.UpdateLength(currentLength);
+                if (cardSlot.cardAnimator != null)
+                {
+                    // Update the visual's sibling index to match the slot's order
+                    cardSlot.cardAnimator.transform.SetSiblingIndex(i);
+
+                    // Pass the new length to the animator for curve/spacing math
+                    cardSlot.cardAnimator.UpdateLength(currentLength);
+                }
             }
         }
     }
