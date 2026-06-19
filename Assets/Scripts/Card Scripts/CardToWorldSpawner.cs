@@ -1,14 +1,14 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CardMovement))]
-public class CardWorldSpawner : MonoBehaviour
+public class CardToWorldSpawner : MonoBehaviour
 {
     [Header("World Interaction")]
     // Object we want to spawn
     [SerializeField] private GameObject worldGameObjectPrefab; 
     [SerializeField] private LayerMask worldPlacementMask; 
 
-    private GameObject spawnedWorldObject;
+    private GameObject _spawnedWorldObject;
     private HexGridSnapper _hexGrid;
     private CardMovement _cardMovement;
 
@@ -25,7 +25,7 @@ public class CardWorldSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (_cardMovement.isPreviewingInWorld && spawnedWorldObject != null)
+        if (_cardMovement.isPreviewingInWorld && _spawnedWorldObject != null)
         {
             // Move the WORLD object using Raycasting
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -34,7 +34,10 @@ public class CardWorldSpawner : MonoBehaviour
                 HexGridSnapper.Cell nearestCell = _hexGrid.GetNearestCell(hit.point);
                 if (nearestCell != null)
                 {
-                    spawnedWorldObject.transform.position = nearestCell.center;
+                    _spawnedWorldObject.transform.position = new Vector3(
+                        nearestCell.center.x, 
+                        nearestCell.center.y + 0.75f, 
+                        nearestCell.center.z);
                 }
             }
         }
@@ -42,41 +45,41 @@ public class CardWorldSpawner : MonoBehaviour
 
     private void CreatePreview()
     {
-        if (spawnedWorldObject == null && worldGameObjectPrefab != null)
+        if (_spawnedWorldObject == null && worldGameObjectPrefab != null)
         {
-            spawnedWorldObject = Instantiate(worldGameObjectPrefab);
+            _spawnedWorldObject = Instantiate(worldGameObjectPrefab);
         }
     }
 
     private void DestroyPreview()
     {
-        if (spawnedWorldObject != null)
+        if (_spawnedWorldObject != null)
         {
-            Destroy(spawnedWorldObject);
-            spawnedWorldObject = null;
+            Destroy(_spawnedWorldObject);
+            _spawnedWorldObject = null;
         }
     }
 
     private void TryPlaceObject()
     {
-        if (spawnedWorldObject == null)
+        if (_spawnedWorldObject == null)
         {
             _cardMovement.ReturnToHand();
             return;
         }
 
         bool successfullyPlaced = false;
-        HexGridSnapper.Cell targetCell = _hexGrid.GetNearestCell(spawnedWorldObject.transform.position);
+        HexGridSnapper.Cell targetCell = _hexGrid.GetNearestCell(_spawnedWorldObject.transform.position);
         
         // Attempt to reserve the cell for our spawned object
         if (targetCell != null)
         {
-            successfullyPlaced = _hexGrid.TryReserveCell(targetCell, spawnedWorldObject.transform);
+            successfullyPlaced = _hexGrid.TryReserveCell(targetCell, _spawnedWorldObject.transform);
         }
 
         if (successfullyPlaced)
         {
-            spawnedWorldObject = null;
+            _spawnedWorldObject = null;
             _cardMovement.SuccessfulPlay();
         }
         else
@@ -89,7 +92,7 @@ public class CardWorldSpawner : MonoBehaviour
     private void OnDestroy()
     {
         // Clean up preview if destroyed mid-drag
-        if (spawnedWorldObject != null)
-            Destroy(spawnedWorldObject);
+        if (_spawnedWorldObject != null)
+            Destroy(_spawnedWorldObject);
     }
 }

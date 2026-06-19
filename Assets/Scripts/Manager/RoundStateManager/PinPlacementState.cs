@@ -7,6 +7,8 @@ public class PinPlacementState : RoundBaseState
         Debug.Log("Entering Pin Placement State");
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
+        
+        PinOnPinCollisionLayer(true);
     }
 
     public override void UpdateState(RoundStateManager manager)
@@ -23,6 +25,18 @@ public class PinPlacementState : RoundBaseState
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }
     public override void OnTriggerEnter(RoundStateManager manager, Collider other) { }
     public override void OnTriggerExit(RoundStateManager manager, Collider other) { }
-    public override void ExitState(RoundStateManager manager) {}
-    
+
+    public override void ExitState(RoundStateManager manager)
+    {
+        PinOnPinCollisionLayer(false);
+    }
+
+    private void PinOnPinCollisionLayer(bool turnOn)
+    {
+        int pinLayer = LayerMask.NameToLayer("Pin");
+
+        // Turn collisions back on when exiting placement mode
+        Physics.IgnoreLayerCollision(pinLayer, pinLayer, turnOn);
+    }
+
 }

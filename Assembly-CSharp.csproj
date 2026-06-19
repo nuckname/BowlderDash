@@ -62,7 +62,6 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/DropdownSample.cs" />
     <Compile Include="Assets/Scripts/ScoreCalculator.cs" />
     <Compile Include="Assets/Scripts/Card Scripts/ShaderCode.cs" />
-    <Compile Include="Assets/Scripts/Card Scripts/CardWorldSpawner.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexColorCycler.cs" />
     <Compile Include="Assets/Scripts/Pins/TicketPin.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/EnvMapAnimator.cs" />
@@ -81,6 +80,7 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/ObjectSpin.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets/BallCollisionTrigger.cs" />
+    <Compile Include="Assets/Scripts/Card Scripts/CardToWorldSpawner.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexJitter.cs" />
     <Compile Include="Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" />
     <Compile Include="Assets/ScriptableObjects/PinCardsSO/PinCardData.cs" />
