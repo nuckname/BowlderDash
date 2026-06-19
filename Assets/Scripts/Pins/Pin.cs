@@ -13,6 +13,7 @@ public class Pin : PinBase
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
 
     [SerializeField] private bool _allowPinToFallOver = false;
+    [SerializeField] private bool _allowPinToBePickedUp = false;
     private bool _isFallen = false;
     private bool _hasBeenHit = false;
 
@@ -27,6 +28,12 @@ public class Pin : PinBase
             _allowPinToFallOver = value;
             SyncPhysicsConstraints();
         }
+    }
+    
+    public bool AllowPinToBePickedUp
+    {
+        get => _allowPinToBePickedUp;
+        set => _allowPinToBePickedUp = value;
     }
     
     public void SyncPhysicsConstraints()
@@ -57,7 +64,7 @@ public class Pin : PinBase
 
     void Update()
     {
-        if (!_allowPinToFallOver || _isFallen) return;
+        if (!_allowPinToFallOver || _isFallen || _allowPinToBePickedUp) return;
 
         if (Vector3.Angle(Vector3.up, transform.up) > fallAngleThreshold)
         {
