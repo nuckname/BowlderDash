@@ -2545,21 +2545,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allActivePinsInTheFrame: []
-  targetCamera: {fileID: 1588884242}
-  cameraManager: {fileID: 1439520103}
-  ThrowingBall:
-    pathDrawer: {fileID: 934142802}
-    ballController: {fileID: 6652253181974710232}
-    tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
-  instructionText: {fileID: 538931267}
+  cameraPanToLocation: {fileID: 1439520103}
+  cameraFollowScript: {fileID: 1439520104}
+  ballController: {fileID: 6652253181974710232}
   scoreCalculator: {fileID: 341304545}
   grid: {fileID: 120957812}
   shopUI: {fileID: 1168153561}
+  cardHand: {fileID: 516170647}
+  instructionText: {fileID: 538931267}
   gameState: {fileID: 11400000, guid: 34b497f35e2f48d4f87bfca0a0bb8cc7, type: 2}
   ticketEconomy: {fileID: 11400000, guid: 17f1c2355522ff343ad3cbb278aaeb0c, type: 2}
   amountOfBallsThrown: 0
   currentRound: 0
-  cardHand: {fileID: 516170647}
+  ThrowingBall:
+    pathDrawer: {fileID: 934142802}
+    tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -8910,6 +8910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1439520102}
   - component: {fileID: 1439520103}
+  - component: {fileID: 1439520104}
   m_Layer: 0
   m_Name: CameraManager
   m_TagString: Untagged
@@ -8930,6 +8931,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2145173074}
   - {fileID: 1316218692}
   - {fileID: 1799454501}
   - {fileID: 1906495015}
@@ -8952,6 +8954,23 @@ MonoBehaviour:
   pinCameraTarget: {fileID: 1906495015}
   ballThrowingTarget: {fileID: 1316218692}
   shopCameraTarget: {fileID: 1799454501}
+--- !u!114 &1439520104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439520101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2ea90cedee674bc29516083b13a2100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCamera: {fileID: 1588884242}
+  ballController: {fileID: 6652253181974710232}
+  cameraFinalTransform: {fileID: 2145173074}
+  cameraSmoothSpeed: 0.125
+  smoothBlendDistance: 20
 --- !u!1 &1465932040
 GameObject:
   m_ObjectHideFlags: 0
@@ -12730,6 +12749,37 @@ Transform:
   - {fileID: 134377293}
   m_Father: {fileID: 543450652758292814}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2145173073
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2145173074}
+  m_Layer: 0
+  m_Name: CameraStopHereOnThrowBall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2145173074
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2145173073}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.17738655, y: -0.002771126, z: -0.015372276, w: 0.98401725}
+  m_LocalPosition: {x: -1067.6, y: -264.3, z: -896}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1439520102}
+  m_LocalEulerAnglesHint: {x: 20.427, y: -0.667, z: -1.91}
 --- !u!1 &50754953876635019
 GameObject:
   m_ObjectHideFlags: 0

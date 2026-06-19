@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// legacy code
 public class PathDrawer : MonoBehaviour
 {
     public ThrowTuningDataSO tuningData;

@@ -5,22 +5,18 @@ public class RoundStateManager : MonoBehaviour
 {
     public RoundBaseState currentState;
     public GameObject[] allActivePinsInTheFrame;
-    public Camera targetCamera;
-    public CameraManager cameraManager;
     
-    public RoundStartState roundStart = new RoundStartState();
-    public ThrowingBallState ThrowingBall = new ThrowingBallState();
-    public PinPlacementState PinPlacement = new PinPlacementState();
-    public ShopState Shop = new ShopState();
-    public ScoringState ScoringState = new ScoringState();
-
-    public Text instructionText;
+    [Header("Managers")]
+    public CameraPanToLocation cameraPanToLocation;
+    public CameraFollowBallScript cameraFollowScript;
+    public BallController ballController; 
 
     [Header("Core Dependencies")]
     public ScoreCalculator scoreCalculator;
     public HexGridSnapper grid;
-    
     public ShopUIManager shopUI;
+    public GameObject cardHand;
+    public Text instructionText;
 
     [Header("Data Objects")]
     public GameStateData gameState;
@@ -30,11 +26,15 @@ public class RoundStateManager : MonoBehaviour
     public int amountOfBallsThrown = 0;
     public int currentRound = 0;
 
-    public GameObject cardHand;
+    // States
+    public RoundStartState roundStart = new RoundStartState();
+    public ThrowingBallState ThrowingBall = new ThrowingBallState();
+    public PinPlacementState PinPlacement = new PinPlacementState();
+    public ShopState Shop = new ShopState();
+    public ScoringState ScoringState = new ScoringState();
 
     void Start()
     {
-        // Initialize the UI so it knows about this State Manager
         if (shopUI != null)
         {
             shopUI.Initialize(this);
@@ -65,24 +65,17 @@ public class RoundStateManager : MonoBehaviour
     {
         gameState.ResetState();
         ticketEconomy.ResetState();
-        
         SwitchState(roundStart);
     }
 
     public void SwitchState(RoundBaseState newState)
     {
-        if (currentState != null)
-        {
-            currentState.ExitState(this);
-        }
-
+        if (currentState != null) currentState.ExitState(this);
         currentState = newState;
-
-        if (currentState != null)
-        {
-            currentState.EnterState(this);
-        }
+        if (currentState != null) currentState.EnterState(this);
     }
+
+    // --- PASS-THROUGH METHODS ---
 
     void OnCollisionEnter(Collision collision) => currentState?.OnCollisionEnter(this, collision);
     void OnCollisionExit(Collision collision) => currentState?.OnCollisionExit(this, collision);
@@ -114,13 +107,7 @@ public class RoundStateManager : MonoBehaviour
     public void ResetLaneExploders() { }
     public void RefreshRuntimePools() { }
 
-    public void TurnOnCardHand(bool turnOn)
-    {
-        cardHand.SetActive(turnOn);
-    }
+    public void TurnOnCardHand(bool turnOn) => cardHand.SetActive(turnOn);
     
-    public void MoveCamera(CameraLocation location)
-    {
-        cameraManager.MoveCameraTo(location);
-    }
+    public void MoveCamera(CameraLocation location) => cameraPanToLocation.MoveCameraTo(location);
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class ThrowingBallState : RoundBaseState, IPathDrawListener
 {
     public PathDrawer pathDrawer;
-    public BallController ballController;
     public ThrowTuningDataSO tuningData;
 
     private RoundStateManager currentManager;
@@ -13,23 +12,18 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public override void EnterState(RoundStateManager manager)
     {
         currentManager = manager;
-        ballController.ResetBall();
-
+        
+        manager.ballController.ResetBall();
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
-        
         manager.TurnOnCardHand(false);
-        
         manager.AllowPinsToFallOver(true);
-        
         manager.UpdateInstructionText("Draw the ball's path! Start from the ball.");
         
-        // Hand ourselves over as the Listener via strict contract
         pathDrawer.Begin(this);
     }
 
     public override void UpdateState(RoundStateManager manager)
     {
-        // Cancel/Reset throw drawing on Right Click
         if (Input.GetMouseButtonDown(1))
         {
             OnDrawCancelled();
@@ -42,7 +36,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         pathDrawer.Stop();
         
-        // Calculate final speed
         float taperStartTime = tuningData.totalMinTime + Mathf.Max(0f, tuningData.powerFalloffDelay);
         float taperEndTime = Mathf.Max(taperStartTime + 0.0001f, tuningData.totalMaxTime);
         float t = (drawDuration <= taperStartTime) ? 1f : 1f - Mathf.InverseLerp(taperStartTime, taperEndTime, drawDuration);
@@ -51,14 +44,20 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         OnInstructionUpdated("Ball Released!");
         
-        // Execute the throw physics
-        ballController.ExecuteThrow(path, launchSpeed);
+        // Execute throw
+        currentManager.ballController.ExecuteThrow(path, launchSpeed);
+
+        // Camera
+        currentManager.cameraFollowScript.StartTracking();
     }
 
     public void OnDrawCancelled()
     {
         pathDrawer.ResetDrawing();
-        ballController.ResetBall();
+        currentManager.ballController.ResetBall();
+        
+        currentManager.cameraFollowScript.StopTracking();
+        
         OnInstructionUpdated("Draw the ball's path! Start from the ball.");
     }
 
@@ -70,6 +69,12 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public override void ExitState(RoundStateManager manager)
     {
         pathDrawer.Stop();
+        
+        if (manager.cameraFollowScript != null)
+        {
+            manager.cameraFollowScript.StopTracking();
+        }
+        
         currentManager = null;
     }
 
@@ -78,14 +83,10 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public override void OnTriggerEnter(RoundStateManager manager, Collider other)
     {
-        // When the ball hits the end of the map.
-        // Search BallCollisionTrigger
         if (other.gameObject.CompareTag("Ball"))
         {
             manager.SwitchState(manager.ScoringState);
         }
     }
     public override void OnTriggerExit(RoundStateManager manager, Collider other) { }
-
-
 }

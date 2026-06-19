@@ -8,7 +8,7 @@ public enum CameraLocation
     ShopCameraLocation 
 }
 
-public class CameraManager : MonoBehaviour
+public class CameraPanToLocation : MonoBehaviour
 {
     public Camera mainCamera;
     public float lerpSpeed = 5f;

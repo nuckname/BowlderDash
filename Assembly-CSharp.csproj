@@ -55,6 +55,7 @@
     <Compile Include="Assets/Scripts/Pins/Pin Refactor/PinEffect.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexShakeA.cs" />
     <Compile Include="Assets/Scripts/Card Scripts/ExtensionMethods.cs" />
+    <Compile Include="Assets/Scripts/Manager/CameraPanToLocation.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_ExampleScript_01.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets/Scripts/MainMenuController.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Assets/Scripts/Pins/Pin Refactor/TicketAwardEffect.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark01_UGUI.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/SimpleScript.cs" />
-    <Compile Include="Assets/Scripts/Manager/CameraManager.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark04.cs" />
     <Compile Include="Assets/Scripts/Card Scripts/HorizontalCardHolder.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/ChatController.cs" />
@@ -85,6 +85,7 @@
     <Compile Include="Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" />
     <Compile Include="Assets/ScriptableObjects/PinCardsSO/PinCardData.cs" />
     <Compile Include="Assets/ScriptableObjects/GameStateData.cs" />
+    <Compile Include="Assets/Scripts/Ball/CameraFollowBallScript.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_DigitValidator.cs" />
     <Compile Include="Assets/Scripts/Card Scripts/CardMovement.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_FrameRateCounter.cs" />
