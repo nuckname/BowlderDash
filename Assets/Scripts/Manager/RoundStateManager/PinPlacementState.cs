@@ -35,7 +35,7 @@ public class PinPlacementState : RoundBaseState
     {
         int pinLayer = LayerMask.NameToLayer("Pin");
 
-        // Turn collisions back on when exiting placement mode
+        // Turn collision on and off for pin layer basically.
         Physics.IgnoreLayerCollision(pinLayer, pinLayer, turnOn);
     }
 
