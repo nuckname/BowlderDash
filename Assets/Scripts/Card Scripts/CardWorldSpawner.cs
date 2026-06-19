@@ -76,7 +76,7 @@ public class CardWorldSpawner : MonoBehaviour
 
         if (successfullyPlaced)
         {
-            spawnedWorldObject = null; // Unlink it so it stays in the world
+            spawnedWorldObject = null;
             _cardMovement.SuccessfulPlay();
         }
         else

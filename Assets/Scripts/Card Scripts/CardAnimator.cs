@@ -68,6 +68,7 @@ public class CardAnimator : MonoBehaviour
     private float curveRotationOffset;
     private Coroutine pressCoroutine;
 
+    private int _currentHandLength;
     private void Start()
     {
         shadowDistance = visualShadow.localPosition;
@@ -94,9 +95,14 @@ public class CardAnimator : MonoBehaviour
         initalize = true;
     }
 
-    public void UpdateIndex(int length)
+    public void UpdateLength(int length)
     {
-        transform.SetSiblingIndex(parentCardMovement.transform.parent.GetSiblingIndex());
+        _currentHandLength = length;
+    }
+    
+    private void HandPositioning(int length)
+    {
+        curveYOffset = (curve.positioning.Evaluate(parentCardMovement.NormalizedPosition()) * curve.positioningInfluence) * _currentHandLength;
     }
 
     void Update()
@@ -112,11 +118,13 @@ public class CardAnimator : MonoBehaviour
 
     private void HandPositioning()
     {
-        curveYOffset = (curve.positioning.Evaluate(parentCardMovement.NormalizedPosition()) * curve.positioningInfluence) * parentCardMovement.SiblingAmount();
-        curveYOffset = parentCardMovement.SiblingAmount() < 5 ? 0 : curveYOffset;
+        // Replaced parentCardMovement.SiblingAmount() with currentHandLength
+        curveYOffset = (curve.positioning.Evaluate(parentCardMovement.NormalizedPosition()) * curve.positioningInfluence) * _currentHandLength;
+        curveYOffset = _currentHandLength < 5 ? 0 : curveYOffset;
         curveRotationOffset = curve.rotation.Evaluate(parentCardMovement.NormalizedPosition());
     }
 
+    
     private void SmoothFollow()
     {
         Vector3 verticalOffset = (Vector3.up * (parentCardMovement.isDragging ? 0 : curveYOffset));

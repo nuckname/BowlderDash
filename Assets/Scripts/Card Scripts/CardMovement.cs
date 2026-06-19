@@ -180,9 +180,16 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void SuccessfulPlay()
     {
-        // CARD SUCCESSFULLY PLAYED ON GRID
+        // Instantly unparent the slot so that childCount updates immediately for remaining cards
+        if (transform.parent != null && transform.parent.CompareTag("Slot"))
+        {
+            transform.parent.SetParent(null);
+            Destroy(transform.parent.gameObject);
+        }
+
         Destroy(gameObject);
     }
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {

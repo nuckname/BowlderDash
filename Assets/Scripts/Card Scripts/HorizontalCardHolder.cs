@@ -8,6 +8,7 @@ using System.Linq;
 
 public class HorizontalCardHolder : MonoBehaviour
 {
+    public static HorizontalCardHolder Instance { get; private set; }
 
     [SerializeField] private CardMovement selectedCardMovement;
     [SerializeReference] private CardMovement hoveredCardMovement;
@@ -21,6 +22,12 @@ public class HorizontalCardHolder : MonoBehaviour
 
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
+
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -49,11 +56,8 @@ public class HorizontalCardHolder : MonoBehaviour
         IEnumerator Frame()
         {
             yield return new WaitForSecondsRealtime(.1f);
-            for (int i = 0; i < cards.Count; i++)
-            {
-                if (cards[i].cardAnimator != null)
-                    cards[i].cardAnimator.UpdateIndex(transform.childCount);
-            }
+            
+            RebuildHandVisuals();
         }
     }
 
@@ -61,7 +65,6 @@ public class HorizontalCardHolder : MonoBehaviour
     {
         selectedCardMovement = cardMovement;
     }
-
 
     void EndDrag(CardMovement cardMovement)
     {
@@ -74,7 +77,6 @@ public class HorizontalCardHolder : MonoBehaviour
         rect.sizeDelta -= Vector2.right;
 
         selectedCardMovement = null;
-
     }
 
     void CardPointerEnter(CardMovement cardMovement)
@@ -93,9 +95,14 @@ public class HorizontalCardHolder : MonoBehaviour
         {
             if (hoveredCardMovement != null)
             {
+                // Instantly unparent the slot before destroying it so childCount updates instantly
+                hoveredCardMovement.transform.parent.SetParent(null);
                 Destroy(hoveredCardMovement.transform.parent.gameObject);
+                
                 cards.Remove(hoveredCardMovement);
-
+                
+                // Rebuild the hand to reflect the deleted card
+                RebuildHandVisuals();
             }
         }
 
@@ -115,7 +122,6 @@ public class HorizontalCardHolder : MonoBehaviour
 
         for (int i = 0; i < cards.Count; i++)
         {
-
             if (selectedCardMovement.transform.position.x > cards[i].transform.position.x)
             {
                 if (selectedCardMovement.ParentIndex() < cards[i].ParentIndex())
@@ -156,10 +162,33 @@ public class HorizontalCardHolder : MonoBehaviour
         cards[index].cardAnimator.Swap(swapIsRight ? -1 : 1);
 
         //Updated Visual Indexes
-        foreach (CardMovement card in cards)
-        {
-            card.cardAnimator.UpdateIndex(transform.childCount);
-        }
+        RebuildHandVisuals();
     }
 
+    /// <summary>
+    /// Evaluates the current slots in the hand and updates all visual cards 
+    /// with their correct sibling index and the new total hand length.
+    /// </summary>
+    public void RebuildHandVisuals()
+    {
+        // Clean out any null references from the list (cards that were destroyed)
+        cards.RemoveAll(c => c == null);
+
+        int currentLength = transform.childCount;
+
+        for (int i = 0; i < currentLength; i++)
+        {
+            Transform slot = transform.GetChild(i);
+            CardMovement cardSlot = slot.GetComponentInChildren<CardMovement>();
+
+            if (cardSlot != null && cardSlot.cardAnimator != null)
+            {
+                // Update the visual's sibling index to match the slot's order
+                cardSlot.cardAnimator.transform.SetSiblingIndex(i);
+
+                // Pass the new length to the animator for curve/spacing math
+                cardSlot.cardAnimator.UpdateLength(currentLength);
+            }
+        }
+    }
 }
