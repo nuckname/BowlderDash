@@ -263,7 +263,7 @@ GameObject:
   - component: {fileID: 8812345678901234568}
   - component: {fileID: -2398941729809505991}
   m_Layer: 0
-  m_Name: Vase
+  m_Name: vasePrefab
   m_TagString: Pin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

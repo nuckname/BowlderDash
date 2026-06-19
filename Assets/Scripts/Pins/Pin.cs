@@ -12,13 +12,43 @@ public class Pin : PinBase
     [SerializeReference] public List<PinEffect> onHitEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
 
-    public bool allowPinToFallOver = false;
+    [SerializeField] private bool _allowPinToFallOver = false;
     private bool _isFallen = false;
     private bool _hasBeenHit = false;
 
     private Renderer _renderer;
     private Collider _collider;
 
+    public bool AllowPinToFallOver
+    {
+        get => _allowPinToFallOver;
+        set
+        {
+            _allowPinToFallOver = value;
+            SyncPhysicsConstraints();
+        }
+    }
+    
+    public void SyncPhysicsConstraints()
+    {
+        if (_rb == null) return;
+
+        if (!AllowPinToFallOver)
+        {
+            // Freezes Position X and Z. 
+            // We also optionally freeze Rotation X and Z so it doesn't tip over.
+            _rb.constraints = RigidbodyConstraints.FreezePositionX | 
+                              RigidbodyConstraints.FreezePositionZ | 
+                              RigidbodyConstraints.FreezeRotationX | 
+                              RigidbodyConstraints.FreezeRotationZ;
+        }
+        else
+        {
+            // Removes all constraints so it can be knocked back and fall
+            _rb.constraints = RigidbodyConstraints.None;
+        }
+    }
+    
     protected override void Awake()
     {
         base.Awake();
@@ -28,7 +58,7 @@ public class Pin : PinBase
 
     void Update()
     {
-        if (!allowPinToFallOver || _isFallen || IsInPlacementMode()) return;
+        if (!_allowPinToFallOver || _isFallen) return;
 
         if (Vector3.Angle(Vector3.up, transform.up) > fallAngleThreshold)
         {
@@ -48,7 +78,7 @@ public class Pin : PinBase
 
     private void HandleHit(Collider other)
     {
-        if (IsInPlacementMode() || _hasBeenHit) return;
+        if (_hasBeenHit) return;
 
         Rigidbody otherRb = other.attachedRigidbody;
         if (otherRb != null && otherRb.velocity.magnitude < minHitVelocity) return;
@@ -56,7 +86,7 @@ public class Pin : PinBase
         if (!string.IsNullOrEmpty(hitterTag) && other.CompareTag(hitterTag))
         {
             _hasBeenHit = true;
-            foreach (var effect in onHitEffects)
+            foreach (PinEffect effect in onHitEffects)
             {
                 effect.Execute(this, other);
             }

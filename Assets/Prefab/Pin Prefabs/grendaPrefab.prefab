@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7116550779813638036}
   - component: {fileID: 5292890100669208921}
   m_Layer: 0
-  m_Name: grenda
+  m_Name: grendaPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

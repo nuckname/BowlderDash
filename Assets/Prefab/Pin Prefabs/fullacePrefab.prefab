@@ -6389,7 +6389,7 @@ GameObject:
   - component: {fileID: -4194461986054586248}
   - component: {fileID: 5830415736669713464}
   m_Layer: 0
-  m_Name: fullace
+  m_Name: fullacePrefab
   m_TagString: Pin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

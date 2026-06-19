@@ -22,13 +22,6 @@ public abstract class PinBase : MonoBehaviour
         _startRot = transform.rotation;
     }
 
-    // Make State machine later
-    protected bool IsInPlacementMode()
-    {
-        return GameManager.Instance != null
-            && GameManager.Instance.GetCurrentState() == GameState.PinPlacement;
-    }
-
     protected void NotifyFallen()
     {
         OnPinFallenGlobal?.Invoke(this);

@@ -156,7 +156,7 @@ MonoBehaviour:
   playAreaThresholdY: 500
   worldPlacementMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   isHovering: 0
   isDragging: 0
   wasDragged: 0

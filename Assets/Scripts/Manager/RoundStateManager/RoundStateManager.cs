@@ -107,7 +107,7 @@ public class RoundStateManager : MonoBehaviour
     {
         foreach(GameObject pin in allActivePinsInTheFrame)
         {
-            pin.GetComponent<Pin>().allowPinToFallOver = allow;
+            pin.GetComponent<Pin>().AllowPinToFallOver = allow;
         }
     }
 

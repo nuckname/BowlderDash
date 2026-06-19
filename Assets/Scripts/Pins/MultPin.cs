@@ -30,14 +30,14 @@ public class MultPin : PinBase
 
     private void Update()
     {
-        if (!IsInPlacementMode()) return;
+       // if (!IsInPlacementMode()) return;
         ResetFrameState();
         onReset?.Invoke();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (_hasAwardedThisFrame || IsInPlacementMode()) return;
+        //if (_hasAwardedThisFrame || IsInPlacementMode()) return;
         if (!IsValidHitter(collision.gameObject)) return;
 
         _hasAwardedThisFrame = true;

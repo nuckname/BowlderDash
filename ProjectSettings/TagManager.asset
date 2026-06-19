@@ -9,6 +9,9 @@ TagManager:
   - Exploder
   - BallCollision
   - RoundManager
+  - Slot
+  - HexManager
+  - VisualCardHandler
   layers:
   - Default
   - TransparentFX

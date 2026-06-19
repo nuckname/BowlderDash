@@ -22,7 +22,7 @@ public class TicketPin : PinBase
 
     private void OnTriggerEnter(Collider other)
     {
-        if (IsInPlacementMode() || !IsBall(other)) return;
+        //if (IsInPlacementMode() || !IsBall(other)) return;
 
         Rigidbody otherRb = other.GetComponent<Rigidbody>();
         if (ballHitCooldown > 0f
@@ -36,7 +36,7 @@ public class TicketPin : PinBase
 
     public void TryAwardFromExplosion(Collider sourceCollider)
     {
-        if (IsInPlacementMode() || !IsAwardCollider(sourceCollider)) return;
+       // if (IsInPlacementMode() || !IsAwardCollider(sourceCollider)) return;
         Award();
         
     }

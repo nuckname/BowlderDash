@@ -36,7 +36,7 @@ public class ExplodingPin : PinBase
 
     private void Update()
     {
-        if (IsInPlacementMode() || _state != ExplodeState.Idle) return;
+        //if (IsInPlacementMode() || _state != ExplodeState.Idle) return;
 
         if (Vector3.Angle(transform.up, Vector3.up) > tipAngleThreshold)
             TransitionTo(ExplodeState.KnockedDown);
@@ -44,7 +44,7 @@ public class ExplodingPin : PinBase
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (IsInPlacementMode() || _state != ExplodeState.Idle) return;
+        //if (IsInPlacementMode() || _state != ExplodeState.Idle) return;
 
         if (collision.relativeVelocity.magnitude > 3f
             && Vector3.Angle(transform.up, Vector3.up) > 10f)
