@@ -984,7 +984,7 @@ GameObject:
   - component: {fileID: 120957812}
   m_Layer: 0
   m_Name: HexManager
-  m_TagString: Untagged
+  m_TagString: HexManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1036,11 +1036,11 @@ Transform:
   m_GameObject: {fileID: 120957811}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1061.685, y: -281.34143, z: -879.06946}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1951707966}
+  m_Father: {fileID: 1346736464}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &121324095
 GameObject:
@@ -6165,7 +6165,7 @@ GameObject:
   - component: {fileID: 967875293}
   m_Layer: 0
   m_Name: VisualCardHandler
-  m_TagString: Untagged
+  m_TagString: VisualCardHandler
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8634,6 +8634,7 @@ Transform:
   - {fileID: 374269888}
   - {fileID: 1439520102}
   - {fileID: 1168153560}
+  - {fileID: 120957813}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1348361069
@@ -11384,8 +11385,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 797099238}
   m_HandleRect: {fileID: 797099237}
   m_Direction: 2
-  m_Value: 0.9996618
-  m_Size: 0.9102
+  m_Value: 0.99966127
+  m_Size: 0.9101999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -11830,7 +11831,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 120957813}
   - {fileID: 341304542}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

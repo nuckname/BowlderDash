@@ -135,7 +135,10 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Drag logic handled in Update
+        if (!isPreviewingInWorld)
+        {
+            transform.position = Input.mousePosition - offset;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
