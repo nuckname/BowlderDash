@@ -116,7 +116,7 @@ MonoBehaviour:
   onHitEffects: []
   onFallEffects:
   - rid: 4911452856340709378
-  allowPinToFallOver: 0
+  _allowPinToFallOver: 0
   references:
     version: 2
     RefIds:
@@ -165,6 +165,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visualTransform: {fileID: 6444032329800440004}
+  pickupPunch: {x: 0.2, y: -0.2, z: 0.2}
+  dropPunch: {x: -0.2, y: 0.2, z: -0.2}
+  punchDuration: 0.3
+  liftHeight: 0.5
+  liftDuration: 0.15
+  tiltMultiplier: 2
+  maxTiltAngle: 35
+  tiltSmoothness: 15
 --- !u!65 &2167565981615595077
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -186,3 +195,8 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.1146393, y: 6.1200004, z: 2.11464}
   m_Center: {x: 0, y: 3.0600002, z: 0}
+--- !u!4 &6444032329800440004 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+  m_PrefabInstance: {fileID: 6838562370640297775}
+  m_PrefabAsset: {fileID: 0}

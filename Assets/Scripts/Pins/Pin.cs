@@ -36,7 +36,6 @@ public class Pin : PinBase
         if (!AllowPinToFallOver)
         {
             // Freezes Position X and Z. 
-            // We also optionally freeze Rotation X and Z so it doesn't tip over.
             _rb.constraints = RigidbodyConstraints.FreezePositionX | 
                               RigidbodyConstraints.FreezePositionZ | 
                               RigidbodyConstraints.FreezeRotationX | 

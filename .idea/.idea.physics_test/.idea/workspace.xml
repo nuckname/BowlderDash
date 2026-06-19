@@ -6,22 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Cards/Card.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Cards/Card.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/Vase.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/Vase.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/fullace.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/fullace.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/grenda.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/grenda.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pin.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pin.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/small pin.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/small pin.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/DOTweenSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/DOTweenSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinPrefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardMovement.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +130,7 @@
       <workItem from="1781734300962" duration="1184000" />
       <workItem from="1781753294320" duration="2687000" />
       <workItem from="1781758738564" duration="1394000" />
-      <workItem from="1781821283829" duration="5124000" />
+      <workItem from="1781821283829" duration="6722000" />
     </task>
     <servers />
   </component>

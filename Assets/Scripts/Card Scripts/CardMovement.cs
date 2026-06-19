@@ -31,15 +31,11 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [SerializeField] private GameObject cardVisualPrefab;
     [HideInInspector] public CardAnimator cardAnimator;
 
-    [Header("World Interaction")]
-    // Object we want to spawn
-    [SerializeField] private GameObject worldGameObjectPrefab; 
+    [Header("Play Area Threshold")]
     [Tooltip("How high up the screen we the spawn the pin, in pixels")]
     [SerializeField] private float playAreaThresholdY = 500f; 
-    [SerializeField] private LayerMask worldPlacementMask; 
-
-    private GameObject spawnedWorldObject;
-    private bool isPreviewingInWorld = false;
+    
+    [HideInInspector] public bool isPreviewingInWorld = false;
 
     [Header("States")]
     public bool isHovering;
@@ -54,16 +50,16 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [HideInInspector] public UnityEvent<CardMovement> BeginDragEvent;
     [HideInInspector] public UnityEvent<CardMovement> EndDragEvent;
     [HideInInspector] public UnityEvent<CardMovement, bool> SelectEvent;
-
-    private HexGridSnapper _hexGrid;
+    
+    [HideInInspector] public UnityEvent OnEnterPlayArea;
+    [HideInInspector] public UnityEvent OnExitPlayArea;
+    [HideInInspector] public UnityEvent OnDropInPlayArea;
 
     private void Awake()
     {
         _canvas = GetComponentInParent<Canvas>();
         _imageComponent = GetComponent<Image>();
         _visualHandler = GameObject.FindGameObjectWithTag("VisualCardHandler").GetComponent<VisualCardsHandler>();
-
-        _hexGrid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<HexGridSnapper>();
     }
 
     void Start()
@@ -83,31 +79,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if (isDragging)
         {
             HandlePlayAreaTransition();
-
-            if (isPreviewingInWorld && spawnedWorldObject != null)
-            {
-                // Move the WORLD object using Raycasting
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
-                {
-                    HexGridSnapper.Cell nearestCell = _hexGrid.GetNearestCell(hit.point);
-                    if (nearestCell != null)
-                    {
-                        spawnedWorldObject.transform.position = nearestCell.center;
-                    }
-                }
-            }
-            else
-            {
-                // Move the UI card using original velocity logic
-                Vector3 targetPosition = Input.mousePosition - offset;
-                Vector3 direction = (targetPosition - transform.position).normalized;
-                
-                float distance = Vector3.Distance(transform.position, targetPosition);
-                Vector3 velocity = direction * Mathf.Min(moveSpeedLimit, distance / Time.deltaTime);
-                
-                transform.Translate(velocity * Time.deltaTime, Space.World);
-            }
         }
     }
 
@@ -124,10 +95,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             if (cardAnimator != null) 
                 cardAnimator.gameObject.SetActive(false);
 
-            if (spawnedWorldObject == null && worldGameObjectPrefab != null)
-            {
-                spawnedWorldObject = Instantiate(worldGameObjectPrefab);
-            }
+            OnEnterPlayArea?.Invoke();
         }
         else if (!isMouseInPlayArea && isPreviewingInWorld)
         {
@@ -138,11 +106,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             if (cardAnimator != null) 
                 cardAnimator.gameObject.SetActive(true);
 
-            if (spawnedWorldObject != null)
-            {
-                Destroy(spawnedWorldObject);
-                spawnedWorldObject = null;
-            }
+            OnExitPlayArea?.Invoke();
         }
     }
 
@@ -181,54 +145,42 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         
         if (isPreviewingInWorld)
         {
-            bool successfullyPlaced = false;
-       
-            HexGridSnapper.Cell targetCell = _hexGrid.GetNearestCell(spawnedWorldObject.transform.position);
-            
-            // Attempt to reserve the cell for our spawned object
-            if (targetCell != null)
-            {
-                successfullyPlaced = _hexGrid.TryReserveCell(targetCell, spawnedWorldObject.transform);
-            }
-    
-
-            if (successfullyPlaced)
-            {
-                // CARD SUCCESSFULLY PLAYED ON GRID
-
-                spawnedWorldObject = null;
-                Destroy(gameObject);
-                return; 
-            }
-            else
-            {
-                // FAILED TO PLACE (Cell occupied or invalid) - Return to Hand
-                isPreviewingInWorld = false;
-
-                _imageComponent.enabled = true;
-                if (cardAnimator != null) 
-                    cardAnimator.gameObject.SetActive(true);
-
-                if (spawnedWorldObject != null)
-                {
-                    Destroy(spawnedWorldObject);
-                    spawnedWorldObject = null;
-                }
-            }
+            OnDropInPlayArea?.Invoke();
         }
+        else
+        {
+            ReturnToHand();
+        }
+    }
+
+    public void ReturnToHand()
+    {
+        // FAILED TO PLACE (Cell occupied or invalid) - Return to Hand
+        isPreviewingInWorld = false;
+
+        _imageComponent.enabled = true;
+        if (cardAnimator != null) 
+            cardAnimator.gameObject.SetActive(true);
 
         // RETURNED TO HAND
         _canvas.GetComponent<GraphicRaycaster>().enabled = true;
         _imageComponent.raycastTarget = true;
 
         StartCoroutine(FrameWait());
-
-        IEnumerator FrameWait()
-        {
-            yield return new WaitForEndOfFrame();
-            wasDragged = false;
-        }
     }
+
+    private IEnumerator FrameWait()
+    {
+        yield return new WaitForEndOfFrame();
+        wasDragged = false;
+    }
+
+    public void SuccessfulPlay()
+    {
+        // CARD SUCCESSFULLY PLAYED ON GRID
+        Destroy(gameObject);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         PointerEnterEvent.Invoke(this);
@@ -302,10 +254,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         if(cardAnimator != null)
             Destroy(cardAnimator.gameObject);
-            
-        // Clean up preview if destroyed mid-drag
-        if (spawnedWorldObject != null)
-            Destroy(spawnedWorldObject);
     }
 }
 

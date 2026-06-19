@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\Card Scripts\ShaderCode.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\Scripts\ScoreCalculator.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\CardWorldSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\Scripts\Pins\TicketPin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
