@@ -6,6 +6,10 @@ using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 
+// https://www.youtube.com/watch?v=I1dAZuWurw4
+// https://github.com/mixandjam/balatro-feel
+
+
 public class HorizontalCardHolder : MonoBehaviour
 {
     public static HorizontalCardHolder Instance { get; private set; }
@@ -184,6 +188,42 @@ public class HorizontalCardHolder : MonoBehaviour
                 }
             }
         }
+    }
+    
+    /// <summary>
+    /// Spawns a card and immediately forces it into the user's hand as an active drag,
+    /// skipping the "return to slot" animation entirely.
+    /// </summary>
+    public void SpawnAndDragCard(GameObject cardPrefabToSpawn)
+    {
+        // Spawn the card directly under the Canvas (transform.parent) instead of inside a slot.
+        // This keeps it free-floating and perfectly locked to the mouse coordinates!
+        GameObject newCardObj = Instantiate(cardPrefabToSpawn, transform.parent);
+        CardMovement newCardMovement = newCardObj.GetComponent<CardMovement>();
+
+        if (newCardMovement != null)
+        {
+            RegisterCardEvents(newCardMovement, cards.Count);
+            
+            // Immediately snap the UI element to the mouse
+            newCardObj.transform.position = Input.mousePosition;
+            
+            // Force the card into an active drag state
+            newCardMovement.ForceStartDrag();
+        }
+        
+        // We do not rebuild visuals yet because we haven't added a slot to the hand!
+    }
+
+    /// <summary>
+    /// Safely wraps a floating card into a layout slot when it is finally dropped in the hand.
+    /// </summary>
+    public void AssignSlotToCard(CardMovement card)
+    {
+        GameObject newSlot = Instantiate(slotPrefab, transform);
+        card.transform.SetParent(newSlot.transform);
+        
+        RebuildHandVisuals();
     }
 
     void Swap(int index)

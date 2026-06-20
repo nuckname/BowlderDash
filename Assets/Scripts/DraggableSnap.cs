@@ -17,16 +17,12 @@ public class DraggableSnap : MonoBehaviour
     private HexGridSnapper.Cell _originalCell;
     private HexGridSnapper _grid;
     private WorldObjectToCard _worldObjectToCard;
-    
-    // We need to hide the 3D mesh when hovering over the hand area
-    private Renderer[] _renderers;
 
     private void Awake()
     {
         _cam = Camera.main;
         _grid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<HexGridSnapper>();
         _worldObjectToCard = GetComponent<WorldObjectToCard>();
-        _renderers = GetComponentsInChildren<Renderer>();
     }
 
     private void OnMouseDown()
@@ -55,12 +51,19 @@ public class DraggableSnap : MonoBehaviour
     {
         if (!_dragging) return;
         
-        print("y:" + Input.mousePosition.y);
         // Check exact same screen threshold as CardMovement.cs
-        bool isMouseInHandArea = Input.mousePosition.y < playAreaThresholdY;
-        
-        // Toggle 3D visibility based on where the mouse is
-        ToggleRenderers(!isMouseInHandArea);
+        // INSTANT SWAP: If we cross the line, immediately swap to the UI card
+        if (Input.mousePosition.y < playAreaThresholdY)
+        {
+            _dragging = false;
+            
+            if (_worldObjectToCard != null)
+            {
+                // This destroys the 3D object and tells the UI card to take over the mouse drag
+                _worldObjectToCard.ReturnToHand(); 
+            }
+            return; 
+        }
 
         float elevatedY = _originalPosition.y + dragElevation;
         Plane plane = new Plane(Vector3.up, new Vector3(0f, elevatedY, 0f));
@@ -71,39 +74,21 @@ public class DraggableSnap : MonoBehaviour
             Vector3 worldPoint = ray.GetPoint(enter);
             Vector3 targetPos = worldPoint + _offset;
 
-            if (isMouseInHandArea)
+            // Snap to Grid when in the Play Area
+            HexGridSnapper.Cell nearestCell = _grid.GetNearestCell(targetPos);
+            if (nearestCell != null)
             {
-                // Move freely without grid snapping so it follows the mouse smoothly into the UI
-                transform.position = new Vector3(targetPos.x, elevatedY, targetPos.z);
-            }
-            else
-            {
-                // Snap to Grid when in the Play Area
-                HexGridSnapper.Cell nearestCell = _grid.GetNearestCell(targetPos);
-                if (nearestCell != null)
-                {
-                    transform.position = new Vector3(nearestCell.center.x, elevatedY, nearestCell.center.z);
-                }
+                transform.position = new Vector3(nearestCell.center.x, elevatedY, nearestCell.center.z);
             }
         }
     }
 
     private void OnMouseUp()
     {
-        _dragging = false;
-        
-        // Ensure renderers are back on just in case
-        ToggleRenderers(true);
+        // Safety check: if the object was already converted to a card, abort!
+        if (!_dragging) return; 
 
-        // Did we drop it in the hand area?
-        if (Input.mousePosition.y < playAreaThresholdY)
-        {
-            if (_worldObjectToCard != null)
-            {
-                _worldObjectToCard.ReturnToHand(); 
-            }
-            return; 
-        }
+        _dragging = false;
 
         // Normal placement attempt in Play Area
         var nearest = _grid.GetNearestCell(transform.position);
@@ -126,15 +111,6 @@ public class DraggableSnap : MonoBehaviour
             {
                 _grid.TryReserveCell(_originalCell, transform);
             }
-        }
-    }
-
-    // Helper method to toggle the 3D pin visuals on/off
-    private void ToggleRenderers(bool state)
-    {
-        foreach (var r in _renderers)
-        {
-            r.enabled = state;
         }
     }
 }

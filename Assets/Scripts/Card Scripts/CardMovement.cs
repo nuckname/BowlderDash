@@ -70,14 +70,50 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         cardAnimator.Initialize(this);
     }
 
+// ADD THIS METHOD: Forces the card into a drag state programmatically
+    public void ForceStartDrag()
+    {
+        // Tell HorizontalCardHolder to set this as the selected card
+        BeginDragEvent.Invoke(this); 
+        
+        // Center the card directly on the mouse
+        offset = Vector3.zero; 
+        
+        isDragging = true;
+        wasDragged = true;
+        
+        // Prevent the card from blocking raycasts while dragging
+        _imageComponent.raycastTarget = false; 
+    }
+
     void Update()
     {
         ClampPosition();
 
         if (isDragging)
         {
+            // MOVE MOVEMENT LOGIC HERE: Since the EventSystem won't fire OnDrag 
+            // automatically when forced, we update the position in Update()
+            if (!isPreviewingInWorld)
+            {
+                transform.position = Input.mousePosition - offset;
+            }
+
             HandlePlayAreaTransition();
+
+            // MANUAL DROP DETECTION: Listen for the mouse release manually
+            if (Input.GetMouseButtonUp(0))
+            {
+                OnEndDrag(null); // Passing null is perfectly safe here
+            }
         }
+    }
+
+// UPDATE OnDrag: You can completely empty out OnDrag since we moved 
+    // the movement logic into Update(), but keep the interface method so Unity doesn't complain.
+    public void OnDrag(PointerEventData eventData) 
+    { 
+        // Logic moved to Update() to support both UI dragging and programmatic dragging
     }
 
     // Toggles the card's visual state when dragged in or out of the designated play area.
@@ -91,8 +127,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             isPreviewingInWorld = true;
             
             _imageComponent.enabled = false;
-            if (cardAnimator != null) 
-                cardAnimator.gameObject.SetActive(false);
+            cardAnimator.gameObject.SetActive(false);
 
             OnEnterPlayArea?.Invoke();
         }
@@ -102,8 +137,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             isPreviewingInWorld = false;
 
             _imageComponent.enabled = true;
-            if (cardAnimator != null) 
-                cardAnimator.gameObject.SetActive(true);
+            cardAnimator.gameObject.SetActive(true);
 
             OnExitPlayArea?.Invoke();
         }
@@ -133,27 +167,26 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         wasDragged = true;
     }
 
-    // Updates the card's UI position to follow the mouse while not previewing in the world.
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (!isPreviewingInWorld)
-        {
-            transform.position = Input.mousePosition - offset;
-        }
-    }
-
     // Fires drop events and resolves placement based on whether the card is in the play area.
     public void OnEndDrag(PointerEventData eventData)
     {
-        EndDragEvent.Invoke(this);
         isDragging = false;
         
         if (isPreviewingInWorld)
         {
+            EndDragEvent.Invoke(this);
             OnDropInPlayArea?.Invoke();
         }
         else
         {
+            // NEW: If this is a floating card pulled from the world, it needs a slot 
+            // BEFORE we fire EndDragEvent so the DOLocalMove animation targets the slot center!
+            if (transform.parent != null && !transform.parent.CompareTag("Slot") && HorizontalCardHolder.Instance != null)
+            {
+                HorizontalCardHolder.Instance.AssignSlotToCard(this);
+            }
+
+            EndDragEvent.Invoke(this);
             ReturnToHand();
         }
     }
@@ -161,6 +194,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Cancels the play preview and restores the card's UI visuals in the hand.
     public void ReturnToHand()
     {
+        Debug.Log("CardMovement REutnr to hand");
         // FAILED TO PLACE (Cell occupied or invalid) - Return to Hand
         isPreviewingInWorld = false;
 
