@@ -14,11 +14,9 @@ public class DraggableSnap : MonoBehaviour
     private Vector3 _originalPosition;
     private HexGridSnapper.Cell _originalCell;
     private HexGridSnapper _grid;
-    private Pin _pin;
 
     private void Awake()
     {
-        _pin = GetComponent<Pin>();
         _cam = Camera.main;
         _grid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<HexGridSnapper>();
     }
@@ -65,11 +63,11 @@ public class DraggableSnap : MonoBehaviour
             Vector3 targetPos = worldPoint + _offset;
          
             // Constantly check if the cell we are hovering over is empty
-            var nearestCell = _grid.GetNearestCell(targetPos);
-
+            HexGridSnapper.Cell nearestCell = _grid.GetNearestCell(targetPos);
+            
             // Snap visually to the empty cell's X/Z, but maintain the dragged Y elevation
             transform.position = new Vector3(nearestCell.center.x, elevatedY, nearestCell.center.z);
-        
+       
         }
     }
 
@@ -85,22 +83,8 @@ public class DraggableSnap : MonoBehaviour
             placed = _grid.TryReserveCell(nearest, transform);
             if (placed)
             {
-                // Drops the pin back down to the exact cell center
-                transform.position = nearest.center;
-            }
-        }
-
-        if (!placed)
-        {
-            // Try to re-reserve original cell if it was taken while we held it
-            if (_originalCell != null)
-            {
-                bool ok = _grid.TryReserveCell(_originalCell, transform);
-                if (ok)
-                {
-                    transform.position = _originalCell.center;
-                    placed = true;
-                }
+                // Snap X/Z to the cell, but keep the original Y level of the plane
+                transform.position = new Vector3(nearest.center.x, _originalPosition.y, nearest.center.z);
             }
         }
     }
