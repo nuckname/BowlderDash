@@ -12,6 +12,7 @@ TagManager:
   - Slot
   - HexManager
   - VisualCardHandler
+  - GridPlane
   layers:
   - Default
   - TransparentFX

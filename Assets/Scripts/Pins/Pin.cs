@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// This should be a basic pin and not have AllowPinToFall Over and other things. this is only the normal pin.
 public class Pin : PinBase
 {
     [Header("Triggers")]

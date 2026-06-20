@@ -121,6 +121,7 @@ MonoBehaviour:
   onFallEffects:
   - rid: 4911452856340709378
   _allowPinToFallOver: 0
+  _allowPinToBePickedUp: 0
   references:
     version: 2
     RefIds:
@@ -169,6 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dragElevation: 3
 --- !u!65 &2167565981615595077
 BoxCollider:
   m_ObjectHideFlags: 0
