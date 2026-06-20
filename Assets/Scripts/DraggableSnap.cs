@@ -4,8 +4,10 @@ using UnityEngine;
 public class DraggableSnap : MonoBehaviour
 {
     [Header("Drag Settings")]
-    [Tooltip("How much the pin lifts up on the Y axis while dragging.")]
     public float dragElevation = 0.5f;
+    
+    [Tooltip("Must match the playAreaThresholdY from CardMovement!")]
+    public float playAreaThresholdY = 500f; 
 
     private Camera _cam;
     private bool _dragging = false;
@@ -14,35 +16,36 @@ public class DraggableSnap : MonoBehaviour
     private Vector3 _originalPosition;
     private HexGridSnapper.Cell _originalCell;
     private HexGridSnapper _grid;
+    private WorldObjectToCard _worldObjectToCard;
+    
+    // We need to hide the 3D mesh when hovering over the hand area
+    private Renderer[] _renderers;
 
     private void Awake()
     {
         _cam = Camera.main;
         _grid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<HexGridSnapper>();
+        _worldObjectToCard = GetComponent<WorldObjectToCard>();
+        _renderers = GetComponentsInChildren<Renderer>();
     }
 
     private void OnMouseDown()
     {
         _originalPosition = transform.position;
- 
         _originalCell = _grid.GetCellByOccupant(transform);
-        // Release it while dragging so it doesn't block itself
-        _grid.ReleaseCell(transform);
-  
-        // Calculate the elevated height for dragging
-        float elevatedY = _originalPosition.y + dragElevation;
         
-        // Immediately pop the pin up
+        if (_originalCell != null)
+            _grid.ReleaseCell(transform);
+  
+        float elevatedY = _originalPosition.y + dragElevation;
         transform.position = new Vector3(transform.position.x, elevatedY, transform.position.z);
 
-        // Create a horizontal plane at the newly elevated Y level
         Plane plane = new Plane(Vector3.up, new Vector3(0f, elevatedY, 0f));
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
         
         if (plane.Raycast(ray, out float enter))
         {
-            Vector3 worldPoint = ray.GetPoint(enter);
-            _offset = transform.position - worldPoint;
+            _offset = transform.position - ray.GetPoint(enter);
         }
         
         _dragging = true;
@@ -52,7 +55,13 @@ public class DraggableSnap : MonoBehaviour
     {
         if (!_dragging) return;
         
-        // Ensure we raycast against the same elevated plane to keep movement strictly horizontal
+        print("y:" + Input.mousePosition.y);
+        // Check exact same screen threshold as CardMovement.cs
+        bool isMouseInHandArea = Input.mousePosition.y < playAreaThresholdY;
+        
+        // Toggle 3D visibility based on where the mouse is
+        ToggleRenderers(!isMouseInHandArea);
+
         float elevatedY = _originalPosition.y + dragElevation;
         Plane plane = new Plane(Vector3.up, new Vector3(0f, elevatedY, 0f));
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
@@ -61,20 +70,42 @@ public class DraggableSnap : MonoBehaviour
         {
             Vector3 worldPoint = ray.GetPoint(enter);
             Vector3 targetPos = worldPoint + _offset;
-         
-            // Constantly check if the cell we are hovering over is empty
-            HexGridSnapper.Cell nearestCell = _grid.GetNearestCell(targetPos);
-            
-            // Snap visually to the empty cell's X/Z, but maintain the dragged Y elevation
-            transform.position = new Vector3(nearestCell.center.x, elevatedY, nearestCell.center.z);
-       
+
+            if (isMouseInHandArea)
+            {
+                // Move freely without grid snapping so it follows the mouse smoothly into the UI
+                transform.position = new Vector3(targetPos.x, elevatedY, targetPos.z);
+            }
+            else
+            {
+                // Snap to Grid when in the Play Area
+                HexGridSnapper.Cell nearestCell = _grid.GetNearestCell(targetPos);
+                if (nearestCell != null)
+                {
+                    transform.position = new Vector3(nearestCell.center.x, elevatedY, nearestCell.center.z);
+                }
+            }
         }
     }
 
     private void OnMouseUp()
     {
         _dragging = false;
+        
+        // Ensure renderers are back on just in case
+        ToggleRenderers(true);
 
+        // Did we drop it in the hand area?
+        if (Input.mousePosition.y < playAreaThresholdY)
+        {
+            if (_worldObjectToCard != null)
+            {
+                _worldObjectToCard.ReturnToHand(); 
+            }
+            return; 
+        }
+
+        // Normal placement attempt in Play Area
         var nearest = _grid.GetNearestCell(transform.position);
         bool placed = false;
         
@@ -83,9 +114,27 @@ public class DraggableSnap : MonoBehaviour
             placed = _grid.TryReserveCell(nearest, transform);
             if (placed)
             {
-                // Snap X/Z to the cell, but keep the original Y level of the plane
                 transform.position = new Vector3(nearest.center.x, _originalPosition.y, nearest.center.z);
             }
+        }
+        
+        // Fallback: Return to original position
+        if (!placed)
+        {
+            transform.position = _originalPosition;
+            if (_originalCell != null)
+            {
+                _grid.TryReserveCell(_originalCell, transform);
+            }
+        }
+    }
+
+    // Helper method to toggle the 3D pin visuals on/off
+    private void ToggleRenderers(bool state)
+    {
+        foreach (var r in _renderers)
+        {
+            r.enabled = state;
         }
     }
 }

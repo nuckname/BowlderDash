@@ -272,7 +272,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Returns the total number of sibling slots in the parent container.
     public int SiblingAmount()
     {
-        return transform.parent != null && transform.parent.CompareTag("Slot") ? transform.parent.parent.childCount - 1 : 0;
+        return transform.parent != null && transform.parent.parent != null && transform.parent.CompareTag("Slot") ? transform.parent.parent.childCount - 1 : 0;
     }
 
     // Gets the current index of this card's UI slot within its parent container.
@@ -284,7 +284,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Calculates the card's relative position (0.0 to 1.0) within the hand.
     public float NormalizedPosition()
     {
-        return transform.parent != null && transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
+        return transform.parent != null && transform.parent.parent != null && transform.parent.CompareTag("Slot") ? ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.parent.childCount - 1), 0, 1) : 0;
     }
 
     // Cleans up the linked visual animator object when this card is destroyed.

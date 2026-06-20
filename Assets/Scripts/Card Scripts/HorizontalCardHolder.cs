@@ -31,24 +31,19 @@ public class HorizontalCardHolder : MonoBehaviour
 
     void Start()
     {
+        rect = GetComponent<RectTransform>();
+
+        // Spawn initial cards
         for (int i = 0; i < cardsToSpawn; i++)
         {
             Instantiate(slotPrefab, transform);
         }
 
-        rect = GetComponent<RectTransform>();
         cards = GetComponentsInChildren<CardMovement>().ToList();
 
-        int cardCount = 0;
-
-        foreach (CardMovement card in cards)
+        for (int i = 0; i < cards.Count; i++)
         {
-            card.PointerEnterEvent.AddListener(CardPointerEnter);
-            card.PointerExitEvent.AddListener(CardPointerExit);
-            card.BeginDragEvent.AddListener(BeginDrag);
-            card.EndDragEvent.AddListener(EndDrag);
-            card.name = cardCount.ToString();
-            cardCount++;
+            RegisterCardEvents(cards[i], i);
         }
 
         StartCoroutine(Frame());
@@ -59,6 +54,48 @@ public class HorizontalCardHolder : MonoBehaviour
             
             RebuildHandVisuals();
         }
+    }
+
+    /// <summary>
+    /// Safely injects a new card back into the hand from the world 
+    /// ensuring it is placed in a Slot and its events are wired correctly.
+    /// Now accepts a start position to animate from the mouse cursor!
+    /// </summary>
+    public void AddCardToHand(GameObject cardPrefabToSpawn, Vector3? startScreenPosition = null)
+    {
+        // Instantiate a new slot so the layout group handles it properly
+        GameObject newSlot = Instantiate(slotPrefab, transform);
+        
+        // Instantiate the actual UI card inside it
+        GameObject newCardObj = Instantiate(cardPrefabToSpawn, newSlot.transform);
+        CardMovement newCardMovement = newCardObj.GetComponent<CardMovement>();
+
+        if (newCardMovement != null)
+        {
+            RegisterCardEvents(newCardMovement, transform.childCount - 1);
+        }
+
+        RebuildHandVisuals();
+
+        // Fling the card from the mouse position into its slot!
+        if (startScreenPosition.HasValue)
+        {
+            // Force the UI card to the mouse position
+            newCardObj.transform.position = startScreenPosition.Value;
+            
+            // Animate it back to the center of its slot (Vector3.zero)
+            // Using a slightly longer duration (0.3f) so you can actually see it fly into the hand
+            newCardObj.transform.DOLocalMove(Vector3.zero, tweenCardReturn ? 0.3f : 0f).SetEase(Ease.OutBack);
+        }
+    }
+
+    private void RegisterCardEvents(CardMovement card, int index)
+    {
+        card.PointerEnterEvent.AddListener(CardPointerEnter);
+        card.PointerExitEvent.AddListener(CardPointerExit);
+        card.BeginDragEvent.AddListener(BeginDrag);
+        card.EndDragEvent.AddListener(EndDrag);
+        card.name = index.ToString();
     }
 
     private void BeginDrag(CardMovement cardMovement)
@@ -73,6 +110,7 @@ public class HorizontalCardHolder : MonoBehaviour
 
         selectedCardMovement.transform.DOLocalMove(selectedCardMovement.selected ? new Vector3(0,selectedCardMovement.selectionOffset,0) : Vector3.zero, tweenCardReturn ? .15f : 0).SetEase(Ease.OutBack);
 
+        // Forces layout rebuild trigger
         rect.sizeDelta += Vector2.right;
         rect.sizeDelta -= Vector2.right;
 
@@ -90,6 +128,12 @@ public class HorizontalCardHolder : MonoBehaviour
     }
 
     void Update()
+    {
+        HandleDebugInput();
+        HandleCardSwapping();
+    }
+
+    private void HandleDebugInput()
     {
         if (Input.GetKeyDown(KeyCode.Delete))
         {
@@ -113,11 +157,11 @@ public class HorizontalCardHolder : MonoBehaviour
                 card.Deselect();
             }
         }
+    }
 
-        if (selectedCardMovement == null)
-            return;
-
-        if (isCrossing)
+    private void HandleCardSwapping()
+    {
+        if (selectedCardMovement == null || isCrossing)
             return;
 
         for (int i = 0; i < cards.Count; i++)

@@ -96,6 +96,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2167565981615595077}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7218449948874417426}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!1 &5919451674846626430 stripped
 GameObject:
@@ -171,6 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragElevation: 3
+  offGridBottomZ: -1
 --- !u!65 &2167565981615595077
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -192,3 +196,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.1146393, y: 6.1200004, z: 2.11464}
   m_Center: {x: 0, y: 3.0600002, z: 0}
+--- !u!114 &7218449948874417426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919451674846626430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dummyCardPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
