@@ -88,5 +88,9 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
             manager.SwitchState(manager.ScoringState);
         }
     }
-    public override void OnTriggerExit(RoundStateManager manager, Collider other) { }
+
+    public override void OnTriggerExit(RoundStateManager manager, Collider other)
+    {
+        PlayerSheet.Instance.playerAmountOfBallsThrown++;
+    }
 }

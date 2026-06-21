@@ -16,7 +16,14 @@ public class RoundStartState : RoundBaseState
 
         manager.currentRound++;
         RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
-        
+
+        manager.uiManager.RefreshHUD(
+            PlayerSheet.Instance.playerCurrentTicket,
+            manager.currentRound,
+            PlayerSheet.Instance.playerAmountOfBallsThrown,
+            roundInfo,
+            manager.roundData.GetMaxRoundNumber()
+        );
         
         HandleMap(manager);
 

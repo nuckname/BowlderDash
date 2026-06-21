@@ -2554,9 +2554,10 @@ MonoBehaviour:
   shopUI: {fileID: 1168153561}
   cardHand: {fileID: 516170647}
   instructionText: {fileID: 538931267}
-  gameState: {fileID: 11400000, guid: 34b497f35e2f48d4f87bfca0a0bb8cc7, type: 2}
+  uiManager: {fileID: 1919503304}
   ticketEconomy: {fileID: 11400000, guid: 17f1c2355522ff343ad3cbb278aaeb0c, type: 2}
-  amountOfBallsThrown: 0
+  roundData: {fileID: 11400000, guid: 9b97d23778ffc45478280cb2b71a7499, type: 2}
+  currentAmountOfBallsThrown: 0
   currentRound: 0
   ThrowingBall:
     pathDrawer: {fileID: 934142802}
@@ -8742,6 +8743,8 @@ Transform:
   - {fileID: 1439520102}
   - {fileID: 1168153560}
   - {fileID: 120957813}
+  - {fileID: 1919503303}
+  - {fileID: 1617183166}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1348361069
@@ -10430,6 +10433,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591489622}
   m_CullTransparentMesh: 1
+--- !u!1 &1617183165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1617183166}
+  - component: {fileID: 1617183167}
+  m_Layer: 0
+  m_Name: PlayerSheet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1617183166
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617183165}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1346736464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1617183167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1617183165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965dd00f78b63044ea5f88d4c8343025, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCurrentTicket: 0
+  lastFrameUsedTicketBonus: 0
+  lastFrameUsedStrikeTicketBonus: 0
+  ticketsEarnedLastFrame: 0
+  scoreTargetTicketsEarnedThisFrame: 0
 --- !u!1 &1621156154
 GameObject:
   m_ObjectHideFlags: 0
@@ -11765,6 +11817,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907220981}
   m_CullTransparentMesh: 1
+--- !u!1 &1919503302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1919503303}
+  - component: {fileID: 1919503304}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1919503303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919503302}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1346736464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1919503304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919503302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a07e69d73655a0241b3ea516bc9832d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalScoreText: {fileID: 228924946}
+  scoreToBeatText: {fileID: 1268858253}
+  roundText: {fileID: 617657972}
+  ballsText: {fileID: 634051133}
 --- !u!65 &1927480909
 BoxCollider:
   m_ObjectHideFlags: 0

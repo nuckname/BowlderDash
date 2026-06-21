@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Pins\TicketPin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\BallCollisionCurvatureStopper.cs" />
+    <Compile Include="Assets\Scripts\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ShopState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundStartState.cs" />
@@ -86,7 +87,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\ScriptableObjects\PinCardsSO\PinCardData.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" />
-    <Compile Include="Assets\ScriptableObjects\GameStateData.cs" />
     <Compile Include="Assets\Scripts\Ball\CameraFollowBallScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardMovement.cs" />

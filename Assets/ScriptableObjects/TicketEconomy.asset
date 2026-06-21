@@ -12,10 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a7bb3bd7c96fc439d8788191c3d425, type: 3}
   m_Name: TicketEconomy
   m_EditorClassIdentifier: 
-  startingTickets: 0
-  currentTickets: 0
-  gridTicketsEarnedThisFrame: 0
-  scoreTargetTicketsEarnedThisFrame: 0
-  ticketsEarnedLastFrame: 0
-  lastFrameUsedTicketBonus: 0
-  lastFrameUsedStrikeTicketBonus: 0
+  startingTickets: 5

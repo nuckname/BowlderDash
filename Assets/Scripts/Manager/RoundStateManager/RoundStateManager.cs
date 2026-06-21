@@ -17,14 +17,13 @@ public class RoundStateManager : MonoBehaviour
     public ShopUIManager shopUI;
     public GameObject cardHand;
     public Text instructionText;
-
+    public UIManager uiManager;
+    
     [Header("Data Objects")]
-    public GameStateData gameState;
     public TicketEconomyData ticketEconomy;
     public RoundData roundData;
     
     [Header("Round Vars")]
-    public int amountOfBallsThrown = 0;
     public int currentRound = 0;
 
     // States
@@ -64,7 +63,6 @@ public class RoundStateManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        gameState.ResetState();
         ticketEconomy.ResetState();
         SwitchState(roundStart);
     }
@@ -75,8 +73,6 @@ public class RoundStateManager : MonoBehaviour
         currentState = newState;
         if (currentState != null) currentState.EnterState(this);
     }
-
-    // --- PASS-THROUGH METHODS ---
 
     void OnCollisionEnter(Collision collision) => currentState?.OnCollisionEnter(this, collision);
     void OnCollisionExit(Collision collision) => currentState?.OnCollisionExit(this, collision);

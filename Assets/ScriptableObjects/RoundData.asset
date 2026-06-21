@@ -12,4 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 234a22ce4ffdbaf4bbab2cda22f89e49, type: 3}
   m_Name: RoundData
   m_EditorClassIdentifier: 
-  rounds: []
+  rounds:
+  - roundNumber: 1
+    scoreNeededToBeat: 30
+    ballsAllowed: 2
+  - roundNumber: 2
+    scoreNeededToBeat: 35
+    ballsAllowed: 2
+  - roundNumber: 3
+    scoreNeededToBeat: 50
+    ballsAllowed: 2

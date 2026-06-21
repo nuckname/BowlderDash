@@ -4,14 +4,11 @@ using UnityEngine;
 [System.Serializable]
 public class RoundScore
 {
-    [Tooltip("The round number, or total number of rounds for this set.")]
     public int roundNumber = 1;
 
-    [Tooltip("The target score required to beat this round.")]
-    public int scoreNeededToBeat = 100;
+    public int scoreNeededToBeat = 30;
 
-    [Tooltip("The amount of balls the player is allowed to throw.")]
-    public int ballsAllowed = 3;
+    public int maxBallsAllowedToThrow = 3;
 }
 
 [CreateAssetMenu(fileName = "NewRoundData", menuName = "Game Data/Round Data")]
@@ -33,5 +30,20 @@ public class RoundData : ScriptableObject
 
         Debug.LogWarning($"Round {targetRoundNumber} was not found");
         return null;
+    }
+
+    public int GetMaxRoundNumber()
+    {
+        int maxRound = 0;
+        
+        foreach (RoundScore round in rounds)
+        {
+            if (round.roundNumber > maxRound)
+            {
+                maxRound = round.roundNumber;
+            }
+        }
+        
+        return maxRound;
     }
 }

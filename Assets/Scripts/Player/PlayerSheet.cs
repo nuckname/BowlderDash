@@ -5,6 +5,7 @@ public class PlayerSheet : MonoBehaviour
     public static PlayerSheet Instance { get; private set; }
 
     public int playerCurrentTicket = 0;
+    public int playerAmountOfBallsThrown = 0;
     public bool lastFrameUsedTicketBonus = false;
     public bool lastFrameUsedStrikeTicketBonus = false;
     public int ticketsEarnedLastFrame = 0;
