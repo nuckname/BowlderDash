@@ -7,7 +7,7 @@ using UnityEngine;
 [Serializable]
 public abstract class PinEffect 
 {
-    public abstract void Execute(Pin context, Collider collider = null);
+    public abstract void Execute(PinBase context, Collider collider = null);
     
     public virtual void ResetEffect() { }
 }

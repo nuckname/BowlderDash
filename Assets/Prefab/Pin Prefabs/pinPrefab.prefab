@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragElevation: 3
-  offGridBottomZ: -1
+  playAreaThresholdY: 500
 --- !u!65 &2167565981615595077
 BoxCollider:
   m_ObjectHideFlags: 0

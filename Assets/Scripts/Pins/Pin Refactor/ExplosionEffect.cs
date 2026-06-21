@@ -5,84 +5,77 @@ using System.Collections;
 [Serializable]
 public class ExplosionEffect : PinEffect
 {
-    // Slightly more complex pin so going to have states
-    private enum ExplodeState
-    {
-        Idle,
-        KnockedDown,
-        Detonating,
-        Exploded
-    }
-
-    private ExplodeState _state = ExplodeState.Idle;
-
-    [Header("Explosion Settings")] public float explosionForce = 15f;
+    [Header("Explosion Settings")] 
+    public float explosionForce = 15f;
     public float explosionRadius = 5f;
     public float upwardModifier = 1.0f;
     public float detonationDelay = 1.0f;
     public ParticleSystem explosionParticles;
 
     private Coroutine _detonationCoroutine;
+    private bool _hasTriggered = false;
+    private bool _hasExploded = false;
 
-    public override void Execute(Pin context, Collider instigator = null)
+    // Updated parameter to PinBase
+    public override void Execute(PinBase context, Collider instigator = null)
     {
-        if (_state != ExplodeState.Idle) return;
-        TransitionTo(ExplodeState.KnockedDown, context);
+        if (_hasTriggered || _hasExploded) return;
+        
+        _hasTriggered = true;
+        _detonationCoroutine = context.StartCoroutine(DetonationSequence(context));
     }
 
-    // Small State Machine 
-    private void TransitionTo(ExplodeState next, Pin context)
-    {
-        _state = next;
-
-        switch (next)
-        {
-            case ExplodeState.KnockedDown:
-                _detonationCoroutine = context.StartCoroutine(DetonationSequence(context));
-                break;
-
-            case ExplodeState.Detonating:
-                Detonate(context);
-                break;
-        }
-    }
-
-    private IEnumerator DetonationSequence(Pin context)
+    private IEnumerator DetonationSequence(PinBase context)
     {
         yield return new WaitForSeconds(detonationDelay);
         _detonationCoroutine = null;
 
-        if (_state == ExplodeState.KnockedDown)
-            TransitionTo(ExplodeState.Detonating, context);
+        if (!_hasExploded)
+        {
+            Detonate(context);
+        }
     }
 
-    private void Detonate(Pin context)
+    private void Detonate(PinBase context)
     {
-        _state = ExplodeState.Exploded;
+        _hasExploded = true;
         Vector3 pos = context.transform.position;
 
         foreach (Collider hit in Physics.OverlapSphere(pos, explosionRadius))
         {
+            // Since VaseEffect is now a serialized class in a list on PinBase, 
+            // GetComponent won't find it. You'll need to grab the PinBase and check its effects list instead.
             Debug.LogError("Try shatter vase from explosion commented out");
-           // hit.GetComponentInParent<VaseEffect>()?.TryShatterFromExplosion();
-            hit.GetComponentInParent<TicketPin>()?.TryAwardFromExplosion(hit);
+            // PinBase hitPin = hit.GetComponentInParent<PinBase>();
+            // if (hitPin != null) ... loop through hitPin.onHitEffects to find VaseEffect ...
+            
+            // hit.GetComponentInParent<TicketPin>()?.TryAwardFromExplosion(hit);
 
-            Rigidbody rb = hit.GetComponent<Rigidbody>();
-            //if (rb != null && rb != context.Rb)
+            // attachedRigidbody is more efficient than GetComponent<Rigidbody>()
+            Rigidbody rb = hit.attachedRigidbody; 
+            
+            // To ensure we don't blow up the pin that is causing the explosion
+            // (Assuming you add a public getter for _rb to PinBase, or you check the GameObject)
+            if (rb != null && hit.gameObject != context.gameObject) 
+            {
                 rb.AddExplosionForce(explosionForce, pos, explosionRadius, upwardModifier, ForceMode.Impulse);
+            }
         }
 
-        explosionParticles?.Play();
-        context.DisableVisualsAndPhysics();
+        if (explosionParticles != null)
+        {
+            explosionParticles.Play();
+        }
     }
 
     public override void ResetEffect()
     {
-        _state = ExplodeState.Idle;
+        _hasTriggered = false;
+        _hasExploded = false;
+        
         if (explosionParticles != null)
         {
-            explosionParticles.Stop();
-            explosionParticles.Clear();
+            explosionParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }
 }

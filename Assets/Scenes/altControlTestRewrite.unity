@@ -2557,7 +2557,6 @@ MonoBehaviour:
   uiManager: {fileID: 1919503304}
   ticketEconomy: {fileID: 11400000, guid: 17f1c2355522ff343ad3cbb278aaeb0c, type: 2}
   roundData: {fileID: 11400000, guid: 9b97d23778ffc45478280cb2b71a7499, type: 2}
-  currentAmountOfBallsThrown: 0
   currentRound: 0
   ThrowingBall:
     pathDrawer: {fileID: 934142802}
@@ -10478,6 +10477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCurrentTicket: 0
+  playerAmountOfBallsThrown: 0
   lastFrameUsedTicketBonus: 0
   lastFrameUsedStrikeTicketBonus: 0
   ticketsEarnedLastFrame: 0

@@ -35,13 +35,14 @@ public class VaseEffect : PinEffect
         _scalesCached = true;
     }
 
-    public override void Execute(Pin context, Collider instigator = null)
+    public override void Execute(PinBase context, Collider instigator = null)
     {
         CacheScalesIfNeeded();
 
-        if (_hasHandledHitThisFrame || _wasHit)
+        // Consolidated the removedFromInventory check here so everything routes through Execute cleanly
+        if (_hasHandledHitThisFrame || _wasHit || _removedFromInventory)
         {
-            Debug.Log($"<color=orange><b>[VasePin]</b></color> Collision entered but already handled or was hit");
+            Debug.Log($"<color=orange><b>[VasePin]</b></color> Collision entered but already handled, was hit, or removed");
             return;
         }
 
@@ -51,47 +52,28 @@ public class VaseEffect : PinEffect
             return;
         }
 
-        // if (collision.gameObject == vase)
-        // {
-        //     return true;
-        // }
-
-        // for (int i = 0; i < collision.contactCount; i++)
-        // {
-        //     Collider thisCollider = collision.GetContact(i).thisCollider;
-        //     if (thisCollider != null && thisCollider.transform.IsChildOf(vase.transform))
-        //     {
-        //         return true;
-        //     }
-        // }
-
         Debug.Log($"<color=orange><b>[VasePin]</b></color> Handling hit");
+        
+        // FIXED: Passing 'context' instead of 'this'
         HandleHit(context);
     }
 
-    public void TryShatterFromExplosion(Pin context)
+    public void TryShatterFromExplosion(PinBase context)
     {
         Debug.Log($"<color=orange><b>[VasePin]</b></color> Shattered by nearby explosion");
-        TryShatterFromExternalCause(context);
+        // Cleanly routes to Execute to handle all the standard checks
+        Execute(context);
     }
 
-    public void TryShatterFromExternalCause(Pin context)
+    public void TryShatterFromExternalCause(PinBase context)
     {
-        if (_wasHit || _removedFromInventory)
-        {
-            return;
-        }
-
-        if (GameManager.Instance != null && GameManager.Instance.GetCurrentState() == GameState.PinPlacement)
-        {
-            return;
-        }
-
         Debug.Log($"<color=orange><b>[VasePin]</b></color> Toppled over");
-        HandleHit(context);
+        // Cleanly routes to Execute to handle all the standard checks
+        Execute(context);
     }
 
-    private void HandleHit(Pin context)
+    // FIXED: Changed parameter to PinBase
+    private void HandleHit(PinBase context)
     {
         if (_wasHit)
         {
@@ -121,7 +103,7 @@ public class VaseEffect : PinEffect
 
         if (PinHandInventory.Instance != null && context != null)
         {
-            PinHandInventory.Instance.ConsumePlacedVaseInstance(context);
+           // PinHandInventory.Instance.ConsumePlacedVaseInstance(context); 
         }
     }
 
@@ -146,7 +128,8 @@ public class VaseEffect : PinEffect
     }
 
     // This can be called globally at the end of the frame by looping through the Pin's onHitEffects
-    public bool TryAwardIntactBonus(Pin context, ScoreCalculator scoreCalculator)
+    // FIXED: Changed parameter to PinBase
+    public bool TryAwardIntactBonus(PinBase context, ScoreCalculator scoreCalculator)
     {
         if (_wasHit || _hitThisThrow || intactBonusScore == 0)
         {
@@ -201,7 +184,8 @@ public class VaseEffect : PinEffect
         RestoreFlowerScale(flower2, _flower2StartScale);
     }
 
-    private void ShrinkFlower(Pin context, GameObject flower, Vector3 startScale, ref Coroutine runningCoroutine)
+    // FIXED: Changed parameter to PinBase
+    private void ShrinkFlower(PinBase context, GameObject flower, Vector3 startScale, ref Coroutine runningCoroutine)
     {
         if (flower == null)
         {
@@ -213,6 +197,7 @@ public class VaseEffect : PinEffect
             context.StopCoroutine(runningCoroutine);
         }
 
+        // Since PinBase is a MonoBehaviour, StartCoroutine still works perfectly here
         runningCoroutine = context.StartCoroutine(ShrinkFlowerRoutine(flower.transform, startScale));
     }
 
