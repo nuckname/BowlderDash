@@ -12,7 +12,7 @@ public class UIManager : MonoBehaviour
 
     public void RefreshHUD(int currentTotalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
     {
-        totalScoreText.text = "{currentTotalScore}";
+        totalScoreText.text = $"{currentTotalScore}";
 
         roundText.text = $"{currentRound} / {maxRounds}";
 
