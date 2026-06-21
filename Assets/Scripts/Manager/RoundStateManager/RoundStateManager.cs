@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class RoundStateManager : MonoBehaviour
 {
     public RoundBaseState currentState;
-    public GameObject[] allActivePinsInTheFrame;
+    public PinBase[] allActivePinsInTheFrame;
     
     [Header("Managers")]
     public CameraPanToLocation cameraPanToLocation;
@@ -95,10 +95,15 @@ public class RoundStateManager : MonoBehaviour
     
     public void AllowPinsToFallOver(bool allow)
     {
-        foreach(GameObject pin in allActivePinsInTheFrame)
+        foreach(PinBase pin in allActivePinsInTheFrame)
         {
-            pin.GetComponent<Pin>().AllowPinToFallOver = allow;
+            pin.AllowPinToFallOver = allow;
         }
+    }
+    
+    public void GetAllPinsInCurrentFrame(RoundStateManager manager)
+    {
+        manager.allActivePinsInTheFrame = FindObjectsOfType<PinBase>();
     }
 
     public void ResetLaneExploders() { }

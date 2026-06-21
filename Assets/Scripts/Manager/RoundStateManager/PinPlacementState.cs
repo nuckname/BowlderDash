@@ -29,6 +29,10 @@ public class PinPlacementState : RoundBaseState
     public override void ExitState(RoundStateManager manager)
     {
         PinOnPinCollisionLayer(false);
+        
+        manager.GetAllPinsInCurrentFrame(manager);
+
+        manager.AllowPinsToFallOver(false);
     }
 
     private void PinOnPinCollisionLayer(bool turnOn)

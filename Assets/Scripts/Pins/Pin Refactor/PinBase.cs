@@ -20,7 +20,9 @@ public abstract class PinBase : MonoBehaviour
     [SerializeField] protected bool _allowPinToFallOver = false;
     [SerializeField] protected bool _allowPinToBePickedUp = false;
     
-    protected bool _isFallen = false;
+    public bool _isFallen = false;
+    public bool IsFallen => _isFallen;
+    
     protected bool _hasBeenHit = false;
 
     protected Rigidbody _rb;
@@ -37,6 +39,23 @@ public abstract class PinBase : MonoBehaviour
         {
             _allowPinToFallOver = value;
             SyncPhysicsConstraints();
+        }
+    }
+    
+    // Checks if the physics engine has put the pin to sleep
+    public bool IsSettled
+    {
+        get
+        {
+            if (_rb == null || _rb.isKinematic) return true;
+
+            // Failsafe: If the pin is barely moving (jittering), force it to sleep
+            if (!_rb.IsSleeping() && _rb.velocity.sqrMagnitude < 0.01f && _rb.angularVelocity.sqrMagnitude < 0.01f)
+            {
+                _rb.Sleep();
+            }
+
+            return _rb.IsSleeping();
         }
     }
     
@@ -58,9 +77,14 @@ public abstract class PinBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!_allowPinToFallOver || _isFallen || _allowPinToBePickedUp) return;
+        if (!_allowPinToFallOver || _isFallen || _allowPinToBePickedUp) 
+        {
+            return;
+        }
 
-        if (Vector3.Angle(Vector3.up, transform.up) > fallAngleThreshold)
+        float currentAngle = Vector3.Angle(Vector3.up, transform.up);
+
+        if (currentAngle > fallAngleThreshold)
         {
             TriggerFall();
         }
@@ -91,7 +115,7 @@ public abstract class PinBase : MonoBehaviour
     protected virtual void TriggerFall()
     {
         _isFallen = true;
-        foreach (var effect in onFallEffects)
+        foreach (PinEffect effect in onFallEffects)
         {
             effect.Execute(this);
         }

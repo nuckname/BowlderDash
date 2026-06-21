@@ -8,4 +8,5 @@ public class Pin : PinBase
 {
     // Left intentionally empty. 
     // Add specific standard pin overrides here if needed in the future.
+    // This is a base pin not every pin should have this script. 
 }
