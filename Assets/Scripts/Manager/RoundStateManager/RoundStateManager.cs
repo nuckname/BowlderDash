@@ -21,6 +21,7 @@ public class RoundStateManager : MonoBehaviour
     [Header("Data Objects")]
     public GameStateData gameState;
     public TicketEconomyData ticketEconomy;
+    public RoundData roundData;
     
     [Header("Round Vars")]
     public int amountOfBallsThrown = 0;

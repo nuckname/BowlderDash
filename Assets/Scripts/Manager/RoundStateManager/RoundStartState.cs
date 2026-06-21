@@ -15,6 +15,8 @@ public class RoundStartState : RoundBaseState
         manager.scoreCalculator.ResetFrameScore();
 
         manager.currentRound++;
+        RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
+        
         
         HandleMap(manager);
 
@@ -50,11 +52,11 @@ public class RoundStartState : RoundBaseState
 
     private void SetTickets(RoundStateManager manager)
     {
-        manager.ticketEconomy.gridTicketsEarnedThisFrame = 0;
-        manager.ticketEconomy.scoreTargetTicketsEarnedThisFrame = 0;
-        manager.ticketEconomy.ticketsEarnedLastFrame = 0;
-        manager.ticketEconomy.lastFrameUsedTicketBonus = false;
-        manager.ticketEconomy.lastFrameUsedStrikeTicketBonus = false;
+        //manager.ticketEconomy.gridTicketsEarnedThisFrame = 0;
+       // manager.ticketEconomy.scoreTargetTicketsEarnedThisFrame = 0;
+        //manager.ticketEconomy.ticketsEarnedLastFrame = 0;
+        //manager.ticketEconomy.lastFrameUsedTicketBonus = false;
+        //manager.ticketEconomy.lastFrameUsedStrikeTicketBonus = false;
     }
 
     public override void UpdateState(RoundStateManager manager) { }

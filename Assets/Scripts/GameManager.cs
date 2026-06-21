@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (lineRenderer != null) lineRenderer.positionCount = 0;
-        if (powerSlider != null) powerSlider.value = 0f;
+       // if (powerSlider != null) powerSlider.value = 0f;
 
         pinHandInventory.Configure(this, grid, null); // passing null for modeSwitcher since it's removed
         shopController.Configure(this, pinHandInventory);
@@ -706,7 +706,7 @@ public class GameManager : MonoBehaviour
         if (powerSlider != null && isValidDraw)
         {
             float currentDuration = Time.time - mouseDownTime;
-            powerSlider.value = GetLaunchPowerNormalized(currentDuration);
+           // powerSlider.value = GetLaunchPowerNormalized(currentDuration);
         }
     }
 
@@ -875,7 +875,7 @@ public class GameManager : MonoBehaviour
         
         if (_currentState == GameState.PlayerReady)
             UpdateInstructionText("Draw the ball's path! Start from the ball.");
-        if (powerSlider != null) powerSlider.value = 0f;
+        //if (powerSlider != null) powerSlider.value = 0f;
 
         if (ball != null) ball.transform.position = startPos;
         yield return new WaitForSeconds(0.05f);
