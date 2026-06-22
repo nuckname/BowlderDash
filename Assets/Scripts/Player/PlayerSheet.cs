@@ -24,4 +24,12 @@ public class PlayerSheet : MonoBehaviour
             DontDestroyOnLoad(this.gameObject); 
         }
     }
+    
+    public void AddTickets(int amount)
+    {
+        playerCurrentTicket += amount;
+        
+        // keeps track, not sure why
+        ticketsEarnedLastFrame += amount; 
+    }
 }

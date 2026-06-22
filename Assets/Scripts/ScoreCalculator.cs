@@ -12,9 +12,16 @@ public class ScoreCalculator : MonoBehaviour
     {
         bonusScore += scoreValue;
         
-        totalMultiplier += multValue; 
 
         // position for floting text score
+    }
+
+    public void QueueScoreMulti(int scoreValue, float multValue, Vector3 position)
+    {
+        totalMultiplier += multValue; 
+        
+        // position for floting text score
+        
     }
 
     // Called by your ScoringState for every standard pin that fell
