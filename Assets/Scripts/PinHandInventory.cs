@@ -278,43 +278,6 @@ public class PinHandInventory : MonoBehaviour
         RefreshCards();
     }
 
-    public void SaveCurrentLayoutAsLastUsed()
-    {
-        if (grid == null) grid = FindObjectOfType<HexGridSnapper>();
-
-        savedLastLayout.Clear();
-        if (grid == null)
-        {
-            return;
-        }
-
-        foreach (Pin pin in GetPlacedPins())
-        {
-            if (pin == null || !pin.gameObject.activeInHierarchy)
-            {
-                continue;
-            }
-
-            HexGridSnapper.Cell cell = grid.GetCellByOccupant(pin.transform);
-            if (cell == null)
-            {
-                cell = grid.GetNearestCell(pin.transform.position);
-            }
-
-            if (cell == null)
-            {
-                continue;
-            }
-
-            savedLastLayout.Add(new SavedLayoutEntry
-            {
-                type = DetectCardType(pin),
-                col = cell.col,
-                row = cell.row
-            });
-        }
-    }
-
     public void ClearSavedLayout()
     {
         savedLastLayout.Clear();
@@ -581,7 +544,7 @@ public class PinHandInventory : MonoBehaviour
 
         CancelPreviewDrag();
     }
-
+/*
     public bool TryReturnPinToInventory(Pin pin, Vector2 screenPosition)
     {
         if (pin == null || !handVisible || !IsScreenPointOverHand(screenPosition))
@@ -643,6 +606,7 @@ public class PinHandInventory : MonoBehaviour
         RefreshCards();
         return true;
     }
+    */
 
     public bool IsScreenPointOverHand(Vector2 screenPosition)
     {
@@ -1214,12 +1178,15 @@ public class PinHandInventory : MonoBehaviour
 
     private GameObject CreatePreviewPin(PinHandCardType type)
     {
+        /*
         GameObject pinObject = TakePinInstance(type, out Pin standardReservation);
         if (pinObject == null) return null;
 
         reservedStandardPin = standardReservation;
         PreparePinForPreview(pinObject);
         return pinObject;
+        */
+        return null;
     }
 
     private void PreparePinForPreview(GameObject pinObject)
@@ -1288,6 +1255,7 @@ public class PinHandInventory : MonoBehaviour
 
     private bool TryPlacePinOnCell(PinHandCardType type, HexGridSnapper.Cell targetCell)
     {
+        /*
         if (grid == null || targetCell == null)
         {
             return false;
@@ -1309,6 +1277,8 @@ public class PinHandInventory : MonoBehaviour
         PreparePinForPlacement(pinObject);
         ConsumePinnedCard(type);
         return true;
+        */
+        return false;
     }
 
     private void ConsumePinnedCard(PinHandCardType type)
@@ -1331,42 +1301,6 @@ public class PinHandInventory : MonoBehaviour
         }
     }
 
-    public void ConsumePlacedVaseInstance(Pin pin)
-    {
-        if (pin == null)
-        {
-            return;
-        }
-
-        VaseEffect vaseComponent = pin.GetComponent<VaseEffect>();
-        if (vaseComponent == null || vaseComponent.IsRemovedFromInventory())
-        {
-            return;
-        }
-
-        vaseComponent.MarkRemovedFromInventory();
-        runtimePowerupPins.Remove(pin);
-
-        ownedCounts[PinHandCardType.Vase] = Mathf.Max(0, GetOwnedCount(PinHandCardType.Vase) - 1);
-
-        if (grid != null)
-        {
-            grid.ReleaseCell(pin.transform);
-        }
-
-        DraggableSnap draggable = pin.GetComponent<DraggableSnap>();
-        if (draggable != null)
-        {
-            draggable.enabled = false;
-        }
-
-        if (!consumedVasePinsPendingCleanup.Contains(pin))
-        {
-            consumedVasePinsPendingCleanup.Add(pin);
-        }
-
-        RefreshCards();
-    }
 
     private void CancelPreviewDrag()
     {
@@ -1406,103 +1340,6 @@ public class PinHandInventory : MonoBehaviour
         DisableLegacyScenePinsOnce();
         standardPinPool.RemoveAll(pin => pin == null);
         EnsureStandardPinPoolSize(GetMaxOwnedCount(PinHandCardType.Standard));
-    }
-
-    private GameObject TakePinInstance(PinHandCardType type, out Pin standardReservation)
-    {
-        standardReservation = null;
-
-        Pin pinComponent = null;
-        GameObject pinObject = null;
-
-        if (type == PinHandCardType.Standard)
-        {
-            for (int i = returnedStandardPins.Count - 1; i >= 0; i--)
-            {
-                Pin candidate = returnedStandardPins[i];
-                returnedStandardPins.RemoveAt(i);
-
-                if (candidate == null)
-                {
-                    continue;
-                }
-
-                standardReservation = candidate;
-                pinComponent = candidate;
-                pinObject = candidate.gameObject;
-                pinObject.SetActive(true);
-                break;
-            }
-        }
-        else
-        {
-            pinObject = CreateConfiguredPinInstance(type);
-            if (pinObject == null)
-            {
-                return null;
-            }
-
-            pinObject.name = GetRuntimePinObjectName(type);
-            pinComponent = pinObject.GetComponent<Pin>();
-
-            DraggableSnap existingDrag = pinObject.GetComponent<DraggableSnap>();
-            if (existingDrag == null)
-            {
-                existingDrag = pinObject.AddComponent<DraggableSnap>();
-            }
-
-            existingDrag.enabled = false;
-
-            if (type == PinHandCardType.Exploding)
-            {
-                if (pinObject.GetComponent<ExplodingPin>() == null)
-                {
-                    pinObject.AddComponent<ExplodingPin>();
-                }
-            }
-            else if (type == PinHandCardType.Ticket)
-            {
-                if (pinObject.GetComponent<TicketPin>() == null)
-                {
-                    pinObject.AddComponent<TicketPin>();
-                }
-            }
-            else if (type == PinHandCardType.MultiplierTumbling)
-            {
-                MultPin multPin = pinObject.GetComponent<MultPin>();
-                if (multPin == null)
-                {
-                    multPin = pinObject.AddComponent<MultPin>();
-                }
-
-                multPin.gameManager = gameManager;
-                multPin.scoreCalculatorOverride = gameManager != null ? gameManager.scoreCalculator : null;
-                EnsureRuntimeCardMarker(pinObject, type);
-            }
-            else if (type == PinHandCardType.Vase)
-            {
-                if (pinObject.GetComponent<VaseEffect>() == null)
-                {
-                    //pinObject.AddComponent<VaseEffect>();
-                }
-            }
-            else if (type == PinHandCardType.Small || type == PinHandCardType.Banana)
-            {
-                EnsureRuntimeCardMarker(pinObject, type);
-            }
-
-            if (pinComponent != null && !runtimePowerupPins.Contains(pinComponent))
-            {
-                runtimePowerupPins.Add(pinComponent);
-            }
-        }
-
-        if (pinComponent != null)
-        {
-            pinComponent.ResetPin();
-        }
-
-        return pinObject;
     }
 
     private void ReturnPinInstance(PinHandCardType type, GameObject pinObject, Pin standardReservation)
@@ -1684,7 +1521,6 @@ public class PinHandInventory : MonoBehaviour
         }
 
         GameObject instance = Instantiate(configuredPrefab);
-        EnsureTypeComponents(instance, type);
         return instance;
     }
 
@@ -1705,71 +1541,6 @@ public class PinHandInventory : MonoBehaviour
         }
 
         return configuredPrefab;
-    }
-
-    private void EnsureTypeComponents(GameObject pinObject, PinHandCardType type)
-    {
-        if (pinObject == null) return;
-
-        if (pinObject.GetComponent<Pin>() == null)
-        {
-            pinObject.AddComponent<Pin>();
-        }
-
-        ExplodingPin explodingComponent = pinObject.GetComponent<ExplodingPin>();
-        MultPin multComponent = pinObject.GetComponent<MultPin>();
-        TicketPin ticketComponent = pinObject.GetComponent<TicketPin>();
-        VaseEffect vaseComponent = pinObject.GetComponent<VaseEffect>();
-
-        if (type == PinHandCardType.Exploding)
-        {
-            if (explodingComponent == null)
-            {
-                pinObject.AddComponent<ExplodingPin>();
-            }
-
-            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
-        }
-        else if (type == PinHandCardType.Ticket)
-        {
-            if (ticketComponent == null)
-            {
-                ticketComponent = pinObject.AddComponent<TicketPin>();
-            }
-
-            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
-        }
-        else if (type == PinHandCardType.MultiplierTumbling)
-        {
-            if (multComponent == null)
-            {
-                multComponent = pinObject.AddComponent<MultPin>();
-            }
-
-            multComponent.gameManager = gameManager;
-            multComponent.scoreCalculatorOverride = gameManager != null ? gameManager.scoreCalculator : null;
-
-            EnsureRuntimeCardMarker(pinObject, type);
-            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
-        }
-        else if (type == PinHandCardType.Vase)
-        {
-            if (vaseComponent == null)
-            {
-                //vaseComponent = pinObject.AddComponent<VaseEffect>();
-            }
-
-            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
-        }
-        else if (type == PinHandCardType.Small || type == PinHandCardType.Banana)
-        {
-            EnsureRuntimeCardMarker(pinObject, type);
-            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
-        }
-        else
-        {
-            ClearConflictingPowerupComponents(pinObject, explodingComponent, multComponent, ticketComponent, vaseComponent, type);
-        }
     }
 
     private static bool UsesAvailableCountInventory(PinHandCardType type)
@@ -1809,44 +1580,6 @@ public class PinHandInventory : MonoBehaviour
         return true;
     }
 
-    private void ClearConflictingPowerupComponents(
-        GameObject pinObject,
-        ExplodingPin explodingComponent,
-        MultPin multComponent,
-        TicketPin ticketComponent,
-        VaseEffect vaseComponent,
-        PinHandCardType type)
-    {
-        if (explodingComponent != null && type != PinHandCardType.Exploding)
-        {
-            Destroy(explodingComponent);
-        }
-
-        if (multComponent != null && type != PinHandCardType.MultiplierTumbling)
-        {
-            Destroy(multComponent);
-        }
-
-        if (ticketComponent != null && type != PinHandCardType.Ticket)
-        {
-            Destroy(ticketComponent);
-        }
-
-        if (vaseComponent != null && type != PinHandCardType.Vase)
-        {
-            //Destroy(vaseComponent);
-        }
-
-        PinHandRuntimeCardMarker marker = pinObject.GetComponent<PinHandRuntimeCardMarker>();
-        if (marker != null
-            && type != PinHandCardType.Small
-            && type != PinHandCardType.Banana
-            && type != PinHandCardType.MultiplierTumbling)
-        {
-            Destroy(marker);
-        }
-    }
-
     private static string GetRuntimePinObjectName(PinHandCardType type)
     {
         switch (type)
@@ -1868,22 +1601,6 @@ public class PinHandInventory : MonoBehaviour
         }
     }
 
-    private PinHandCardType DetectCardType(Pin pin)
-    {
-        if (pin == null) return PinHandCardType.Standard;
-
-        PinHandRuntimeCardMarker marker = pin.GetComponent<PinHandRuntimeCardMarker>();
-        if (marker != null)
-        {
-            return marker.cardType;
-        }
-
-        if (pin.GetComponent<VaseEffect>() != null) return PinHandCardType.Vase;
-        if (pin.GetComponent<ExplodingPin>() != null) return PinHandCardType.Exploding;
-        if (pin.GetComponent<TicketPin>() != null) return PinHandCardType.Ticket;
-        if (pin.GetComponent<MultPin>() != null) return PinHandCardType.MultiplierTumbling;
-        return PinHandCardType.Standard;
-    }
 
     private PinTypeConfig GetTypeConfig(PinHandCardType type)
     {

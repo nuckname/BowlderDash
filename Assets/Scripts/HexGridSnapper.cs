@@ -512,12 +512,6 @@ public class HexGridSnapper : MonoBehaviour
                 continue;
             }
 
-            if (occupant.GetComponent<MultPin>() != null
-                || occupant.GetComponent<TicketPin>() != null
-                || occupant.GetComponent<VaseEffect>() != null)
-            {
-                continue;
-            }
 
             foundPlacedPin = true;
 

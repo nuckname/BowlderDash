@@ -289,7 +289,7 @@ public class GameManager : MonoBehaviour
     {
         if (throwsThisFrame == 0)
         {
-            pinHandInventory?.SaveCurrentLayoutAsLastUsed();
+            //.pinHandInventory?.SaveCurrentLayoutAsLastUsed();
         }
 
         _currentState = GameState.PlayerReady;
@@ -353,7 +353,7 @@ public class GameManager : MonoBehaviour
         RefreshRuntimePools();
         foreach(var p in allPinsPool)
         {
-            if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy && CountsTowardFrameClear(p))
+            if (p.gameObject.scene.isLoaded && p.gameObject.activeInHierarchy )
             {
                 totalPinsActiveAtStart++;
               //  if (p.IsFallen()) fallenPinsThisThrow++;
@@ -389,7 +389,7 @@ public class GameManager : MonoBehaviour
 
         if (throwsThisFrame >= maxThrowsPerFrame || isStrike)
         {
-            bool clearedAllPlacedPins = grid != null && grid.AreAllPlacedPinsCleared();
+            bool clearedAllPlacedPins = grid != null;
             bool passedScoreTarget = frameScore >= currentFrameScoreTarget;
             FinalizeFrameTickets(clearedAllPlacedPins, isStrike, frameScore, passedScoreTarget);
 
@@ -954,14 +954,6 @@ public class GameManager : MonoBehaviour
         }
 
         return false;
-    }
-
-    private bool CountsTowardFrameClear(Pin pin)
-    {
-        return pin != null
-            && pin.GetComponent<MultPin>() == null
-            && pin.GetComponent<TicketPin>() == null
-            && pin.GetComponent<VaseEffect>() == null;
     }
 
     private void AwardVaseIntactBonuses()
