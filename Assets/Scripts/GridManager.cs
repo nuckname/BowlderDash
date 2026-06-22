@@ -15,20 +15,9 @@ public class GridManager : MonoBehaviour
         visuals = GetComponent<HexGridVisuals>();
     }
 
-    private void Start()
-    {
-        if (Application.isPlaying) GenerateGrid();
-    }
-
-    private void Update()
-    {
-        if (Application.isPlaying) visuals.RefreshColors();
-    }
-
     [ContextMenu("Generate Grid")]
     public void GenerateGrid()
     {
-        if (grid == null) Awake();
         grid.GenerateGrid();
         visuals.RebuildVisuals();
     }
@@ -47,12 +36,4 @@ public class GridManager : MonoBehaviour
 
     public bool TryReserveCell(HexCell cell, Transform requester) => occupancy.TryReserveCell(cell, requester);
 
-    public void SnapTransformToNearest(Transform t)
-    {
-        HexCell nearest = grid.GetNearestCell(t.position);
-        if (occupancy.TryReserveCell(nearest, t))
-        {
-            t.position = nearest.center;
-        }
-    }
 }

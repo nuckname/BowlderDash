@@ -79,10 +79,10 @@ public class HexGridVisuals : MonoBehaviour
     {
         if (!showGizmos || grid == null || grid.Cells == null) return;
         
-        foreach (var c in grid.Cells)
+        foreach (HexCell cell in grid.Cells)
         {
-            Gizmos.color = c.occupant != null ? occupiedCellColor : freeCellColor;
-            Vector3[] v = GetHexVertices(c.center, grid.hexSize);
+            Gizmos.color = cell.occupant != null ? occupiedCellColor : freeCellColor;
+            Vector3[] v = GetHexVertices(cell.center, grid.hexSize);
             for (int i = 0; i < 6; i++) Gizmos.DrawLine(v[i], v[(i + 1) % 6]);
         }
     }
