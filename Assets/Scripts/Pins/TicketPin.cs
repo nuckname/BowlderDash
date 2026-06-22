@@ -3,7 +3,7 @@ using UnityEngine;
 public class TicketPin : PinBase
 {
     public string hitterTag = "Ball";
-    public float minHitVelocity = 3f;
+  //  public float minHitVelocity = 3f;
     public int ticketValue = 1;
     public float ballHitCooldown = 0f;
 

@@ -365,18 +365,18 @@ public class GameManager : MonoBehaviour
 
         if (scoreCalculator != null)
         {
-            yield return StartCoroutine(scoreCalculator.CalculateScoringSequence());
+            //yield return StartCoroutine(scoreCalculator.CalculateScoringSequence());
         }
 
         bool isStrike = (throwsThisFrame == 1 && fallenPinsThisThrow == totalPinsActiveAtStart && totalPinsActiveAtStart > 0);
 
         if (isStrike && scoreCalculator != null)
         {
-            scoreCalculator.ApplyStrikeBonus();
+            //scoreCalculator.ApplyStrikeBonus();
         }
 
         int frameScore = 0;
-        if (scoreCalculator != null) frameScore = scoreCalculator.GetFinalScore();
+       // if (scoreCalculator != null) frameScore = scoreCalculator.GetFinalScore();
 
         int totalScoreDelta = frameScore - scoreAppliedToTotalThisFrame;
         totalScore += totalScoreDelta;

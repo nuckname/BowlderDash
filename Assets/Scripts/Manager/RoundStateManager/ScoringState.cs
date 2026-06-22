@@ -57,13 +57,13 @@ public class ScoringState : RoundBaseState
         {
             if (pin.IsFallen)
             {
-                scoreThisRound++;
+                manager.scoreCalculator.AddStandardPinFallen();
             }
         }
 
-        Debug.Log($"Pins knocked down {scoreThisRound}");
+        int finalScoreThisRound = manager.scoreCalculator.CalculateFinalScore();
         
-        // manager.AddScore(scoreThisRound); 
+        Debug.Log($"Pins knocked down {finalScoreThisRound}");
     }
 
     public override void FixedUpdateState(RoundStateManager manager) { }

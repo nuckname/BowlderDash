@@ -51,14 +51,15 @@ public class GameUIController : MonoBehaviour
 
     void Update()
     {
+        /*
         GameManager gm = GameManager.Instance;
         if (gm != null && gm.scoreCalculator != null)
         {
             int finalScore = gm.scoreCalculator.GetFinalScore();
             if (totalScoreText) totalScoreText.text = finalScore.ToString();
         }
-
-        UpdateGameplayHudTransition(gm);
+    */
+    //    UpdateGameplayHudTransition(gm);
     }
 
     private void UpdateGameplayHudTransition(GameManager gm)

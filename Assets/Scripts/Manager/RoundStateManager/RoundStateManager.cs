@@ -104,6 +104,16 @@ public class RoundStateManager : MonoBehaviour
     public void GetAllPinsInCurrentFrame(RoundStateManager manager)
     {
         manager.allActivePinsInTheFrame = FindObjectsOfType<PinBase>();
+
+        InjectDependenciesIntoAllPins(manager.allActivePinsInTheFrame, manager);
+    }
+    
+    private void InjectDependenciesIntoAllPins(PinBase[] pinBases, RoundStateManager manager)
+    {
+        foreach (PinBase pin in pinBases)
+        {
+            pin.InjectDependencies(manager.scoreCalculator);
+        }
     }
 
     public void ResetLaneExploders() { }

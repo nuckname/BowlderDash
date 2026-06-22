@@ -32,6 +32,9 @@ public abstract class PinBase : MonoBehaviour
     protected Vector3 _startPos;
     protected Quaternion _startRot;
 
+    // dependency injection 
+    public ScoreCalculator FrameScoreCalculator { get; private set; }
+    
     public bool AllowPinToFallOver
     {
         get => _allowPinToFallOver;
@@ -63,6 +66,11 @@ public abstract class PinBase : MonoBehaviour
     {
         get => _allowPinToBePickedUp;
         set => _allowPinToBePickedUp = value;
+    }
+    
+    public void InjectDependencies(ScoreCalculator calculator)
+    {
+        FrameScoreCalculator = calculator;
     }
 
     protected virtual void Awake()
