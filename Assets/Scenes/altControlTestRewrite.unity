@@ -982,10 +982,9 @@ GameObject:
   m_Component:
   - component: {fileID: 120957813}
   - component: {fileID: 120957812}
-  - component: {fileID: 120957818}
-  - component: {fileID: 120957817}
   - component: {fileID: 120957816}
-  - component: {fileID: 120957815}
+  - component: {fileID: 120957817}
+  - component: {fileID: 120957818}
   - component: {fileID: 120957814}
   m_Layer: 0
   m_Name: HexManager
@@ -1040,22 +1039,6 @@ MonoBehaviour:
   occupiedCellColor: {r: 0, g: 1, b: 0, a: 0.6}
   runtimeLineWidth: 0.08
   runtimeLineHeightOffset: 0.05
---- !u!114 &120957815
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 120957811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06d1b95b5eb2f416582d3cdea9c4112b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  columns: 10
-  rows: 5
-  hexSize: 0.5
-  originOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &120957816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1068,10 +1051,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0547af66771449b8b812c3127a04ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minTicketsPerFrame: 2
-  maxTicketsPerFrame: 4
+  minTicketsPerFrame: 3
+  maxTicketsPerFrame: 3
   ticketValue: 1
-  ticketHeightOffset: 0.08
+  ticketHeightOffset: 0.5
   ticketCellColor: {r: 1, g: 0.82, b: 0.18, a: 0.92}
   ticketVisualPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
 --- !u!114 &120957817

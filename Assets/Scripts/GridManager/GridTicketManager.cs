@@ -12,8 +12,8 @@ public class GridTicketManager : MonoBehaviour
     }
 
     [Header("Ticket Economy")]
-    public int minTicketsPerFrame = 2;
-    public int maxTicketsPerFrame = 4;
+    public int minTicketsPerFrame = 3;
+    public int maxTicketsPerFrame = 3;
     public int ticketValue = 1;
     public float ticketHeightOffset = 0.08f;
     public Color ticketCellColor = new Color(1f, 0.82f, 0.18f, 0.92f);
