@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
@@ -22,7 +20,7 @@ public class HorizontalCardHolder : MonoBehaviour
 
     [Header("Spawn Settings")]
     [SerializeField] private int cardsToSpawn = 7;
-    public List<CardMovement> cards;
+    public List<CardMovement> cardsInHand;
 
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
@@ -43,11 +41,11 @@ public class HorizontalCardHolder : MonoBehaviour
             Instantiate(slotPrefab, transform);
         }
 
-        cards = GetComponentsInChildren<CardMovement>().ToList();
+        cardsInHand = GetComponentsInChildren<CardMovement>().ToList();
 
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < cardsInHand.Count; i++)
         {
-            RegisterCardEvents(cards[i], i);
+            RegisterCardEvents(cardsInHand[i], i);
         }
 
         StartCoroutine(Frame());
@@ -147,7 +145,7 @@ public class HorizontalCardHolder : MonoBehaviour
                 hoveredCardMovement.transform.parent.SetParent(null);
                 Destroy(hoveredCardMovement.transform.parent.gameObject);
                 
-                cards.Remove(hoveredCardMovement);
+                cardsInHand.Remove(hoveredCardMovement);
                 
                 // Rebuild the hand to reflect the deleted card
                 RebuildHandVisuals();
@@ -156,7 +154,7 @@ public class HorizontalCardHolder : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            foreach (CardMovement card in cards)
+            foreach (CardMovement card in cardsInHand)
             {
                 card.Deselect();
             }
@@ -168,20 +166,20 @@ public class HorizontalCardHolder : MonoBehaviour
         if (selectedCardMovement == null || isCrossing)
             return;
 
-        for (int i = 0; i < cards.Count; i++)
+        for (int i = 0; i < cardsInHand.Count; i++)
         {
-            if (selectedCardMovement.transform.position.x > cards[i].transform.position.x)
+            if (selectedCardMovement.transform.position.x > cardsInHand[i].transform.position.x)
             {
-                if (selectedCardMovement.ParentIndex() < cards[i].ParentIndex())
+                if (selectedCardMovement.ParentIndex() < cardsInHand[i].ParentIndex())
                 {
                     Swap(i);
                     break;
                 }
             }
 
-            if (selectedCardMovement.transform.position.x < cards[i].transform.position.x)
+            if (selectedCardMovement.transform.position.x < cardsInHand[i].transform.position.x)
             {
-                if (selectedCardMovement.ParentIndex() > cards[i].ParentIndex())
+                if (selectedCardMovement.ParentIndex() > cardsInHand[i].ParentIndex())
                 {
                     Swap(i);
                     break;
@@ -203,7 +201,7 @@ public class HorizontalCardHolder : MonoBehaviour
 
         if (newCardMovement != null)
         {
-            RegisterCardEvents(newCardMovement, cards.Count);
+            RegisterCardEvents(newCardMovement, cardsInHand.Count);
             
             // Immediately snap the UI element to the mouse
             newCardObj.transform.position = Input.mousePosition;
@@ -231,19 +229,19 @@ public class HorizontalCardHolder : MonoBehaviour
         isCrossing = true;
 
         Transform focusedParent = selectedCardMovement.transform.parent;
-        Transform crossedParent = cards[index].transform.parent;
+        Transform crossedParent = cardsInHand[index].transform.parent;
 
-        cards[index].transform.SetParent(focusedParent);
-        cards[index].transform.localPosition = cards[index].selected ? new Vector3(0, cards[index].selectionOffset, 0) : Vector3.zero;
+        cardsInHand[index].transform.SetParent(focusedParent);
+        cardsInHand[index].transform.localPosition = cardsInHand[index].selected ? new Vector3(0, cardsInHand[index].selectionOffset, 0) : Vector3.zero;
         selectedCardMovement.transform.SetParent(crossedParent);
 
         isCrossing = false;
 
-        if (cards[index].cardAnimator == null)
+        if (cardsInHand[index].cardAnimator == null)
             return;
 
-        bool swapIsRight = cards[index].ParentIndex() > selectedCardMovement.ParentIndex();
-        cards[index].cardAnimator.Swap(swapIsRight ? -1 : 1);
+        bool swapIsRight = cardsInHand[index].ParentIndex() > selectedCardMovement.ParentIndex();
+        cardsInHand[index].cardAnimator.Swap(swapIsRight ? -1 : 1);
 
         //Updated Visual Indexes
         RebuildHandVisuals();
@@ -256,7 +254,7 @@ public class HorizontalCardHolder : MonoBehaviour
     public void RebuildHandVisuals()
     {
         // Wipe the list completely clean
-        cards.Clear();
+        cardsInHand.Clear();
 
         // Count the physical slots remaining in the hand
         int currentLength = transform.childCount;
@@ -269,7 +267,7 @@ public class HorizontalCardHolder : MonoBehaviour
             // Re-add only the valid cards that are actually in the slots right now
             if (cardSlot != null)
             {
-                cards.Add(cardSlot);
+                cardsInHand.Add(cardSlot);
 
                 if (cardSlot.cardAnimator != null)
                 {

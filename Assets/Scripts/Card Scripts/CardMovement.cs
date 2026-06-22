@@ -220,7 +220,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         if (HorizontalCardHolder.Instance != null)
         {
-            HorizontalCardHolder.Instance.cards.Remove(this);
+            HorizontalCardHolder.Instance.cardsInHand.Remove(this);
         }
 
         // Instantly unparent the slot so childCount updates immediately

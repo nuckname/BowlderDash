@@ -12,6 +12,7 @@ public class GridTicketManager : MonoBehaviour
     }
 
     [Header("Ticket Economy")]
+    // Scale with round number?
     public int minTicketsPerFrame = 3;
     public int maxTicketsPerFrame = 3;
     public int ticketValue = 1;
