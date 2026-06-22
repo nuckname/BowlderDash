@@ -11,7 +11,7 @@ public class TicketEffect : PinEffect
     // We use a local bool so the pin doesn't spam tickets if it gets hit multiple times
     private bool _hasAwarded = false; 
 
-    public override void Execute(PinBase context, Collider instigator = null)
+    public override void Execute(Pin context, Collider instigator = null)
     {
         if (_hasAwarded) return;
 

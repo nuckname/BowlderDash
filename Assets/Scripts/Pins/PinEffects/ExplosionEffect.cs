@@ -19,7 +19,7 @@ public class ExplosionEffect : PinEffect
     private Coroutine _detonationCoroutine;
 
     // Triggered automatically by PinBase when the pin tips over
-    public override void Execute(PinBase context, Collider instigator = null)
+    public override void Execute(Pin context, Collider instigator = null)
     {
         if (_hasTriggered) return;
         
@@ -29,7 +29,7 @@ public class ExplosionEffect : PinEffect
         _detonationCoroutine = context.StartCoroutine(DetonationSequence(context));
     }
 
-    private IEnumerator DetonationSequence(PinBase context)
+    private IEnumerator DetonationSequence(Pin context)
     {
         // 1. Wait for the fuse
         yield return new WaitForSeconds(detonationDelay);
@@ -38,7 +38,7 @@ public class ExplosionEffect : PinEffect
         Detonate(context);
     }
 
-    private void Detonate(PinBase context)
+    private void Detonate(Pin context)
     {
         Vector3 pos = context.transform.position;
         Debug.Log($"<color=orange><b>[ExplosionEffect]</b></color> Detonated at {pos}");
@@ -52,7 +52,7 @@ public class ExplosionEffect : PinEffect
         {
             // Check if we hit another pin
             // Encapsulation do we need this? Pin falling over handles itself?
-            PinBase hitPin = hit.GetComponentInParent<PinBase>();
+            Pin hitPin = hit.GetComponentInParent<Pin>();
             if (hitPin != null && hitPin != context && !hitPin.IsFallen)
             {
                 // This cleanly handles Vases, Tickets, and normal pins!
@@ -79,7 +79,7 @@ public class ExplosionEffect : PinEffect
         }
     }
 
-    private void ApplyExplosionFeedback(PinBase context)
+    private void ApplyExplosionFeedback(Pin context)
     {
         // Hide the bomb pin so it looks like it was destroyed
         Renderer renderer = context.GetComponentInChildren<Renderer>();

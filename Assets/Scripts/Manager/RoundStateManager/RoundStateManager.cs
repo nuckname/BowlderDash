@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class RoundStateManager : MonoBehaviour
 {
     public RoundBaseState currentState;
-    public PinBase[] allActivePinsInTheFrame;
+    public Pin[] allActivePinsInTheFrame;
     
     [Header("Managers")]
     public CameraPanToLocation cameraPanToLocation;
@@ -95,7 +95,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void AllowPinsToFallOver(bool allow)
     {
-        foreach(PinBase pin in allActivePinsInTheFrame)
+        foreach(Pin pin in allActivePinsInTheFrame)
         {
             pin.AllowPinToFallOver = allow;
         }
@@ -103,14 +103,14 @@ public class RoundStateManager : MonoBehaviour
     
     public void GetAllPinsInCurrentFrame(RoundStateManager manager)
     {
-        manager.allActivePinsInTheFrame = FindObjectsOfType<PinBase>();
+        manager.allActivePinsInTheFrame = FindObjectsOfType<Pin>();
 
         InjectDependenciesIntoAllPins(manager.allActivePinsInTheFrame, manager);
     }
     
-    private void InjectDependenciesIntoAllPins(PinBase[] pinBases, RoundStateManager manager)
+    private void InjectDependenciesIntoAllPins(Pin[] pinBases, RoundStateManager manager)
     {
-        foreach (PinBase pin in pinBases)
+        foreach (Pin pin in pinBases)
         {
             pin.InjectDependencies(manager.scoreCalculator);
         }

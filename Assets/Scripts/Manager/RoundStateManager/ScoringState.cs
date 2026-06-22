@@ -38,7 +38,7 @@ public class ScoringState : RoundBaseState
 
     private bool AreAllPinsSettled(RoundStateManager manager)
     {
-        foreach (PinBase pin in manager.allActivePinsInTheFrame)
+        foreach (Pin pin in manager.allActivePinsInTheFrame)
         {
             if (!pin.IsSettled) 
             {
@@ -53,7 +53,7 @@ public class ScoringState : RoundBaseState
     {
         int scoreThisRound = 0;
 
-        foreach (PinBase pin in manager.allActivePinsInTheFrame)
+        foreach (Pin pin in manager.allActivePinsInTheFrame)
         {
             if (pin.IsFallen)
             {

@@ -9,7 +9,7 @@ public class ScoreMultiplierEffect : PinEffect
     public float multValue = 0.5f;
     //public ParticleSystem particleSystem;
 
-    public override void Execute(PinBase context, Collider instigator = null) 
+    public override void Execute(Pin context, Collider instigator = null) 
     {
         context.FrameScoreCalculator.QueueScoreModification(scoreValue, multValue, context.transform.position);
     }

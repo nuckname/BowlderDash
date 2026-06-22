@@ -38,7 +38,7 @@ public class VaseEffect : PinEffect
     }
 
     // Triggered automatically by PinBase when hit (or when falling, depending on which list you put it in)
-    public override void Execute(PinBase context, Collider instigator = null)
+    public override void Execute(Pin context, Collider instigator = null)
     {
         if (_isShattered) return;
 
@@ -64,7 +64,7 @@ public class VaseEffect : PinEffect
     }
 
     // Call this from your ScoringState at the end of the round
-    public void TryAwardIntactBonus(PinBase context)
+    public void TryAwardIntactBonus(Pin context)
     {
         // If it broke, or if there is no bonus, do nothing
         if (_isShattered || intactBonusScore <= 0) return;
@@ -98,7 +98,7 @@ public class VaseEffect : PinEffect
 
     // --- Coroutine Helpers ---
 
-    private void ShrinkFlower(PinBase context, GameObject flower, Vector3 startScale, ref Coroutine runningCoroutine)
+    private void ShrinkFlower(Pin context, GameObject flower, Vector3 startScale, ref Coroutine runningCoroutine)
     {
         if (flower == null) return;
         
