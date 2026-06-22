@@ -8,14 +8,14 @@ public class WorldObjectToCard : MonoBehaviour
     [Tooltip("The UI Card Prefab to spawn back into the hand.")]
     [SerializeField] private GameObject dummyCardPrefab;
 
-    private HexGridSnapper _hexGrid;
+    private HexGrid _grid;
 
     private void Start()
     {
         GameObject hexManager = GameObject.FindGameObjectWithTag("HexManager");
         if (hexManager != null)
         {
-            _hexGrid = hexManager.GetComponent<HexGridSnapper>();
+            _grid = hexManager.GetComponent<HexGrid>();
         }
     }
 
@@ -28,14 +28,12 @@ public class WorldObjectToCard : MonoBehaviour
         }
 
         // Un-reserve the Hex Cell so a new object can be placed there later
-        if (_hexGrid != null)
+        Debug.LogError("unreserve hexcell");
+        if (_grid != null)
         {
-            HexGridSnapper.Cell cell = _hexGrid.GetNearestCell(transform.position);
-            if (cell != null)
-            {
+            // cell = _grid.GetNearestCell(transform.position);
                 // will need a method in HexGridSnapper to clear the reservation.
                 //? _hexGrid.FreeCell(cell);
-            }
         }
 
         Destroy(gameObject);

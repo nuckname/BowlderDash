@@ -14,24 +14,27 @@ public class DraggableSnap : MonoBehaviour
     private Vector3 _offset;
 
     private Vector3 _originalPosition;
-    private HexGridSnapper.Cell _originalCell;
-    private HexGridSnapper _grid;
+    private HexCell _originalCell;
+    private GridOccupancy _gridOccupancy;
+    private HexGrid _hexGrid;
     private WorldObjectToCard _worldObjectToCard;
 
     private void Awake()
     {
         _cam = Camera.main;
-        _grid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<HexGridSnapper>();
+        // Is this better then using a string tag?
+        _gridOccupancy = FindFirstObjectByType<GridOccupancy>();
         _worldObjectToCard = GetComponent<WorldObjectToCard>();
+        _hexGrid = GetComponent<HexGrid>();
     }
 
     private void OnMouseDown()
     {
         _originalPosition = transform.position;
-        _originalCell = _grid.GetCellByOccupant(transform);
+        _originalCell = _gridOccupancy.GetCellByOccupant(transform);
         
         if (_originalCell != null)
-            _grid.ReleaseCell(transform);
+            _gridOccupancy.ReleaseCell(transform);
   
         float elevatedY = _originalPosition.y + dragElevation;
         transform.position = new Vector3(transform.position.x, elevatedY, transform.position.z);
@@ -51,15 +54,12 @@ public class DraggableSnap : MonoBehaviour
     {
         if (!_dragging) return;
         
-        // Check exact same screen threshold as CardMovement.cs
-        // INSTANT SWAP: If we cross the line, immediately swap to the UI card
         if (Input.mousePosition.y < playAreaThresholdY)
         {
             _dragging = false;
             
             if (_worldObjectToCard != null)
             {
-                // This destroys the 3D object and tells the UI card to take over the mouse drag
                 _worldObjectToCard.ReturnToHand(); 
             }
             return; 
@@ -74,8 +74,7 @@ public class DraggableSnap : MonoBehaviour
             Vector3 worldPoint = ray.GetPoint(enter);
             Vector3 targetPos = worldPoint + _offset;
 
-            // Snap to Grid when in the Play Area
-            HexGridSnapper.Cell nearestCell = _grid.GetNearestCell(targetPos);
+            HexCell nearestCell = _hexGrid.GetNearestCell(targetPos);
             if (nearestCell != null)
             {
                 transform.position = new Vector3(nearestCell.center.x, elevatedY, nearestCell.center.z);
@@ -85,18 +84,16 @@ public class DraggableSnap : MonoBehaviour
 
     private void OnMouseUp()
     {
-        // Safety check: if the object was already converted to a card, abort!
         if (!_dragging) return; 
 
         _dragging = false;
 
-        // Normal placement attempt in Play Area
-        var nearest = _grid.GetNearestCell(transform.position);
+        HexCell nearest = _hexGrid.GetNearestCell(transform.position);
         bool placed = false;
         
         if (nearest != null)
         {
-            placed = _grid.TryReserveCell(nearest, transform);
+            placed = _gridOccupancy.TryReserveCell(nearest, transform);
             if (placed)
             {
                 transform.position = new Vector3(nearest.center.x, _originalPosition.y, nearest.center.z);
@@ -109,7 +106,7 @@ public class DraggableSnap : MonoBehaviour
             transform.position = _originalPosition;
             if (_originalCell != null)
             {
-                _grid.TryReserveCell(_originalCell, transform);
+                _gridOccupancy.TryReserveCell(_originalCell, transform);
             }
         }
     }

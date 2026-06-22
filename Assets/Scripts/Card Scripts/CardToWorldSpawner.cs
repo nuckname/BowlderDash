@@ -9,13 +9,13 @@ public class CardToWorldSpawner : MonoBehaviour
     [SerializeField] private LayerMask worldPlacementMask; 
 
     private GameObject _spawnedWorldObject;
-    private HexGridSnapper _hexGrid;
+    private GridManager _grid;
     private CardMovement _cardMovement;
 
     private void Awake()
     {
         _cardMovement = GetComponent<CardMovement>();
-        _hexGrid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<HexGridSnapper>();
+        _grid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<GridManager>();
 
         // Subscribe to events from the movement script
         _cardMovement.OnEnterPlayArea.AddListener(CreatePreview);
@@ -31,7 +31,7 @@ public class CardToWorldSpawner : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
             {
-                HexGridSnapper.Cell nearestCell = _hexGrid.GetNearestCell(hit.point);
+                HexCell nearestCell = _grid.GetNearestCell(hit.point);
                 if (nearestCell != null)
                 {
                     _spawnedWorldObject.transform.position = new Vector3(
@@ -69,12 +69,12 @@ public class CardToWorldSpawner : MonoBehaviour
         }
 
         bool successfullyPlaced = false;
-        HexGridSnapper.Cell targetCell = _hexGrid.GetNearestCell(_spawnedWorldObject.transform.position);
+        HexCell targetCell = _grid.GetNearestCell(_spawnedWorldObject.transform.position);
         
         // Attempt to reserve the cell for our spawned object
         if (targetCell != null)
         {
-            successfullyPlaced = _hexGrid.TryReserveCell(targetCell, _spawnedWorldObject.transform);
+            successfullyPlaced = _grid.TryReserveCell(targetCell, _spawnedWorldObject.transform);
         }
 
         if (successfullyPlaced)

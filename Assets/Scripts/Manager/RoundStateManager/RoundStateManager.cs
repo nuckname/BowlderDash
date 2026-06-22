@@ -13,7 +13,7 @@ public class RoundStateManager : MonoBehaviour
 
     [Header("Core Dependencies")]
     public ScoreCalculator scoreCalculator;
-    public HexGridSnapper grid;
+    public GridManager grid;
     public ShopUIManager shopUI;
     public GameObject cardHand;
     public Text instructionText;
@@ -64,6 +64,7 @@ public class RoundStateManager : MonoBehaviour
     public void StartNewGame()
     {
         ticketEconomy.ResetState();
+        grid.GenerateGrid();
         SwitchState(roundStart);
     }
 

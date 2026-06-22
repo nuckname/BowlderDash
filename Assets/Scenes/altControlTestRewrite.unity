@@ -982,6 +982,11 @@ GameObject:
   m_Component:
   - component: {fileID: 120957813}
   - component: {fileID: 120957812}
+  - component: {fileID: 120957818}
+  - component: {fileID: 120957817}
+  - component: {fileID: 120957816}
+  - component: {fileID: 120957815}
+  - component: {fileID: 120957814}
   m_Layer: 0
   m_Name: HexManager
   m_TagString: HexManager
@@ -1001,32 +1006,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0976d5d9c4b963946999cd2dc080ea92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 6
-  rows: 8
-  hexSize: 2.4
-  originOffset: {x: 0, y: 0, z: 0}
-  spawnPrefab: {fileID: 0}
-  clearBeforeSpawn: 0
-  childrenParent: {fileID: 0}
-  snapChildrenOnStart: 1
-  allowOnePerCell: 1
-  showGizmos: 1
-  showGridInPlay: 1
-  runtimeLineMaterial: {fileID: 0}
-  freeCellColor: {r: 0, g: 0.9529412, b: 0.7958554, a: 0.6}
-  occupiedCellColor: {r: 0, g: 1, b: 0, a: 0.6}
-  runtimeLineWidth: 0.1
-  ticketLineWidthOffset: 0.1
-  runtimeLineHeightOffset: 0.05
-  enableFrameTickets: 1
-  minTicketsPerFrame: 4
-  maxTicketsPerFrame: 6
-  ticketValue: 1
-  ticketHeightOffset: 1
-  ticketCellLineYOffset: 0.1
-  ticketVisualScale: 1
-  ticketCellColor: {r: 0.8679245, g: 0.5444998, b: 0.61002, a: 1}
-  ticketVisualPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
 --- !u!4 &120957813
 Transform:
   m_ObjectHideFlags: 0
@@ -1043,6 +1022,87 @@ Transform:
   - {fileID: 945140347}
   m_Father: {fileID: 1346736464}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &120957814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8072132f94363491e91aca38d8b6f78f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showGizmos: 1
+  showGridInPlay: 1
+  freeCellColor: {r: 0, g: 0.6, b: 1, a: 0.6}
+  occupiedCellColor: {r: 0, g: 1, b: 0, a: 0.6}
+  runtimeLineWidth: 0.08
+  runtimeLineHeightOffset: 0.05
+--- !u!114 &120957815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d1b95b5eb2f416582d3cdea9c4112b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columns: 10
+  rows: 5
+  hexSize: 0.5
+  originOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &120957816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0547af66771449b8b812c3127a04ecc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minTicketsPerFrame: 2
+  maxTicketsPerFrame: 4
+  ticketValue: 1
+  ticketHeightOffset: 0.08
+  ticketCellColor: {r: 1, g: 0.82, b: 0.18, a: 0.92}
+  ticketVisualPrefab: {fileID: 0}
+--- !u!114 &120957817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e222027eb84c14295bb80f2dcc6fe6d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowOnePerCell: 1
+--- !u!114 &120957818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06d1b95b5eb2f416582d3cdea9c4112b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columns: 3
+  rows: 2
+  hexSize: 2
+  originOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &121324095
 GameObject:
   m_ObjectHideFlags: 0
