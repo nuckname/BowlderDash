@@ -1073,7 +1073,7 @@ MonoBehaviour:
   ticketValue: 1
   ticketHeightOffset: 0.08
   ticketCellColor: {r: 1, g: 0.82, b: 0.18, a: 0.92}
-  ticketVisualPrefab: {fileID: 0}
+  ticketVisualPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
 --- !u!114 &120957817
 MonoBehaviour:
   m_ObjectHideFlags: 0
