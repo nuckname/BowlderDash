@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6991375030384004190}
   - component: {fileID: 7856950424251737157}
   - component: {fileID: 4386718380205329185}
+  - component: {fileID: 8896769548120430109}
   m_Layer: 0
   m_Name: FloatingScoreText
   m_TagString: Untagged
@@ -171,3 +172,23 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7856950424251737157}
   m_maskType: 0
+--- !u!114 &8896769548120430109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2221769346915677457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721fe722726db9a4fb267380255f39d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  style: 0
+  lifetime: 1.5
+  floatSpeed: 2
+  upwardSpeed: 1.5
+  swayFrequency: 5
+  swayAmplitude: 0.5
+  popForce: {x: 1.5, y: 4}
+  gravity: 8

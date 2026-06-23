@@ -33,6 +33,7 @@ public class RoundStateManager : MonoBehaviour
     public ShopState Shop = new ShopState();
     public ScoringState ScoringState = new ScoringState();
 
+    [SerializeField] private GameObject floatingTextPrefab;
     void Start()
     {
         if (shopUI != null)
@@ -115,6 +116,11 @@ public class RoundStateManager : MonoBehaviour
         {
             pin.InjectDependencies(manager.scoreCalculator);
         }
+    }
+    
+    public void SpawnFloatingText(string text, Vector3 position)
+    {
+        Instantiate(floatingTextPrefab, position, Quaternion.identity).GetComponent<FloatingText>().Initialize(text);
     }
 
     public void ResetLaneExploders() { }

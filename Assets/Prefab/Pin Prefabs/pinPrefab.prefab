@@ -86,9 +86,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6582164031549289575}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2186308725401229125}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
@@ -99,41 +96,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7218449948874417426}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3249321446885713653}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!1 &5919451674846626430 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
   m_PrefabInstance: {fileID: 6838562370640297775}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6582164031549289575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5919451674846626430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fallAngleThreshold: 45
-  hitterTag: Ball
-  minHitVelocity: 3
-  onHitEffects: []
-  onFallEffects:
-  - rid: 4911452856340709378
-  _allowPinToFallOver: 0
-  _allowPinToBePickedUp: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: 4911452856340709378
-      type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
-      data:
-        scoreValue: 10
-        multValue: 0
-        particleSystem: {fileID: 0}
 --- !u!54 &2186308725401229125
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -209,3 +180,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dummyCardPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
+--- !u!114 &3249321446885713653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919451674846626430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdd3bab0b90a38e47a950845f1936b30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallAngleThreshold: 45
+  hitterTag: Ball
+  minHitVelocity: 3
+  onHitEffects: []
+  onFallEffects:
+  - rid: 4911452994981855232
+  _allowPinToFallOver: 0
+  _allowPinToBePickedUp: 0
+  _isFallen: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 4911452994981855232
+      type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
+      data:
+        scoreValue: 10
+        multValue: 0

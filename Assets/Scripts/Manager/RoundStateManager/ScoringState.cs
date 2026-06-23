@@ -24,7 +24,7 @@ public class ScoringState : RoundBaseState
         // Only run the settlement check every 1 second
         if (timeSinceLastCheck >= checkInterval)
         {
-            timeSinceLastCheck = 0f; // Reset timer for the next interval
+            timeSinceLastCheck = 0f;
 
             if (AreAllPinsSettled(manager))
             {
@@ -57,15 +57,27 @@ public class ScoringState : RoundBaseState
         {
             if (pin.IsFallen)
             {
+                foreach (PinEffect effect in pin.onFallEffects)
+                {
+                    if (effect is ScoreMultiplierEffect scoreEffect)
+                    {
+                        string scoreText = scoreEffect.scoreValue.ToString();
+                        
+                        manager.SpawnFloatingText(scoreText, pin.transform.position);
+                        
+                        break;
+                    }
+                }
+
                 manager.scoreCalculator.AddStandardPinFallen();
             }
         }
 
         int finalScoreThisRound = manager.scoreCalculator.CalculateFinalScore();
         
-        Debug.Log($"Pins knocked down {finalScoreThisRound}");
+        // need to save this and add to it. 
+        manager.uiManager.totalScoreText.text = finalScoreThisRound.ToString();
     }
-
     public override void FixedUpdateState(RoundStateManager manager) { }
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }

@@ -8,6 +8,8 @@ public class CardToWorldSpawner : MonoBehaviour
     [SerializeField] private GameObject worldGameObjectPrefab; 
     [SerializeField] private LayerMask worldPlacementMask; 
 
+    [SerializeField] private CardPaidWithBowlingPinSO cardPaidWithBowlingPinSO;
+    
     private GameObject _spawnedWorldObject;
     private GridManager _grid;
     private CardMovement _cardMovement;
