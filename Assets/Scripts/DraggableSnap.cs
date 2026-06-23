@@ -24,8 +24,9 @@ public class DraggableSnap : MonoBehaviour
         _cam = Camera.main;
         // Is this better then using a string tag?
         _gridOccupancy = FindFirstObjectByType<GridOccupancy>();
+        _hexGrid = FindFirstObjectByType<HexGrid>();
+        
         _worldObjectToCard = GetComponent<WorldObjectToCard>();
-        _hexGrid = GetComponent<HexGrid>();
     }
 
     private void OnMouseDown()

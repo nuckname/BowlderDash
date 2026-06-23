@@ -31,10 +31,8 @@ public class ExplosionEffect : PinEffect
 
     private IEnumerator DetonationSequence(Pin context)
     {
-        // 1. Wait for the fuse
         yield return new WaitForSeconds(detonationDelay);
 
-        // 2. BOOM
         Detonate(context);
     }
 
@@ -43,10 +41,10 @@ public class ExplosionEffect : PinEffect
         Vector3 pos = context.transform.position;
         Debug.Log($"<color=orange><b>[ExplosionEffect]</b></color> Detonated at {pos}");
 
-        // 1. Apply visual feedback (Hide the pin, play particles)
+        // Apply visual feedback (Hide the pin, play particles)
         ApplyExplosionFeedback(context);
 
-        // 2. Physics and Interactions
+        // Physics and Interactions
         Collider[] hits = Physics.OverlapSphere(pos, explosionRadius);
         foreach (Collider hit in hits)
         {
@@ -59,7 +57,7 @@ public class ExplosionEffect : PinEffect
                 //hitPin.TriggerFall(); 
             }
 
-            // B. Apply physics blast
+            // Apply physics blast
             Rigidbody rb = hit.attachedRigidbody;
             if (rb != null && rb != context.GetComponent<Rigidbody>())
             {
@@ -70,7 +68,7 @@ public class ExplosionEffect : PinEffect
             }
         }
 
-        // 3. Optional: Environment Exploder script integration
+        // Optional: Environment Exploder script integration
         // (If you still need this for breaking lane walls, etc.)
         GameObject exploderObj = GameObject.FindGameObjectWithTag("Exploder");
         if (exploderObj != null)

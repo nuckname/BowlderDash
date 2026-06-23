@@ -1054,7 +1054,7 @@ MonoBehaviour:
   minTicketsPerFrame: 3
   maxTicketsPerFrame: 3
   ticketValue: 1
-  ticketHeightOffset: 0.5
+  ticketHeightOffset: 1
   ticketCellColor: {r: 1, g: 0.82, b: 0.18, a: 0.92}
   ticketVisualPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
 --- !u!114 &120957817
