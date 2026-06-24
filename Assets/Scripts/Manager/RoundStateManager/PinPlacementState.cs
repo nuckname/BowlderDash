@@ -15,7 +15,7 @@ public class PinPlacementState : RoundBaseState
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            manager.SwitchState(manager.ThrowingBall);
+            manager.SwitchState(manager.throwingBallState);
         }
         
     }

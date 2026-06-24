@@ -50,6 +50,7 @@
     <Compile Include="Assets\Scripts\Pins\PinEffects\VaseEffect.cs" />
     <Compile Include="Assets\Scripts\GridManager\GridTicketManager.cs" />
     <Compile Include="Assets\PathDrawer.cs" />
+    <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundOverState.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\PinEffect.cs" />

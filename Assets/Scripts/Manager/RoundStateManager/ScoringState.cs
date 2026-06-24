@@ -8,9 +8,14 @@ public class ScoringState : RoundBaseState
     private float checkInterval = 1f;
     private float timeSinceLastCheck = 0f;
 
+    private RoundStateManager _manager;
+
     public override void EnterState(RoundStateManager manager)
     {
         manager.UpdateInstructionText("Waiting for pins to settle...");
+        
+        _manager = manager;
+        
         hasScored = false;
         timeSinceLastCheck = 0f;
     }
@@ -26,19 +31,18 @@ public class ScoringState : RoundBaseState
         {
             timeSinceLastCheck = 0f;
 
-            if (AreAllPinsSettled(manager))
+            if (AreAllPinsSettled())
             {
-                CalculateScore(manager);
+                CalculateScore();
                 hasScored = true;
-
-                // switch state
+                GoToNextRound();
             }
         }
     }
 
-    private bool AreAllPinsSettled(RoundStateManager manager)
+    private bool AreAllPinsSettled()
     {
-        foreach (Pin pin in manager.allActivePinsInTheFrame)
+        foreach (Pin pin in _manager.allActivePinsInTheFrame)
         {
             if (!pin.IsSettled) 
             {
@@ -49,11 +53,36 @@ public class ScoringState : RoundBaseState
         return true;
     }
 
-    private void CalculateScore(RoundStateManager manager)
+    private void GoToNextRound()
+    {
+        int ballsThrown = PlayerSheet.Instance.GetAmountOfBallsThrown();
+        int maxBallsAllowed = _manager.roundData.GetRoundInfo(_manager.currentRound).maxBallsAllowedToThrow;
+        int scoreNeeded = _manager.roundData.GetRoundInfo(_manager.currentRound).scoreNeededToBeat;
+        int currentScore = PlayerSheet.Instance.GetScore();
+        
+        if (ballsThrown == maxBallsAllowed)
+        {
+            _manager.SwitchState(_manager.roundOverState);
+        }
+        
+        if (currentScore >= scoreNeeded)
+        {
+            // Next Frame and go to shop
+            _manager.SwitchState(_manager.shopState);
+
+        }
+        else
+        {
+            _manager.SwitchState(_manager.roundOverState);
+        }
+        
+    }
+    
+    private void CalculateScore()
     {
         int scoreThisRound = 0;
 
-        foreach (Pin pin in manager.allActivePinsInTheFrame)
+        foreach (Pin pin in _manager.allActivePinsInTheFrame)
         {
             if (pin.IsFallen)
             {
@@ -63,20 +92,22 @@ public class ScoringState : RoundBaseState
                     {
                         string scoreText = scoreEffect.scoreValue.ToString();
                         
-                        manager.SpawnFloatingText(scoreText, pin.transform.position);
+                        _manager.SpawnFloatingText(scoreText, pin.transform.position);
                         
                         break;
                     }
                 }
 
-                manager.scoreCalculator.AddStandardPinFallen();
+                _manager.scoreCalculator.AddStandardPinFallen();
             }
         }
 
-        int finalScoreThisRound = manager.scoreCalculator.CalculateFinalScore();
+        int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
+        
+        PlayerSheet.Instance.AddScore(finalScoreThisRound);
         
         // need to save this and add to it. 
-        manager.uiManager.totalScoreText.text = finalScoreThisRound.ToString();
+        _manager.uiManager.totalScoreText.text = finalScoreThisRound.ToString();
     }
     public override void FixedUpdateState(RoundStateManager manager) { }
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }

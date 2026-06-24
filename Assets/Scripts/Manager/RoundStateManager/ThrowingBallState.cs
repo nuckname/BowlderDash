@@ -70,10 +70,9 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         pathDrawer.Stop();
         
-        if (manager.cameraFollowScript != null)
-        {
-            manager.cameraFollowScript.StopTracking();
-        }
+        manager.cameraFollowScript.StopTracking();
+
+        PlayerSheet.Instance.AddBallsThrown();
         
         currentManager = null;
     }
@@ -85,12 +84,12 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         if (other.gameObject.CompareTag("Ball"))
         {
-            manager.SwitchState(manager.ScoringState);
+            manager.SwitchState(manager.scoringState);
         }
     }
 
     public override void OnTriggerExit(RoundStateManager manager, Collider other)
     {
-        PlayerSheet.Instance.playerAmountOfBallsThrown++;
+        
     }
 }

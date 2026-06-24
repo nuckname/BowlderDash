@@ -2164,9 +2164,10 @@ MonoBehaviour:
   ticketEconomy: {fileID: 11400000, guid: 17f1c2355522ff343ad3cbb278aaeb0c, type: 2}
   roundData: {fileID: 11400000, guid: 9b97d23778ffc45478280cb2b71a7499, type: 2}
   currentRound: 0
-  ThrowingBall:
+  throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
+  floatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -10084,7 +10085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCurrentTicket: 0
-  playerAmountOfBallsThrown: 0
+  currentScore: 0
   lastFrameUsedTicketBonus: 0
   lastFrameUsedStrikeTicketBonus: 0
   ticketsEarnedLastFrame: 0

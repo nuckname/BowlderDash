@@ -27,11 +27,12 @@ public class RoundStateManager : MonoBehaviour
     public int currentRound = 0;
 
     // States
-    public RoundStartState roundStart = new RoundStartState();
-    public ThrowingBallState ThrowingBall = new ThrowingBallState();
-    public PinPlacementState PinPlacement = new PinPlacementState();
-    public ShopState Shop = new ShopState();
-    public ScoringState ScoringState = new ScoringState();
+    public RoundStartState roundStartState = new RoundStartState();
+    public ThrowingBallState throwingBallState = new ThrowingBallState();
+    public  PinPlacementState pinPlacementState = new PinPlacementState();
+    public ShopState shopState = new ShopState();
+    public ScoringState scoringState = new ScoringState();
+    public  RoundOverState roundOverState = new RoundOverState();
 
     [SerializeField] private GameObject floatingTextPrefab;
     void Start()
@@ -54,11 +55,11 @@ public class RoundStateManager : MonoBehaviour
         // Debug testing
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if (currentState == roundStart) SwitchState(PinPlacement);
-            else if (currentState == PinPlacement) SwitchState(ThrowingBall);
-            else if (currentState == ThrowingBall) SwitchState(ScoringState);
-            else if (currentState == ScoringState) SwitchState(Shop);
-            else if (currentState == Shop) SwitchState(roundStart);
+            if (currentState == roundStartState) SwitchState(pinPlacementState);
+            else if (currentState == pinPlacementState) SwitchState(throwingBallState);
+            else if (currentState == throwingBallState) SwitchState(scoringState);
+            else if (currentState == scoringState) SwitchState(shopState);
+            else if (currentState == shopState) SwitchState(roundStartState);
         }
     }
 
@@ -66,7 +67,7 @@ public class RoundStateManager : MonoBehaviour
     {
         ticketEconomy.ResetState();
         grid.GenerateGrid();
-        SwitchState(roundStart);
+        SwitchState(roundStartState);
     }
 
     public void SwitchState(RoundBaseState newState)

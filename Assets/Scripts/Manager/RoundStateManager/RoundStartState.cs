@@ -15,7 +15,7 @@ public class RoundStartState : RoundBaseState
         manager.uiManager.RefreshHUD(
             PlayerSheet.Instance.playerCurrentTicket,
             manager.currentRound,
-            PlayerSheet.Instance.playerAmountOfBallsThrown,
+            PlayerSheet.Instance.GetAmountOfBallsThrown(),
             roundInfo,
             manager.roundData.GetMaxRoundNumber()
         );
@@ -24,7 +24,7 @@ public class RoundStartState : RoundBaseState
 
         HandleGrid(manager);
 
-        manager.SwitchState(manager.PinPlacement);
+        manager.SwitchState(manager.pinPlacementState);
     }
 
     private void HandleGrid(RoundStateManager manager)
