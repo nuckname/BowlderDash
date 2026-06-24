@@ -70,7 +70,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         cardAnimator.Initialize(this);
     }
 
-// ADD THIS METHOD: Forces the card into a drag state programmatically
+    // Forces the card into a drag state programmatically
     public void ForceStartDrag()
     {
         // Tell HorizontalCardHolder to set this as the selected card
