@@ -98,7 +98,7 @@ PrefabInstance:
       addedObject: {fileID: 7218449948874417426}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3249321446885713653}
+      addedObject: {fileID: 6346728117955831566}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!1 &5919451674846626430 stripped
 GameObject:
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dummyCardPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
---- !u!114 &3249321446885713653
+--- !u!114 &6346728117955831566
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5919451674846626430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdd3bab0b90a38e47a950845f1936b30, type: 3}
+  m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fallAngleThreshold: 45
@@ -197,14 +197,14 @@ MonoBehaviour:
   minHitVelocity: 3
   onHitEffects: []
   onFallEffects:
-  - rid: 4911452994981855232
+  - rid: 4249070929281024002
   _allowPinToFallOver: 0
   _allowPinToBePickedUp: 0
   _isFallen: 0
   references:
     version: 2
     RefIds:
-    - rid: 4911452994981855232
+    - rid: 4249070929281024002
       type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
       data:
         scoreValue: 10
