@@ -26,16 +26,7 @@ public class WorldObjectToCard : MonoBehaviour
         {
             HorizontalCardHolder.Instance.AddCardToHand(dummyCardPrefab);
         }
-
-        // Un-reserve the Hex Cell so a new object can be placed there later
-        Debug.LogError("unreserve hexcell");
-        if (_grid != null)
-        {
-            // cell = _grid.GetNearestCell(transform.position);
-                // will need a method in HexGridSnapper to clear the reservation.
-                //? _hexGrid.FreeCell(cell);
-        }
-
+        
         Destroy(gameObject);
     }
 }

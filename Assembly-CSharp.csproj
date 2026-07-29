@@ -129,8 +129,8 @@
     <Compile Include="Assets/Scripts/Card Scripts/Card.cs" />
     <Compile Include="Assets/Scripts/Manager/ShopUIManager.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
-    <Compile Include="Assets/Scripts/Pins/PinEffects/ExplosionEffect.cs" />
     <Compile Include="Assets/ScriptableObjects/CardSO/CardPaidWithBowlingPinSO.cs" />
+    <Compile Include="Assets/Scripts/Pins/PinEffects/ExplosionEffect.cs" />
     <Compile Include="Assets/Scripts/Manager/RoundStateManager/PinPlacementState.cs" />
     <Compile Include="Assets/Scripts/Interface/IPathListener.cs" />
     <Compile Include="Assets/Scripts/Pins/Pin Refactor/ScoreMultiplierEffect.cs" />
