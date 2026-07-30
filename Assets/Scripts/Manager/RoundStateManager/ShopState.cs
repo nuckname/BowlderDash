@@ -9,6 +9,17 @@ public class ShopState : RoundBaseState
         manager.UpdateInstructionText("Shop phase. Spend tickets, then click Continue.");
 
         manager.shopUI.Show();
+        
+        // Reset UI
+        RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
+        
+        manager.uiManager.RefreshHUD(
+            PlayerSheet.Instance.playerCurrentTicket,
+            manager.currentRound,
+            PlayerSheet.Instance.GetAmountOfBallsThrown(),
+            roundInfo,
+            manager.roundData.GetMaxRoundNumber()
+        );
     }
 
     public override void UpdateState(RoundStateManager manager) { }
