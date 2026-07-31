@@ -133,6 +133,28 @@ public class HorizontalCardHolder : MonoBehaviour
     {
         HandleDebugInput();
         HandleCardSwapping();
+        HandleHotkeyInput();
+    }
+    
+    private void HandleHotkeyInput()
+    {
+        KeyCode[] numberKeys = { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5 };
+
+        for (int i = 0; i < numberKeys.Length; i++)
+        {
+            if (Input.GetKeyDown(numberKeys[i]))
+            {
+                if (i < cardsInHand.Count)
+                {
+                    if (selectedCardMovement != null && selectedCardMovement != cardsInHand[i])
+                    {
+                        selectedCardMovement.OnEndDrag(null);
+                    }
+
+                    cardsInHand[i].ForceStartDrag();
+                }
+            }
+        }
     }
 
     private void HandleDebugInput()
