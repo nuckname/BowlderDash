@@ -13,6 +13,7 @@ TagManager:
   - HexManager
   - VisualCardHandler
   - GridPlane
+  - ThePit
   layers:
   - Default
   - TransparentFX

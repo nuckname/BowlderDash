@@ -2,9 +2,14 @@ using UnityEngine;
 
 public class RoundOverState : RoundBaseState
 {
+    private float waitTimer = 0f;
+    private float waitTime = 2.5f;
+
     public override void EnterState(RoundStateManager manager)
     {
         manager.UpdateInstructionText("Round Over! Click to continue.");
+        
+        waitTimer = 0f;
 
         // We are getting these twice, maybe can store them later in the manager
         foreach (Pin pin in manager.allActivePinsInTheFrame)
@@ -25,7 +30,9 @@ public class RoundOverState : RoundBaseState
 
     public override void UpdateState(RoundStateManager manager)
     {
-        if (Input.GetMouseButtonDown(0))
+        waitTimer += Time.deltaTime;
+
+        if (waitTimer >= waitTime || Input.GetMouseButtonDown(0))
         {
             manager.SwitchState(manager.roundStartState);
         }

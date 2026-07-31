@@ -92,10 +92,13 @@ PrefabInstance:
       addedObject: {fileID: 2992027067406168073}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2167565981615595077}
+      addedObject: {fileID: 7218449948874417426}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7218449948874417426}
+      addedObject: {fileID: 6469380549180960215}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6548506033457879598}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!1 &5919451674846626430 stripped
 GameObject:
@@ -111,8 +114,8 @@ Rigidbody:
   m_GameObject: {fileID: 5919451674846626430}
   serializedVersion: 4
   m_Mass: 2
-  m_Drag: 0
-  m_AngularDrag: 0
+  m_Drag: 1
+  m_AngularDrag: 1
   m_CenterOfMass: {x: 0, y: 0.2, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -143,8 +146,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragElevation: 3
   playAreaThresholdY: 500
---- !u!65 &2167565981615595077
-BoxCollider:
+--- !u!114 &7218449948874417426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919451674846626430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dummyCardPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
+--- !u!136 &6469380549180960215
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -161,10 +177,12 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2.1146393, y: 6.1200004, z: 2.11464}
+  serializedVersion: 2
+  m_Radius: 1.05732
+  m_Height: 6.1200004
+  m_Direction: 1
   m_Center: {x: 0, y: 3.0600002, z: 0}
---- !u!114 &7218449948874417426
+--- !u!114 &6548506033457879598
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -173,7 +191,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 5919451674846626430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
+  m_Script: {fileID: 11500000, guid: cdd3bab0b90a38e47a950845f1936b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dummyCardPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
+  fallAngleThreshold: 45
+  hitterTag: Ball
+  minHitVelocity: 3
+  hasEnterTheHoleAtTheBack: 0
+  onHitEffects: []
+  onFallEffects:
+  - rid: 2609993920827621377
+  _allowPinToFallOver: 0
+  _allowPinToBePickedUp: 0
+  _isFallen: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 2609993920827621377
+      type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
+      data:
+        scoreValue: 10
+        multValue: 0.5

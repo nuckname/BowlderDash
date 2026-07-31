@@ -5,9 +5,17 @@ using System.Collections.Generic;
 public class ScoringState : RoundBaseState
 {
     private bool hasScored = false;
+    private bool pinsHaveSettled = false;
     private float checkInterval = 1f;
     private float timeSinceLastCheck = 0f;
-
+    
+    private float waitTimer = 0f;
+    private float waitTimeBeforeScoring = 4f;
+    
+    // Floating text offsets
+    private float yOffsetPinInHole = 16.0f; 
+    private float yOffset = 2.0f;
+    
     private RoundStateManager _manager;
 
     public override void EnterState(RoundStateManager manager)
@@ -17,21 +25,37 @@ public class ScoringState : RoundBaseState
         _manager = manager;
         
         hasScored = false;
+        pinsHaveSettled = false;
         timeSinceLastCheck = 0f;
+        waitTimer = 0f;
     }
 
     public override void UpdateState(RoundStateManager manager) 
     { 
         if (hasScored) return;
 
-        timeSinceLastCheck += Time.deltaTime;
-
-        // Only run the settlement check every 1 second
-        if (timeSinceLastCheck >= checkInterval)
+        if (!pinsHaveSettled)
         {
-            timeSinceLastCheck = 0f;
+            timeSinceLastCheck += Time.deltaTime;
 
-            if (AreAllPinsSettled())
+            // Only run the settlement check every 1 second
+            if (timeSinceLastCheck >= checkInterval)
+            {
+                timeSinceLastCheck = 0f;
+
+                if (AreAllPinsSettled())
+                {
+                    pinsHaveSettled = true;
+                    SpawnFloatingTexts();
+                }
+            }
+        }
+        else
+        {
+            // Once pins have settled, we start the wait timer before scoring
+            waitTimer += Time.deltaTime;
+            
+            if (waitTimer >= waitTimeBeforeScoring)
             {
                 CalculateScore();
                 hasScored = true;
@@ -51,6 +75,52 @@ public class ScoringState : RoundBaseState
             }
         }
         return true;
+    }
+
+    private void SpawnFloatingTexts()
+    {
+        foreach (Pin pin in _manager.allActivePinsInTheFrame)
+        {
+            if (pin.IsFallen)
+            {
+                foreach (PinEffect effect in pin.onFallEffects)
+                {
+                    if (effect is ScoreMultiplierEffect scoreEffect)
+                    {
+                        string scoreText = scoreEffect.scoreValue.ToString();
+
+                        if (pin.hasEnterTheHoleAtTheBack)
+                        {
+                            Vector3 spawnPos = pin.transform.position + new Vector3(0, yOffsetPinInHole, 0);
+                            _manager.SpawnFloatingText(scoreText, spawnPos);
+                        }
+                        else
+                        {
+                            Vector3 spawnPos = pin.transform.position + new Vector3(0, 2, 0);
+                            _manager.SpawnFloatingText(scoreText, spawnPos);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void CalculateScore()
+    {
+        foreach (Pin pin in _manager.allActivePinsInTheFrame)
+        {
+            if (pin.IsFallen)
+            {
+                _manager.scoreCalculator.AddStandardPinFallen();
+            }
+        }
+
+        int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
+        
+        PlayerSheet.Instance.AddScore(finalScoreThisRound);
+        
+        // need to save this and add to it. 
+        _manager.uiManager.totalScoreText.text = finalScoreThisRound.ToString();
     }
 
     private void GoToNextRound()
@@ -78,37 +148,6 @@ public class ScoringState : RoundBaseState
         
     }
     
-    private void CalculateScore()
-    {
-        int scoreThisRound = 0;
-
-        foreach (Pin pin in _manager.allActivePinsInTheFrame)
-        {
-            if (pin.IsFallen)
-            {
-                foreach (PinEffect effect in pin.onFallEffects)
-                {
-                    if (effect is ScoreMultiplierEffect scoreEffect)
-                    {
-                        string scoreText = scoreEffect.scoreValue.ToString();
-                        
-                        _manager.SpawnFloatingText(scoreText, pin.transform.position);
-                        
-                        break;
-                    }
-                }
-
-                _manager.scoreCalculator.AddStandardPinFallen();
-            }
-        }
-
-        int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
-        
-        PlayerSheet.Instance.AddScore(finalScoreThisRound);
-        
-        // need to save this and add to it. 
-        _manager.uiManager.totalScoreText.text = finalScoreThisRound.ToString();
-    }
     public override void FixedUpdateState(RoundStateManager manager) { }
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }

@@ -12,6 +12,8 @@ public class Pin : MonoBehaviour
     public float fallAngleThreshold = 45f;
     public string hitterTag = "Ball";
     public float minHitVelocity = 3f;
+
+    public bool hasEnterTheHoleAtTheBack = false;
     
     [Header("Effects")]
     [SerializeReference] public List<PinEffect> onHitEffects = new List<PinEffect>();
@@ -102,6 +104,14 @@ public class Pin : MonoBehaviour
     {
         HandleHit(collision.collider);
     }
+    
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("ThePit"))
+        {
+            hasEnterTheHoleAtTheBack = true;
+        }
+    }
 
     protected virtual void HandleHit(Collider other)
     {
@@ -184,11 +194,13 @@ public class Pin : MonoBehaviour
         if (ps != null)
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
-
+    
+    // Why is this here?
     public virtual void ResetPin()
     {
         _isFallen = false;
         _hasBeenHit = false;
+        hasEnterTheHoleAtTheBack = false;
 
         if (_renderer) _renderer.enabled = true;
         if (_collider) _collider.enabled = true;
