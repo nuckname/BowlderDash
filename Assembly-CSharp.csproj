@@ -63,9 +63,9 @@
     <Compile Include="Assets\Scripts\GridManager\HexGridVisuals.cs" />
     <Compile Include="Assets\Scripts\MainMenuController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\ShaderCode.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\Scripts\ScoreCalculator.cs" />
-    <Compile Include="Assets\Scripts\Card Scripts\ShaderCode.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\BallCollisionCurvatureStopper.cs" />
@@ -86,8 +86,8 @@
     <Compile Include="Assets\Scripts\Card Scripts\CardToWorldSpawner.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\MultiEffect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
-    <Compile Include="Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" />
     <Compile Include="Assets\ScriptableObjects\PinCardsSO\PinCardData.cs" />
+    <Compile Include="Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexGrid.cs" />
     <Compile Include="Assets\Scripts\Ball\CameraFollowBallScript.cs" />
     <Compile Include="Assets\Scripts\GridManager.cs" />
@@ -122,15 +122,15 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundStateManager.cs" />
     <Compile Include="Assets\Scripts\Tumbling.cs" />
-    <Compile Include="Assets\Scripts\Ball\BallController.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\TicketEffect.cs" />
+    <Compile Include="Assets\Scripts\Ball\BallController.cs" />
     <Compile Include="Assets\Scripts\FloatingTextScript\FloatingText.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\Pin.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\Manager\ShopUIManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
-    <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
     <Compile Include="Assets\ScriptableObjects\CardSO\CardPaidWithBowlingPinSO.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\PinPlacementState.cs" />
     <Compile Include="Assets\Scripts\Interface\IPathListener.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\ScoreMultiplierEffect.cs" />
@@ -413,11 +413,11 @@
     <Reference Include="ReportGeneratorMerged">
       <HintPath>D:\unity projects\bowlderdash\physics_test\Library\PackageCache\com.unity.testtools.codecoverage@1.2.6\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>D:\unity projects\bowlderdash\physics_test\Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="DOTween">
       <HintPath>D:\unity projects\bowlderdash\physics_test\Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
+      <HintPath>D:\unity projects\bowlderdash\physics_test\Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:\Unity Install\2022.3.62f3\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
