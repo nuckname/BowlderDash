@@ -27,7 +27,6 @@ public class RoundOverState : RoundBaseState
     {
         if (Input.GetMouseButtonDown(0))
         {
-            // Transitions to the next appropriate state, e.g., pin placement or round start
             manager.SwitchState(manager.roundStartState);
         }
     }

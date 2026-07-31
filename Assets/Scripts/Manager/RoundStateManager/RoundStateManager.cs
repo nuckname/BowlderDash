@@ -68,6 +68,12 @@ public class RoundStateManager : MonoBehaviour
         ticketEconomy.ResetState();
         grid.GenerateGrid();
         SwitchState(roundStartState);
+        
+        RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
+        uiManager.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
+        uiManager.UpdateScoreText(0);
+        
+        uiManager.UpdateBallsText(0, roundInfo.maxBallsAllowedToThrow);
     }
 
     public void SwitchState(RoundBaseState newState)
