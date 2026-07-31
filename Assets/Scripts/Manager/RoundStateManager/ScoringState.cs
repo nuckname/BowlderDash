@@ -18,6 +18,11 @@ public class ScoringState : RoundBaseState
     
     private RoundStateManager _manager;
 
+    private Queue<Pin> _fallenPinsQueue = new Queue<Pin>();
+    private bool _isSpawningText = false;
+    private float _textSpawnTimer = 0f;
+    private float _textSpawnDelay = 1f;
+
     public override void EnterState(RoundStateManager manager)
     {
         manager.UpdateInstructionText("Waiting for pins to settle...");
@@ -28,6 +33,10 @@ public class ScoringState : RoundBaseState
         pinsHaveSettled = false;
         timeSinceLastCheck = 0f;
         waitTimer = 0f;
+
+        _fallenPinsQueue.Clear();
+        _isSpawningText = false;
+        _textSpawnTimer = 0f;
     }
 
     public override void UpdateState(RoundStateManager manager) 
@@ -36,31 +45,66 @@ public class ScoringState : RoundBaseState
 
         if (!pinsHaveSettled)
         {
-            timeSinceLastCheck += Time.deltaTime;
-
-            // Only run the settlement check every 1 second
-            if (timeSinceLastCheck >= checkInterval)
-            {
-                timeSinceLastCheck = 0f;
-
-                if (AreAllPinsSettled())
-                {
-                    pinsHaveSettled = true;
-                    SpawnFloatingTexts();
-                }
-            }
+            HandlePinSettlement();
+        }
+        else if (_isSpawningText)
+        {
+            HandleFloatingTextSpawning();
         }
         else
         {
-            // Once pins have settled, we start the wait timer before scoring
-            waitTimer += Time.deltaTime;
-            
-            if (waitTimer >= waitTimeBeforeScoring)
+            HandleWaitAndScore();
+        }
+    }
+
+    private void HandlePinSettlement()
+    {
+        timeSinceLastCheck += Time.deltaTime;
+
+        // Only run the settlement check every 1 second
+        if (timeSinceLastCheck >= checkInterval)
+        {
+            timeSinceLastCheck = 0f;
+
+            if (AreAllPinsSettled())
             {
-                CalculateScore();
-                hasScored = true;
-                GoToNextRound();
+                pinsHaveSettled = true;
+                PrepareFloatingTexts();
             }
+        }
+    }
+
+    private void HandleFloatingTextSpawning()
+    {
+        _textSpawnTimer += Time.deltaTime;
+
+        if (_textSpawnTimer >= _textSpawnDelay)
+        {
+            _textSpawnTimer = 0f;
+            
+            if (_fallenPinsQueue.Count > 0)
+            {
+                Pin currentPin = _fallenPinsQueue.Dequeue();
+                SpawnTextForSinglePin(currentPin);
+            }
+
+            if (_fallenPinsQueue.Count == 0)
+            {
+                _isSpawningText = false;
+            }
+        }
+    }
+
+    private void HandleWaitAndScore()
+    {
+        // Once pins have settled, we start the wait timer before scoring
+        waitTimer += Time.deltaTime;
+        
+        if (waitTimer >= waitTimeBeforeScoring)
+        {
+            CalculateScore();
+            hasScored = true;
+            GoToNextRound();
         }
     }
 
@@ -77,29 +121,40 @@ public class ScoringState : RoundBaseState
         return true;
     }
 
-    private void SpawnFloatingTexts()
+    private void PrepareFloatingTexts()
     {
         foreach (Pin pin in _manager.allActivePinsInTheFrame)
         {
             if (pin.IsFallen)
             {
-                foreach (PinEffect effect in pin.onFallEffects)
-                {
-                    if (effect is ScoreMultiplierEffect scoreEffect)
-                    {
-                        string scoreText = scoreEffect.scoreValue.ToString();
+                _fallenPinsQueue.Enqueue(pin);
+            }
+        }
+        
+        if (_fallenPinsQueue.Count > 0)
+        {
+            _isSpawningText = true;
+            _textSpawnTimer = _textSpawnDelay; // Start at delay so the first one spawns instantly
+        }
+    }
 
-                        if (pin.hasEnterTheHoleAtTheBack)
-                        {
-                            Vector3 spawnPos = pin.transform.position + new Vector3(0, yOffsetPinInHole, 0);
-                            _manager.SpawnFloatingText(scoreText, spawnPos);
-                        }
-                        else
-                        {
-                            Vector3 spawnPos = pin.transform.position + new Vector3(0, 2, 0);
-                            _manager.SpawnFloatingText(scoreText, spawnPos);
-                        }
-                    }
+    private void SpawnTextForSinglePin(Pin pin)
+    {
+        foreach (PinEffect effect in pin.onFallEffects)
+        {
+            if (effect is ScoreMultiplierEffect scoreEffect)
+            {
+                string scoreText = scoreEffect.scoreValue.ToString();
+
+                if (pin.hasEnterTheHoleAtTheBack)
+                {
+                    Vector3 spawnPos = pin.transform.position + new Vector3(0, yOffsetPinInHole, 0);
+                    _manager.SpawnFloatingText(scoreText, spawnPos);
+                }
+                else
+                {
+                    Vector3 spawnPos = pin.transform.position + new Vector3(0, yOffset, 0);
+                    _manager.SpawnFloatingText(scoreText, spawnPos);
                 }
             }
         }
