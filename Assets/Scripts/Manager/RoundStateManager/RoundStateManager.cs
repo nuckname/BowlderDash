@@ -25,7 +25,8 @@ public class RoundStateManager : MonoBehaviour
     
     [Header("Round Vars")]
     public int currentRound = 0;
-
+    public int amountOfCardsToDrawEachTurn = 10;
+    
     // States
     public RoundStartState roundStartState = new RoundStartState();
     public ThrowingBallState throwingBallState = new ThrowingBallState();

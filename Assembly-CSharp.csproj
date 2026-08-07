@@ -78,7 +78,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
-    <Compile Include="Assets\Scripts\Card Scripts\HorizontalCardHolder.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
@@ -134,6 +133,7 @@
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\PinPlacementState.cs" />
     <Compile Include="Assets\Scripts\Interface\IPathListener.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\ScoreMultiplierEffect.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\CardHandController.cs" />
     <Compile Include="Assets\Scripts\Pins\WorldObjectToCard.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

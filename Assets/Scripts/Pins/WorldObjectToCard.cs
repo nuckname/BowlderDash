@@ -22,9 +22,9 @@ public class WorldObjectToCard : MonoBehaviour
     public void ReturnToHand()
     {
         // Spawn the dummy card into the UI using our new centralized method
-        if (HorizontalCardHolder.Instance != null && dummyCardPrefab != null)
+        if (CardHandController.Instance != null && dummyCardPrefab != null)
         {
-            HorizontalCardHolder.Instance.AddCardToHand(dummyCardPrefab);
+            CardHandController.Instance.AddCardToHand(dummyCardPrefab);
         }
         
         Destroy(gameObject);

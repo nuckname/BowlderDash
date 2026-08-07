@@ -8,9 +8,9 @@ using System.Linq;
 // https://github.com/mixandjam/balatro-feel
 
 
-public class HorizontalCardHolder : MonoBehaviour
+public class CardHandController : MonoBehaviour
 {
-    public static HorizontalCardHolder Instance { get; private set; }
+    public static CardHandController Instance { get; private set; }
 
     [SerializeField] private CardMovement selectedCardMovement;
     [SerializeReference] private CardMovement hoveredCardMovement;
@@ -29,14 +29,14 @@ public class HorizontalCardHolder : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+
+        rect = GetComponent<RectTransform>();
     }
 
-    void Start()
+    public void Draw(int amount)
     {
-        rect = GetComponent<RectTransform>();
-
         // Spawn initial cards
-        for (int i = 0; i < cardsToSpawn; i++)
+        for (int i = 0; i < amount; i++)
         {
             Instantiate(slotPrefab, transform);
         }
@@ -45,6 +45,12 @@ public class HorizontalCardHolder : MonoBehaviour
 
         for (int i = 0; i < cardsInHand.Count; i++)
         {
+            // Clear existing listeners to prevent duplicates if Draw is called multiple times across rounds
+            cardsInHand[i].PointerEnterEvent.RemoveAllListeners();
+            cardsInHand[i].PointerExitEvent.RemoveAllListeners();
+            cardsInHand[i].BeginDragEvent.RemoveAllListeners();
+            cardsInHand[i].EndDragEvent.RemoveAllListeners();
+            
             RegisterCardEvents(cardsInHand[i], i);
         }
 
