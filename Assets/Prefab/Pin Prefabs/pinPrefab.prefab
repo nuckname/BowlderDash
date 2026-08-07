@@ -98,7 +98,13 @@ PrefabInstance:
       addedObject: {fileID: 6469380549180960215}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6548506033457879598}
+      addedObject: {fileID: 491747499473032632}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7268848984046806169}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8327561609825615850}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!1 &5919451674846626430 stripped
 GameObject:
@@ -113,7 +119,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5919451674846626430}
   serializedVersion: 4
-  m_Mass: 2
+  m_Mass: 1
   m_Drag: 1
   m_AngularDrag: 1
   m_CenterOfMass: {x: 0, y: 0.2, z: 0}
@@ -158,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dummyCardPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
+  dummyCardPrefab: {fileID: 0}
 --- !u!136 &6469380549180960215
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -179,10 +185,10 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.05732
-  m_Height: 6.1200004
+  m_Height: 4.0935993
   m_Direction: 1
-  m_Center: {x: 0, y: 3.0600002, z: 0}
---- !u!114 &6548506033457879598
+  m_Center: {x: 0, y: 2.0467997, z: 0}
+--- !u!114 &491747499473032632
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,7 +197,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5919451674846626430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdd3bab0b90a38e47a950845f1936b30, type: 3}
+  m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   fallAngleThreshold: 45
@@ -200,15 +206,59 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   onHitEffects: []
   onFallEffects:
-  - rid: 2609993920827621377
+  - rid: 6055849625722814464
   _allowPinToFallOver: 0
   _allowPinToBePickedUp: 0
   _isFallen: 0
   references:
     version: 2
     RefIds:
-    - rid: 2609993920827621377
+    - rid: 6055849625722814464
       type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
       data:
         scoreValue: 10
         multValue: 0.5
+--- !u!136 &7268848984046806169
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919451674846626430}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.59257126
+  m_Height: 2.1922474
+  m_Direction: 1
+  m_Center: {x: 0, y: 5.023877, z: -0.12023735}
+--- !u!65 &8327561609825615850
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919451674846626430}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1877639, y: 0.10426903, z: 1.1102028}
+  m_Center: {x: -0.003252387, y: 0.052134514, z: -0.02956009}
