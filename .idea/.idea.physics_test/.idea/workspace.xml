@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefab/Cards/CardSlot.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Cards/CardSlot.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/altControlTestRewrite.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/altControlTestRewrite.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardMovement.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardMovement.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardToWorldSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardToWorldSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/PinBasic.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/PinBasic.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardHandController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardHandController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/WorldObjectToCard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/WorldObjectToCard.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -159,7 +158,7 @@
       <workItem from="1782185581996" duration="3356000" />
       <workItem from="1785471119367" duration="5644000" />
       <workItem from="1786171128372" duration="1357000" />
-      <workItem from="1786172628730" duration="1996000" />
+      <workItem from="1786172628730" duration="2889000" />
     </task>
     <servers />
   </component>

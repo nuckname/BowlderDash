@@ -4257,6 +4257,30 @@ PrefabInstance:
       propertyPath: discardPileTransform
       value: 
       objectReference: {fileID: 1790490390}
+    - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: startingDeck.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: startingDeck.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+    - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: startingDeck.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+    - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: startingDeck.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+    - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: startingDeck.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+    - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: startingDeck.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

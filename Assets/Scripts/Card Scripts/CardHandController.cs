@@ -23,6 +23,10 @@ public class CardHandController : MonoBehaviour
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
 
+    [Header("Deck Settings")]
+    [SerializeField] private List<CardDataSO> startingDeck = new List<CardDataSO>();
+    private List<CardDataSO> _currentDeck = new List<CardDataSO>();
+    
 	[Header("Discard Settings")]
     [SerializeField] private RectTransform discardPileTransform;
     [SerializeField] private float discardAnimationDuration = 0.5f;
@@ -33,39 +37,34 @@ public class CardHandController : MonoBehaviour
         else Destroy(gameObject);
 
         rect = GetComponent<RectTransform>();
+        
+        _currentDeck = new List<CardDataSO>(startingDeck);
     }
 
+    /// <summary>
+    /// Draws a specified number of cards from the current deck and adds them to the player's hand.
+    /// Stops drawing if the deck becomes empty.
+    /// </summary>
     public void Draw(int amount)
     {
-        // Spawn initial cards
         for (int i = 0; i < amount; i++)
         {
-            Instantiate(slotPrefab, transform);
-        }
+            if (_currentDeck.Count == 0)
+            {
+                Debug.LogWarning("Deck is empty!");
+                break;
+            }
 
-        cardsInHand = GetComponentsInChildren<CardMovement>().ToList();
+            CardDataSO drawnCard = _currentDeck[0];
+            _currentDeck.RemoveAt(0);
 
-        for (int i = 0; i < cardsInHand.Count; i++)
-        {
-            // Clear existing listeners to prevent duplicates if Draw is called multiple times across rounds
-            cardsInHand[i].PointerEnterEvent.RemoveAllListeners();
-            cardsInHand[i].PointerExitEvent.RemoveAllListeners();
-            cardsInHand[i].BeginDragEvent.RemoveAllListeners();
-            cardsInHand[i].EndDragEvent.RemoveAllListeners();
-            
-            RegisterCardEvents(cardsInHand[i], i);
-        }
-
-        StartCoroutine(Frame());
-
-        IEnumerator Frame()
-        {
-            yield return new WaitForSecondsRealtime(.1f);
-            
-            RebuildHandVisuals();
+            AddCardToHand(drawnCard);
         }
     }
 
+    /// <summary>
+    /// Discards all currently held cards in the hand, triggering their discard animations.
+    /// </summary>
 	public void DiscardHand()
     {
         for (int i = cardsInHand.Count - 1; i >= 0; i--)
@@ -75,6 +74,10 @@ public class CardHandController : MonoBehaviour
     }
 
 	// https://share.gemini.google/usukNofWRGFR
+    /// <summary>
+    /// Removes a specific card from the hand, unparents its layout slot, and animates it 
+    /// moving to the discard pile before destroying it.
+    /// </summary>
 	public void DiscardCard(CardMovement card)
     {
         if (card == null) return;
@@ -112,21 +115,25 @@ public class CardHandController : MonoBehaviour
     }
 
     /// <summary>
-    /// Safely injects a new card back into the hand from the world 
-    /// ensuring it is placed in a Slot and its events are wired correctly.
-    /// Now accepts a start position to animate from the mouse cursor!
+    /// Instantiates a new card layout slot and UI prefab based on the provided CardDataSO, 
+    /// injecting its data and optionally animating its entry from a specific screen position.
     /// </summary>
-    public void AddCardToHand(GameObject cardPrefabToSpawn, Vector3? startScreenPosition = null)
+    public void AddCardToHand(CardDataSO cardDataToSpawn, Vector3? startScreenPosition = null)
     {
+        if (cardDataToSpawn == null || cardDataToSpawn.cardUIPrefab == null) return;
+
         // Instantiate a new slot so the layout group handles it properly
         GameObject newSlot = Instantiate(slotPrefab, transform);
         
-        // Instantiate the actual UI card inside it
-        GameObject newCardObj = Instantiate(cardPrefabToSpawn, newSlot.transform);
+        // Instantiate the actual UI card inside it USING THE DATA
+        GameObject newCardObj = Instantiate(cardDataToSpawn.cardUIPrefab, newSlot.transform);
         CardMovement newCardMovement = newCardObj.GetComponent<CardMovement>();
 
         if (newCardMovement != null)
         {
+            // INJECT THE DATA HERE
+            newCardMovement.cardData = cardDataToSpawn;
+            
             RegisterCardEvents(newCardMovement, transform.childCount - 1);
         }
 
@@ -135,11 +142,7 @@ public class CardHandController : MonoBehaviour
         // Fling the card from the mouse position into its slot!
         if (startScreenPosition.HasValue)
         {
-            // Force the UI card to the mouse position
             newCardObj.transform.position = startScreenPosition.Value;
-            
-            // Animate it back to the center of its slot (Vector3.zero)
-            // Using a slightly longer duration (0.3f) so you can actually see it fly into the hand
             newCardObj.transform.DOLocalMove(Vector3.zero, tweenCardReturn ? 0.3f : 0f).SetEase(Ease.OutBack);
         }
     }
@@ -268,34 +271,10 @@ public class CardHandController : MonoBehaviour
             }
         }
     }
-    
-    /// <summary>
-    /// Spawns a card and immediately forces it into the user's hand as an active drag,
-    /// skipping the "return to slot" animation entirely.
-    /// </summary>
-    public void SpawnAndDragCard(GameObject cardPrefabToSpawn)
-    {
-        // Spawn the card directly under the Canvas (transform.parent) instead of inside a slot.
-        // This keeps it free-floating and perfectly locked to the mouse coordinates!
-        GameObject newCardObj = Instantiate(cardPrefabToSpawn, transform.parent);
-        CardMovement newCardMovement = newCardObj.GetComponent<CardMovement>();
-
-        if (newCardMovement != null)
-        {
-            RegisterCardEvents(newCardMovement, cardsInHand.Count);
-            
-            // Immediately snap the UI element to the mouse
-            newCardObj.transform.position = Input.mousePosition;
-            
-            // Force the card into an active drag state
-            newCardMovement.ForceStartDrag();
-        }
-        
-        // We do not rebuild visuals yet because we haven't added a slot to the hand!
-    }
 
     /// <summary>
-    /// Safely wraps a floating card into a layout slot when it is finally dropped in the hand.
+    /// Safely wraps an existing floating UI card into a new layout group slot 
+    /// when it is dropped back into the hand area.
     /// </summary>
     public void AssignSlotToCard(CardMovement card)
     {
@@ -329,8 +308,8 @@ public class CardHandController : MonoBehaviour
     }
 
     /// <summary>
-    /// Evaluates the current slots in the hand and updates all visual cards 
-    /// with their correct sibling index and the new total hand length.
+    /// Evaluates the current physical slots in the hand and updates all visual card components 
+    /// with their correct sibling indexes and the new total hand length for positioning math.
     /// </summary>
     public void RebuildHandVisuals()
     {
