@@ -29,11 +29,14 @@ public class CardHandManager : MonoBehaviour
     [Header("Deck Settings")]
     [SerializeField] private List<CardDataSO> startingDeck = new List<CardDataSO>();
     private List<CardDataSO> _currentDeck = new List<CardDataSO>();
+    private List<CardDataSO> _discardPile = new List<CardDataSO>();
     
     [Header("Discard Settings")]
     [SerializeField] private RectTransform discardPileTransform;
-    [SerializeField] private float discardAnimationDuration = 0.5f;
-
+    public float discardAnimationDuration = 0.5f;
+    // The delay to switch to the next state
+    public float discardAnimationDurationBuffer = 0.75f;
+    
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -42,6 +45,7 @@ public class CardHandManager : MonoBehaviour
         rect = GetComponent<RectTransform>();
         
         _currentDeck = new List<CardDataSO>(startingDeck);
+        ShuffleDeck(_currentDeck);
     }
 
     private void Start()
@@ -49,7 +53,7 @@ public class CardHandManager : MonoBehaviour
         if (deckUiManager != null)
         {
             deckUiManager.UpdateDeckCount(_currentDeck.Count);
-            deckUiManager.UpdateDiscardCount(0);
+            deckUiManager.UpdateDiscardCount(_discardPile.Count);
         }
     }
 
@@ -63,8 +67,14 @@ public class CardHandManager : MonoBehaviour
         {
             if (_currentDeck.Count == 0)
             {
-                Debug.LogWarning("Deck is empty!");
-                break;
+                ShuffleDiscardIntoDeck();
+                
+                // If it's still empty after shuffling, we are completely out of cards
+                if (_currentDeck.Count == 0)
+                {
+                    Debug.LogWarning("Deck and discard pile are empty!");
+                    break;
+                }
             }
 
             CardDataSO drawnCard = _currentDeck[0];
@@ -74,6 +84,33 @@ public class CardHandManager : MonoBehaviour
                 deckUiManager.UpdateDeckCount(_currentDeck.Count);
 
             AddCardToHand(drawnCard);
+        }
+    }
+
+    private void ShuffleDiscardIntoDeck()
+    {
+        if (_discardPile.Count == 0) return;
+
+        _currentDeck.AddRange(_discardPile);
+        _discardPile.Clear();
+
+        ShuffleDeck(_currentDeck);
+
+        if (deckUiManager != null)
+        {
+            deckUiManager.UpdateDeckCount(_currentDeck.Count);
+            deckUiManager.UpdateDiscardCount(_discardPile.Count);
+        }
+    }
+
+    private void ShuffleDeck(List<CardDataSO> deckToShuffle)
+    {
+        for (int i = 0; i < deckToShuffle.Count; i++)
+        {
+            CardDataSO temp = deckToShuffle[i];
+            int randomIndex = Random.Range(i, deckToShuffle.Count);
+            deckToShuffle[i] = deckToShuffle[randomIndex];
+            deckToShuffle[randomIndex] = temp;
         }
     }
 
@@ -108,6 +145,11 @@ public class CardHandManager : MonoBehaviour
     {
         if (card == null) return;
 
+        if (card.cardData != null)
+        {
+            _discardPile.Add(card.cardData);
+        }
+
         // Instantly unparent the slot before destroying it so childCount updates instantly
         Transform slot = card.transform.parent;
         slot.SetParent(null);
@@ -122,11 +164,18 @@ public class CardHandManager : MonoBehaviour
         RebuildHandVisuals();
 
         if (deckUiManager != null)
-            deckUiManager.IncrementDiscardCount();
+            deckUiManager.UpdateDiscardCount(_discardPile.Count);
 
         // Disable the script so it can't be interacted with while animating
         card.enabled = false;
 
+        DiscardAnimation(card);
+    }
+
+    // AI  
+    // https://share.gemini.google/usukNofWRGFR
+    private void DiscardAnimation(CardMovement card)
+    {
         if (discardPileTransform != null)
         {
             Sequence discardSeq = DOTween.Sequence();

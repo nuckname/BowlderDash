@@ -219,25 +219,15 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Cleans up the card and its container slot after being successfully played.
     public void SuccessfulPlay()
     {
+        // Sends the card's data to the discard pile and plays the discard animation
         if (CardHandManager.Instance != null)
         {
-            CardHandManager.Instance.cardsInHand.Remove(this);
+            CardHandManager.Instance.DiscardCard(this);
         }
-
-        // Instantly unparent the slot so childCount updates immediately
-        if (transform.parent != null && transform.parent.CompareTag("Slot"))
+        else
         {
-            transform.parent.SetParent(null);
-            Destroy(transform.parent.gameObject);
+            Destroy(gameObject);
         }
-        
-        // Tell the manager to update the visuals for the REMAINING cards
-        if (CardHandManager.Instance != null)
-        {
-            CardHandManager.Instance.RebuildHandVisuals();
-        }
-
-        Destroy(gameObject);
     }
 
     // Fires the enter event and marks the card as hovering.

@@ -1,10 +1,15 @@
+using System.Collections;
 using UnityEngine;
 
 public class PinPlacementState : RoundBaseState
 {
+    private bool _isTransitioning = false;
+
     public override void EnterState(RoundStateManager manager)
     {
         Debug.Log("Entering Pin Placement State");
+        _isTransitioning = false;
+        
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
         
@@ -15,12 +20,25 @@ public class PinPlacementState : RoundBaseState
 
     public override void UpdateState(RoundStateManager manager)
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && !_isTransitioning)
         {
-            manager.SwitchState(manager.throwingBallState);
+            manager.StartCoroutine(HandleDiscardAndTransition(manager));
         }
-        
     }
+    
+    private IEnumerator HandleDiscardAndTransition(RoundStateManager manager)
+    {
+        _isTransitioning = true;
+        
+        // Trigger the discard early so we can see the animation
+        CardHandManager.Instance.DiscardHand();
+        
+        // Wait for the exact duration of the discard animation plus a bit
+        yield return new WaitForSeconds(CardHandManager.Instance.discardAnimationDuration + CardHandManager.Instance.discardAnimationDurationBuffer);
+        
+        manager.SwitchState(manager.throwingBallState);
+    }
+
     public override void FixedUpdateState(RoundStateManager manager) { }
 
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
@@ -31,6 +49,8 @@ public class PinPlacementState : RoundBaseState
     public override void ExitState(RoundStateManager manager)
     {
         PinOnPinCollisionLayer(false);
+        
+        // DiscardHand() was removed from here so we don't accidentally call it twice
         
         manager.GetAllPinsInCurrentFrame(manager);
 
@@ -44,5 +64,4 @@ public class PinPlacementState : RoundBaseState
         // Turn collision on and off for pin layer basically.
         Physics.IgnoreLayerCollision(pinLayer, pinLayer, turnOn);
     }
-
 }
