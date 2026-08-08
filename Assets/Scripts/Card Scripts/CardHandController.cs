@@ -18,7 +18,6 @@ public class CardHandController : MonoBehaviour
     private RectTransform rect;
 
     [Header("Spawn Settings")]
-    [SerializeField] private int cardsToSpawn = 7;
     public List<CardMovement> cardsInHand;
 
     bool isCrossing = false;

@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\GridManager\HexGrid.cs" />
     <Compile Include="Assets\Scripts\Ball\CameraFollowBallScript.cs" />
     <Compile Include="Assets\Scripts\GridManager.cs" />
+    <Compile Include="Assets\ScriptableObjects\CardSO\CardDataSO.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardMovement.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />

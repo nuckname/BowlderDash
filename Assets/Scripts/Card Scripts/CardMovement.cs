@@ -26,8 +26,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     private float _pointerDownTime;
     private float _pointerUpTime;
 
+    public CardDataSO cardData;
+    
     [Header("Visual")]
-    [SerializeField] private GameObject cardVisualPrefab;
     [HideInInspector] public CardAnimator cardAnimator;
 
     [Header("Play Area Threshold")]
@@ -62,10 +63,10 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     void Start()
     {
-        if (!instantiateVisual)
+        if (!instantiateVisual || cardData == null || cardData.cardVisualPrefab == null)
             return;
 
-        cardAnimator = Instantiate(cardVisualPrefab, _visualHandler.transform).GetComponent<CardAnimator>();
+        cardAnimator = Instantiate(cardData.cardVisualPrefab, _visualHandler.transform).GetComponent<CardAnimator>();
         
         cardAnimator.Initialize(this);
     }

@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class WorldObjectToCard : MonoBehaviour
 {
-    [Header("Card Spawning")]
-    [Tooltip("The UI Card Prefab to spawn back into the hand.")]
-    [SerializeField] private GameObject dummyCardPrefab;
-
+    [SerializeField] private CardDataSO cardData;
+    
     private HexGrid _grid;
 
     private void Start()
@@ -19,12 +17,16 @@ public class WorldObjectToCard : MonoBehaviour
         }
     }
 
+    public void SetupCardData(CardDataSO data)
+    {
+        cardData = data;
+    }
+    
     public void ReturnToHand()
     {
-        // Spawn the dummy card into the UI using our new centralized method
-        if (CardHandController.Instance != null && dummyCardPrefab != null)
+        if (CardHandController.Instance != null && cardData != null && cardData.cardUIPrefab != null)
         {
-            CardHandController.Instance.AddCardToHand(dummyCardPrefab);
+            CardHandController.Instance.AddCardToHand(cardData.cardUIPrefab);
         }
         
         Destroy(gameObject);

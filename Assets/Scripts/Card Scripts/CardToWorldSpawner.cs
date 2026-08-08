@@ -5,7 +5,6 @@ public class CardToWorldSpawner : MonoBehaviour
 {
     [Header("World Interaction")]
     // Object we want to spawn
-    [SerializeField] private GameObject worldGameObjectPrefab; 
     [SerializeField] private LayerMask worldPlacementMask; 
 
     [SerializeField] private CardPaidWithBowlingPinSO cardPaidWithBowlingPinSO;
@@ -47,12 +46,11 @@ public class CardToWorldSpawner : MonoBehaviour
 
     private void CreatePreview()
     {
-        if (_spawnedWorldObject == null && worldGameObjectPrefab != null)
+        if (_spawnedWorldObject == null && _cardMovement.cardData != null && _cardMovement.cardData.worldGameObjectPrefab != null)
         {
-            _spawnedWorldObject = Instantiate(worldGameObjectPrefab);
+            _spawnedWorldObject = Instantiate(_cardMovement.cardData.worldGameObjectPrefab);
         }
     }
-
     private void DestroyPreview()
     {
         if (_spawnedWorldObject != null)
@@ -81,6 +79,13 @@ public class CardToWorldSpawner : MonoBehaviour
 
         if (successfullyPlaced)
         {
+            WorldObjectToCard returnScript = _spawnedWorldObject.GetComponent<WorldObjectToCard>();
+            if (returnScript != null)
+            {
+                // Inject the pin with card data.
+                returnScript.SetupCardData(_cardMovement.cardData);
+            }
+
             _spawnedWorldObject = null;
             _cardMovement.SuccessfulPlay();
         }
@@ -90,7 +95,7 @@ public class CardToWorldSpawner : MonoBehaviour
             _cardMovement.ReturnToHand();
         }
     }
-
+    
     private void OnDestroy()
     {
         // Clean up preview if destroyed mid-drag
