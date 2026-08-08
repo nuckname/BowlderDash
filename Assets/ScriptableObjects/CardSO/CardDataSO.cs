@@ -5,7 +5,6 @@ public class CardDataSO : ScriptableObject
 {
     [Header("Card Identity")]
     public string cardID; // If we want unique cards or something
-    public string cardName;
 
     [Header("Prefabs")]
     public GameObject cardUIPrefab; 

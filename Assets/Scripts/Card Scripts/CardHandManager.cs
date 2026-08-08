@@ -283,6 +283,11 @@ public class CardHandManager : MonoBehaviour
             DiscardHand();
         }
         
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            Draw(5);
+        }
+        
         HandleCardSwapping();
         HandleHotkeyInput();
     }

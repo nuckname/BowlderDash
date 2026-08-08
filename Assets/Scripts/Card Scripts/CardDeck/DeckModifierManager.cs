@@ -31,11 +31,10 @@ public class DeckModifierManager : MonoBehaviour
                 if (mapping.cardData != null)
                 {
                     CardHandManager.Instance.AddCardToDeck(mapping.cardData);
-                    Debug.Log($"Added {mapping.cardData.cardName} to the deck.");
                 }
                 else
                 {
-                    Debug.LogWarning($"CardDataSO is missing for {pinToAdd} in the Inspector!");
+                    Debug.LogWarning($"CardDataSO is missing for {pinToAdd} in the Inspector");
                 }
                 return;
             }
