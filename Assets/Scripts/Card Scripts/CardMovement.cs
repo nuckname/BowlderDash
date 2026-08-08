@@ -182,9 +182,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             // NEW: If this is a floating card pulled from the world, it needs a slot 
             // BEFORE we fire EndDragEvent so the DOLocalMove animation targets the slot center!
-            if (transform.parent != null && !transform.parent.CompareTag("Slot") && CardHandController.Instance != null)
+            if (transform.parent != null && !transform.parent.CompareTag("Slot") && CardHandManager.Instance != null)
             {
-                CardHandController.Instance.AssignSlotToCard(this);
+                CardHandManager.Instance.AssignSlotToCard(this);
             }
 
             EndDragEvent.Invoke(this);
@@ -219,9 +219,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Cleans up the card and its container slot after being successfully played.
     public void SuccessfulPlay()
     {
-        if (CardHandController.Instance != null)
+        if (CardHandManager.Instance != null)
         {
-            CardHandController.Instance.cardsInHand.Remove(this);
+            CardHandManager.Instance.cardsInHand.Remove(this);
         }
 
         // Instantly unparent the slot so childCount updates immediately
@@ -232,9 +232,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         }
         
         // Tell the manager to update the visuals for the REMAINING cards
-        if (CardHandController.Instance != null)
+        if (CardHandManager.Instance != null)
         {
-            CardHandController.Instance.RebuildHandVisuals();
+            CardHandManager.Instance.RebuildHandVisuals();
         }
 
         Destroy(gameObject);

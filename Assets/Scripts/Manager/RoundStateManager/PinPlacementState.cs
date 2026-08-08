@@ -8,7 +8,7 @@ public class PinPlacementState : RoundBaseState
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
         
-        CardHandController.Instance.Draw(manager.amountOfCardsToDrawEachTurn);
+        CardHandManager.Instance.Draw(manager.amountOfCardsToDrawEachTurn);
         
         PinOnPinCollisionLayer(true);
     }

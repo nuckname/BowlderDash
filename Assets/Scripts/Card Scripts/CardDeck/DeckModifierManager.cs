@@ -13,6 +13,15 @@ public class DeckModifierManager : MonoBehaviour
     [Tooltip("Map the enums to their specific CardDataSO here")]
     [SerializeField] private List<PinCardMapping> cardMappings = new List<PinCardMapping>();
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Y)) AddPinCardToDeck(Pins.Vase);
+        if (Input.GetKeyDown(KeyCode.U)) AddPinCardToDeck(Pins.Normal);
+        if (Input.GetKeyDown(KeyCode.I)) AddPinCardToDeck(Pins.Small);
+        if (Input.GetKeyDown(KeyCode.O)) AddPinCardToDeck(Pins.Grenda);
+        if (Input.GetKeyDown(KeyCode.P)) AddPinCardToDeck(Pins.Pinata);
+    }
+    
     public void AddPinCardToDeck(Pins pinToAdd)
     {
         foreach (PinCardMapping mapping in cardMappings)
@@ -21,7 +30,7 @@ public class DeckModifierManager : MonoBehaviour
             {
                 if (mapping.cardData != null)
                 {
-                    CardHandController.Instance.AddCardToDeck(mapping.cardData);
+                    CardHandManager.Instance.AddCardToDeck(mapping.cardData);
                     Debug.Log($"Added {mapping.cardData.cardName} to the deck.");
                 }
                 else

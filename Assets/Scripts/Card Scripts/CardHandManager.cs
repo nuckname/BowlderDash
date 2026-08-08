@@ -7,10 +7,13 @@ using System.Linq;
 // https://www.youtube.com/watch?v=I1dAZuWurw4
 // https://github.com/mixandjam/balatro-feel
 
-public class CardHandController : MonoBehaviour
+public class CardHandManager : MonoBehaviour
 {
-    public static CardHandController Instance { get; private set; }
-
+    public static CardHandManager Instance { get; private set; }
+    
+    [Header("References")]
+    [SerializeField] private DeckUiManager deckUiManager;
+    
     [SerializeField] private CardMovement selectedCardMovement;
     [SerializeReference] private CardMovement hoveredCardMovement;
 
@@ -27,7 +30,7 @@ public class CardHandController : MonoBehaviour
     [SerializeField] private List<CardDataSO> startingDeck = new List<CardDataSO>();
     private List<CardDataSO> _currentDeck = new List<CardDataSO>();
     
-	[Header("Discard Settings")]
+    [Header("Discard Settings")]
     [SerializeField] private RectTransform discardPileTransform;
     [SerializeField] private float discardAnimationDuration = 0.5f;
 
@@ -35,10 +38,19 @@ public class CardHandController : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-
+        
         rect = GetComponent<RectTransform>();
         
         _currentDeck = new List<CardDataSO>(startingDeck);
+    }
+
+    private void Start()
+    {
+        if (deckUiManager != null)
+        {
+            deckUiManager.UpdateDeckCount(_currentDeck.Count);
+            deckUiManager.UpdateDiscardCount(0);
+        }
     }
 
     /// <summary>
@@ -58,6 +70,9 @@ public class CardHandController : MonoBehaviour
             CardDataSO drawnCard = _currentDeck[0];
             _currentDeck.RemoveAt(0);
 
+            if (deckUiManager != null)
+                deckUiManager.UpdateDeckCount(_currentDeck.Count);
+
             AddCardToHand(drawnCard);
         }
     }
@@ -65,7 +80,7 @@ public class CardHandController : MonoBehaviour
     /// <summary>
     /// Discards all currently held cards in the hand, triggering their discard animations.
     /// </summary>
-	public void DiscardHand()
+    public void DiscardHand()
     {
         for (int i = cardsInHand.Count - 1; i >= 0; i--)
         {
@@ -79,14 +94,17 @@ public class CardHandController : MonoBehaviour
     public void AddCardToDeck(CardDataSO newCard)
     {
         _currentDeck.Add(newCard);
+
+        if (deckUiManager != null)
+            deckUiManager.UpdateDeckCount(_currentDeck.Count);
     }
 
-	// https://share.gemini.google/usukNofWRGFR
+    // https://share.gemini.google/usukNofWRGFR
     /// <summary>
     /// Removes a specific card from the hand, unparents its layout slot, and animates it 
     /// moving to the discard pile before destroying it.
     /// </summary>
-	public void DiscardCard(CardMovement card)
+    public void DiscardCard(CardMovement card)
     {
         if (card == null) return;
 
@@ -102,6 +120,9 @@ public class CardHandController : MonoBehaviour
 
         // Rebuild the hand to reflect the deleted card
         RebuildHandVisuals();
+
+        if (deckUiManager != null)
+            deckUiManager.IncrementDiscardCount();
 
         // Disable the script so it can't be interacted with while animating
         card.enabled = false;
