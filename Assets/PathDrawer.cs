@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // legacy code
+// this is from last sem I forgot who wrote it.
 public class PathDrawer : MonoBehaviour
 {
     public ThrowTuningDataSO tuningData;

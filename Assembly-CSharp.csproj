@@ -78,6 +78,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\CardDeck\DeckModifierManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Assets\Scripts\Card Scripts\CardToWorldSpawner.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\MultiEffect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
-    <Compile Include="Assets\ScriptableObjects\PinCardsSO\PinCardData.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexGrid.cs" />
     <Compile Include="Assets\Scripts\Ball\CameraFollowBallScript.cs" />
@@ -125,10 +125,10 @@
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\Pin.cs" />
     <Compile Include="Assets\Scripts\Manager\ShopUIManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
-    <Compile Include="Assets\ScriptableObjects\CardSO\CardPaidWithBowlingPinSO.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\PinPlacementState.cs" />
     <Compile Include="Assets\Scripts\Interface\IPathListener.cs" />
+    <Compile Include="Assets\Scripts\Enums\Pins.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\ScoreMultiplierEffect.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardHandController.cs" />
     <Compile Include="Assets\Scripts\Pins\WorldObjectToCard.cs" />

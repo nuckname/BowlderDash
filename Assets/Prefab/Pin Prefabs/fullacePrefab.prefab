@@ -6386,8 +6386,8 @@ GameObject:
   - component: {fileID: 4654159578542557722}
   - component: {fileID: 5564525676392362196}
   - component: {fileID: 3144254737813204594}
-  - component: {fileID: -4194461986054586248}
   - component: {fileID: 5830415736669713464}
+  - component: {fileID: 1113830930927098440}
   m_Layer: 0
   m_Name: fullacePrefab
   m_TagString: Pin
@@ -6461,23 +6461,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-4194461986054586248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3811477678882886870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db02cf6752e05134d8359be057cbe918, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hitterTag: Ball
-  minHitVelocity: 3
-  ticketValue: 1
-  ballHitCooldown: 0.5
-  particleSystem: {fileID: 6131355113909808092}
+  dragElevation: 0.5
+  playAreaThresholdY: 500
 --- !u!54 &5830415736669713464
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6505,6 +6490,30 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1113830930927098440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811477678882886870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84a683a61efcf2842b7f020751281deb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fallAngleThreshold: 45
+  hitterTag: Ball
+  minHitVelocity: 3
+  hasEnterTheHoleAtTheBack: 0
+  onHitEffects: []
+  onFallEffects: []
+  _allowPinToFallOver: 0
+  _allowPinToBePickedUp: 0
+  _isFallen: 0
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &4199497254964305983
 GameObject:
   m_ObjectHideFlags: 0

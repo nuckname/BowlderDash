@@ -72,6 +72,14 @@ public class CardHandController : MonoBehaviour
             DiscardCard(cardsInHand[i]);
         }
     }
+    
+    /// <summary>
+    /// Adds a specific card data directly into the active draw deck.
+    /// </summary>
+    public void AddCardToDeck(CardDataSO newCard)
+    {
+        _currentDeck.Add(newCard);
+    }
 
 	// https://share.gemini.google/usukNofWRGFR
     /// <summary>
@@ -193,7 +201,6 @@ public class CardHandController : MonoBehaviour
             DiscardHand();
         }
         
-        HandleDebugInput();
         HandleCardSwapping();
         HandleHotkeyInput();
     }
@@ -215,32 +222,6 @@ public class CardHandController : MonoBehaviour
 
                     cardsInHand[i].ForceStartDrag();
                 }
-            }
-        }
-    }
-
-    private void HandleDebugInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            if (hoveredCardMovement != null)
-            {
-                // Instantly unparent the slot before destroying it so childCount updates instantly
-                hoveredCardMovement.transform.parent.SetParent(null);
-                Destroy(hoveredCardMovement.transform.parent.gameObject);
-                
-                cardsInHand.Remove(hoveredCardMovement);
-                
-                // Rebuild the hand to reflect the deleted card
-                RebuildHandVisuals();
-            }
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            foreach (CardMovement card in cardsInHand)
-            {
-                card.Deselect();
             }
         }
     }
