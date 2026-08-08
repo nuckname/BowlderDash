@@ -27,6 +27,8 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private bool tweenCardReturn = true;
 
     [Header("Deck Settings")]
+    [SerializeField] private RectTransform spawnPointForDrawingCards;
+    public float drawInterval = 0.15f;
     [SerializeField] private List<CardDataSO> startingDeck = new List<CardDataSO>();
     private List<CardDataSO> _currentDeck = new List<CardDataSO>();
     private List<CardDataSO> _discardPile = new List<CardDataSO>();
@@ -63,6 +65,11 @@ public class CardHandManager : MonoBehaviour
     /// </summary>
     public void Draw(int amount)
     {
+        StartCoroutine(DrawCardsRoutine(amount));
+    }
+
+    private IEnumerator DrawCardsRoutine(int amount)
+    {
         for (int i = 0; i < amount; i++)
         {
             if (_currentDeck.Count == 0)
@@ -83,7 +90,12 @@ public class CardHandManager : MonoBehaviour
             if (deckUiManager != null)
                 deckUiManager.UpdateDeckCount(_currentDeck.Count);
 
-            AddCardToHand(drawnCard);
+            // For spawning cards that go to our hand. (Animation)
+            Vector3 startPosition = spawnPointForDrawingCards.position;
+
+            AddCardToHand(drawnCard, startPosition);
+
+            yield return new WaitForSeconds(drawInterval);
         }
     }
 
