@@ -100,9 +100,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin.cs" />
-    <Compile Include="Assets\Scripts\GameUIController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\exploder.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Scripts\GridManager\GridOccupancy.cs" />
@@ -114,7 +112,6 @@
     <Compile Include="Assets\Scripts\GridManager\HexCell.cs" />
     <Compile Include="Assets\Scripts\DraggableSnap.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
-    <Compile Include="Assets\Scripts\Card Scripts\CardView.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundBaseState.cs" />
@@ -125,7 +122,6 @@
     <Compile Include="Assets\Scripts\Ball\BallController.cs" />
     <Compile Include="Assets\Scripts\FloatingTextScript\FloatingText.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\Pin.cs" />
-    <Compile Include="Assets\Scripts\Card Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\Manager\ShopUIManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\ScriptableObjects\CardSO\CardPaidWithBowlingPinSO.cs" />
