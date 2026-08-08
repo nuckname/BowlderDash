@@ -7,7 +7,6 @@ using System.Linq;
 // https://www.youtube.com/watch?v=I1dAZuWurw4
 // https://github.com/mixandjam/balatro-feel
 
-
 public class CardHandController : MonoBehaviour
 {
     public static CardHandController Instance { get; private set; }
@@ -24,6 +23,10 @@ public class CardHandController : MonoBehaviour
 
     bool isCrossing = false;
     [SerializeField] private bool tweenCardReturn = true;
+
+	[Header("Discard Settings")]
+    [SerializeField] private RectTransform discardPileTransform;
+    [SerializeField] private float discardAnimationDuration = 0.5f;
 
     private void Awake()
     {
@@ -61,6 +64,51 @@ public class CardHandController : MonoBehaviour
             yield return new WaitForSecondsRealtime(.1f);
             
             RebuildHandVisuals();
+        }
+    }
+
+	public void DiscardHand()
+    {
+        for (int i = cardsInHand.Count - 1; i >= 0; i--)
+        {
+            DiscardCard(cardsInHand[i]);
+        }
+    }
+
+	// https://share.gemini.google/usukNofWRGFR
+	public void DiscardCard(CardMovement card)
+    {
+        if (card == null) return;
+
+        // Instantly unparent the slot before destroying it so childCount updates instantly
+        Transform slot = card.transform.parent;
+        slot.SetParent(null);
+        Destroy(slot.gameObject);
+        
+        cardsInHand.Remove(card);
+        
+        // Unparent the card and put it on the root Canvas so it can fly freely over other UI elements
+        card.transform.SetParent(transform.parent);
+
+        // Rebuild the hand to reflect the deleted card
+        RebuildHandVisuals();
+
+        // Disable the script so it can't be interacted with while animating
+        card.enabled = false;
+
+        if (discardPileTransform != null)
+        {
+            Sequence discardSeq = DOTween.Sequence();
+            
+            discardSeq.Append(card.transform.DOMove(discardPileTransform.position, discardAnimationDuration).SetEase(Ease.InBack));
+            discardSeq.Join(card.transform.DOScale(Vector3.zero, discardAnimationDuration).SetEase(Ease.InBack));
+            discardSeq.Join(card.transform.DORotate(new Vector3(0, 0, 180f), discardAnimationDuration, RotateMode.FastBeyond360));
+            
+            discardSeq.OnComplete(() => Destroy(card.gameObject));
+        }
+        else
+        {
+            Destroy(card.gameObject);
         }
     }
 
@@ -137,6 +185,12 @@ public class CardHandController : MonoBehaviour
 
     void Update()
     {
+        // E to end turn, temp move to FSM.
+        if (Input.GetKey(KeyCode.E))
+        {
+            DiscardHand();
+        }
+        
         HandleDebugInput();
         HandleCardSwapping();
         HandleHotkeyInput();

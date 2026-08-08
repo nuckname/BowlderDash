@@ -2269,7 +2269,7 @@ MonoBehaviour:
   ticketEconomy: {fileID: 11400000, guid: 17f1c2355522ff343ad3cbb278aaeb0c, type: 2}
   roundData: {fileID: 11400000, guid: 9b97d23778ffc45478280cb2b71a7499, type: 2}
   currentRound: 0
-  amountOfCardsToDrawEachTurn: 10
+  amountOfCardsToDrawEachTurn: 5
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
@@ -3060,7 +3060,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 543450652758292814}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalScale.x
@@ -3076,27 +3076,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: -42.80998
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.57
+      value: -1.5699997
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 69.22
+      value: -1.2999763
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 0.7071066
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 1
+      value: 0.707107
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
       propertyPath: m_LocalRotation.z
@@ -13046,6 +13046,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1544364546}
   - {fileID: 2140304003}
   - {fileID: 509060600}
   - {fileID: 753584030}
@@ -14653,4 +14654,3 @@ SceneRoots:
   - {fileID: 543450652758292814}
   - {fileID: 1058055205}
   - {fileID: 1137028395}
-  - {fileID: 556239622}
