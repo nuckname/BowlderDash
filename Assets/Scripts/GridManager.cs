@@ -30,7 +30,7 @@ public class GridManager : MonoBehaviour
         visuals.RefreshColors();
     }
 
-    public bool TryCollectTicketForPin(Pin pin, out int val) => tickets.TryCollectTicketForPin(pin, out val);
+    public bool TryCollectTicketForPin(PinBase pin, out int val) => tickets.TryCollectTicketForPin(pin, out val);
 
     public HexCell GetNearestCell(Vector3 pos) => grid.GetNearestCell(pos);
 

@@ -8,7 +8,7 @@ public class ViewDeck : MonoBehaviour
     [Header("Deck Viewer Settings")]
     [SerializeField] private Transform deckViewerContainer;
     private List<GameObject> spawnedViewerCards = new List<GameObject>();
-    [SerializeField] private CardHandManager cardHandManager;
+    [SerializeField] private DeckManager deckManager;
     
     private enum ActiveView { None, Draw, Total, Discard }
     private ActiveView _currentView = ActiveView.None;
@@ -103,9 +103,9 @@ public class ViewDeck : MonoBehaviour
         }
     }
 
-    public void ViewTotalDeck() => VisualizeDeck(cardHandManager.GetTotalDeck());
+    public void ViewTotalDeck() => VisualizeDeck(deckManager.GetTotalDeck());
     
-    public void ViewDrawPile() => VisualizeDeck(cardHandManager.GetDrawPile());
+    public void ViewDrawPile() => VisualizeDeck(deckManager.GetDrawPile());
     
-    public void ViewDiscardPile() => VisualizeDeck(cardHandManager.GetDiscardPile());
+    public void ViewDiscardPile() => VisualizeDeck(deckManager.GetDiscardPile());
 }

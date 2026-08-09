@@ -182,9 +182,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             // NEW: If this is a floating card pulled from the world, it needs a slot 
             // BEFORE we fire EndDragEvent so the DOLocalMove animation targets the slot center!
-            if (transform.parent != null && !transform.parent.CompareTag("Slot") && CardHandManager.Instance != null)
+            if (transform.parent != null && !transform.parent.CompareTag("Slot") && HandManager.Instance != null)
             {
-                CardHandManager.Instance.AssignSlotToCard(this);
+                HandManager.Instance.AssignSlotToCard(this);
             }
 
             EndDragEvent.Invoke(this);
@@ -220,9 +220,9 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     public void SuccessfulPlay()
     {
         // Sends the card's data to the discard pile and plays the discard animation
-        if (CardHandManager.Instance != null)
+        if (HandManager.Instance != null)
         {
-            CardHandManager.Instance.DiscardCard(this);
+            HandManager.Instance.DiscardCard(this);
         }
         else
         {

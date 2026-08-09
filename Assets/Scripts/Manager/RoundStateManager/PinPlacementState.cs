@@ -13,7 +13,7 @@ public class PinPlacementState : RoundBaseState
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
         
-        CardHandManager.Instance.Draw(manager.amountOfCardsToDrawEachTurn);
+        DeckManager.Instance.Draw(manager.amountOfCardsToDrawEachTurn);
         
         PinOnPinCollisionLayer(true);
     }
@@ -31,10 +31,10 @@ public class PinPlacementState : RoundBaseState
         _isTransitioning = true;
         
         // Trigger the discard early so we can see the animation
-        CardHandManager.Instance.DiscardHand();
+        HandManager.Instance.DiscardHand();
         
         // Wait for the exact duration of the discard animation plus a bit
-        yield return new WaitForSeconds(CardHandManager.Instance.discardAnimationDuration + CardHandManager.Instance.discardAnimationDurationBuffer);
+        yield return new WaitForSeconds(HandManager.Instance.discardAnimationDuration + HandManager.Instance.discardAnimationDurationBuffer);
         
         manager.SwitchState(manager.throwingBallState);
     }

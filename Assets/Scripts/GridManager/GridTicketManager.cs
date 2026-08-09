@@ -70,7 +70,7 @@ public class GridTicketManager : MonoBehaviour
         }
     }
 
-    public bool TryCollectTicketForPin(Pin pin, out int collectedValue)
+    public bool TryCollectTicketForPin(PinBase pin, out int collectedValue)
     {
         collectedValue = 0;
         if (pin == null) return false;

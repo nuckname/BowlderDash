@@ -18,7 +18,7 @@ public class ScoringState : RoundBaseState
     
     private RoundStateManager _manager;
 
-    private Queue<Pin> _fallenPinsQueue = new Queue<Pin>();
+    private Queue<PinBase> _fallenPinsQueue = new Queue<PinBase>();
     private bool _isSpawningText = false;
     private float _textSpawnTimer = 0f;
     private float _textSpawnDelay = 1f;
@@ -84,7 +84,7 @@ public class ScoringState : RoundBaseState
             
             if (_fallenPinsQueue.Count > 0)
             {
-                Pin currentPin = _fallenPinsQueue.Dequeue();
+                PinBase currentPin = _fallenPinsQueue.Dequeue();
                 SpawnTextForSinglePin(currentPin);
             }
 
@@ -110,7 +110,7 @@ public class ScoringState : RoundBaseState
 
     private bool AreAllPinsSettled()
     {
-        foreach (Pin pin in _manager.allActivePinsInTheFrame)
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
             if (!pin.IsSettled) 
             {
@@ -123,7 +123,7 @@ public class ScoringState : RoundBaseState
 
     private void PrepareFloatingTexts()
     {
-        foreach (Pin pin in _manager.allActivePinsInTheFrame)
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
             if (pin.IsFallen)
             {
@@ -138,7 +138,7 @@ public class ScoringState : RoundBaseState
         }
     }
 
-    private void SpawnTextForSinglePin(Pin pin)
+    private void SpawnTextForSinglePin(PinBase pin)
     {
         foreach (PinEffect effect in pin.onFallEffects)
         {
@@ -162,7 +162,7 @@ public class ScoringState : RoundBaseState
 
     private void CalculateScore()
     {
-        foreach (Pin pin in _manager.allActivePinsInTheFrame)
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
             if (pin.IsFallen)
             {

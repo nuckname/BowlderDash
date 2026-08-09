@@ -8,7 +8,7 @@ public class MultiEffect : PinEffect
     
     public ParticleSystem particleSystem;
 
-    public override void Execute(Pin context, Collider instigator = null) 
+    public override void Execute(PinBase context, Collider instigator = null) 
     {
         context.FrameScoreCalculator.QueueScoreMulti(0, multValue, context.transform.position);
         //particleSystem.Play();

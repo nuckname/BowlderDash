@@ -1,0 +1,154 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using DG.Tweening;
+using System.Linq;
+
+public class HandInteractionManager : MonoBehaviour
+{
+    [Header("References")]
+    [SerializeField] private HandManager handManager;
+
+    public CardMovement selectedCardMovement;
+    [SerializeReference] private CardMovement hoveredCardMovement;
+
+    private RectTransform rect;
+    private bool isCrossing = false;
+
+    private void Awake()
+    {
+        // Should be attached to the layout group GameObject to force rebuild layout correctly
+        rect = GetComponent<RectTransform>();
+    }
+
+    public void RegisterCardEvents(CardMovement card, int index)
+    {
+        card.PointerEnterEvent.AddListener(CardPointerEnter);
+        card.PointerExitEvent.AddListener(CardPointerExit);
+        card.BeginDragEvent.AddListener(BeginDrag);
+        card.EndDragEvent.AddListener(EndDrag);
+        card.name = index.ToString();
+    }
+
+    private void BeginDrag(CardMovement cardMovement)
+    {
+        selectedCardMovement = cardMovement;
+    }
+
+    private void EndDrag(CardMovement cardMovement)
+    {
+        if (selectedCardMovement == null)
+            return;
+
+        selectedCardMovement.transform.DOLocalMove(
+            selectedCardMovement.selected ? new Vector3(0, selectedCardMovement.selectionOffset, 0) : Vector3.zero, 
+            handManager.TweenCardReturn ? .15f : 0).SetEase(Ease.OutBack);
+
+        // Forces layout rebuild trigger
+        if (rect != null)
+        {
+            rect.sizeDelta += Vector2.right;
+            rect.sizeDelta -= Vector2.right;
+        }
+
+        selectedCardMovement = null;
+    }
+
+    private void CardPointerEnter(CardMovement cardMovement)
+    {
+        hoveredCardMovement = cardMovement;
+    }
+
+    private void CardPointerExit(CardMovement cardMovement)
+    {
+        hoveredCardMovement = null;
+    }
+
+    private void Update()
+    {
+        // E to end turn, temp move to FSM.
+        if (Input.GetKey(KeyCode.E))
+        {
+            handManager.DiscardHand();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            DeckManager.Instance.Draw(5);
+        }
+        
+        HandleCardSwapping();
+        HandleHotkeyInput();
+    }
+    
+    private void HandleHotkeyInput()
+    {
+        KeyCode[] numberKeys = { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5 };
+
+        for (int i = 0; i < numberKeys.Length; i++)
+        {
+            if (Input.GetKeyDown(numberKeys[i]))
+            {
+                if (i < handManager.cardsInHand.Count)
+                {
+                    if (selectedCardMovement != null && selectedCardMovement != handManager.cardsInHand[i])
+                    {
+                        selectedCardMovement.OnEndDrag(null);
+                    }
+
+                    handManager.cardsInHand[i].ForceStartDrag();
+                }
+            }
+        }
+    }
+
+    private void HandleCardSwapping()
+    {
+        if (selectedCardMovement == null || isCrossing)
+            return;
+
+        for (int i = 0; i < handManager.cardsInHand.Count; i++)
+        {
+            if (selectedCardMovement.transform.position.x > handManager.cardsInHand[i].transform.position.x)
+            {
+                if (selectedCardMovement.ParentIndex() < handManager.cardsInHand[i].ParentIndex())
+                {
+                    Swap(i);
+                    break;
+                }
+            }
+
+            if (selectedCardMovement.transform.position.x < handManager.cardsInHand[i].transform.position.x)
+            {
+                if (selectedCardMovement.ParentIndex() > handManager.cardsInHand[i].ParentIndex())
+                {
+                    Swap(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private void Swap(int index)
+    {
+        isCrossing = true;
+
+        Transform focusedParent = selectedCardMovement.transform.parent;
+        Transform crossedParent = handManager.cardsInHand[index].transform.parent;
+
+        handManager.cardsInHand[index].transform.SetParent(focusedParent);
+        handManager.cardsInHand[index].transform.localPosition = handManager.cardsInHand[index].selected ? new Vector3(0, handManager.cardsInHand[index].selectionOffset, 0) : Vector3.zero;
+        selectedCardMovement.transform.SetParent(crossedParent);
+
+        isCrossing = false;
+
+        if (handManager.cardsInHand[index].cardAnimator == null)
+            return;
+
+        bool swapIsRight = handManager.cardsInHand[index].ParentIndex() > selectedCardMovement.ParentIndex();
+        handManager.cardsInHand[index].cardAnimator.Swap(swapIsRight ? -1 : 1);
+
+        //Updated Visual Indexes
+        handManager.RebuildHandVisuals();
+    }
+}

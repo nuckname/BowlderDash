@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// physics toggling, placement-mode guards, hit detection, and fall mechanics.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class Pin : MonoBehaviour
+public class PinBase : MonoBehaviour
 {
     [Header("Triggers")]
     public float fallAngleThreshold = 45f;

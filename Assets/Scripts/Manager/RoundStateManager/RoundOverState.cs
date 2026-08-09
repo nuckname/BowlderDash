@@ -12,7 +12,7 @@ public class RoundOverState : RoundBaseState
         waitTimer = 0f;
 
         // We are getting these twice, maybe can store them later in the manager
-        foreach (Pin pin in manager.allActivePinsInTheFrame)
+        foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
             if (pin != null && pin.IsFallen)
             {

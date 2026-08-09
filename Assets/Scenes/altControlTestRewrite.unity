@@ -2189,6 +2189,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2140304003}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &292756688 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3002825497996913973, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+  m_PrefabInstance: {fileID: 761201438}
+  m_PrefabAsset: {fileID: 0}
 --- !u!64 &344083092
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2348,7 +2353,6 @@ Transform:
   m_Children:
   - {fileID: 1215643626}
   - {fileID: 1627406034}
-  - {fileID: 920505716}
   m_Father: {fileID: 1346736464}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &374269889
@@ -4378,6 +4382,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1168153563}
     - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: interactionManager
+      value: 
+      objectReference: {fileID: 1545294221}
+    - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: discardPileTransform
       value: 
       objectReference: {fileID: 1790490390}
@@ -4531,8 +4539,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 920505716}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3002825497996913973, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1545294222}
+    - targetCorrespondingSourceObject: {fileID: 3002825497996913973, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1545294221}
   m_SourcePrefab: {fileID: 100100000, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
 --- !u!1 &779197920
 GameObject:
@@ -5674,12 +5691,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 920505715}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 102.36511, y: 123.0914, z: 935.68945}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 374269888}
+  m_Father: {fileID: 1545294216}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &920505717
 MonoBehaviour:
@@ -8240,7 +8257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deckViewerContainer: {fileID: 2084844914}
-  cardHandManager: {fileID: 1545294220}
+  deckManager: {fileID: 1545294222}
 --- !u!43 &1176472340
 Mesh:
   m_ObjectHideFlags: 0
@@ -10429,12 +10446,59 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
   m_PrefabInstance: {fileID: 761201438}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 292756688}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8436a7e3d3df42d7a7058aec5e41a69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1545294221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 292756688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 793389ea36b5e2a4e8e124afc52b0a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handManager: {fileID: 1545294220}
+  selectedCardMovement: {fileID: 0}
+  hoveredCardMovement: {fileID: 0}
+--- !u!114 &1545294222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 292756688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab8b48971a40a644b884d193fbc1a1e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deckDisplayUi: {fileID: 1168153563}
+  handManager: {fileID: 1545294220}
+  drawInterval: 0.15
+  startingDeck:
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  drawPile: []
+  totalDeck: []
+  discardPile: []
 --- !u!1 &1546402768
 GameObject:
   m_ObjectHideFlags: 0

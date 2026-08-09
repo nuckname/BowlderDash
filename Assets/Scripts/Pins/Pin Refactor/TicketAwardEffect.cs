@@ -8,7 +8,7 @@ public class TicketAwardEffect : PinEffect
     public int ticketValue = 1;
     public ParticleSystem particleSystem;
 
-    public override void Execute(Pin context, Collider instigator = null) 
+    public override void Execute(PinBase context, Collider instigator = null) 
     {
         //PlayerSheet.Instance?.AddGridTicketsThisFrame(ticketValue);
         particleSystem?.Play();

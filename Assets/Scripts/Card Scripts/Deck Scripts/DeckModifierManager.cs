@@ -30,7 +30,7 @@ public class DeckModifierManager : MonoBehaviour
             {
                 if (mapping.cardData != null)
                 {
-                    CardHandManager.Instance.AddCardToDeck(mapping.cardData);
+                    DeckManager.Instance.AddCardToDeck(mapping.cardData);
                 }
                 else
                 {
