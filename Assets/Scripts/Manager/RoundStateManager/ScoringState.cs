@@ -175,7 +175,7 @@ public class ScoringState : RoundBaseState
         PlayerSheet.Instance.AddScore(finalScoreThisRound);
         
         // need to save this and add to it. 
-        _manager.uiManager.totalScoreText.text = finalScoreThisRound.ToString();
+        _manager.inGameScoreUi.totalScoreText.text = finalScoreThisRound.ToString();
     }
 
     private void GoToNextRound()

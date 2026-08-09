@@ -17,7 +17,7 @@ public class RoundStateManager : MonoBehaviour
     public ShopUIManager shopUI;
     public GameObject cardHand;
     public Text instructionText;
-    public UIManager uiManager;
+    public InGameScoreUi inGameScoreUi;
     
     [Header("Data Objects")]
     public TicketEconomyData ticketEconomy;
@@ -71,10 +71,10 @@ public class RoundStateManager : MonoBehaviour
         SwitchState(roundStartState);
         
         RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
-        uiManager.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
-        uiManager.UpdateScoreText(0);
+        inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
+        inGameScoreUi.UpdateScoreText(0);
         
-        uiManager.UpdateBallsText(0, roundInfo.maxBallsAllowedToThrow);
+        inGameScoreUi.UpdateBallsText(0, roundInfo.maxBallsAllowedToThrow);
     }
 
     public void SwitchState(RoundBaseState newState)

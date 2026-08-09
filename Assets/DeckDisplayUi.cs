@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class DeckUiManager : MonoBehaviour
+public class DeckDisplayUi : MonoBehaviour
 {
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI deckCountText;

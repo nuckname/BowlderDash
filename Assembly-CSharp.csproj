@@ -69,7 +69,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\BallCollisionCurvatureStopper.cs" />
-    <Compile Include="Assets\Scripts\Manager\UIManager.cs" />
+    <Compile Include="Assets\DeckDisplayUi.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ShopState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundStartState.cs" />
@@ -79,7 +79,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardDeck\DeckModifierManager.cs" />
-    <Compile Include="Assets\DeckUiManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
@@ -111,9 +110,11 @@
     <Compile Include="Assets\Scripts\Card Scripts\VisualCardsHandler.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ThrowingBallState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
+    <Compile Include="Assets\Scripts\Manager\InGameScoreUi.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexCell.cs" />
     <Compile Include="Assets\Scripts\DraggableSnap.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
+    <Compile Include="Assets\ViewDeck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundBaseState.cs" />

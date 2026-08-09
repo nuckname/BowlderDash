@@ -12,7 +12,7 @@ public class CardHandManager : MonoBehaviour
     public static CardHandManager Instance { get; private set; }
     
     [Header("References")]
-    [SerializeField] private DeckUiManager deckUiManager;
+    [SerializeField] private DeckDisplayUi deckDisplayUi;
     
     [SerializeField] private CardMovement selectedCardMovement;
     [SerializeReference] private CardMovement hoveredCardMovement;
@@ -30,8 +30,31 @@ public class CardHandManager : MonoBehaviour
     [SerializeField] private RectTransform spawnPointForDrawingCards;
     public float drawInterval = 0.15f;
     [SerializeField] private List<CardDataSO> startingDeck = new List<CardDataSO>();
-    private List<CardDataSO> _currentDeck = new List<CardDataSO>();
-    private List<CardDataSO> _discardPile = new List<CardDataSO>();
+    [SerializeField] private List<CardDataSO> drawPile = new List<CardDataSO>();
+    
+    public List<CardDataSO> totalDeck = new List<CardDataSO>();
+    
+    [SerializeField] private List<CardDataSO> discardPile = new List<CardDataSO>();
+
+    public List<CardDataSO> GetStartingDeck()
+    {
+        return startingDeck;
+    }
+
+    public List<CardDataSO> GetTotalDeck()
+    {
+        return totalDeck;
+    }
+
+    public List<CardDataSO> GetDrawPile()
+    {
+        return drawPile;
+    }
+
+    public List<CardDataSO> GetDiscardPile()
+    {
+        return discardPile;
+    }
     
     [Header("Discard Settings")]
     [SerializeField] private RectTransform discardPileTransform;
@@ -46,16 +69,18 @@ public class CardHandManager : MonoBehaviour
         
         rect = GetComponent<RectTransform>();
         
-        _currentDeck = new List<CardDataSO>(startingDeck);
-        ShuffleDeck(_currentDeck);
+        totalDeck = new List<CardDataSO>(startingDeck);
+        
+        drawPile = new List<CardDataSO>(startingDeck);
+        ShuffleDeck(drawPile);
     }
 
     private void Start()
     {
-        if (deckUiManager != null)
+        if (deckDisplayUi != null)
         {
-            deckUiManager.UpdateDeckCount(_currentDeck.Count);
-            deckUiManager.UpdateDiscardCount(_discardPile.Count);
+            deckDisplayUi.UpdateDeckCount(drawPile.Count);
+            deckDisplayUi.UpdateDiscardCount(discardPile.Count);
         }
     }
 
@@ -72,23 +97,23 @@ public class CardHandManager : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
-            if (_currentDeck.Count == 0)
+            if (drawPile.Count == 0)
             {
                 ShuffleDiscardIntoDeck();
                 
                 // If it's still empty after shuffling, we are completely out of cards
-                if (_currentDeck.Count == 0)
+                if (drawPile.Count == 0)
                 {
                     Debug.LogWarning("Deck and discard pile are empty!");
                     break;
                 }
             }
 
-            CardDataSO drawnCard = _currentDeck[0];
-            _currentDeck.RemoveAt(0);
+            CardDataSO drawnCard = drawPile[0];
+            drawPile.RemoveAt(0);
 
-            if (deckUiManager != null)
-                deckUiManager.UpdateDeckCount(_currentDeck.Count);
+            if (deckDisplayUi != null)
+                deckDisplayUi.UpdateDeckCount(drawPile.Count);
 
             // For spawning cards that go to our hand. (Animation)
             Vector3 startPosition = spawnPointForDrawingCards.position;
@@ -101,17 +126,17 @@ public class CardHandManager : MonoBehaviour
 
     private void ShuffleDiscardIntoDeck()
     {
-        if (_discardPile.Count == 0) return;
+        if (discardPile.Count == 0) return;
 
-        _currentDeck.AddRange(_discardPile);
-        _discardPile.Clear();
+        drawPile.AddRange(discardPile);
+        discardPile.Clear();
 
-        ShuffleDeck(_currentDeck);
+        ShuffleDeck(drawPile);
 
-        if (deckUiManager != null)
+        if (deckDisplayUi != null)
         {
-            deckUiManager.UpdateDeckCount(_currentDeck.Count);
-            deckUiManager.UpdateDiscardCount(_discardPile.Count);
+            deckDisplayUi.UpdateDeckCount(drawPile.Count);
+            deckDisplayUi.UpdateDiscardCount(discardPile.Count);
         }
     }
 
@@ -142,10 +167,11 @@ public class CardHandManager : MonoBehaviour
     /// </summary>
     public void AddCardToDeck(CardDataSO newCard)
     {
-        _currentDeck.Add(newCard);
-
-        if (deckUiManager != null)
-            deckUiManager.UpdateDeckCount(_currentDeck.Count);
+        drawPile.Add(newCard);
+        totalDeck.Add(newCard);
+        
+        if (deckDisplayUi != null)
+            deckDisplayUi.UpdateDeckCount(drawPile.Count);
     }
 
     // https://share.gemini.google/usukNofWRGFR
@@ -159,7 +185,7 @@ public class CardHandManager : MonoBehaviour
 
         if (card.cardData != null)
         {
-            _discardPile.Add(card.cardData);
+            discardPile.Add(card.cardData);
         }
 
         // Instantly unparent the slot before destroying it so childCount updates instantly
@@ -175,8 +201,8 @@ public class CardHandManager : MonoBehaviour
         // Rebuild the hand to reflect the deleted card
         RebuildHandVisuals();
 
-        if (deckUiManager != null)
-            deckUiManager.UpdateDiscardCount(_discardPile.Count);
+        if (deckDisplayUi != null)
+            deckDisplayUi.UpdateDiscardCount(discardPile.Count);
 
         // Disable the script so it can't be interacted with while animating
         card.enabled = false;
