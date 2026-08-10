@@ -365,11 +365,21 @@ MonoBehaviour:
   hitterTag: Ball
   minHitVelocity: 3
   hasEnterTheHoleAtTheBack: 0
-  onHitEffects: []
+  onHitEffects:
+  - rid: 6055849687980703744
   onFallEffects: []
   _allowPinToFallOver: 0
   _allowPinToBePickedUp: 0
   _isFallen: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6055849687980703744
+      type: {class: VaseEffect, ns: , asm: Assembly-CSharp}
+      data:
+        shatteredVasePrefab: {fileID: 0}
+        vase: {fileID: 0}
+        flower1: {fileID: 0}
+        flower2: {fileID: 0}
+        intactBonusScore: 10
+        flowerShrinkDuration: 0.4
