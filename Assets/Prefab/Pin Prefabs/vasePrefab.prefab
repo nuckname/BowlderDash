@@ -279,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 8935457865669160150}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.0857315, y: -9.599999, z: 50.149765}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.0545686, y: 1.0545686, z: 1.0545686}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -378,10 +378,10 @@ MonoBehaviour:
     - rid: 6055849687980703744
       type: {class: VaseEffect, ns: , asm: Assembly-CSharp}
       data:
-        shatteredVasePrefab: {fileID: 0}
-        vase: {fileID: 0}
-        flower1: {fileID: 0}
-        flower2: {fileID: 0}
+        shatteredVasePrefab: {fileID: 5233888619542058040, guid: 6112ee614a8e7db4bb3d12838b9d6194, type: 3}
+        vase: {fileID: 114782181947271798}
+        flower1: {fileID: 594026184152654567}
+        flower2: {fileID: 3125624124259819643}
         intactBonusScore: 10
         flowerShrinkDuration: 0.4
 --- !u!114 &7932745912026453913
