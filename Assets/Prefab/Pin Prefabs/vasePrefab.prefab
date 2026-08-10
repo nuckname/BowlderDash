@@ -262,6 +262,7 @@ GameObject:
   - component: {fileID: 8812345678901234568}
   - component: {fileID: -2398941729809505991}
   - component: {fileID: 6747926071243505309}
+  - component: {fileID: 7932745912026453913}
   m_Layer: 0
   m_Name: vasePrefab
   m_TagString: Pin
@@ -383,3 +384,16 @@ MonoBehaviour:
         flower2: {fileID: 0}
         intactBonusScore: 10
         flowerShrinkDuration: 0.4
+--- !u!114 &7932745912026453913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8935457865669160150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData: {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}

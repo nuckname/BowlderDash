@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: PinataPin
   m_EditorClassIdentifier: 
   cardID: 
-  cardName: Basic Pin
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
-  cardVisualPrefab: {fileID: 5740910511806353211, guid: 2c22fd0667610b542885faac68d1bfd6, type: 3}
+  cardVisualPrefab: {fileID: 5740910511806353211, guid: 1476631d82aa0bc4c99c0833effc7634, type: 3}
   worldGameObjectPrefab: {fileID: 4780778977750545815, guid: 1128406d71e04d74fb0815da353b6678, type: 3}

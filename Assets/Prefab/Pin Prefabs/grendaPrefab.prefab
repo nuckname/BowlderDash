@@ -5022,11 +5022,20 @@ MonoBehaviour:
   hitterTag: Ball
   minHitVelocity: 3
   hasEnterTheHoleAtTheBack: 0
-  onHitEffects: []
+  onHitEffects:
+  - rid: 6055849687980703745
   onFallEffects: []
   _allowPinToFallOver: 0
   _allowPinToBePickedUp: 0
   _isFallen: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6055849687980703745
+      type: {class: ExplosionEffect, ns: , asm: Assembly-CSharp}
+      data:
+        explosionForce: 15
+        explosionRadius: 5
+        upwardModifier: 1
+        detonationDelay: 1
+        explosionParticles: {fileID: 4918979806117386139}
