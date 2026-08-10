@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="Assets\ScriptableObjects\RoundData.cs" />
     <Compile Include="Assets\ScriptableObjects\ThrowTuningDataSO.cs" />
-    <Compile Include="Assets\Scripts\Pins\PinEffects\VaseEffect.cs" />
     <Compile Include="Assets\Scripts\GridManager\GridTicketManager.cs" />
     <Compile Include="Assets\PathDrawer.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundOverState.cs" />
@@ -118,6 +117,7 @@
     <Compile Include="Assets\Scripts\DraggableSnap.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\VaseVisualEffect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\DeckManager.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundBaseState.cs" />

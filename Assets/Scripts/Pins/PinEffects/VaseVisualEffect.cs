@@ -4,7 +4,7 @@ using UnityEngine;
 
 //Legacy Code
 [Serializable]
-public class VaseEffect : PinEffect
+public class VaseVisualEffect : PinEffect
 {
     [Header("References")]
     public GameObject shatteredVasePrefab;
@@ -62,20 +62,6 @@ public class VaseEffect : PinEffect
         // 2. Shrink flowers (using the PinBase MonoBehaviour to run the Coroutine)
         ShrinkFlower(context, flower1, _flower1StartScale, ref _flower1Coroutine);
         ShrinkFlower(context, flower2, _flower2StartScale, ref _flower2Coroutine);
-    }
-
-    // Call this from your ScoringState at the end of the round
-    public void TryAwardIntactBonus(PinBase context)
-    {
-        // If it broke, or if there is no bonus, do nothing
-        if (_isShattered || intactBonusScore <= 0) return;
-
-        // Use the injected calculator! No Singletons required.
-        if (context.FrameScoreCalculator != null)
-        {
-            context.FrameScoreCalculator.QueueScoreModification(intactBonusScore, 0f, context.transform.position);
-            Debug.Log($"<color=orange><b>[VasePin]</b></color> Survived the round! Intact bonus awarded.");
-        }
     }
 
     public override void ResetEffect()

@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class PinataEffect : MonoBehaviour
+[Serializable]
+public class PinataEffect : PinEffect
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Execute(PinBase pin, Collider target)
     {
-        
+        // On Collision, Add a ticket
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    public override void ResetEffect()
     {
-        
     }
 }

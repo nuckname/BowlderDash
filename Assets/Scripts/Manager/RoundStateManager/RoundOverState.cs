@@ -14,7 +14,9 @@ public class RoundOverState : RoundBaseState
         // We are getting these twice, maybe can store them later in the manager
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
-            if (pin != null && pin.IsFallen)
+            pin.TriggerEndOfRound();
+            
+            if (pin.IsFallen)
             {
                 pin.gameObject.SetActive(false);
             }

@@ -18,7 +18,9 @@ public class PinBase : MonoBehaviour
     [Header("Effects")]
     [SerializeReference] public List<PinEffect> onHitEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
-
+    [SerializeReference] public List<PinEffect> onEndOfRoundEffects = new List<PinEffect>();
+    
+    
     [SerializeField] protected bool _allowPinToFallOver = false;
     [SerializeField] protected bool _allowPinToBePickedUp = false;
     
@@ -129,6 +131,14 @@ public class PinBase : MonoBehaviour
             }
         }
     }
+    
+    public virtual void TriggerEndOfRound()
+    {
+        foreach (PinEffect effect in onEndOfRoundEffects)
+        {
+            effect.Execute(this);
+        }
+    }
 
     protected virtual void TriggerFall()
     {
@@ -205,8 +215,9 @@ public class PinBase : MonoBehaviour
         if (_renderer) _renderer.enabled = true;
         if (_collider) _collider.enabled = true;
 
-        foreach (var effect in onHitEffects) effect.ResetEffect();
-        foreach (var effect in onFallEffects) effect.ResetEffect();
+        foreach (PinEffect effect in onHitEffects) effect.ResetEffect();
+        foreach (PinEffect effect in onFallEffects) effect.ResetEffect();
+        foreach (PinEffect effect in onEndOfRoundEffects) effect.ResetEffect();
 
         if (_rb != null)
         {

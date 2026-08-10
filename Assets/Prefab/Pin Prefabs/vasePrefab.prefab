@@ -367,16 +367,18 @@ MonoBehaviour:
   minHitVelocity: 3
   hasEnterTheHoleAtTheBack: 0
   onHitEffects:
-  - rid: 6055849687980703744
+  - rid: 6055849687980703747
   onFallEffects: []
+  onEndOfRoundEffects:
+  - rid: 6055849687980703749
   _allowPinToFallOver: 0
   _allowPinToBePickedUp: 0
   _isFallen: 0
   references:
     version: 2
     RefIds:
-    - rid: 6055849687980703744
-      type: {class: VaseEffect, ns: , asm: Assembly-CSharp}
+    - rid: 6055849687980703747
+      type: {class: VaseVisualEffect, ns: , asm: Assembly-CSharp}
       data:
         shatteredVasePrefab: {fileID: 5233888619542058040, guid: 6112ee614a8e7db4bb3d12838b9d6194, type: 3}
         vase: {fileID: 114782181947271798}
@@ -384,6 +386,11 @@ MonoBehaviour:
         flower2: {fileID: 3125624124259819643}
         intactBonusScore: 10
         flowerShrinkDuration: 0.4
+    - rid: 6055849687980703749
+      type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
+      data:
+        scoreValue: 10
+        multValue: 0
 --- !u!114 &7932745912026453913
 MonoBehaviour:
   m_ObjectHideFlags: 0
