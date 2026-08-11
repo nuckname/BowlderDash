@@ -122,7 +122,11 @@ public class PinBase : MonoBehaviour
         Rigidbody otherRb = other.attachedRigidbody;
         if (otherRb != null && otherRb.velocity.magnitude < minHitVelocity) return;
 
-        if (!string.IsNullOrEmpty(hitterTag) && other.CompareTag(hitterTag))
+        bool isHitter = !string.IsNullOrEmpty(hitterTag) && other.CompareTag(hitterTag);
+
+        bool isAnotherPin = other.GetComponent<PinBase>() != null;
+
+        if (isHitter || isAnotherPin)
         {
             _hasBeenHit = true;
             foreach (PinEffect effect in onHitEffects)

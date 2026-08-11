@@ -6415,6 +6415,7 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   onHitEffects: []
   onFallEffects: []
+  onEndOfRoundEffects: []
   _allowPinToFallOver: 0
   _allowPinToBePickedUp: 0
   _isFallen: 0
@@ -6489,10 +6490,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.99943256
-  m_Height: 6.3453097
+  m_Radius: 1.3274798
+  m_Height: 5.498995
   m_Direction: 1
-  m_Center: {x: -0.08924675, y: 3.137345, z: 0.03850746}
+  m_Center: {x: -0.08924675, y: 3.3940315, z: -0.2895398}
 --- !u!1 &4199497254964305983
 GameObject:
   m_ObjectHideFlags: 0

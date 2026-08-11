@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7116550779813638036}
   - component: {fileID: 5292890100669208921}
   - component: {fileID: 852012921410265539}
+  - component: {fileID: 5373738608955730648}
   m_Layer: 0
   m_Name: grendaPrefab
   m_TagString: Untagged
@@ -5025,6 +5026,7 @@ MonoBehaviour:
   onHitEffects:
   - rid: 6055849687980703745
   onFallEffects: []
+  onEndOfRoundEffects: []
   _allowPinToFallOver: 0
   _allowPinToBePickedUp: 0
   _isFallen: 0
@@ -5039,3 +5041,16 @@ MonoBehaviour:
         upwardModifier: 1
         detonationDelay: 1
         explosionParticles: {fileID: 4918979806117386139}
+--- !u!114 &5373738608955730648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4548911073050350972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardData: {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
