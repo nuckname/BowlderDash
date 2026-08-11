@@ -17,7 +17,7 @@ public class TicketEffect : PinEffect
 
         _hasAwarded = true;
         
-        PlayerSheet.Instance.AddTickets(ticketValue);
+        SessionData.Instance.AddTickets(ticketValue);
 
         //particleSystem.Play();
     }

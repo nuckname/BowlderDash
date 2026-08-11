@@ -169,10 +169,10 @@ public class ScoringState : RoundBaseState
                 _manager.scoreCalculator.AddStandardPinFallen();
             }
         }
-
+        
         int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
         
-        PlayerSheet.Instance.AddScore(finalScoreThisRound);
+        _manager.sessionData.AddScore(finalScoreThisRound);
         
         // need to save this and add to it. 
         _manager.inGameScoreUi.totalScoreText.text = finalScoreThisRound.ToString();
@@ -180,10 +180,10 @@ public class ScoringState : RoundBaseState
 
     private void GoToNextRound()
     {
-        int ballsThrown = PlayerSheet.Instance.GetAmountOfBallsThrown();
+        int ballsThrown = _manager.sessionData.ballsThrown;
         int maxBallsAllowed = _manager.roundData.GetRoundInfo(_manager.currentRound).maxBallsAllowedToThrow;
         int scoreNeeded = _manager.roundData.GetRoundInfo(_manager.currentRound).scoreNeededToBeat;
-        int currentScore = PlayerSheet.Instance.GetScore();
+        int currentScore = _manager.sessionData.currentScore;
         
         if (ballsThrown == maxBallsAllowed)
         {

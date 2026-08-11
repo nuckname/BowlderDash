@@ -13,13 +13,14 @@ public class ShopState : RoundBaseState
         // Reset UI
         RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
         
+/*        
         manager.inGameScoreUi.RefreshHUD(
             PlayerSheet.Instance.playerCurrentTicket,
             manager.currentRound,
             PlayerSheet.Instance.GetAmountOfBallsThrown(),
             roundInfo,
             manager.roundData.GetMaxRoundNumber()
-        );
+        );*/
     }
 
     public override void UpdateState(RoundStateManager manager) { }

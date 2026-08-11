@@ -20,8 +20,8 @@ public class RoundStateManager : MonoBehaviour
     public InGameScoreUi inGameScoreUi;
     
     [Header("Data Objects")]
-    public TicketEconomyData ticketEconomy;
     public RoundData roundData;
+    public SessionData sessionData = new SessionData();
     
     [Header("Round Vars")]
     public int currentRound = 0;
@@ -66,7 +66,8 @@ public class RoundStateManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        ticketEconomy.ResetState();
+        sessionData.ResetSession();
+        
         grid.GenerateGrid();
         SwitchState(roundStartState);
         

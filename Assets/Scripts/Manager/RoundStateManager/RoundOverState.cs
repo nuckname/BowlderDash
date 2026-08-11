@@ -23,11 +23,6 @@ public class RoundOverState : RoundBaseState
         }
 
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
-
-        if (manager.inGameScoreUi != null && manager.inGameScoreUi.totalScoreText != null)
-        {
-            manager.inGameScoreUi.totalScoreText.text = PlayerSheet.Instance.GetScore().ToString();
-        }
     }
 
     public override void UpdateState(RoundStateManager manager)
