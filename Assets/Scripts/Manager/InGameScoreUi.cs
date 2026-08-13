@@ -5,10 +5,10 @@ using UnityEngine.UI;
 public class InGameScoreUi : MonoBehaviour
 {
     [Header("UI Text References")]
-    public Text totalScoreText;
-    public Text scoreToBeatText;
-    public Text roundText;
-    public Text ballsText;
+    public TextMeshProUGUI totalScoreText;
+    public TextMeshProUGUI scoreToBeatText;
+    public TextMeshProUGUI roundText;
+    public TextMeshProUGUI ballsText;
 
     public void RefreshHUD(int currentTotalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
     {
