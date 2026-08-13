@@ -106,7 +106,7 @@ public class ShopUIManager : MonoBehaviour
             }
         }
     }
-    
+    //
     // AI https://share.gemini.google/lIdrnSIvV63b
     private void SetCardAlpha(Button button, Image visual, float alpha)
     {
