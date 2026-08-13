@@ -23,10 +23,7 @@ public class CardAnimator : MonoBehaviour
     private Canvas canvas;
 
     [Header("References")]
-    public Transform visualShadow;
     private float shadowOffset = 20;
-    private Vector2 shadowDistance;
-    private Canvas shadowCanvas;
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
     [SerializeField] private Image cardImage;
@@ -69,10 +66,6 @@ public class CardAnimator : MonoBehaviour
     private Coroutine pressCoroutine;
 
     private int _currentHandLength;
-    private void Start()
-    {
-        shadowDistance = visualShadow.localPosition;
-    }
 
     public void Initialize(CardMovement target, int index = 0)
     {
@@ -80,7 +73,6 @@ public class CardAnimator : MonoBehaviour
         parentCardMovement = target;
         cardTransform = target.transform;
         canvas = GetComponent<Canvas>();
-        shadowCanvas = visualShadow.GetComponent<Canvas>();
 
         //Event Listening
         parentCardMovement.PointerEnterEvent.AddListener(PointerEnter);
@@ -221,18 +213,12 @@ public class CardAnimator : MonoBehaviour
         if(scaleAnimations)
             transform.DOScale(longPress ? scaleOnHover : scaleOnSelect, scaleTransition).SetEase(scaleEase);
         canvas.overrideSorting = false;
-
-        visualShadow.localPosition = shadowDistance;
-        shadowCanvas.overrideSorting = true;
     }
 
     private void PointerDown(CardMovement cardMovement)
     {
         if(scaleAnimations)
             transform.DOScale(scaleOnSelect, scaleTransition).SetEase(scaleEase);
-            
-        visualShadow.localPosition += (-Vector3.up * shadowOffset);
-        shadowCanvas.overrideSorting = false;
     }
 
 }

@@ -28,7 +28,7 @@ public class BallController : MonoBehaviour
         _isLaunched = false;
         _isFollowingCurve = false;
         
-        _ballRb.velocity = Vector3.zero;
+        _ballRb.linearVelocity = Vector3.zero;
         _ballRb.angularVelocity = Vector3.zero;
         _ballRb.isKinematic = true;
         
@@ -91,7 +91,7 @@ public class BallController : MonoBehaviour
 
         transform.position = firstLinePosition;
         _ballRb.isKinematic = false;
-        _ballRb.velocity = Vector3.forward * speed;
+        _ballRb.linearVelocity = Vector3.forward * speed;
         _isLaunched = true;
         _isFollowingCurve = true;
     }
@@ -128,9 +128,9 @@ public class BallController : MonoBehaviour
             float xDiff = targetX - currentPos.x;
             float forceStrength = 60f; 
             _ballRb.AddForce(new Vector3(xDiff * forceStrength, 0, 0), ForceMode.Acceleration);
-            Vector3 vel = _ballRb.velocity;
+            Vector3 vel = _ballRb.linearVelocity;
             vel.x *= 0.85f;
-            _ballRb.velocity = vel;
+            _ballRb.linearVelocity = vel;
         }
         else if (currentPos.z > tuningData.maxZ)
         {

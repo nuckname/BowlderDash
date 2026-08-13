@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,8 @@ public class RoundStateManager : MonoBehaviour
     [Header("Data Objects")]
     public RoundData roundData;
     public SessionData sessionData = new SessionData();
+    // Let's put all our SOs here so we only have to refernce / update one list
+    public List<CardDataSO> masterCardList;
     
     [Header("Round Vars")]
     public int currentRound = 0;

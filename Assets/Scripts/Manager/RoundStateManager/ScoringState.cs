@@ -23,6 +23,7 @@ public class ScoringState : RoundBaseState
     private float _textSpawnTimer = 0f;
     private float _textSpawnDelay = 1f;
 
+    public GameObject hello; 
     public override void EnterState(RoundStateManager manager)
     {
         manager.UpdateInstructionText("Waiting for pins to settle...");

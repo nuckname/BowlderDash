@@ -57,7 +57,7 @@ public class PinBase : MonoBehaviour
             if (_rb == null || _rb.isKinematic) return true;
 
             // Failsafe: If the pin is barely moving (jittering), force it to sleep
-            if (!_rb.IsSleeping() && _rb.velocity.sqrMagnitude < 0.01f && _rb.angularVelocity.sqrMagnitude < 0.01f)
+            if (!_rb.IsSleeping() && _rb.linearVelocity.sqrMagnitude < 0.01f && _rb.angularVelocity.sqrMagnitude < 0.01f)
             {
                 _rb.Sleep();
             }
@@ -120,7 +120,7 @@ public class PinBase : MonoBehaviour
         if (_hasBeenHit) return;
 
         Rigidbody otherRb = other.attachedRigidbody;
-        if (otherRb != null && otherRb.velocity.magnitude < minHitVelocity) return;
+        if (otherRb != null && otherRb.linearVelocity.magnitude < minHitVelocity) return;
 
         bool isHitter = !string.IsNullOrEmpty(hitterTag) && other.CompareTag(hitterTag);
 
@@ -225,7 +225,7 @@ public class PinBase : MonoBehaviour
 
         if (_rb != null)
         {
-            _rb.velocity = Vector3.zero;
+            _rb.linearVelocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
         }
 

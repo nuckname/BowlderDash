@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// does this need mono behaviour?
 public class ScoreCalculator : MonoBehaviour
 {
     [Header("Current Frame Data")]

@@ -8,7 +8,7 @@ public class ShopState : RoundBaseState
         manager.MoveCamera(CameraLocation.ShopCameraLocation);
         manager.UpdateInstructionText("Shop phase. Spend tickets, then click Continue.");
 
-        manager.shopUI.Show();
+        manager.shopUI.ShowShop(manager);
         
         // Reset UI
         RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
