@@ -5,36 +5,30 @@ using UnityEngine.UI;
 public class ShopUIManager : MonoBehaviour
 {
     [Header("UI References")]
-    public CanvasGroup canvasGroup;
+    public GameObject shopGameObject;
     public Button continueButton;
     public Text ticketText;
-
+    
+    [Header("Card References")]
+    public Button Card1Button;
+    public Button Card2Button;
+    public Button Card3Button;
+    
+    public Image CardVisual1;
+    public Image CardVisual2;
+    public Image CardVisual3;
+    
     private RoundStateManager stateManager;
-
-    // Called once by the RoundStateManager to link them together
-    public void Initialize(RoundStateManager manager)
-    {
-        stateManager = manager;
-
-        // Ensure the continue button tells the state machine to move to the next frame
-        if (continueButton != null)
-        {
-            continueButton.onClick.RemoveAllListeners();
-            continueButton.onClick.AddListener(OnContinueClicked);
-        }
-
-        Hide(); // Make sure it starts hidden
-    }
+    
+    //Continue button goes to next state.
 
     public void Show()
     {
-        SetVisible(true);
         RefreshUI();
     }
 
     public void Hide()
     {
-        SetVisible(false);
     }
 
     private void RefreshUI()
@@ -53,12 +47,4 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
-    private void SetVisible(bool visible)
-    {
-        if (canvasGroup == null) return;
-        
-        canvasGroup.alpha = visible ? 1f : 0f;
-        canvasGroup.blocksRaycasts = visible;
-        canvasGroup.interactable = visible;
-    }
 }

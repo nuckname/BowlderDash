@@ -38,11 +38,6 @@ public class RoundStateManager : MonoBehaviour
     [SerializeField] private GameObject floatingTextPrefab;
     void Start()
     {
-        if (shopUI != null)
-        {
-            shopUI.Initialize(this);
-        }
-        
         StartNewGame();
     }
 
