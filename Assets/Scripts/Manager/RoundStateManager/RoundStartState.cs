@@ -9,7 +9,16 @@ public class RoundStartState : RoundBaseState
 
         manager.scoreCalculator.ResetFrameScore();
 
+        manager.sessionData.ballsThrown = 0;
+        
         manager.currentRound++;
+        
+        RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
+        if (roundInfo != null)
+        {
+            manager.inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
+            manager.inGameScoreUi.UpdateBallsText(manager.sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+        }
         
         HandleMap(manager);
 

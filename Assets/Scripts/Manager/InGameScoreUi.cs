@@ -9,6 +9,7 @@ public class InGameScoreUi : MonoBehaviour
     public TextMeshProUGUI scoreToBeatText;
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI ballsText;
+    public TextMeshProUGUI currentTicketsText;
 
     public void RefreshHUD(int currentTotalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
     {

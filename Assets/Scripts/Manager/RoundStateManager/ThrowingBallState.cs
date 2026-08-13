@@ -72,7 +72,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         manager.cameraFollowScript.StopTracking();
 
-        manager.sessionData.AddBallThrown();
+        manager.AddBallThrownToSession();
         
         currentManager = null;
     }

@@ -80,9 +80,8 @@ public class RoundStateManager : MonoBehaviour
         
         RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
         inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
-        inGameScoreUi.UpdateScoreText(0);
-        
-        inGameScoreUi.UpdateBallsText(0, roundInfo.maxBallsAllowedToThrow);
+        inGameScoreUi.UpdateScoreText(sessionData.currentScore);
+        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
     }
 
     public void SwitchState(RoundBaseState newState)
@@ -90,6 +89,24 @@ public class RoundStateManager : MonoBehaviour
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         if (currentState != null) currentState.EnterState(this);
+    }
+    
+    public void AddScoreToSession(int amount)
+    {
+        sessionData.AddScore(amount);
+        inGameScoreUi.UpdateScoreText(sessionData.currentScore);
+    }
+
+    public void AddTicketsToSession(int amount)
+    {
+        sessionData.AddTickets(amount);
+    }
+
+    public void AddBallThrownToSession()
+    {
+        sessionData.AddBallThrown();
+        RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
+        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
     }
 
     void OnCollisionEnter(Collision collision) => currentState?.OnCollisionEnter(this, collision);

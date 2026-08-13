@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-
 public class ScoringState : RoundBaseState
 {
     private bool hasScored = false;
@@ -172,10 +171,8 @@ public class ScoringState : RoundBaseState
         
         int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
         
-        _manager.sessionData.AddScore(finalScoreThisRound);
-        
         // need to save this and add to it. 
-        _manager.inGameScoreUi.totalScoreText.text = finalScoreThisRound.ToString();
+        _manager.AddScoreToSession(finalScoreThisRound);
     }
 
     private void GoToNextRound()
