@@ -3016,8 +3016,6 @@ MonoBehaviour:
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
-  scoringState:
-    hello: {fileID: 0}
   floatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
 --- !u!1 &374805130
 GameObject:
@@ -4385,7 +4383,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -259, y: 161}
+  m_AnchoredPosition: {x: -250, y: 161}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &593323458
@@ -9665,6 +9663,7 @@ MonoBehaviour:
   CardVisual1: {fileID: 593323458}
   CardVisual2: {fileID: 2072535365}
   CardVisual3: {fileID: 338407411}
+  costScalingPerRound: 5
 --- !u!43 &1176472340
 Mesh:
   m_ObjectHideFlags: 0
@@ -10732,7 +10731,7 @@ Transform:
   m_GameObject: {fileID: 1316218691}
   serializedVersion: 2
   m_LocalRotation: {x: 0.35707715, y: -0.01300919, z: -0.007488608, w: 0.9339543}
-  m_LocalPosition: {x: -1067.0651, y: -248.22144, z: -958.9895}
+  m_LocalPosition: {x: -1061.6, y: -248.3, z: -958.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,6 +40,14 @@ public class RoundStateManager : MonoBehaviour
     public  RoundOverState roundOverState = new RoundOverState();
 
     [SerializeField] private GameObject floatingTextPrefab;
+
+    private void Awake()
+    {
+        // Bind the local reference to the Singleton instance so they share the exact same data
+        sessionData = SessionData.Instance;
+    }
+
+
     void Start()
     {
         StartNewGame();

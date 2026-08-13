@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Legacy Code
 [RequireComponent(typeof(HexGrid))]
 public class GridOccupancy : MonoBehaviour
 {

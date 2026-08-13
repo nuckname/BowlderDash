@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Legacy Code
 [RequireComponent(typeof(HexGrid), typeof(GridOccupancy))]
 public class GridTicketManager : MonoBehaviour
 {
@@ -72,14 +73,21 @@ public class GridTicketManager : MonoBehaviour
 
     public bool TryCollectTicketForPin(PinBase pin, out int collectedValue)
     {
-        collectedValue = 0;
+        collectedValue = 1;
         if (pin == null) return false;
 
-        HexCell cell = occupancy.GetCellByOccupant(pin.transform) ?? grid.GetNearestCell(pin.transform.position);
-        if (cell == null) return false;
+        HexCell cell = occupancy.GetCellByOccupant(pin.transform);
 
-        TicketInstance ticket = activeTickets.Find(t => t.cell == cell);
-        if (ticket == null) return false;
+        TicketInstance ticket = null;
+    
+        foreach (TicketInstance t in activeTickets)
+        {
+            if (t.cell == cell)
+            {
+                ticket = t;
+                break;
+            }
+        }
 
         collectedValue = ticket.value;
         Destroy(ticket.visual);

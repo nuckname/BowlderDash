@@ -6,9 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Classes/SessionData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Classes/SessionData.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GridManager/GridTicketManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GridManager/GridTicketManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +29,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/9d/f201b6fe/Debug.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/340c3b1a1ad54b41a4fa6d9d6bea45c51fe00/61/90284f6e/Physics.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/37cc348edc804f4cb176b63962c716e7177200/dc/a1269a69/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="FORCE_HIGHLIGHTING" />
@@ -49,16 +52,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/TicketEffect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pins/WorldObjectToCard.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/ScoreCalculator.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@14.0.12/Editor/Data/Util/PooledList.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.test-framework@1.1.33/UnityEngine.TestRunner/Assertions/LogAssert.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/ExecuteEvents.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/InputModules/StandaloneInputModule.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.9.4/Editor/VisualScripting.Flow/Events/TriggerCustomEventDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.9.4/Editor/VisualScripting.State/Transitions/TriggerStateTransitionWidget.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.9.4/Runtime/VisualScripting.Flow/Framework/Events/Physics/TriggerEventUnit.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.9.4/Runtime/VisualScripting.Flow/Framework/Events/Physics2D/TriggerEvent2DUnit.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.9.4/Runtime/VisualScripting.Flow/Framework/Events/TriggerCustomEvent.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.visualscripting@1.9.4/Runtime/VisualScripting.State/TriggerStateTransition.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -164,7 +157,7 @@
       <workItem from="1786235932664" duration="7848000" />
       <workItem from="1786322519465" duration="4928000" />
       <workItem from="1786427965698" duration="1954000" />
-      <workItem from="1786593538687" duration="3402000" />
+      <workItem from="1786593538687" duration="6642000" />
     </task>
     <servers />
   </component>
@@ -207,19 +200,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs</url>
-          <line>85</line>
-          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Manager\ShopUIManager.cs" containingFunctionPresentation="Method 'UpdateButtonText'">
-            <startOffsets>
-              <option value="2321" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2381" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

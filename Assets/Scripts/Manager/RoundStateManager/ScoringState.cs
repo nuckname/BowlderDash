@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[System.Serializable]
+
 public class ScoringState : RoundBaseState
 {
     private bool hasScored = false;
@@ -23,7 +23,6 @@ public class ScoringState : RoundBaseState
     private float _textSpawnTimer = 0f;
     private float _textSpawnDelay = 1f;
 
-    public GameObject hello; 
     public override void EnterState(RoundStateManager manager)
     {
         manager.UpdateInstructionText("Waiting for pins to settle...");

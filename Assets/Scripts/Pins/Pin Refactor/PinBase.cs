@@ -151,6 +151,14 @@ public class PinBase : MonoBehaviour
         {
             effect.Execute(this);
         }
+        
+        // I dont like getting the compoent like this but I dont know another way.
+        GridManager gridManager = FindObjectOfType<GridManager>();
+        if (gridManager != null && gridManager.TryCollectTicketForPin(this, out int ticketValue))
+        {
+            SessionData.Instance.AddTickets(ticketValue);
+            Debug.Log("+1");
+        }
     }
 
     public void SyncPhysicsConstraints()
