@@ -28,6 +28,21 @@ public class SessionData
         tickets += amount;
     }
 
+    public bool CanAfford(int amount)
+    {
+        return tickets >= amount;
+    }
+
+    public bool SpendTickets(int amount)
+    {
+        if (CanAfford(amount))
+        {
+            tickets -= amount;
+            return true;
+        }
+        return false;
+    }
+
     public void ResetSession()
     {
         currentScore = 0;

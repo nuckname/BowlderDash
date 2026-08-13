@@ -1,6 +1,7 @@
 // ShopUIManager.cs
 
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,9 @@ public class ShopUIManager : MonoBehaviour
     public Image CardVisual1;
     public Image CardVisual2;
     public Image CardVisual3;
+    
+    [Header("Shop Settings")]
+    public int costScalingPerRound = 3;
     
     private RoundStateManager stateManager;
     private CardDataSO[] currentShopCards = new CardDataSO[3];
@@ -53,6 +57,8 @@ public class ShopUIManager : MonoBehaviour
         {
             int randomIndex = Random.Range(0, stateManager.masterCardList.Count);
             currentShopCards[i] = stateManager.masterCardList[randomIndex];
+            
+            UpdateButtonText(i);
         }
 
         UpdateCardVisual(CardVisual1, currentShopCards[0]);
@@ -68,6 +74,24 @@ public class ShopUIManager : MonoBehaviour
         {
             cardImage.sprite = prefabImage.sprite;
         }
+    }
+    
+    private void UpdateButtonText(int index)
+    {
+        Button targetButton = null;
+        
+        if (index == 0) targetButton = Card1Button;
+        else if (index == 1) targetButton = Card2Button;
+        else if (index == 2) targetButton = Card3Button;
+
+        TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
+        
+        if (buttonText != null)
+        {
+            int cardCost = currentShopCards[index].baseCost + (stateManager.currentRound * costScalingPerRound);
+            buttonText.text = $"Buy ({cardCost})";
+        }
+       
     }
 
     private void RefreshUI()
@@ -87,26 +111,39 @@ public class ShopUIManager : MonoBehaviour
     {
         if (currentShopCards[index] != null)
         {
+            int cardCost = currentShopCards[index].baseCost + (stateManager.currentRound * costScalingPerRound);
+            
             DeckManager.Instance.AddCardToDeck(currentShopCards[index]);
             
-            // Remove from the array so it can't be bought again
-            currentShopCards[index] = null; 
+            if (SessionData.Instance.SpendTickets(cardCost))
+            {
+                DeckManager.Instance.AddCardToDeck(currentShopCards[index]);
+                
+                // Remove from the array so it can't be bought again
+                currentShopCards[index] = null; 
 
-            if (index == 0)
-            {
-                SetCardAlpha(Card1Button, CardVisual1, 0.25f);
+                if (index == 0)
+                {
+                    SetCardAlpha(Card1Button, CardVisual1, 0.25f);
+                }
+                else if (index == 1)
+                {
+                    SetCardAlpha(Card2Button, CardVisual2, 0.25f);
+                }
+                else if (index == 2)
+                {
+                    SetCardAlpha(Card3Button, CardVisual3, 0.25f);
+                }
+                
+                RefreshUI();
             }
-            else if (index == 1)
+            else
             {
-                SetCardAlpha(Card2Button, CardVisual2, 0.25f);
-            }
-            else if (index == 2)
-            {
-                SetCardAlpha(Card3Button, CardVisual3, 0.25f);
+                Debug.LogWarning("Not enough tickets to buy this card!");
             }
         }
     }
-    //
+    
     // AI https://share.gemini.google/lIdrnSIvV63b
     private void SetCardAlpha(Button button, Image visual, float alpha)
     {

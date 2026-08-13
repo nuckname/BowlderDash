@@ -10,4 +10,7 @@ public class CardDataSO : ScriptableObject
     public GameObject cardUIPrefab; 
     public GameObject cardVisualPrefab; 
     public GameObject worldGameObjectPrefab; 
+    
+    [Header("Shop Settings")]
+    public int baseCost = 5;
 }
