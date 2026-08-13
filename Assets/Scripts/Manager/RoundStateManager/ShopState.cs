@@ -13,6 +13,9 @@ public class ShopState : RoundBaseState
         // Reset UI
         RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
         
+        // We need to pick 3 cards from
+        // assign from round manager
+        
 /*        
         manager.inGameScoreUi.RefreshHUD(
             PlayerSheet.Instance.playerCurrentTicket,
