@@ -13,9 +13,11 @@ public class PinPlacementState : RoundBaseState
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
         
-        DeckManager.Instance.Draw(manager.amountOfCardsToDrawEachTurn);
+        PinOnPinCollisionLayer(false);
         
-        PinOnPinCollisionLayer(true);
+        manager.AllowPinCollisionEffects(false);
+        
+        DeckManager.Instance.Draw(manager.amountOfCardsToDrawEachTurn);
     }
 
     public override void UpdateState(RoundStateManager manager)
@@ -48,20 +50,18 @@ public class PinPlacementState : RoundBaseState
 
     public override void ExitState(RoundStateManager manager)
     {
-        PinOnPinCollisionLayer(false);
-        
-        // DiscardHand() was removed from here so we don't accidentally call it twice
-        
         manager.GetAllPinsInCurrentFrame(manager);
 
+        PinOnPinCollisionLayer(true);
+        
         manager.AllowPinsToFallOver(false);
     }
-
+    
     private void PinOnPinCollisionLayer(bool turnOn)
     {
         int pinLayer = LayerMask.NameToLayer("Pin");
 
-        // Turn collision on and off for pin layer basically.
+        // Turn collision on and off for pin layer.
         Physics.IgnoreLayerCollision(pinLayer, pinLayer, turnOn);
     }
 }

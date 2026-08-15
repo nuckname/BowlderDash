@@ -192,12 +192,31 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         }
     }
 
+    // Forcefully cancels the drag without triggering OnDropInPlayArea
+    public void CancelDrag()
+    {
+        isDragging = false;
+        
+        if (transform.parent != null && !transform.parent.CompareTag("Slot") && HandManager.Instance != null)
+        {
+            HandManager.Instance.AssignSlotToCard(this);
+        }
+
+        EndDragEvent.Invoke(this);
+        ReturnToHand();
+    }
+    
     // Cancels the play preview and restores the card's UI visuals in the hand.
     public void ReturnToHand()
     {
         Debug.Log("CardMovement REutnr to hand");
         // FAILED TO PLACE (Cell occupied or invalid) - Return to Hand
-        isPreviewingInWorld = false;
+        
+        if (isPreviewingInWorld)
+        {
+            OnExitPlayArea?.Invoke();
+            isPreviewingInWorld = false;
+        }
 
         _imageComponent.enabled = true;
         if (cardAnimator != null) 

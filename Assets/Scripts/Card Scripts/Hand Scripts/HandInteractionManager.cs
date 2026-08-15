@@ -93,7 +93,7 @@ public class HandInteractionManager : MonoBehaviour
                 {
                     if (selectedCardMovement != null && selectedCardMovement != handManager.cardsInHand[i])
                     {
-                        selectedCardMovement.OnEndDrag(null);
+                        selectedCardMovement.CancelDrag();
                     }
 
                     handManager.cardsInHand[i].ForceStartDrag();

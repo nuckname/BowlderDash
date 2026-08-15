@@ -137,6 +137,16 @@ public class RoundStateManager : MonoBehaviour
         }
     }
     
+    public void AllowPinCollisionEffects(bool allow)
+    {
+        if(allActivePinsInTheFrame == null) return;
+        
+        foreach(PinBase pin in allActivePinsInTheFrame)
+        {
+            pin.AllowCollisionEffects = allow;
+        }
+    }
+    
     public void GetAllPinsInCurrentFrame(RoundStateManager manager)
     {
         manager.allActivePinsInTheFrame = FindObjectsOfType<PinBase>();

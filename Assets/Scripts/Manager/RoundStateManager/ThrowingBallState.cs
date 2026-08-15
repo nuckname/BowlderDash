@@ -15,8 +15,13 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         manager.ballController.ResetBall();
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
+        
         manager.TurnOnCardHand(false);
+        
+        manager.AllowPinCollisionEffects(true);
+        
         manager.AllowPinsToFallOver(true);
+        
         manager.UpdateInstructionText("Draw the ball's path! Start from the ball.");
         
         pathDrawer.Begin(this);

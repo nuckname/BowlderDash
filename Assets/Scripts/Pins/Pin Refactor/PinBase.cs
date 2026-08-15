@@ -20,9 +20,9 @@ public class PinBase : MonoBehaviour
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onEndOfRoundEffects = new List<PinEffect>();
     
-    
-    [SerializeField] protected bool _allowPinToFallOver = false;
-    [SerializeField] protected bool _allowPinToBePickedUp = false;
+    [SerializeField] protected bool allowPinToFallOver = false;
+    [SerializeField] protected bool allowPinToBePickedUp = false;
+    [SerializeField] protected bool allowCollisionEffects = false;
     
     public bool _isFallen = false;
     public bool IsFallen => _isFallen;
@@ -41,10 +41,10 @@ public class PinBase : MonoBehaviour
     
     public bool AllowPinToFallOver
     {
-        get => _allowPinToFallOver;
+        get => allowPinToFallOver;
         set
         {
-            _allowPinToFallOver = value;
+            allowPinToFallOver = value;
             SyncPhysicsConstraints();
         }
     }
@@ -68,8 +68,14 @@ public class PinBase : MonoBehaviour
     
     public bool AllowPinToBePickedUp
     {
-        get => _allowPinToBePickedUp;
-        set => _allowPinToBePickedUp = value;
+        get => allowPinToBePickedUp;
+        set => allowPinToBePickedUp = value;
+    }
+    
+    public bool AllowCollisionEffects
+    {
+        get => allowCollisionEffects;
+        set => allowCollisionEffects = value;
     }
     
     public void InjectDependencies(ScoreCalculator calculator)
@@ -89,7 +95,7 @@ public class PinBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!_allowPinToFallOver || _isFallen || _allowPinToBePickedUp) 
+        if (!allowPinToFallOver || _isFallen || allowPinToBePickedUp) 
         {
             return;
         }
@@ -117,7 +123,7 @@ public class PinBase : MonoBehaviour
 
     protected virtual void HandleHit(Collider other)
     {
-        if (_hasBeenHit) return;
+        if (_hasBeenHit || !allowCollisionEffects) return;
 
         Rigidbody otherRb = other.attachedRigidbody;
         if (otherRb != null && otherRb.linearVelocity.magnitude < minHitVelocity) return;
