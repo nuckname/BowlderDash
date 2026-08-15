@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\PinPlacementState.cs" />
     <Compile Include="Assets\Scripts\Interface\IPathListener.cs" />
     <Compile Include="Assets\ScriptableObjects\RoundData.cs" />
+    <Compile Include="Assets\Scripts\Manager\RoundStateManager\SpawnBossObjectState.cs" />
     <Compile Include="Assets\PathDrawer.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardAnimator.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\PinEffect.cs" />

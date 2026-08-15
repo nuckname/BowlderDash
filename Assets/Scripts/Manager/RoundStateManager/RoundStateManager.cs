@@ -38,7 +38,8 @@ public class RoundStateManager : MonoBehaviour
     public ShopState shopState = new ShopState();
     public ScoringState scoringState = new ScoringState();
     public  RoundOverState roundOverState = new RoundOverState();
-
+    public SpawnBossObjectsState spawnBossObjectsState = new SpawnBossObjectsState();
+    
     [SerializeField] private GameObject floatingTextPrefab;
 
     private void Awake()

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Call this on a new round start
 [System.Serializable]
 public class RoundStartState : RoundBaseState
 {
@@ -12,6 +13,23 @@ public class RoundStartState : RoundBaseState
         manager.sessionData.ballsThrown = 0;
         
         manager.currentRound++;
+
+        if (manager.currentRound == 1)
+        {
+            // set up start for a new game
+        }
+        
+        if (manager.currentRound == 1)
+        {
+            // check if we are in a boss frame
+            // then go to boss frame state
+        }
+        else
+        {
+            // go to pin placement
+        }
+        
+        
         
         RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
         if (roundInfo != null)

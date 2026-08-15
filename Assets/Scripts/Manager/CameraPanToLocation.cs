@@ -5,7 +5,8 @@ public enum CameraLocation
 { 
     PinCameraLocation, 
     BallThrowingCameraLocation, 
-    ShopCameraLocation 
+    ShopCameraLocation,
+    SpawnBossObjectsCameraPosition
 }
 
 public class CameraPanToLocation : MonoBehaviour
