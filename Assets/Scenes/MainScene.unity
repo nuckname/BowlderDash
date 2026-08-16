@@ -3266,6 +3266,9 @@ MonoBehaviour:
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
+  spawnBossObjectsState:
+    bossObjectPrefabs: []
+    bossSpawnLocations: []
   floatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
 --- !u!1 &374805130
 GameObject:
@@ -8847,7 +8850,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1047286572}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1168153566}
+        m_TargetAssemblyTypeName: ShopUIManager, Assembly-CSharp
+        m_MethodName: OnContinueClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1047286572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17447,7 +17462,7 @@ GameObject:
   - component: {fileID: 273124771}
   - component: {fileID: 273124770}
   - component: {fileID: 273124769}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Exploder (Plane)
   m_TagString: Exploder
   m_Icon: {fileID: 0}

@@ -10,6 +10,9 @@ public class WorldObjectToCard : MonoBehaviour
 
     private void Start()
     {
+        gameObject.layer = 0;
+        gameObject.tag = "Untagged";
+
         GameObject hexManager = GameObject.FindGameObjectWithTag("HexManager");
         if (hexManager != null)
         {
