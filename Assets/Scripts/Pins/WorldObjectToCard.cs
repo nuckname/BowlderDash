@@ -5,6 +5,7 @@ using UnityEngine;
 public class WorldObjectToCard : MonoBehaviour
 {
     [SerializeField] private CardDataSO cardData;
+    private bool hasReturnedToDeck;
     
     private HexGrid _grid;
 
@@ -20,6 +21,7 @@ public class WorldObjectToCard : MonoBehaviour
     public void SetupCardData(CardDataSO data)
     {
         cardData = data;
+        hasReturnedToDeck = false;
     }
     
     public void ReturnToHand()
@@ -29,6 +31,23 @@ public class WorldObjectToCard : MonoBehaviour
             HandManager.Instance.AddCardToHand(cardData);
         }
         
+        Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Returns this placed card to the discard pile so it can be shuffled and drawn again.
+    /// Destroying the root also clears child debris and visual effects.
+    /// </summary>
+    public void ReturnToDeck()
+    {
+        if (hasReturnedToDeck) return;
+        hasReturnedToDeck = true;
+
+        if (cardData != null && DeckManager.Instance != null)
+        {
+            DeckManager.Instance.AddToDiscardPile(cardData);
+        }
+
         Destroy(gameObject);
     }
 }

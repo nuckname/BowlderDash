@@ -54,6 +54,7 @@ public class RoundStartState : RoundBaseState
 
     private void HandleMap(RoundStateManager manager)
     {
+        manager.ClearPlacedPinsAndReturnCardsToDeck();
         manager.ResetLaneExploders();
         //manager.pinHandInventory?.ResetInventoryAndPins();
         manager.RefreshRuntimePools();

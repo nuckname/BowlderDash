@@ -84,6 +84,26 @@ public class HandManager : MonoBehaviour
         DiscardAnimation(card);
     }
 
+    /// <summary>
+    /// Removes a card UI after it becomes a placed world object. The world object owns the
+    /// card data until it is recalled or cleared at the round boundary.
+    /// </summary>
+    public void ConsumePlayedCard(CardMovement card)
+    {
+        if (card == null) return;
+
+        Transform slot = card.transform.parent;
+        if (slot != null)
+        {
+            slot.SetParent(null);
+            Destroy(slot.gameObject);
+        }
+
+        cardsInHand.Remove(card);
+        RebuildHandVisuals();
+        Destroy(card.gameObject);
+    }
+
     // AI  
     // https://share.gemini.google/usukNofWRGFR
     private void DiscardAnimation(CardMovement card)

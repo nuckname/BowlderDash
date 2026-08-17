@@ -75,6 +75,12 @@ public class RoundStateManager : MonoBehaviour
             else if (currentState == scoringState) SwitchState(shopState);
             else if (currentState == shopState) SwitchState(roundStartState);
         }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            AddTicketsToSession(10);
+            Debug.LogWarning("Added 10 tickets!");
+        }
     }
 
     public void StartNewGame()
@@ -202,6 +208,20 @@ public class RoundStateManager : MonoBehaviour
     public void SpawnFloatingText(string text, Vector3 position)
     {
         Instantiate(floatingTextPrefab, position, Quaternion.identity).GetComponent<FloatingText>().Initialize(text);
+    }
+
+    /// <summary>
+    /// Clears all placed card-backed pins between rounds. Card data returns once to the
+    /// discard pile and destroying each root also removes child debris/effects.
+    /// </summary>
+    public void ClearPlacedPinsAndReturnCardsToDeck()
+    {
+        foreach (WorldObjectToCard placedObject in FindObjectsByType<WorldObjectToCard>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            placedObject.ReturnToDeck();
+        }
+
+        allActivePinsInTheFrame = System.Array.Empty<PinBase>();
     }
 
     public void ResetLaneExploders() { }

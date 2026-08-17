@@ -238,10 +238,10 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Cleans up the card and its container slot after being successfully played.
     public void SuccessfulPlay()
     {
-        // Sends the card's data to the discard pile and plays the discard animation
+        // The placed world object now owns this card and returns it to the deck later.
         if (HandManager.Instance != null)
         {
-            HandManager.Instance.DiscardCard(this);
+            HandManager.Instance.ConsumePlayedCard(this);
         }
         else
         {

@@ -18,7 +18,15 @@ public class RoundOverState : RoundBaseState
             
             if (pin.IsFallen)
             {
-                GameObject.Destroy(pin.gameObject);
+                WorldObjectToCard cardBackedPin = pin.GetComponent<WorldObjectToCard>();
+                if (cardBackedPin != null)
+                {
+                    cardBackedPin.ReturnToDeck();
+                }
+                else
+                {
+                    GameObject.Destroy(pin.gameObject);
+                }
             }
         }
 
