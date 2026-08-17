@@ -5,11 +5,11 @@ public class ScoringState : RoundBaseState
 {
     private bool hasScored = false;
     private bool pinsHaveSettled = false;
-    private float checkInterval = 1f;
+    private float checkInterval = 0.25f;
     private float timeSinceLastCheck = 0f;
     
     private float waitTimer = 0f;
-    private float waitTimeBeforeScoring = 4f;
+    private float waitTimeBeforeScoring = 0.25f;
     
     // Floating text offsets
     private float yOffsetPinInHole = 16.0f; 
@@ -60,7 +60,7 @@ public class ScoringState : RoundBaseState
     {
         timeSinceLastCheck += Time.deltaTime;
 
-        // Only run the settlement check every 1 second
+        // Check a certain amount of time to reduce performance overhead from checking every frame
         if (timeSinceLastCheck >= checkInterval)
         {
             timeSinceLastCheck = 0f;

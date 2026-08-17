@@ -8,7 +8,7 @@ public class BallBooster : MonoBehaviour
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();
             
-            rb.AddForce(rb.velocity.normalized, ForceMode.Impulse);
+            rb.AddForce(rb.linearVelocity.normalized, ForceMode.Impulse);
            
         }
     }

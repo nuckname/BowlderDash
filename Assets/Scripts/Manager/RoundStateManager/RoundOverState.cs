@@ -18,7 +18,7 @@ public class RoundOverState : RoundBaseState
             
             if (pin.IsFallen)
             {
-                pin.gameObject.SetActive(false);
+                GameObject.Destroy(pin.gameObject);
             }
         }
 
