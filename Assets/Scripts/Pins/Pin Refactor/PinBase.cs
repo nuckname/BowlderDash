@@ -95,6 +95,13 @@ public class PinBase : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (!allowPinToFallOver)
+        {
+            // Stand up right
+            Vector3 currentEuler = transform.rotation.eulerAngles;
+            transform.rotation = Quaternion.Euler(0f, currentEuler.y, 0f);
+        }
+        
         if (!allowPinToFallOver || _isFallen || allowPinToBePickedUp) 
         {
             return;
