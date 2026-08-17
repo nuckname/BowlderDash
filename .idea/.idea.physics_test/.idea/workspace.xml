@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ball/BallBooster.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ball/BallBooster.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -28,6 +27,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/13/0e92a5d1/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/33/8a91a79f/SetupCoroutine.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/9d/f201b6fe/Debug.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/340c3b1a1ad54b41a4fa6d9d6bea45c51fe00/61/90284f6e/Physics.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/37cc348edc804f4cb176b63962c716e7177200/dc/a1269a69/MonoBehaviour.cs" root0="SKIP_HIGHLIGHTING" />
@@ -235,16 +235,16 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs</url>
-          <line>44</line>
-          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" containingFunctionPresentation="Method 'UpdateState'">
+          <line>92</line>
+          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" containingFunctionPresentation="Method 'SpawnTextForSinglePin'">
             <startOffsets>
-              <option value="1220" />
+              <option value="2413" />
             </startOffsets>
             <endOffsets>
-              <option value="1241" />
+              <option value="2460" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="11" />
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

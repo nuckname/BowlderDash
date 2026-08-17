@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class ScoringState : RoundBaseState
@@ -8,18 +9,13 @@ public class ScoringState : RoundBaseState
     private float checkInterval = 0.25f;
     private float timeSinceLastCheck = 0f;
     
-    private float waitTimer = 0f;
-    private float waitTimeBeforeScoring = 0.25f;
+    private float waitTimeBeforeScoring = 0.2f;
     
     // Floating text offsets
     private float yOffsetPinInHole = 16.0f; 
-    private float yOffset = 2.0f;
+    private float yOffset = 4.0f;
     
     private RoundStateManager _manager;
-
-    private Queue<PinBase> _fallenPinsQueue = new Queue<PinBase>();
-    private bool _isSpawningText = false;
-    private float _textSpawnTimer = 0f;
     private float _textSpawnDelay = 1f;
 
     public override void EnterState(RoundStateManager manager)
@@ -31,11 +27,6 @@ public class ScoringState : RoundBaseState
         hasScored = false;
         pinsHaveSettled = false;
         timeSinceLastCheck = 0f;
-        waitTimer = 0f;
-
-        _fallenPinsQueue.Clear();
-        _isSpawningText = false;
-        _textSpawnTimer = 0f;
     }
 
     public override void UpdateState(RoundStateManager manager) 
@@ -45,14 +36,6 @@ public class ScoringState : RoundBaseState
         if (!pinsHaveSettled)
         {
             HandlePinSettlement();
-        }
-        else if (_isSpawningText)
-        {
-            HandleFloatingTextSpawning();
-        }
-        else
-        {
-            HandleWaitAndScore();
         }
     }
 
@@ -68,43 +51,28 @@ public class ScoringState : RoundBaseState
             if (AreAllPinsSettled())
             {
                 pinsHaveSettled = true;
-                PrepareFloatingTexts();
+                _manager.StartCoroutine(ProcessScoringRoutine());
             }
         }
     }
 
-    private void HandleFloatingTextSpawning()
+    private IEnumerator ProcessScoringRoutine()
     {
-        _textSpawnTimer += Time.deltaTime;
-
-        if (_textSpawnTimer >= _textSpawnDelay)
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
-            _textSpawnTimer = 0f;
-            
-            if (_fallenPinsQueue.Count > 0)
+            if (pin.IsFallen)
             {
-                PinBase currentPin = _fallenPinsQueue.Dequeue();
-                SpawnTextForSinglePin(currentPin);
-            }
-
-            if (_fallenPinsQueue.Count == 0)
-            {
-                _isSpawningText = false;
+                SpawnTextForSinglePin(pin);
+                yield return new WaitForSeconds(_textSpawnDelay);
             }
         }
-    }
 
-    private void HandleWaitAndScore()
-    {
         // Once pins have settled, we start the wait timer before scoring
-        waitTimer += Time.deltaTime;
-        
-        if (waitTimer >= waitTimeBeforeScoring)
-        {
-            CalculateScore();
-            hasScored = true;
-            GoToNextRound();
-        }
+        yield return new WaitForSeconds(waitTimeBeforeScoring);
+
+        CalculateScore();
+        hasScored = true;
+        GoToNextRound();
     }
 
     private bool AreAllPinsSettled()
@@ -118,23 +86,6 @@ public class ScoringState : RoundBaseState
             }
         }
         return true;
-    }
-
-    private void PrepareFloatingTexts()
-    {
-        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
-        {
-            if (pin.IsFallen)
-            {
-                _fallenPinsQueue.Enqueue(pin);
-            }
-        }
-        
-        if (_fallenPinsQueue.Count > 0)
-        {
-            _isSpawningText = true;
-            _textSpawnTimer = _textSpawnDelay; // Start at delay so the first one spawns instantly
-        }
     }
 
     private void SpawnTextForSinglePin(PinBase pin)
