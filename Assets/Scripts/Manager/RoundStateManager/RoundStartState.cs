@@ -11,6 +11,7 @@ public class RoundStartState : RoundBaseState
         manager.scoreCalculator.ResetFrameScore();
 
         manager.sessionData.ballsThrown = 0;
+        manager.ResetHandDrawState();
         
         manager.currentRound++;
 

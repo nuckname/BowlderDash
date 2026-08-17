@@ -30,6 +30,11 @@ public class RoundStateManager : MonoBehaviour
     [Header("Round Vars")]
     public int currentRound = 0;
     public int amountOfCardsToDrawEachTurn;
+
+    [HideInInspector] public bool hasDrawnCardsThisTurn;
+    [HideInInspector] public bool isHandDrawReady;
+
+    private Coroutine handDrawReadinessRoutine;
     
     // States
     public RoundStartState roundStartState = new RoundStartState();
@@ -90,6 +95,38 @@ public class RoundStateManager : MonoBehaviour
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         if (currentState != null) currentState.EnterState(this);
+    }
+
+    public void ResetHandDrawState()
+    {
+        if (handDrawReadinessRoutine != null)
+        {
+            StopCoroutine(handDrawReadinessRoutine);
+            handDrawReadinessRoutine = null;
+        }
+
+        hasDrawnCardsThisTurn = false;
+        isHandDrawReady = false;
+    }
+
+    public void DrawHandForCurrentTurn()
+    {
+        if (hasDrawnCardsThisTurn) return;
+
+        hasDrawnCardsThisTurn = true;
+        isHandDrawReady = false;
+
+        DeckManager.Instance.Draw(amountOfCardsToDrawEachTurn);
+        handDrawReadinessRoutine = StartCoroutine(WaitForHandDraw());
+    }
+
+    private System.Collections.IEnumerator WaitForHandDraw()
+    {
+        float drawInterval = DeckManager.Instance != null ? DeckManager.Instance.drawInterval : 0f;
+        yield return new WaitForSeconds(amountOfCardsToDrawEachTurn * drawInterval);
+
+        isHandDrawReady = true;
+        handDrawReadinessRoutine = null;
     }
     
     public void AddScoreToSession(int amount)

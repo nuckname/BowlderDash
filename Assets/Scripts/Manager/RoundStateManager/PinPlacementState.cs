@@ -1,14 +1,10 @@
-using System.Collections;
 using UnityEngine;
 
 public class PinPlacementState : RoundBaseState
 {
-    private bool _isTransitioning = false;
-
     public override void EnterState(RoundStateManager manager)
     {
         Debug.Log("Entering Pin Placement State");
-        _isTransitioning = false;
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
@@ -16,29 +12,23 @@ public class PinPlacementState : RoundBaseState
         PinOnPinCollisionLayer(false);
         
         manager.AllowPinCollisionEffects(false);
+        manager.AllowPinsToFallOver(false);
         
-        DeckManager.Instance.Draw(manager.amountOfCardsToDrawEachTurn);
+        manager.DrawHandForCurrentTurn();
     }
 
     public override void UpdateState(RoundStateManager manager)
     {
-        if (Input.GetKeyDown(KeyCode.Tab) && !_isTransitioning)
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            manager.StartCoroutine(HandleDiscardAndTransition(manager));
+            if (!manager.isHandDrawReady)
+            {
+                manager.UpdateInstructionText("Drawing cards...");
+                return;
+            }
+
+            manager.SwitchState(manager.throwingBallState);
         }
-    }
-    
-    private IEnumerator HandleDiscardAndTransition(RoundStateManager manager)
-    {
-        _isTransitioning = true;
-        
-        // Trigger the discard early so we can see the animation
-        HandManager.Instance.DiscardHand();
-        
-        // Wait for the exact duration of the discard animation plus a bit
-        yield return new WaitForSeconds(HandManager.Instance.discardAnimationDuration + HandManager.Instance.discardAnimationDurationBuffer);
-        
-        manager.SwitchState(manager.throwingBallState);
     }
 
     public override void FixedUpdateState(RoundStateManager manager) { }

@@ -8,10 +8,12 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public ThrowTuningDataSO tuningData;
 
     private RoundStateManager currentManager;
+    private bool ballHasBeenReleased;
 
     public override void EnterState(RoundStateManager manager)
     {
         currentManager = manager;
+        ballHasBeenReleased = false;
         
         manager.ballController.ResetBall();
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
@@ -29,6 +31,12 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public override void UpdateState(RoundStateManager manager)
     {
+        if (Input.GetKeyDown(KeyCode.Tab) && !ballHasBeenReleased)
+        {
+            manager.SwitchState(manager.pinPlacementState);
+            return;
+        }
+
         if (Input.GetMouseButtonDown(1))
         {
             OnDrawCancelled();
@@ -39,7 +47,14 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public void OnDrawCompleted(List<CurvePoint> path, float drawDuration)
     {
+        if (!currentManager.isHandDrawReady)
+        {
+            OnDrawCancelled();
+            return;
+        }
+
         pathDrawer.Stop();
+        ballHasBeenReleased = true;
         
         float taperStartTime = tuningData.totalMinTime + Mathf.Max(0f, tuningData.powerFalloffDelay);
         float taperEndTime = Mathf.Max(taperStartTime + 0.0001f, tuningData.totalMaxTime);
@@ -51,6 +66,11 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         // Execute throw
         currentManager.ballController.ExecuteThrow(path, launchSpeed);
+
+        if (HandManager.Instance != null)
+        {
+            HandManager.Instance.DiscardHand();
+        }
 
         // Camera
         currentManager.cameraFollowScript.StartTracking();
@@ -77,7 +97,10 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         manager.cameraFollowScript.StopTracking();
 
-        manager.AddBallThrownToSession();
+        if (ballHasBeenReleased)
+        {
+            manager.AddBallThrownToSession();
+        }
         
         currentManager = null;
     }

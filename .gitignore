@@ -105,3 +105,4 @@ Assets/Scenes/SampleScene.unity
 *.dwlt
 obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache
 Assembly-CSharp.csproj
+*.cache
