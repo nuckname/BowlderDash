@@ -224,7 +224,16 @@ public class RoundStateManager : MonoBehaviour
         allActivePinsInTheFrame = System.Array.Empty<PinBase>();
     }
 
-    public void ResetLaneExploders() { }
+    /// <summary>
+    /// Restores every deformable lane mesh before the next round begins.
+    /// </summary>
+    public void ResetLaneExploders()
+    {
+        foreach (exploder laneExploder in FindObjectsByType<exploder>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            laneExploder.ResetMesh();
+        }
+    }
     public void RefreshRuntimePools() { }
 
     public void TurnOnCardHand(bool turnOn) => cardHand.SetActive(turnOn);
