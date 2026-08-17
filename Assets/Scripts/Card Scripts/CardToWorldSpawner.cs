@@ -31,7 +31,7 @@ public class CardToWorldSpawner : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
             {
                 HexCell nearestCell = _grid.GetNearestCell(hit.point);
-                if (nearestCell != null)
+                if (nearestCell != null && nearestCell.occupant == null)
                 {
                     _spawnedWorldObject.transform.position = new Vector3(
                         nearestCell.center.x, 
