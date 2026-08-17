@@ -76,13 +76,13 @@ public class DraggableSnap : MonoBehaviour
             Vector3 targetPos = worldPoint + _offset;
 
             HexCell nearestCell = _hexGrid.GetNearestCell(targetPos);
-            if (nearestCell != null)
+            if (nearestCell != null && nearestCell.occupant == null)
             {
                 transform.position = new Vector3(nearestCell.center.x, elevatedY, nearestCell.center.z);
             }
         }
     }
-
+    
     private void OnMouseUp()
     {
         if (!_dragging) return; 
