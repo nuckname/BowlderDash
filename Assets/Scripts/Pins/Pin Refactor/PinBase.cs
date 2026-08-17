@@ -132,9 +132,6 @@ public class PinBase : MonoBehaviour
     {
         if (_hasBeenHit || !allowCollisionEffects) return;
 
-        Rigidbody otherRb = other.attachedRigidbody;
-        if (otherRb != null && otherRb.linearVelocity.magnitude < minHitVelocity) return;
-
         bool isHitter = !string.IsNullOrEmpty(hitterTag) && other.CompareTag(hitterTag);
 
         bool isAnotherPin = other.GetComponent<PinBase>() != null;

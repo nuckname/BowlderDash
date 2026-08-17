@@ -89,6 +89,8 @@ public class GridTicketManager : MonoBehaviour
             }
         }
 
+        if (ticket == null) return false;
+        
         collectedValue = ticket.value;
         Destroy(ticket.visual);
         activeTickets.Remove(ticket);

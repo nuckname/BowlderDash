@@ -3266,6 +3266,9 @@ MonoBehaviour:
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
+  spawnBossObjectsState:
+    bossObjectPrefabs: []
+    bossSpawnLocations: []
   floatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
 --- !u!1 &374805130
 GameObject:
@@ -17743,7 +17746,7 @@ GameObject:
   - component: {fileID: 1353803851}
   - component: {fileID: 1353803850}
   - component: {fileID: 6652253181974710232}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Ball
   m_TagString: Ball
   m_Icon: {fileID: 0}
