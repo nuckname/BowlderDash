@@ -36,7 +36,6 @@ public class ShopUIManager : MonoBehaviour
         
         stateManager = manager;
         GenerateShopCards();
-        RefreshUI();
     }
 
     public void Hide()
@@ -94,14 +93,6 @@ public class ShopUIManager : MonoBehaviour
        
     }
 
-    private void RefreshUI()
-    {
-        if (ticketText != null && stateManager != null)
-        {
-            // ticketText.text = $"Tickets: {stateManager.ticketEconomy.currentTickets}";
-        }
-    }
-
     public void OnContinueClicked()
     {
         stateManager.SwitchState(stateManager.roundStartState);
@@ -134,8 +125,6 @@ public class ShopUIManager : MonoBehaviour
                 {
                     SetCardAlpha(Card3Button, CardVisual3, 0.25f);
                 }
-                
-                RefreshUI();
             }
             else
             {

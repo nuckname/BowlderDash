@@ -43,7 +43,13 @@ public class SessionData
         return false;
     }
 
-    public void ResetSession()
+    public void NewRoundReset()
+    {
+        currentScore = 0;
+        ballsThrown = 0;
+    }
+    
+    public void StartBrandNewSession()
     {
         currentScore = 0;
         currentFrame = 1;

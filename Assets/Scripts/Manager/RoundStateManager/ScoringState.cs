@@ -122,8 +122,8 @@ public class ScoringState : RoundBaseState
         
         int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
         
-        // need to save this and add to it. 
-        _manager.AddScoreToSession(finalScoreThisRound);
+        _manager.inGameScoreUi.UpdateScoreText(finalScoreThisRound);
+        _manager.sessionData.AddScore(finalScoreThisRound);
     }
 
     private void GoToNextRound()

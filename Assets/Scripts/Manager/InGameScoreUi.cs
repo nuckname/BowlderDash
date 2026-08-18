@@ -13,19 +13,22 @@ public class InGameScoreUi : MonoBehaviour
 
     public void RefreshHUD(int currentTotalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
     {
-        totalScoreText.text = $"{currentTotalScore}";
-
-        roundText.text = $"{currentRound} / {maxRounds}";
-
-        scoreToBeatText.text = $"{roundData.scoreNeededToBeat}";
-
-        ballsText.text = $"{currentBalls} / {roundData.maxBallsAllowedToThrow}";
+        UpdateRoundToBeatText(currentTotalScore);
+        UpdateRoundText(currentRound, maxRounds);
+        UpdateRoundToBeatText(roundData.scoreNeededToBeat);
+        UpdateBallsText(currentBalls, roundData.maxBallsAllowedToThrow);
     }
     
     public void UpdateScoreText(int newScore)
     {
         totalScoreText.text = $"Total Score: {newScore}";
     }
+    
+    public void UpdateRoundText(int currentRound, int maxRounds)
+    {
+        roundText.text = $"Rounds: {currentRound} / {maxRounds}";
+    }
+
     
     public void UpdateBallsText(int newBalls, int maxBalls)
     {

@@ -75,17 +75,17 @@ public class RoundStateManager : MonoBehaviour
             else if (currentState == scoringState) SwitchState(shopState);
             else if (currentState == shopState) SwitchState(roundStartState);
         }
-
+        
         if (Input.GetKeyDown(KeyCode.T))
         {
             AddTicketsToSession(10);
-            Debug.LogWarning("Added 10 tickets!");
+            Debug.Log("Added 10 tickets!");
         }
     }
 
     public void StartNewGame()
     {
-        sessionData.ResetSession();
+        sessionData.StartBrandNewSession();
         
         grid.GenerateGrid();
         SwitchState(roundStartState);
@@ -135,12 +135,6 @@ public class RoundStateManager : MonoBehaviour
         handDrawReadinessRoutine = null;
     }
     
-    public void AddScoreToSession(int amount)
-    {
-        sessionData.AddScore(amount);
-        inGameScoreUi.UpdateScoreText(sessionData.currentScore);
-    }
-
     public void AddTicketsToSession(int amount)
     {
         sessionData.AddTickets(amount);
