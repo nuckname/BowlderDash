@@ -90,12 +90,14 @@ public class RoundStateManager : MonoBehaviour
         sessionData.StartBrandNewSession();
         
         grid.GenerateGrid();
-        SwitchState(roundStartState);
         
         RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
+        
         inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+        
+        SwitchState(roundStartState);
     }
 
     public void SwitchState(RoundBaseState newState)
