@@ -104,8 +104,6 @@ public class ShopUIManager : MonoBehaviour
         {
             int cardCost = currentShopCards[index].baseCost + (stateManager.currentRound * costScalingPerRound);
             
-            DeckManager.Instance.AddCardToDeck(currentShopCards[index]);
-            
             if (SessionData.Instance.SpendTickets(cardCost))
             {
                 DeckManager.Instance.AddCardToDeck(currentShopCards[index]);

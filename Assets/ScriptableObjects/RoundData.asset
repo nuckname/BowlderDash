@@ -15,10 +15,16 @@ MonoBehaviour:
   rounds:
   - roundNumber: 1
     scoreNeededToBeat: 30
-    ballsAllowed: 2
+    maxBallsAllowedToThrow: 3
   - roundNumber: 2
     scoreNeededToBeat: 35
-    ballsAllowed: 2
+    maxBallsAllowedToThrow: 3
   - roundNumber: 3
     scoreNeededToBeat: 50
-    ballsAllowed: 2
+    maxBallsAllowedToThrow: 3
+  - roundNumber: 4
+    scoreNeededToBeat: 60
+    maxBallsAllowedToThrow: 3
+  - roundNumber: 5
+    scoreNeededToBeat: 75
+    maxBallsAllowedToThrow: 2

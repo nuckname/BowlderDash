@@ -10,17 +10,16 @@ public class RoundStartState : RoundBaseState
         SessionData.Instance.NewRoundReset();
 
         manager.ResetHandDrawState();
-        
-        manager.currentRound++;
+    
 
         if (manager.currentRound == 1)
         {
             // set up start for a new game
         }
-        
+    
         // Reset Ui Score 
         // Reset SessionDataScore
-        
+    
         if (manager.currentRound == 1)
         {
             // check if we are in a boss frame
@@ -30,21 +29,9 @@ public class RoundStartState : RoundBaseState
         {
             // go to pin placement
         }
-        
-        
-        
-        RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
+    
 
-        // Not ideal hard coding max rounds 8
-        manager.inGameScoreUi.RefreshHUD(0, roundInfo.roundNumber, 0, roundInfo, 8);
-        
-        
-        if (roundInfo != null)
-        {
-            manager.inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
-            manager.inGameScoreUi.UpdateBallsText(manager.sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
-        }
-        
+    
         HandleMap(manager);
 
         HandleGrid(manager);

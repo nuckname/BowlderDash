@@ -9,11 +9,22 @@ public class InGameScoreUi : MonoBehaviour
     public TextMeshProUGUI scoreToBeatText;
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI ballsText;
-    public TextMeshProUGUI currentTicketsText;
+    
+    // Tickets
+    public TextMeshProUGUI inGameUiTicketsText;
+    public Text shopUiTicketsText;
 
-    public void RefreshHUD(int currentTotalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
+    public static InGameScoreUi Instance;
+
+    private void Awake()
     {
-        UpdateRoundToBeatText(currentTotalScore);
+        Instance = this;
+    }
+    
+    // Update score UI with default values, for starting a new round when we win the frame/round
+    public void RefreshHUD(int totalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
+    {
+        UpdateScoreText(totalScore);
         UpdateRoundText(currentRound, maxRounds);
         UpdateRoundToBeatText(roundData.scoreNeededToBeat);
         UpdateBallsText(currentBalls, roundData.maxBallsAllowedToThrow);
@@ -24,19 +35,31 @@ public class InGameScoreUi : MonoBehaviour
         totalScoreText.text = $"Total Score: {newScore}";
     }
     
+    public void UpdateTicketText(int newTickets)
+    {
+        // In Game
+        inGameUiTicketsText.text = $"Tickets: {newTickets}";
+        
+        // In Shop
+        if (shopUiTicketsText != null)
+        {
+            shopUiTicketsText.text = $"Tickets: {newTickets}";
+        }
+    }
+    
     public void UpdateRoundText(int currentRound, int maxRounds)
     {
         roundText.text = $"Rounds: {currentRound} / {maxRounds}";
     }
 
     
-    public void UpdateBallsText(int newBalls, int maxBalls)
+    public void UpdateBallsText(int ball, int maxBalls)
     {
-        ballsText.text = $"Balls Thrown: {newBalls} / {maxBalls}";
+        ballsText.text = $"Balls Thrown: {ball} / {maxBalls}";
     }
 
-    public void UpdateRoundToBeatText(int newRound)
+    public void UpdateRoundToBeatText(int scoreToBeat)
     {
-        scoreToBeatText.text = $"Score To Beat: {newRound}";
+        scoreToBeatText.text = $"Score To Beat: {scoreToBeat}";
     }
 }

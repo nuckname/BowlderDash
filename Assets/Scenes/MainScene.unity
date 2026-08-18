@@ -1621,7 +1621,7 @@ GameObject:
   - component: {fileID: 115637197}
   - component: {fileID: 115637196}
   m_Layer: 0
-  m_Name: TicketAmount
+  m_Name: TicketAmountInGame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10033,7 +10033,8 @@ MonoBehaviour:
   scoreToBeatText: {fileID: 1269767762}
   roundText: {fileID: 42475874}
   ballsText: {fileID: 761309850}
-  currentTicketsText: {fileID: 115637196}
+  inGameUiTicketsText: {fileID: 115637196}
+  shopUiTicketsText: {fileID: 1704388473}
 --- !u!114 &1168153565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14429,7 +14430,7 @@ GameObject:
   - component: {fileID: 1704388473}
   - component: {fileID: 1704388472}
   m_Layer: 8
-  m_Name: Ticket
+  m_Name: TicketAmountInShop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

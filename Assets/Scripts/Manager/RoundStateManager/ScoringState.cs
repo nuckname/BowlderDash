@@ -133,22 +133,20 @@ public class ScoringState : RoundBaseState
         int scoreNeeded = _manager.roundData.GetRoundInfo(_manager.currentRound).scoreNeededToBeat;
         int currentScore = _manager.sessionData.currentScore;
         
-        if (ballsThrown == maxBallsAllowed)
-        {
-            _manager.SwitchState(_manager.roundOverState);
-        }
-        
         if (currentScore >= scoreNeeded)
         {
             // Next Frame and go to shop
-            _manager.SwitchState(_manager.shopState);
-
+            _manager.SwitchState(_manager.roundWinState);
+        }
+        else if (ballsThrown >= maxBallsAllowed)
+        {
+            // Lost the game
+            _manager.SwitchState(_manager.gameOverState);
         }
         else
         {
             _manager.SwitchState(_manager.roundOverState);
         }
-        
     }
     
     public override void FixedUpdateState(RoundStateManager manager) { }

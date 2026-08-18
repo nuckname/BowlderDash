@@ -9,21 +9,6 @@ public class ShopState : RoundBaseState
         manager.UpdateInstructionText("Shop phase. Spend tickets, then click Continue.");
 
         manager.shopUI.ShowShop(manager);
-        
-        // Reset UI
-        RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
-        
-        // We need to pick 3 cards from
-        // assign from round manager
-        
-/*        
-        manager.inGameScoreUi.RefreshHUD(
-            PlayerSheet.Instance.playerCurrentTicket,
-            manager.currentRound,
-            PlayerSheet.Instance.GetAmountOfBallsThrown(),
-            roundInfo,
-            manager.roundData.GetMaxRoundNumber()
-        );*/
     }
 
     public override void UpdateState(RoundStateManager manager) { }

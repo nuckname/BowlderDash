@@ -26,9 +26,10 @@ public class SessionData
     public void AddTickets(int amount)
     {
         tickets += amount;
+        InGameScoreUi.Instance.UpdateTicketText(tickets);
     }
 
-    public bool CanAfford(int amount)
+    private bool CanAfford(int amount)
     {
         return tickets >= amount;
     }
@@ -38,6 +39,7 @@ public class SessionData
         if (CanAfford(amount))
         {
             tickets -= amount;
+            InGameScoreUi.Instance.UpdateTicketText(tickets);
             return true;
         }
         return false;
@@ -55,5 +57,6 @@ public class SessionData
         currentFrame = 1;
         ballsThrown = 0;
         tickets = 0;
+        InGameScoreUi.Instance.UpdateTicketText(tickets);
     }
 }

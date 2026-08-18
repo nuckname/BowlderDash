@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Game is not over, the player hasnt reached their score quota yet and much throw another ball.
 public class RoundOverState : RoundBaseState
 {
     private float waitTimer = 0f;

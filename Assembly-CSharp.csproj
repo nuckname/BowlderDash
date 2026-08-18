@@ -81,6 +81,7 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexZoom.cs" />
     <Compile Include="Assets/Scripts/Enums/Pin.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextSelector_B.cs" />
+    <Compile Include="Assets/Scripts/Manager/RoundStateManager/RoundWinState.cs" />
     <Compile Include="Assets/Scripts/Manager/RoundStateManager/ThrowingBallState.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/SkewTextExample.cs" />
     <Compile Include="Assets/Scripts/GridManager/HexCell.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
     <Compile Include="Assets/Scripts/Pins/PinEffects/ExplosionEffect.cs" />
     <Compile Include="Assets/Scripts/Manager/CameraPanToLocation.cs" />
+    <Compile Include="Assets/Scripts/Manager/RoundStateManager/GameOverState.cs" />
     <Compile Include="Assets/Scripts/MainMenuController.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/DropdownSample.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexColorCycler.cs" />

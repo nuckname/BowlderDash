@@ -44,6 +44,8 @@ public class RoundStateManager : MonoBehaviour
     public ScoringState scoringState = new ScoringState();
     public  RoundOverState roundOverState = new RoundOverState();
     public SpawnBossObjectsState spawnBossObjectsState = new SpawnBossObjectsState();
+    public GameOverState gameOverState = new GameOverState();
+    public RoundWinState roundWinState = new RoundWinState();
     
     [SerializeField] private GameObject floatingTextPrefab;
 
