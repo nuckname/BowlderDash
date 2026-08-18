@@ -15,6 +15,14 @@ public class PinBase : MonoBehaviour
 
     public bool hasEnterTheHoleAtTheBack = false;
     
+    // Im doing it like this because not all pin prefabs are the same.
+    // Universal pin drag
+    [SerializeField] protected float fallenDrag = 0.25f;
+    [SerializeField] protected float fallenAngularDrag = 2.5f;
+    
+    private float _originalDrag;
+    private float _originalAngularDrag;
+    
     [Header("Effects")]
     [SerializeReference] public List<PinEffect> onHitEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
@@ -91,6 +99,12 @@ public class PinBase : MonoBehaviour
         
         _startPos = transform.position;
         _startRot = transform.rotation;
+        
+        if (_rb != null)
+        {
+            _originalDrag = _rb.linearDamping;
+            _originalAngularDrag = _rb.angularDamping;
+        }
     }
 
     protected virtual void Update()
@@ -157,6 +171,13 @@ public class PinBase : MonoBehaviour
     protected virtual void TriggerFall()
     {
         _isFallen = true;
+        
+        if (_rb != null)
+        {
+            _rb.linearDamping = fallenDrag;
+            _rb.angularDamping = fallenAngularDrag;
+        }
+        
         foreach (PinEffect effect in onFallEffects)
         {
             effect.Execute(this);
@@ -245,6 +266,8 @@ public class PinBase : MonoBehaviour
         {
             _rb.linearVelocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
+            _rb.linearDamping = _originalDrag;
+            _rb.angularDamping = _originalAngularDrag;
         }
 
         transform.position = _startPos;
