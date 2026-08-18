@@ -3398,6 +3398,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
   - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
   - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
   currentRound: 0
   amountOfCardsToDrawEachTurn: 5
   hasDrawnCardsThisTurn: 0
@@ -12883,6 +12884,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
   - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
   - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

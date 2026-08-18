@@ -98,9 +98,6 @@ public class ShopUIManager : MonoBehaviour
             _cardCost = currentShopCards[index].baseCost + (stateManager.currentRound * costScalingPerRound);
             buttonText.text = $"Buy ({_cardCost})";
         }
-
-    
-       
     }
 
     public void OnContinueClicked()
