@@ -93,6 +93,7 @@ public class RoundStateManager : MonoBehaviour
         SwitchState(roundStartState);
         
         RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
+        // This is null I dont know why
         inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
