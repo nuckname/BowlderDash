@@ -16,3 +16,4 @@ MonoBehaviour:
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: 2c22fd0667610b542885faac68d1bfd6, type: 3}
   worldGameObjectPrefab: {fileID: 8935457865669160150, guid: aaef52980d8e54b46bee9f5f3f3867e4, type: 3}
+  baseCost: 1

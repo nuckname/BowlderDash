@@ -28,8 +28,8 @@ public class ShopUIManager : MonoBehaviour
     private RoundStateManager stateManager;
     private CardDataSO[] currentShopCards = new CardDataSO[3];
     
-    //Continue button goes to next state.
-
+    private int _cardCost = 0;
+    
     public void ShowShop(RoundStateManager manager)
     {
         shopGameObject.SetActive(true);
@@ -75,6 +75,7 @@ public class ShopUIManager : MonoBehaviour
         }
     }
     
+    // Shop Cost
     private void UpdateButtonText(int index)
     {
         Button targetButton = null;
@@ -84,12 +85,21 @@ public class ShopUIManager : MonoBehaviour
         else if (index == 2) targetButton = Card3Button;
 
         TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
-        
-        if (buttonText != null)
+
+        if (stateManager.currentRound == 1)
         {
-            int cardCost = currentShopCards[index].baseCost + (stateManager.currentRound * costScalingPerRound);
-            buttonText.text = $"Buy ({cardCost})";
+            // Apply no scaling to first round
+            _cardCost = currentShopCards[index].baseCost;
+            buttonText.text = $"Buy ({_cardCost})";
         }
+        else
+        {
+            // Apply no scaling to first round
+            _cardCost = currentShopCards[index].baseCost + (stateManager.currentRound * costScalingPerRound);
+            buttonText.text = $"Buy ({_cardCost})";
+        }
+
+    
        
     }
 
@@ -102,9 +112,7 @@ public class ShopUIManager : MonoBehaviour
     {
         if (currentShopCards[index] != null)
         {
-            int cardCost = currentShopCards[index].baseCost + (stateManager.currentRound * costScalingPerRound);
-            
-            if (SessionData.Instance.SpendTickets(cardCost))
+            if (SessionData.Instance.SpendTickets(_cardCost))
             {
                 DeckManager.Instance.AddCardToDeck(currentShopCards[index]);
                 
@@ -113,15 +121,15 @@ public class ShopUIManager : MonoBehaviour
 
                 if (index == 0)
                 {
-                    SetCardAlpha(Card1Button, CardVisual1, 0.25f);
+                    SetCardAlpha(Card1Button, CardVisual1, 0.15f);
                 }
                 else if (index == 1)
                 {
-                    SetCardAlpha(Card2Button, CardVisual2, 0.25f);
+                    SetCardAlpha(Card2Button, CardVisual2, 0.15f);
                 }
                 else if (index == 2)
                 {
-                    SetCardAlpha(Card3Button, CardVisual3, 0.25f);
+                    SetCardAlpha(Card3Button, CardVisual3, 0.15f);
                 }
             }
             else

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: tinyPin
   m_EditorClassIdentifier: 
   cardID: 
-  cardName: Basic Pin
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: 27b7f0a0396f19d4aabb104d097c3836, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 4eb09489445ecd042a6c0d18d9adb519, type: 3}
+  baseCost: 1
