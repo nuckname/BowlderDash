@@ -11,7 +11,8 @@ public class RoundWinState : RoundBaseState
         if (roundInfo != null)
         {
             // Not ideal hard coding max rounds 8
-            manager.inGameScoreUi.RefreshHUD(0, roundInfo.roundNumber, 0, roundInfo, 8);
+           
+            manager.inGameScoreUi.RefreshHUD(0, roundInfo.roundNumber, 0, roundInfo, manager.roundData.GetMaxRoundNumber());
         }
         else
         {
