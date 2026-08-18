@@ -33,6 +33,7 @@ public class RoundStartState : RoundBaseState
         
         
         RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
+        
         if (roundInfo != null)
         {
             manager.inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);

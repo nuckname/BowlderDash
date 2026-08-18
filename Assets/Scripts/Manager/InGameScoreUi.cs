@@ -24,16 +24,16 @@ public class InGameScoreUi : MonoBehaviour
     
     public void UpdateScoreText(int newScore)
     {
-        totalScoreText.text = $"{newScore}";
+        totalScoreText.text = $"Total Score: {newScore}";
     }
     
     public void UpdateBallsText(int newBalls, int maxBalls)
     {
-        ballsText.text = $"{newBalls} / {maxBalls}";
+        ballsText.text = $"Balls Thrown: {newBalls} / {maxBalls}";
     }
 
     public void UpdateRoundToBeatText(int newRound)
     {
-        scoreToBeatText.text = $"{newRound}";
+        scoreToBeatText.text = $"Score To Beat: {newRound}";
     }
 }
