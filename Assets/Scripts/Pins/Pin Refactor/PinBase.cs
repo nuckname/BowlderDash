@@ -43,6 +43,8 @@ public class PinBase : MonoBehaviour
     
     protected Vector3 _startPos;
     protected Quaternion _startRot;
+    
+    private bool _isForcedSettled = false;
 
     // dependency injection 
     public ScoreCalculator FrameScoreCalculator { get; private set; }
@@ -53,16 +55,20 @@ public class PinBase : MonoBehaviour
         set
         {
             allowPinToFallOver = value;
-            SyncPhysicsConstraints();
+            //SyncPhysicsConstraints();
         }
     }
     
     // Checks if the physics engine has put the pin to sleep
     public bool IsSettled
     {
-        set{}
+        set
+        {
+            _isForcedSettled = value;
+        }
         get
         {
+            if (_isForcedSettled) return true;
             if (_rb == null || _rb.isKinematic) return true;
 
             // Failsafe: If the pin is barely moving (jittering), force it to sleep
@@ -212,68 +218,9 @@ public class PinBase : MonoBehaviour
         }
     }
 
-    public void UpdateTransform()
-    {
-        _startPos = transform.position;
-        _startRot = transform.rotation;
-    }
-
-    public void SyncPhysicsToGameState()
-    {
-        bool active = true;
-        // Commented out to prevent errors if GameManager is missing in your current view, 
-        // but this remains unchanged from your original logic.
-        /* if (GameManager.Instance != null)
-        {
-            GameState s = GameManager.Instance.GetCurrentState();
-            active = s != GameState.PinPlacement && s != GameState.Shop;
-        }
-        */
-        SetPhysicsEnabled(active);
-    }
-
-    public void SetPhysicsEnabled(bool enabled)
-    {
-        if (_rb != null) _rb.isKinematic = !enabled;
-
-        // Assuming Tumbling is a valid component in your project
-        /*
-        foreach (Tumbling t in GetComponentsInChildren<Tumbling>(true))
-            if (t != null) t.setTumbling(enabled);
-        */
-    }
-
     protected static void StopParticles(ParticleSystem ps)
     {
         if (ps != null)
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-    }
-    
-    // Why is this here?
-    public virtual void ResetPin()
-    {
-        _isFallen = false;
-        _hasBeenHit = false;
-        hasEnterTheHoleAtTheBack = false;
-
-        if (_renderer) _renderer.enabled = true;
-        if (_collider) _collider.enabled = true;
-
-        foreach (PinEffect effect in onHitEffects) effect.ResetEffect();
-        foreach (PinEffect effect in onFallEffects) effect.ResetEffect();
-        foreach (PinEffect effect in onEndOfRoundEffects) effect.ResetEffect();
-
-        if (_rb != null)
-        {
-            _rb.linearVelocity = Vector3.zero;
-            _rb.angularVelocity = Vector3.zero;
-            _rb.linearDamping = _originalDrag;
-            _rb.angularDamping = _originalAngularDrag;
-        }
-
-        transform.position = _startPos;
-        transform.rotation = _startRot;
-
-        SyncPhysicsToGameState();
     }
 }

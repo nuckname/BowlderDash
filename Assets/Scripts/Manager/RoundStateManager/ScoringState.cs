@@ -9,7 +9,7 @@ public class ScoringState : RoundBaseState
     private float checkInterval = 0.25f;
     private float timeSinceLastCheck = 0f;
     
-    private float waitTimeBeforeScoring = 0.2f;
+    private float waitTimeBeforeScoring = 3f;
     
     // Floating text offsets
     private float yOffsetPinInHole = 16.0f; 
