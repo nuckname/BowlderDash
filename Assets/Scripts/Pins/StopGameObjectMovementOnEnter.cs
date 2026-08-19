@@ -10,6 +10,7 @@ public class StopGameObjectMovementOnEnter : MonoBehaviour
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
+            
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
         

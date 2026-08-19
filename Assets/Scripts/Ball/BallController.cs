@@ -32,6 +32,8 @@ public class BallController : MonoBehaviour
         _ballRb.angularVelocity = Vector3.zero;
         _ballRb.isKinematic = true;
         
+        _ballRb.constraints = RigidbodyConstraints.None;
+        
         transform.position = _startPos;
     }
 
