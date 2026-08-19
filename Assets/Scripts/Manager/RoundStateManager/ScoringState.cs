@@ -9,7 +9,7 @@ public class ScoringState : RoundBaseState
     private float checkInterval = 0.25f;
     private float timeSinceLastCheck = 0f;
     
-    private float waitTimeBeforeScoring = 3f;
+    private float waitTimeBeforeScoring = 2f;
     
     // Floating text offsets
     private float yOffsetPinInHole = 16.0f; 
@@ -17,10 +17,6 @@ public class ScoringState : RoundBaseState
     
     private RoundStateManager _manager;
     private float _textSpawnDelay = 1f;
-
-    private ScoringDebugUI _debugUI;
-    public string debugCurrentPhase = "Initializing";
-    public string debugUnsettledPins = "";
 
     public override void EnterState(RoundStateManager manager)
     {
@@ -32,11 +28,7 @@ public class ScoringState : RoundBaseState
         pinsHaveSettled = false;
         timeSinceLastCheck = 0f;
 
-        debugCurrentPhase = "Waiting for pins to settle...";
         GameObject debugGo = new GameObject("ScoringDebugUI");
-        _debugUI = debugGo.AddComponent<ScoringDebugUI>();
-        _debugUI.scoringState = this;
-        _debugUI.manager = manager;
     }
 
     public override void UpdateState(RoundStateManager manager) 
@@ -68,29 +60,27 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator ProcessScoringRoutine()
     {
+        yield return new WaitForSeconds(waitTimeBeforeScoring);
+        
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
             if (pin.IsFallen)
             {
-                debugCurrentPhase = "Spawning text for: " + pin.gameObject.name;
                 SpawnTextForSinglePin(pin);
                 yield return new WaitForSeconds(_textSpawnDelay);
             }
         }
 
         // Once pins have settled, we start the wait timer before scoring
-        debugCurrentPhase = "Waiting before final score calc...";
         yield return new WaitForSeconds(waitTimeBeforeScoring);
 
         CalculateScore();
         hasScored = true;
-        debugCurrentPhase = "Finished scoring, going to next round.";
         GoToNextRound();
     }
 
     private bool AreAllPinsSettled()
     {
-        debugUnsettledPins = "";
         int unsettledCount = 0;
 
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
@@ -98,7 +88,6 @@ public class ScoringState : RoundBaseState
             if (!pin.IsSettled) 
             {
                 unsettledCount++;
-                debugUnsettledPins += pin.gameObject.name + "\n";
             }
         }
 
@@ -185,11 +174,6 @@ public class ScoringState : RoundBaseState
 
     public override void ExitState(RoundStateManager manager)
     {
-        if (_debugUI != null)
-        {
-            GameObject.Destroy(_debugUI.gameObject);
-        }
-
         if(manager.currentRound == manager.roundData.GetMaxRoundNumber())
         {
             // then we check score to beat
@@ -199,29 +183,5 @@ public class ScoringState : RoundBaseState
         {
             // if not beat then restart game.
         }
-    }
-}
-
-// Just AI slop its an OnGui so its UI at the top, temp
-public class ScoringDebugUI : MonoBehaviour
-{
-    public ScoringState scoringState;
-    public RoundStateManager manager;
-
-    private void OnGUI()
-    {
-        if (scoringState == null || manager == null) return;
-
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 24;
-        style.normal.textColor = Color.red;
-        style.alignment = TextAnchor.UpperCenter;
-        style.fontStyle = FontStyle.Bold;
-
-        string debugText = "--- SCORING STATE DEBUG ---\n" +
-                           "Current Phase: " + scoringState.debugCurrentPhase + "\n\n" +
-                           "Unsettled Pins:\n" + (string.IsNullOrEmpty(scoringState.debugUnsettledPins) ? "None (All Settled)" : scoringState.debugUnsettledPins);
-
-        GUI.Label(new Rect(Screen.width / 2f - 300f, 20f, 600f, 800f), debugText, style);
     }
 }
