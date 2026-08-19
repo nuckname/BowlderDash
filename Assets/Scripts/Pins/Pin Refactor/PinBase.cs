@@ -60,6 +60,7 @@ public class PinBase : MonoBehaviour
     // Checks if the physics engine has put the pin to sleep
     public bool IsSettled
     {
+        set{}
         get
         {
             if (_rb == null || _rb.isKinematic) return true;

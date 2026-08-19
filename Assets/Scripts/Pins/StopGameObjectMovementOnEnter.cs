@@ -12,5 +12,12 @@ public class StopGameObjectMovementOnEnter : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
+        
+        PinBase pin = other.GetComponent<PinBase>();
+        
+        if (pin != null)
+        {
+            pin.IsSettled = true;
+        }
     }
 }
