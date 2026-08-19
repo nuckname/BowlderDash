@@ -97,10 +97,16 @@ public class ShowPhysicDeck : MonoBehaviour
     
     private void DisableGameplayComponents(GameObject pinObject)
     {
+        pinObject.AddComponent<ForcePinToStandUpForPhysicalDeck>();
+
+        pinObject.tag = "Untagged";
+        pinObject.layer = LayerMask.NameToLayer("Ignore This Pin");
+        
+        
         // Maybe some pins don't have all the components, so we check if they exist before disabling them
         if (pinObject.TryGetComponent(out PinBase pinBase))
         {
-            // pinBase.enabled = false;
+            pinBase.enabled = false;
         }
 
         if (pinObject.TryGetComponent(out DraggableSnap draggableSnap))

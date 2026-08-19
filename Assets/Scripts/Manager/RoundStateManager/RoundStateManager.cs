@@ -190,7 +190,19 @@ public class RoundStateManager : MonoBehaviour
     
     public void GetAllPinsInCurrentFrame(RoundStateManager manager)
     {
-        manager.allActivePinsInTheFrame = FindObjectsOfType<PinBase>();
+        PinBase[] allPins = FindObjectsOfType<PinBase>(true);
+        List<PinBase> activeGameplayPins = new List<PinBase>();
+
+        // We do this so that we dont also grab the physic pins from the deck on the left and right of our screen.
+        foreach (PinBase pin in allPins)
+        {
+            if (pin.enabled)
+            {
+                activeGameplayPins.Add(pin);
+            }
+        }
+
+        manager.allActivePinsInTheFrame = activeGameplayPins.ToArray();
 
         InjectDependenciesIntoAllPins(manager.allActivePinsInTheFrame, manager);
     }

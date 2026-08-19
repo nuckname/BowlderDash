@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\Enums\Pin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundWinState.cs" />
+    <Compile Include="Assets\Scripts\Pins\ForcePinToStandUpForPhysicalDeck.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ThrowingBallState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexCell.cs" />
