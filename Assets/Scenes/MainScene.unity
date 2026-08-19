@@ -3393,6 +3393,7 @@ MonoBehaviour:
     ballsThrown: 0
     tickets: 0
   masterCardList:
+  - {fileID: 11400000, guid: 42aeef7c33ffadb408333770abf43cfc, type: 2}
   - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
@@ -12885,6 +12886,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
   - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
   - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
+  - {fileID: 11400000, guid: 42aeef7c33ffadb408333770abf43cfc, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
