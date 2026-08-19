@@ -184,7 +184,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
             // BEFORE we fire EndDragEvent so the DOLocalMove animation targets the slot center!
             if (transform.parent != null && !transform.parent.CompareTag("Slot") && HandManager.Instance != null)
             {
-                HandManager.Instance.AssignSlotToCard(this);
+                HandManager.Instance.DiscardCard(this);
             }
 
             EndDragEvent.Invoke(this);
