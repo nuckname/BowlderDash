@@ -98,6 +98,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\GridManager\GridTicketManager.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundOverState.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\ShowPhysicDeck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\HandManager.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\ExtensionMethods.cs" />

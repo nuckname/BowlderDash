@@ -10,6 +10,7 @@ public class DeckManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private DeckDisplayUi deckDisplayUi;
     [SerializeField] private HandManager handManager;
+    private ShowPhysicDeck _showPhysicDeck;
 
     [Header("Deck Settings")]
     public float drawInterval = 0.15f;
@@ -30,6 +31,8 @@ public class DeckManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
         
+        _showPhysicDeck = GetComponent<ShowPhysicDeck>();
+        
         totalDeck = new List<CardDataSO>(startingDeck);
         
         drawPile = new List<CardDataSO>(startingDeck);
@@ -48,6 +51,8 @@ public class DeckManager : MonoBehaviour
             deckDisplayUi.UpdateDeckCount(drawPile.Count);
             deckDisplayUi.UpdateDiscardCount(discardPile.Count);
         }
+      
+        _showPhysicDeck.UpdatePhysicalPiles();
     }
 
     /// <summary>
@@ -80,6 +85,9 @@ public class DeckManager : MonoBehaviour
 
             if (deckDisplayUi != null)
                 deckDisplayUi.UpdateDeckCount(drawPile.Count);
+
+            if (_showPhysicDeck != null)
+                _showPhysicDeck.UpdatePhysicalPiles();
 
             handManager.AddDrawnCardToHand(drawnCard);
 
@@ -119,6 +127,9 @@ public class DeckManager : MonoBehaviour
         
         if (deckDisplayUi != null)
             deckDisplayUi.UpdateDeckCount(drawPile.Count);
+
+        if (_showPhysicDeck != null)
+            _showPhysicDeck.UpdatePhysicalPiles();
     }
     
     public void AddToDiscardPile(CardDataSO discardedCard)

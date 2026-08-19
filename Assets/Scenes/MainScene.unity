@@ -3121,6 +3121,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3002825497996913973, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
   m_PrefabInstance: {fileID: 761201438}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &324871814
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 324871815}
+  m_Layer: 0
+  m_Name: DiscardPileDrawDeck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &324871815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 324871814}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 16.43, y: -7.29, z: -4.49}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 580164689}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &338407409
 GameObject:
   m_ObjectHideFlags: 0
@@ -3975,6 +4006,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 580164689}
   - {fileID: 3745622627677479467}
   - {fileID: 4083501150756243208}
   - {fileID: 5680519943787634332}
@@ -4602,6 +4634,39 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 570357392}
   m_CullTransparentMesh: 1
+--- !u!1 &580164688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 580164689}
+  m_Layer: 0
+  m_Name: SpawnPhysicalDeckTransforms
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &580164689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580164688}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071063, y: 0.0006718933, z: -0.0006716251, w: 0.70710677}
+  m_LocalPosition: {x: -50.7, y: 20.14, z: 0.11999893}
+  m_LocalScale: {x: 4.212, y: 4.2120004, z: 4.2120004}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2141039435}
+  - {fileID: 324871815}
+  m_Father: {fileID: 509060600}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &592063484
 GameObject:
   m_ObjectHideFlags: 0
@@ -5960,7 +6025,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3002825497996913973, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_Name
-      value: PlayingCardGroup
+      value: DeckManager
       objectReference: {fileID: 0}
     - target: {fileID: 3329801164774111922, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: slotPrefab
@@ -6149,6 +6214,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 920505716}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3002825497996913973, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1545294223}
     - targetCorrespondingSourceObject: {fileID: 3002825497996913973, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1545294222}
@@ -12890,6 +12958,24 @@ MonoBehaviour:
   drawPile: []
   totalDeck: []
   discardPile: []
+--- !u!114 &1545294223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 292756688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f33fba7fe45a1534c9815da7438ba7cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShowPhysicDeck
+  roundStateManager: {fileID: 374269889}
+  drawPileSpawnPoint: {fileID: 2141039435}
+  discardPileSpawnPoint: {fileID: 324871815}
+  spawnRandomRange: {x: 3, y: 0.25, z: 3}
+  minSpawnDistance: 1.25
+  maxSpawnAttempts: 25
 --- !u!1 &1546402768
 GameObject:
   m_ObjectHideFlags: 0
@@ -17463,6 +17549,37 @@ Transform:
   - {fileID: 134377293}
   m_Father: {fileID: 543450652758292814}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2141039434
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2141039435}
+  m_Layer: 0
+  m_Name: DrawPilePhysicalDeckLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2141039435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2141039434}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 17.16, y: 7.17, z: -4.49}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 580164689}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2145173073
 GameObject:
   m_ObjectHideFlags: 0
@@ -18366,6 +18483,7 @@ GameObject:
   - component: {fileID: 5811517545600373558}
   - component: {fileID: 4321851933409994487}
   - component: {fileID: 2199397639573709637}
+  - component: {fileID: 5811517545600373559}
   m_Layer: 0
   m_Name: Plane.004
   m_TagString: Untagged
@@ -18498,6 +18616,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 509060600}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5811517545600373559
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4767400413453061398}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 84.9677, y: 300, z: 3.6379784e-12}
+  m_Center: {x: -32.483814, y: 140, z: 0.000008285258}
 --- !u!33 &5873270184790161782
 MeshFilter:
   m_ObjectHideFlags: 0
