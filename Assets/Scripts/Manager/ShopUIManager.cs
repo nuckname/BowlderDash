@@ -92,6 +92,21 @@ public class ShopUIManager : MonoBehaviour
             _cardCost = currentShopCards[index].baseCost;
             buttonText.text = $"Buy ({_cardCost})";
         }
+        else if (stateManager.currentRound == 2)
+        {
+            _cardCost = currentShopCards[index].baseCost + 2;
+            buttonText.text = $"Buy ({_cardCost})";
+        }
+        else if (stateManager.currentRound == 3)
+        {
+            _cardCost = currentShopCards[index].baseCost + 4;
+            buttonText.text = $"Buy ({_cardCost})";
+        }
+        else if (stateManager.currentRound == 4)
+        {
+            _cardCost = currentShopCards[index].baseCost + 6;
+            buttonText.text = $"Buy ({_cardCost})";
+        }
         else
         {
             // Apply no scaling to first round
