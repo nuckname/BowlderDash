@@ -95,6 +95,15 @@ public class DeckManager : MonoBehaviour
         }
     }
 
+    public void RemoveFromDiscardPile(CardDataSO discardedCard)
+    {
+        if (discardPile.Contains(discardedCard))
+        {
+            discardPile.Remove(discardedCard);
+            UpdateUIDeckCounts();
+        }
+    }
+    
     private void ShuffleDiscardIntoDeck()
     {
         if (discardPile.Count == 0) return;

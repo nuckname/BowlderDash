@@ -29,6 +29,8 @@ public class WorldObjectToCard : MonoBehaviour
         if (HandManager.Instance != null && cardData != null && cardData.cardUIPrefab != null)
         {
             HandManager.Instance.AddCardToHand(cardData);
+      
+            DeckManager.Instance.RemoveFromDiscardPile(cardData);
         }
         
         Destroy(gameObject);

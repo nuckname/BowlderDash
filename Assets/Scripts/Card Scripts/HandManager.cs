@@ -66,11 +66,7 @@ public class HandManager : MonoBehaviour
         }
 
         // Instantly unparent the slot before destroying it so childCount updates instantly
-        Transform slot = card.transform.parent;
-        slot.SetParent(null);
-        Destroy(slot.gameObject);
-        
-        cardsInHand.Remove(card);
+        RemoveCardUi(card);
         
         // Unparent the card and put it on the root Canvas so it can fly freely over other UI elements
         card.transform.SetParent(transform.parent);
@@ -92,6 +88,13 @@ public class HandManager : MonoBehaviour
     {
         if (card == null) return;
 
+        DeckManager.Instance.AddToDiscardPile(card.cardData);
+
+        RemoveCardUi(card);
+    }
+
+    private void RemoveCardUi(CardMovement card)
+    {
         Transform slot = card.transform.parent;
         if (slot != null)
         {
@@ -163,6 +166,8 @@ public class HandManager : MonoBehaviour
     /// </summary>
     public void AssignSlotToCard(CardMovement card)
     {
+        DeckManager.Instance.RemoveFromDiscardPile(card.cardData);
+        
         GameObject newSlot = Instantiate(slotPrefab, transform);
         card.transform.SetParent(newSlot.transform);
         

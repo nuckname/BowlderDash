@@ -110,7 +110,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         }
     }
 
-// UPDATE OnDrag: You can completely empty out OnDrag since we moved 
+    // UPDATE OnDrag: You can completely empty out OnDrag since we moved 
     // the movement logic into Update(), but keep the interface method so Unity doesn't complain.
     public void OnDrag(PointerEventData eventData) 
     { 
