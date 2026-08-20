@@ -16,25 +16,9 @@ public class RoundOverState : RoundBaseState
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
             pin.TriggerEndOfRound();
-            
-            if (pin.IsFallen)
-            {
-                GameObject.Destroy(pin.gameObject);
-                
-                    /*
-                WorldObjectToCard cardBackedPin = pin.GetComponent<WorldObjectToCard>();
-                if (cardBackedPin != null)
-                {
-                    cardBackedPin.ReturnToDeck();
-                }
-                else
-                {
-                }
-                */
-            }
         }
 
-        manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
+        //manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
     }
 
     public override void UpdateState(RoundStateManager manager)
@@ -43,7 +27,7 @@ public class RoundOverState : RoundBaseState
 
         if (waitTimer >= waitTime || Input.GetMouseButtonDown(0))
         {
-            manager.SwitchState(manager.roundStartState);
+            manager.SwitchState(manager.scoringState);
         }
     }
 

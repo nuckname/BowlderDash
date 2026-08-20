@@ -17,6 +17,10 @@ public class ScoringState : RoundBaseState
     
     private RoundStateManager _manager;
     private float _textSpawnDelay = 1f;
+    
+    // Camera settings
+    private float waitBeforeUiCamera = 1.5f;
+    private float waitBeforePinPlacement = 2.0f;
 
     public override void EnterState(RoundStateManager manager)
     {
@@ -28,7 +32,7 @@ public class ScoringState : RoundBaseState
         pinsHaveSettled = false;
         timeSinceLastCheck = 0f;
 
-        GameObject debugGo = new GameObject("ScoringDebugUI");
+        manager.MoveCamera(CameraLocation.ScoringCameraLocation);
     }
 
     public override void UpdateState(RoundStateManager manager) 
@@ -64,6 +68,10 @@ public class ScoringState : RoundBaseState
         
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
+            if (pin == null)
+            {
+                Debug.LogWarning("Pin is null for some reason.");
+            }
             if (pin.IsFallen)
             {
                 SpawnTextForSinglePin(pin);
@@ -85,7 +93,7 @@ public class ScoringState : RoundBaseState
 
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
-            if (!pin.IsSettled) 
+            if (pin != null && !pin.IsSettled) 
             {
                 unsettledCount++;
             }
@@ -162,8 +170,20 @@ public class ScoringState : RoundBaseState
         }
         else
         {
-            _manager.SwitchState(_manager.roundOverState);
+            // I want to show the in game UI before we go to the next round.
+            _manager.StartCoroutine(TransitionToPinPlacementRoutine());
         }
+    }
+    
+    private IEnumerator TransitionToPinPlacementRoutine()
+    {
+        yield return new WaitForSeconds(waitBeforeUiCamera);
+        
+        _manager.MoveCamera(CameraLocation.ShowInGameUiLocation);
+        
+        yield return new WaitForSeconds(waitBeforePinPlacement);
+        
+        _manager.SwitchState(_manager.roundStartState);
     }
     
     public override void FixedUpdateState(RoundStateManager manager) { }
@@ -174,14 +194,17 @@ public class ScoringState : RoundBaseState
 
     public override void ExitState(RoundStateManager manager)
     {
-        if(manager.currentRound == manager.roundData.GetMaxRoundNumber())
+        ClearFallenOverPins(manager);
+    }
+
+    private static void ClearFallenOverPins(RoundStateManager manager)
+    {
+        foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
-            // then we check score to beat
-            // if beat next state -> shop or something
-        }
-        else
-        {
-            // if not beat then restart game.
+            if (pin.IsFallen)
+            {
+                GameObject.Destroy(pin.gameObject);
+            }
         }
     }
 }

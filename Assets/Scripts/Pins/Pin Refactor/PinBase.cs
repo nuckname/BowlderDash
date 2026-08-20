@@ -157,6 +157,7 @@ public class PinBase : MonoBehaviour
         bool isAnotherPin = other.GetComponent<PinBase>() != null;
 
         if (other.CompareTag("Ball") || isAnotherPin)
+            
         {
             _hasBeenHit = true;
             foreach (PinEffect effect in onHitEffects)

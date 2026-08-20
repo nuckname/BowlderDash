@@ -134,7 +134,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         if (other.gameObject.CompareTag("Ball"))
         {
             debugCurrentPhase = "End trigger hit! Switching to Scoring State.";
-            manager.SwitchState(manager.scoringState);
+            manager.SwitchState(manager.roundOverState);
         }
     }
 

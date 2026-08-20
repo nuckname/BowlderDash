@@ -1,12 +1,23 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public enum CameraLocation 
 { 
     PinCameraLocation, 
     BallThrowingCameraLocation, 
     ShopCameraLocation,
-    SpawnBossObjectsCameraPosition
+    SpawnBossObjectsCameraPosition,
+    ScoringCameraLocation,
+    RoundOverCameraLocation,
+    ShowInGameUiLocation
+}
+
+[System.Serializable]
+public struct CameraLocationMapping
+{
+    public CameraLocation location;
+    public Transform target;
 }
 
 public class CameraPanToLocation : MonoBehaviour
@@ -15,21 +26,22 @@ public class CameraPanToLocation : MonoBehaviour
     public float lerpSpeed = 5f;
 
     [Header("Transform Targets")]
-    public Transform pinCameraTarget;
-    public Transform ballThrowingTarget;
-    public Transform shopCameraTarget;
+    public List<CameraLocationMapping> cameraMappings = new List<CameraLocationMapping>();
 
     private Coroutine activeLerp;
 
     public void MoveCameraTo(CameraLocation location)
     {
-        Transform target = location switch
+        Transform target = mainCamera.transform; // Fallback
+
+        foreach (var mapping in cameraMappings)
         {
-            CameraLocation.PinCameraLocation => pinCameraTarget,
-            CameraLocation.BallThrowingCameraLocation => ballThrowingTarget,
-            CameraLocation.ShopCameraLocation => shopCameraTarget,
-            _ => mainCamera.transform
-        };
+            if (mapping.location == location)
+            {
+                target = mapping.target;
+                break;
+            }
+        }
 
         if (activeLerp != null) StopCoroutine(activeLerp);
         activeLerp = StartCoroutine(LerpCamera(target));
