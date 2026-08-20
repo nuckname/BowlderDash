@@ -39,7 +39,6 @@ public class VaseVisualEffect : PinEffect
         _scalesCached = true;
     }
 
-    // Triggered automatically by PinBase when hit (or when falling, depending on which list you put it in)
     public override void Execute(PinBase context, Collider instigator = null)
     {
         if (_isShattered) return;
@@ -47,7 +46,7 @@ public class VaseVisualEffect : PinEffect
         CacheScalesIfNeeded();
         _isShattered = true;
 
-        // 1. Swap visual models
+        // Swap visual models
         if (vase != null) vase.SetActive(false);
         
         if (shatteredVasePrefab != null && vase != null)
@@ -60,7 +59,7 @@ public class VaseVisualEffect : PinEffect
             );
         }
 
-        // 2. Shrink flowers (using the PinBase MonoBehaviour to run the Coroutine)
+        // Shrink flowers (using the PinBase MonoBehaviour to run the Coroutine)
         ShrinkFlower(context, flower1, _flower1StartScale, ref _flower1Coroutine);
         ShrinkFlower(context, flower2, _flower2StartScale, ref _flower2Coroutine);
     }
@@ -69,17 +68,17 @@ public class VaseVisualEffect : PinEffect
     {
         _isShattered = false;
 
-        // 1. Destroy the broken pieces
+        // Destroy the broken pieces
         if (_shatteredInstance != null)
         {
             UnityEngine.Object.Destroy(_shatteredInstance);
             _shatteredInstance = null;
         }
 
-        // 2. Restore the intact vase model
+        // Restore the intact vase model
         if (vase != null) vase.SetActive(true);
 
-        // 3. Restore flowers
+        // Restore flowers
         ResetFlower(flower1, _flower1StartScale, ref _flower1Coroutine);
         ResetFlower(flower2, _flower2StartScale, ref _flower2Coroutine);
     }

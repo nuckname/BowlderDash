@@ -7,7 +7,9 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="" />
+    <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/VaseVisualEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/VaseVisualEffect.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -295,12 +297,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/VaseVisualEffect.cs</url>
-          <line>44</line>
-          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Pins\PinEffects\VaseVisualEffect.cs" containingFunctionPresentation="Method 'Execute'" />
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

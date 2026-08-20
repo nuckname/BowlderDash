@@ -10,7 +10,6 @@ public class PinBase : MonoBehaviour
 {
     [Header("Triggers")]
     public float fallAngleThreshold = 45f;
-    public string hitterTag = "Ball";
     public float minHitVelocity = 3f;
 
     public bool hasEnterTheHoleAtTheBack = false;
@@ -147,17 +146,17 @@ public class PinBase : MonoBehaviour
         {
             hasEnterTheHoleAtTheBack = true;
         }
+        
+        HandleHit(other);
     }
 
     protected virtual void HandleHit(Collider other)
     {
         if (_hasBeenHit || !allowCollisionEffects) return;
 
-        bool isHitter = !string.IsNullOrEmpty(hitterTag) && other.CompareTag(hitterTag);
-
         bool isAnotherPin = other.GetComponent<PinBase>() != null;
 
-        if (isHitter || isAnotherPin)
+        if (other.CompareTag("Ball") || isAnotherPin)
         {
             _hasBeenHit = true;
             foreach (PinEffect effect in onHitEffects)
