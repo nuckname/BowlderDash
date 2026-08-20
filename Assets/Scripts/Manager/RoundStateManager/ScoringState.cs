@@ -154,13 +154,19 @@ public class ScoringState : RoundBaseState
     private void GoToNextRound()
     {
         int ballsThrown = _manager.sessionData.ballsThrown;
-        int maxBallsAllowed = _manager.roundData.GetRoundInfo(_manager.currentRound).maxBallsAllowedToThrow;
-        int scoreNeeded = _manager.roundData.GetRoundInfo(_manager.currentRound).scoreNeededToBeat;
+        int maxBallsAllowed = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound).maxBallsAllowedToThrow;
+        int scoreNeeded = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound).scoreNeededToBeat;
         int currentScore = _manager.sessionData.currentScore;
         
         if (currentScore >= scoreNeeded)
         {
             // Next Frame and go to shop
+            Debug.Log("Win");
+            Debug.Log("Win");
+            Debug.Log("Win");
+            Debug.Log("Win");
+            Debug.Log("Win");
+            Debug.Log("Win");
             _manager.SwitchState(_manager.roundWinState);
         }
         else if (ballsThrown >= maxBallsAllowed)
@@ -170,6 +176,8 @@ public class ScoringState : RoundBaseState
         }
         else
         {
+            // Else throw the ball again and try to reach the quota.
+            
             // I want to show the in game UI before we go to the next round.
             _manager.StartCoroutine(TransitionToPinPlacementRoutine());
         }

@@ -9,7 +9,7 @@ public class SessionData
     public static SessionData Instance => _instance ?? (_instance = new SessionData());
 
     public int currentScore;
-    public int currentFrame;
+    public int currentRound;
     public int ballsThrown;
     public int tickets;
 
@@ -44,17 +44,11 @@ public class SessionData
         }
         return false;
     }
-
-    public void NewRoundReset()
-    {
-        currentScore = 0;
-        ballsThrown = 0;
-    }
     
     public void StartBrandNewSession()
     {
         currentScore = 0;
-        currentFrame = 1;
+        currentRound = 1;
         ballsThrown = 0;
         tickets = 0;
         InGameScoreUi.Instance.UpdateTicketText(tickets);

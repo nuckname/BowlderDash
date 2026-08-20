@@ -5,13 +5,12 @@ public class RoundWinState : RoundBaseState
     public override void EnterState(RoundStateManager manager)
     {
         // We have won the frame so lets reset UI values and increase round number etc.
-        RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.currentRound);
-        manager.currentRound++;
-
+        manager.sessionData.currentRound++;
+        
+        RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.sessionData.currentRound);
+        
         if (roundInfo != null)
         {
-            // Not ideal hard coding max rounds 8
-           
             manager.inGameScoreUi.RefreshHUD(0, roundInfo.roundNumber, 0, roundInfo, manager.roundData.GetMaxRoundNumber());
         }
         else

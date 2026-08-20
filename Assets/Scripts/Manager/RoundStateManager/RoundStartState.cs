@@ -7,31 +7,9 @@ public class RoundStartState : RoundBaseState
     public override void EnterState(RoundStateManager manager)
     {
         manager.scoreCalculator.ResetFrameScore();
-        SessionData.Instance.NewRoundReset();
 
         manager.ResetHandDrawState();
-    
 
-        if (manager.currentRound == 1)
-        {
-            // set up start for a new game
-        }
-    
-        // Reset Ui Score 
-        // Reset SessionDataScore
-    
-        if (manager.currentRound == 1)
-        {
-            // check if we are in a boss frame
-            // then go to boss frame state
-        }
-        else
-        {
-            // go to pin placement
-        }
-    
-
-    
         HandleMap(manager);
 
         HandleGrid(manager);

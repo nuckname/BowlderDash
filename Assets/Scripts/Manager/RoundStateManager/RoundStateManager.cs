@@ -29,7 +29,6 @@ public class RoundStateManager : MonoBehaviour
     public List<CardDataSO> masterCardList;
     
     [Header("Round Vars")]
-    public int currentRound = 0;
     public int amountOfCardsToDrawEachTurn;
 
     [HideInInspector] public bool hasDrawnCardsThisTurn;
@@ -92,7 +91,7 @@ public class RoundStateManager : MonoBehaviour
         
         grid.GenerateGrid();
         
-        RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
+        RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
         
         inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
@@ -148,7 +147,7 @@ public class RoundStateManager : MonoBehaviour
     public void AddBallThrownToSession()
     {
         sessionData.AddBallThrown();
-        RoundScore roundInfo = roundData.GetRoundInfo(currentRound);
+        RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
     }
 
