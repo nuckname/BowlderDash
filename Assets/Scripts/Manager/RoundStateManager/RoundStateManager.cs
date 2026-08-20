@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -185,6 +186,22 @@ public class RoundStateManager : MonoBehaviour
         foreach(PinBase pin in allActivePinsInTheFrame)
         {
             pin.AllowCollisionEffects = allow;
+        }
+    }
+    
+    public void DeleteAllActivePins()
+    {
+        if (allActivePinsInTheFrame != null)
+        {
+            foreach (PinBase pin in allActivePinsInTheFrame)
+            {
+                if (pin != null && pin.gameObject != null)
+                {
+                    Destroy(pin.gameObject);
+                }
+            }
+
+            allActivePinsInTheFrame = System.Array.Empty<PinBase>();
         }
     }
     

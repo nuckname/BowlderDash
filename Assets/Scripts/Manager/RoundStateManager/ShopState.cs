@@ -9,6 +9,8 @@ public class ShopState : RoundBaseState
         manager.UpdateInstructionText("Shop phase. Spend tickets, then click Continue.");
 
         manager.shopUI.ShowShop(manager);
+
+        manager.DeleteAllActivePins();
     }
 
     public override void UpdateState(RoundStateManager manager) { }
