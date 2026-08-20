@@ -86,26 +86,31 @@ public class ShopUIManager : MonoBehaviour
 
         TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        // Put this in a SO or something
-        if (stateManager.sessionData.currentRound == 1)
+
+        // We start on round 2
+        if (stateManager.sessionData.currentRound == 2)
         {
-            // Apply no scaling to first round
             _cardCost = currentShopCards[index].baseCost;
-            buttonText.text = $"Buy ({_cardCost})";
-        }
-        else if (stateManager.sessionData.currentRound == 2)
-        {
-            _cardCost = currentShopCards[index].baseCost + 2;
             buttonText.text = $"Buy ({_cardCost})";
         }
         else if (stateManager.sessionData.currentRound == 3)
         {
-            _cardCost = currentShopCards[index].baseCost + 4;
+            _cardCost = currentShopCards[index].baseCost + 1;
             buttonText.text = $"Buy ({_cardCost})";
         }
         else if (stateManager.sessionData.currentRound == 4)
         {
-            _cardCost = currentShopCards[index].baseCost + 6;
+            _cardCost = currentShopCards[index].baseCost + 2;
+            buttonText.text = $"Buy ({_cardCost})";
+        }
+        else if (stateManager.sessionData.currentRound == 5)
+        {
+            _cardCost = currentShopCards[index].baseCost + 3;
+            buttonText.text = $"Buy ({_cardCost})";
+        }
+        else if (stateManager.sessionData.currentRound == 6)
+        {
+            _cardCost = currentShopCards[index].baseCost + 3;
             buttonText.text = $"Buy ({_cardCost})";
         }
         else
