@@ -11,6 +11,9 @@ public class ScoringState : RoundBaseState
     
     private float waitTimeBeforeScoring = 2f;
     
+    private float maxWaitTimeForSettling = 6.0f;
+    private float totalWaitTime = 0f;
+    
     // Floating text offsets
     private float yOffsetPinInHole = 16.0f; 
     private float yOffset = 4.0f;
@@ -31,6 +34,7 @@ public class ScoringState : RoundBaseState
         hasScored = false;
         pinsHaveSettled = false;
         timeSinceLastCheck = 0f;
+        totalWaitTime = 0f;
 
         manager.MoveCamera(CameraLocation.ScoringCameraLocation);
     }
@@ -48,13 +52,14 @@ public class ScoringState : RoundBaseState
     private void HandlePinSettlement()
     {
         timeSinceLastCheck += Time.deltaTime;
+        totalWaitTime += Time.deltaTime;
 
         // Check a certain amount of time to reduce performance overhead from checking every frame
         if (timeSinceLastCheck >= checkInterval)
         {
             timeSinceLastCheck = 0f;
 
-            if (AreAllPinsSettled())
+            if (AreAllPinsSettled() || totalWaitTime >= maxWaitTimeForSettling)
             {
                 pinsHaveSettled = true;
                 _manager.StartCoroutine(ProcessScoringRoutine());

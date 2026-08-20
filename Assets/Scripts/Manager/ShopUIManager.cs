@@ -105,7 +105,7 @@ public class ShopUIManager : MonoBehaviour
         }
         else if (stateManager.sessionData.currentRound == 5)
         {
-            _cardCost = currentShopCards[index].baseCost + 3;
+            _cardCost = currentShopCards[index].baseCost + 2;
             buttonText.text = $"Buy ({_cardCost})";
         }
         else if (stateManager.sessionData.currentRound == 6)
