@@ -15,6 +15,27 @@ public class PinPlacementState : RoundBaseState
         manager.AllowPinsToFallOver(false);
         
         manager.DrawHandForCurrentTurn();
+
+        manager.GetAllPinsInCurrentFrame(manager);
+
+        SnapPinToClosestHexCell(manager);
+    }
+
+    // Some pins can move but not fall over, so lets just snap them to the nearest hex cell to make sure they are aligned properly.
+    private static void SnapPinToClosestHexCell(RoundStateManager manager)
+    {
+        foreach (PinBase pin in manager.allActivePinsInTheFrame)
+        {
+            if (pin != null && !pin._isFallen)
+            {
+                HexCell nearestCell = manager.grid.GetNearestCell(pin.transform.position);
+                if (nearestCell != null)
+                {
+                    pin.transform.position = new Vector3(nearestCell.center.x, pin.transform.position.y, nearestCell.center.z);
+                    manager.grid.TryReserveCell(nearestCell, pin.transform);
+                }
+            }
+        }
     }
 
     public override void UpdateState(RoundStateManager manager)
