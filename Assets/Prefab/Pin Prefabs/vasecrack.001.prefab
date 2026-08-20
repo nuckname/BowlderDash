@@ -718,7 +718,7 @@ GameObject:
   - component: {fileID: 299493488375739819}
   m_Layer: 10
   m_Name: vasecrack.001
-  m_TagString: Untagged
+  m_TagString: Pin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

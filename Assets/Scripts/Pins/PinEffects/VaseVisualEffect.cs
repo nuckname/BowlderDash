@@ -43,6 +43,8 @@ public class VaseVisualEffect : PinEffect
     {
         if (_isShattered) return;
 
+        context._isFallen = true;
+        
         CacheScalesIfNeeded();
         _isShattered = true;
 

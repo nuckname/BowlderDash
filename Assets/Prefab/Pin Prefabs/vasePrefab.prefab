@@ -384,7 +384,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallAngleThreshold: 45
-  hitterTag: Ball
   minHitVelocity: 3
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.25
