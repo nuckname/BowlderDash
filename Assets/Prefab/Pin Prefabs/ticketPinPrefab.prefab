@@ -6434,15 +6434,14 @@ GameObject:
   m_Component:
   - component: {fileID: 6573059936800584494}
   - component: {fileID: 4654159578542557722}
-  - component: {fileID: 3144254737813204594}
   - component: {fileID: 5830415736669713464}
   - component: {fileID: 568341343779092702}
   - component: {fileID: 2265266226455491222}
   - component: {fileID: 3966506406019630799}
-  - component: {fileID: 1018054820787693720}
-  - component: {fileID: 6879246917333233161}
+  - component: {fileID: 4640395973791459692}
+  - component: {fileID: 4377073858204794061}
   m_Layer: 9
-  m_Name: fullacePrefab
+  m_Name: ticketPinPrefab
   m_TagString: Pin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6457,7 +6456,7 @@ Transform:
   m_GameObject: {fileID: 3811477678882886870}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.05, y: -9.51, z: 46.87}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6473,7 +6472,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3811477678882886870}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a85b1e927ef099d4b8879b4f4ea3e841, type: 3}
   m_Name: 
@@ -6481,20 +6480,6 @@ MonoBehaviour:
   objectToRotate: {fileID: 6566747375580956300}
   lookTowards: {fileID: 5270511962058577666}
   lessIntensity: 3
---- !u!114 &3144254737813204594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3811477678882886870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dragElevation: 0.5
-  playAreaThresholdY: 500
 --- !u!54 &5830415736669713464
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6503,10 +6488,10 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3811477678882886870}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 2
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_AngularDamping: 0
+  m_CenterOfMass: {x: 0, y: 0.2, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -6539,7 +6524,8 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
-  onHitEffects: []
+  onHitEffects:
+  - rid: 6055849943401234495
   onFallEffects: []
   onEndOfRoundEffects: []
   allowPinToFallOver: 0
@@ -6548,7 +6534,12 @@ MonoBehaviour:
   _isFallen: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6055849943401234495
+      type: {class: TicketEffect, ns: , asm: Assembly-CSharp}
+      data:
+        ticketValue: 1
+        particleSystem: {fileID: 6131355113909808092}
 --- !u!114 &2265266226455491222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6561,7 +6552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ea672280c134a4cb37205baaa68bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragElevation: 0.5
+  dragElevation: 2
   playAreaThresholdY: 500
 --- !u!114 &3966506406019630799
 MonoBehaviour:
@@ -6576,36 +6567,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
---- !u!64 &1018054820787693720
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3811477678882886870}
-  m_Material: {fileID: 13400000, guid: 3431604cc8f26684986f38b43fa0a06d, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -7055619067759339669, guid: 9192c901fa35744439d718b5d0ecc4c2, type: 3}
---- !u!136 &6879246917333233161
+--- !u!136 &4640395973791459692
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3811477678882886870}
-  m_Material: {fileID: 13400000, guid: 3431604cc8f26684986f38b43fa0a06d, type: 2}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6617,10 +6586,31 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.3274798
-  m_Height: 5.498995
+  m_Radius: 1.1493342
+  m_Height: 5.314316
   m_Direction: 1
-  m_Center: {x: -0.08924675, y: 3.3940315, z: -0.2895398}
+  m_Center: {x: 0, y: 3.1673346, z: 0.01904273}
+--- !u!65 &4377073858204794061
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811477678882886870}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.08566201, z: 1}
+  m_Center: {x: 0, y: 0.4400906, z: 0}
 --- !u!1 &4199497254964305983
 GameObject:
   m_ObjectHideFlags: 0
@@ -7801,7 +7791,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3744692549175499050}
   - component: {fileID: 4389478703641049244}
-  - component: {fileID: 5962861508623934600}
   - component: {fileID: 8799971190593285803}
   m_Layer: 9
   m_Name: acee
@@ -7809,7 +7798,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3744692549175499050
 Transform:
   m_ObjectHideFlags: 0
@@ -7852,27 +7841,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &5962861508623934600
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5561499527254371229}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.3422346, y: 0.009999998, z: 0.39974976}
-  m_Center: {x: -0.07521868, y: -0.06, z: -0.11450958}
 --- !u!145 &8799971190593285803
 SpringJoint:
   m_ObjectHideFlags: 0
@@ -8014,8 +7982,8 @@ Transform:
   m_GameObject: {fileID: 6566747375580956300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.77322507, y: 0.773225, z: 0.77322507}
+  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalScale: {x: 0.6160362, y: 0.6160361, z: 0.6160362}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6228987136073928991}

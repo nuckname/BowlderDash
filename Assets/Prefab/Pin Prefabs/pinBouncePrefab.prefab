@@ -22,15 +22,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.4066
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -20.533
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 29.949
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       propertyPath: m_LocalRotation.w
@@ -253,7 +253,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallAngleThreshold: 45
-  hitterTag: Ball
   minHitVelocity: 3
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.25
