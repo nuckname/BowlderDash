@@ -30,6 +30,9 @@ public class PinBase : MonoBehaviour
     [SerializeField] protected bool allowPinToFallOver = false;
     [SerializeField] protected bool allowPinToBePickedUp = false;
     [SerializeField] protected bool allowCollisionEffects = false;
+
+    [Header("Disable this box collider on hit")]
+    [SerializeField] private BoxCollider boxColliderToDisable;
     
     public bool _isFallen = false;
     public bool IsFallen => _isFallen;
@@ -160,6 +163,12 @@ public class PinBase : MonoBehaviour
             
         {
             _hasBeenHit = true;
+            
+            if (boxColliderToDisable != null)
+            {
+                boxColliderToDisable.enabled = false;
+            }
+
             foreach (PinEffect effect in onHitEffects)
             {
                 effect.Execute(this, other); 

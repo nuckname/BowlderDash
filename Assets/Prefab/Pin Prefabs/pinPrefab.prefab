@@ -256,6 +256,7 @@ MonoBehaviour:
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
+  boxColliderToDisable: {fileID: 8327561609825615850}
   _isFallen: 0
   references:
     version: 2
