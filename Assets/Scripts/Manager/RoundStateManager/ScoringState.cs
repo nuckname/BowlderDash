@@ -37,6 +37,23 @@ public class ScoringState : RoundBaseState
         totalWaitTime = 0f;
 
         manager.MoveCamera(CameraLocation.ScoringCameraLocation);
+
+        bool anyPinsFallen = false;
+        
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
+        {
+            if (pin.IsFallen)
+            {
+                anyPinsFallen = true;
+                break;
+            }
+        }
+
+        if (!anyPinsFallen)
+        {
+            hasScored = true;
+            GoToNextRound();
+        }
     }
 
     public override void UpdateState(RoundStateManager manager) 
