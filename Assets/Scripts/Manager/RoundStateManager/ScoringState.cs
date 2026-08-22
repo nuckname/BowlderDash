@@ -15,7 +15,7 @@ public class ScoringState : RoundBaseState
     private float totalWaitTime = 0f;
     
     // Floating text offsets
-    private float yOffsetPinInHole = 13.0f; 
+    private float yOffsetPinInHole = 16.0f; 
     private float yOffset = 4.0f;
     
     private RoundStateManager _manager;
@@ -82,8 +82,6 @@ public class ScoringState : RoundBaseState
                 SpawnTextForSinglePin(pin);
                 yield return new WaitForSeconds(_textSpawnDelay);
             }
-            
-            
         }
 
         // Once pins have settled, we start the wait timer before scoring

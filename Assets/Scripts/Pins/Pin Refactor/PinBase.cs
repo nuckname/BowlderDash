@@ -54,6 +54,7 @@ public class PinBase : MonoBehaviour
         set
         {
             allowPinToFallOver = value;
+            //SyncPhysicsConstraints();
         }
     }
     
@@ -195,6 +196,25 @@ public class PinBase : MonoBehaviour
         {
             SessionData.Instance.AddTickets(ticketValue);
             Debug.Log("+1");
+        }
+    }
+
+    public void SyncPhysicsConstraints()
+    {
+        if (_rb == null) return;
+
+        if (!AllowPinToFallOver)
+        {
+            // Freezes Position X and Z, and Rotation X and Z.
+            _rb.constraints = RigidbodyConstraints.FreezePositionX | 
+                              RigidbodyConstraints.FreezePositionZ | 
+                              RigidbodyConstraints.FreezeRotationX | 
+                              RigidbodyConstraints.FreezeRotationZ;
+        }
+        else
+        {
+            // Removes all constraints so it can be knocked back and fall
+            _rb.constraints = RigidbodyConstraints.None;
         }
     }
 
