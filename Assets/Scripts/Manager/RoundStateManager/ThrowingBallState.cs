@@ -10,9 +10,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     private RoundStateManager currentManager;
     private bool ballHasBeenReleased;
 
-    private ThrowingDebugUI _debugUI;
-    public string debugCurrentPhase = "Initializing";
-
     public override void EnterState(RoundStateManager manager)
     {
         currentManager = manager;
@@ -30,25 +27,18 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         manager.UpdateInstructionText("Draw the ball's path! Start from the ball.");
         
         pathDrawer.Begin(this);
-
-        debugCurrentPhase = "Waiting for player to draw path...";
-        GameObject debugGo = new GameObject("ThrowingDebugUI");
-        _debugUI = debugGo.AddComponent<ThrowingDebugUI>();
-        _debugUI.throwingState = this;
     }
 
     public override void UpdateState(RoundStateManager manager)
     {
         if (Input.GetKeyDown(KeyCode.Tab) && !ballHasBeenReleased)
         {
-            debugCurrentPhase = "Tab pressed, switching to Pin Placement State.";
             manager.SwitchState(manager.pinPlacementState);
             return;
         }
 
         if (Input.GetMouseButtonDown(1) && !ballHasBeenReleased)
         {
-            debugCurrentPhase = "Right click pressed, drawing cancelled.";
             OnDrawCancelled();
         }
     }
@@ -59,7 +49,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         if (!currentManager.isHandDrawReady)
         {
-            debugCurrentPhase = "Draw completed but hand draw not ready, cancelling.";
             OnDrawCancelled();
             return;
         }
@@ -85,8 +74,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
         // Camera
         currentManager.cameraFollowScript.StartTracking();
-
-        debugCurrentPhase = "Ball released! Waiting to hit end trigger...";
     }
 
     public void OnDrawCancelled()
@@ -99,7 +86,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         OnInstructionUpdated("Draw the ball's path! Start from the ball.");
 
         ballHasBeenReleased = false;
-        debugCurrentPhase = "Draw cancelled. Waiting for player to draw again...";
     }
 
     public void OnInstructionUpdated(string message)
@@ -119,11 +105,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         }
         
         currentManager = null;
-
-        if (_debugUI != null)
-        {
-            GameObject.Destroy(_debugUI.gameObject);
-        }
     }
 
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
@@ -133,7 +114,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         if (other.gameObject.CompareTag("Ball"))
         {
-            debugCurrentPhase = "End trigger hit! Switching to Scoring State.";
             manager.SwitchState(manager.roundOverState);
         }
     }
@@ -141,26 +121,5 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public override void OnTriggerExit(RoundStateManager manager, Collider other)
     {
         
-    }
-}
-
-public class ThrowingDebugUI : MonoBehaviour
-{
-    public ThrowingBallState throwingState;
-
-    private void OnGUI()
-    {
-        if (throwingState == null) return;
-
-        GUIStyle style = new GUIStyle();
-        style.fontSize = 24;
-        style.normal.textColor = Color.yellow;
-        style.alignment = TextAnchor.UpperCenter;
-        style.fontStyle = FontStyle.Bold;
-
-        string debugText = "--- THROWING STATE DEBUG ---\n" +
-                           "Current Phase: " + throwingState.debugCurrentPhase;
-
-        GUI.Label(new Rect(Screen.width / 2f - 300f, 20f, 600f, 200f), debugText, style);
     }
 }
