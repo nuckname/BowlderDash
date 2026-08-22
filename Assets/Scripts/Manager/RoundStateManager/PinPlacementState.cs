@@ -9,8 +9,6 @@ public class PinPlacementState : RoundBaseState
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
         
-        PinOnPinCollisionLayer(false);
-        
         manager.AllowPinCollisionEffects(false);
         manager.AllowPinsToFallOver(false);
         
@@ -63,16 +61,6 @@ public class PinPlacementState : RoundBaseState
     {
         manager.GetAllPinsInCurrentFrame(manager);
 
-        PinOnPinCollisionLayer(true);
-        
         manager.AllowPinsToFallOver(false);
-    }
-    
-    private void PinOnPinCollisionLayer(bool turnOn)
-    {
-        int pinLayer = LayerMask.NameToLayer("Pin");
-
-        // Turn collision on and off for pin layer.
-        Physics.IgnoreLayerCollision(pinLayer, pinLayer, turnOn);
     }
 }
