@@ -226,15 +226,17 @@ public class ScoringState : RoundBaseState
     {
         ClearFallenOverPins(manager);
     }
-
-    private static void ClearFallenOverPins(RoundStateManager manager)
+    
+    private void ClearFallenOverPins(RoundStateManager manager)
     {
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
             if (pin.IsFallen)
             {
-                GameObject.Destroy(pin.gameObject);
+                manager.PutRealWorldPinIntoDiscardPile(pin);
             }
         }
     }
+
+
 }

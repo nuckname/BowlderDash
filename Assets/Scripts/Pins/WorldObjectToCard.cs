@@ -26,13 +26,7 @@ public class WorldObjectToCard : MonoBehaviour
     
     public void ReturnToHand()
     {
-        if (HandManager.Instance != null && cardData != null && cardData.cardUIPrefab != null)
-        {
-            HandManager.Instance.AddCardToHand(cardData);
-      
-            DeckManager.Instance.RemoveFromDiscardPile(cardData);
-        }
-        
+        HandManager.Instance.AddCardToHand(cardData);
         Destroy(gameObject);
     }
 
@@ -40,7 +34,7 @@ public class WorldObjectToCard : MonoBehaviour
     /// Returns this placed card to the discard pile so it can be shuffled and drawn again.
     /// Destroying the root also clears child debris and visual effects.
     /// </summary>
-    public void ReturnToDeck()
+    public void ReturnToDiscardPile()
     {
         if (hasReturnedToDeck) return;
         hasReturnedToDeck = true;

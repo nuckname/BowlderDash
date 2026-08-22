@@ -88,7 +88,7 @@ public class HandManager : MonoBehaviour
     {
         if (card == null) return;
 
-        DeckManager.Instance.AddToDiscardPile(card.cardData);
+        //DeckManager.Instance.AddToDiscardPile(card.cardData);
 
         RemoveCardUi(card);
     }

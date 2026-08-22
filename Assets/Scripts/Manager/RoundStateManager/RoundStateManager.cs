@@ -178,6 +178,16 @@ public class RoundStateManager : MonoBehaviour
         }
     }
     
+    public void PutRealWorldPinIntoDiscardPile(PinBase pin)
+    {
+        WorldObjectToCard cardBackedPin = pin.GetComponent<WorldObjectToCard>();
+        if (cardBackedPin != null)
+        {
+            cardBackedPin.ReturnToDiscardPile();
+        }
+    }
+    
+    
     public void AllowPinCollisionEffects(bool allow)
     {
         if(allActivePinsInTheFrame == null) return;
@@ -194,10 +204,7 @@ public class RoundStateManager : MonoBehaviour
         {
             foreach (PinBase pin in allActivePinsInTheFrame)
             {
-                if (pin != null && pin.gameObject != null)
-                {
-                    Destroy(pin.gameObject);
-                }
+                PutRealWorldPinIntoDiscardPile(pin);
             }
 
             allActivePinsInTheFrame = System.Array.Empty<PinBase>();
@@ -244,7 +251,7 @@ public class RoundStateManager : MonoBehaviour
     {
         foreach (WorldObjectToCard placedObject in FindObjectsByType<WorldObjectToCard>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            placedObject.ReturnToDeck();
+            placedObject.ReturnToDiscardPile();
         }
 
         allActivePinsInTheFrame = System.Array.Empty<PinBase>();
