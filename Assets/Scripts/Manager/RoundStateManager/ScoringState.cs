@@ -189,6 +189,7 @@ public class ScoringState : RoundBaseState
             Debug.Log("Win");
             Debug.Log("Win");
             Debug.Log("Win");
+            _manager.ResetUiForNewRound();
             _manager.SwitchState(_manager.roundWinState);
         }
         else if (ballsThrown >= maxBallsAllowed)

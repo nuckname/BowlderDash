@@ -26,7 +26,7 @@ public class InGameScoreUi : MonoBehaviour
     {
         UpdateScoreText(totalScore);
         UpdateRoundText(currentRound, maxRounds);
-        UpdateRoundToBeatText(roundData.scoreNeededToBeat);
+        UpdateScoreToBeatText(roundData.scoreNeededToBeat);
         UpdateBallsText(currentBalls, roundData.maxBallsAllowedToThrow);
     }
     
@@ -58,7 +58,7 @@ public class InGameScoreUi : MonoBehaviour
         ballsText.text = $"Balls Thrown: {ball} / {maxBalls}";
     }
 
-    public void UpdateRoundToBeatText(int scoreToBeat)
+    public void UpdateScoreToBeatText(int scoreToBeat)
     {
         scoreToBeatText.text = $"Score To Beat: {scoreToBeat}";
     }

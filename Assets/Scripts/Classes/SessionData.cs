@@ -18,6 +18,12 @@ public class SessionData
         currentScore += amount;
     }
 
+    public void AddRound()
+    {
+        Debug.unityLogger.Log("AddRound");
+        currentRound++;
+    }
+
     public void AddBallThrown()
     {
         ballsThrown++;
@@ -52,5 +58,11 @@ public class SessionData
         ballsThrown = 0;
         tickets = 0;
         InGameScoreUi.Instance.UpdateTicketText(tickets);
+    }
+    
+    public void RoundOverResetValues()
+    {
+        currentScore = 0;
+        ballsThrown = 0;
     }
 }

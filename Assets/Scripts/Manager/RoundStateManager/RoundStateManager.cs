@@ -93,13 +93,32 @@ public class RoundStateManager : MonoBehaviour
         
         RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
         
-        inGameScoreUi.UpdateRoundToBeatText(roundInfo.scoreNeededToBeat);
+        inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+        inGameScoreUi.UpdateRoundText(0, roundData.GetMaxRoundNumber());
         
         SwitchState(roundStartState);
     }
 
+    // The player has completed a frame/round/they meet quota. call This:
+    public void ResetUiForNewRound()
+    {
+        sessionData.AddRound();
+        
+        sessionData.RoundOverResetValues();
+
+        RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
+        
+        inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
+        inGameScoreUi.UpdateScoreText(sessionData.currentScore);
+        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+    }
+    
+    public void ResetUiForQuotaNotMeetThisTurn()
+    {
+    }
+    
     public void SwitchState(RoundBaseState newState)
     {
         if (currentState != null) currentState.ExitState(this);
