@@ -27,6 +27,10 @@ public class PinBase : MonoBehaviour
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onEndOfRoundEffects = new List<PinEffect>();
     
+    [Header("Floating Text Offsets")]
+    [SerializeField] protected float yOffset = 4.0f;
+    [SerializeField] protected float yOffsetPinInHole = 10.0f;
+    
     [SerializeField] protected bool allowPinToFallOver = false;
     [SerializeField] protected bool allowPinToBePickedUp = false;
     [SerializeField] protected bool allowCollisionEffects = false;
@@ -150,6 +154,22 @@ public class PinBase : MonoBehaviour
         }
         
         HandleHit(other);
+    }
+    
+    public virtual void TriggerTextForEffects(List<PinEffect> effectsToProcess, System.Action<string, Vector3> spawnTextCallback)
+    {
+        float offset = hasEnterTheHoleAtTheBack ? yOffsetPinInHole : yOffset;
+        Vector3 spawnPos = transform.position + new Vector3(0, offset, 0);
+
+        foreach (PinEffect effect in effectsToProcess)
+        {
+            string effectText = effect.GetEffectText();
+            
+            if (!string.IsNullOrEmpty(effectText))
+            {
+                spawnTextCallback?.Invoke(effectText, spawnPos);
+            }
+        }
     }
 
     protected virtual void HandleHit(Collider other)

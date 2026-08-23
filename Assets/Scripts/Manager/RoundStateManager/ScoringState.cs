@@ -14,10 +14,6 @@ public class ScoringState : RoundBaseState
     private float maxWaitTimeForSettling = 6.0f;
     private float totalWaitTime = 0f;
     
-    // Floating text offsets
-    private float yOffsetPinInHole = 16.0f; 
-    private float yOffset = 4.0f;
-    
     private RoundStateManager _manager;
     private float _textSpawnDelay = 1f;
     
@@ -131,36 +127,13 @@ public class ScoringState : RoundBaseState
 
     private void SpawnTextForSinglePin(PinBase pin)
     {
-        foreach (PinEffect effect in pin.onFallEffects)
-        {
-            if (effect is ScoreMultiplierEffect scoreEffect)
-            {
-                string scoreText = scoreEffect.scoreValue.ToString();
-
-                if (pin.hasEnterTheHoleAtTheBack)
-                {
-                    Vector3 spawnPos = pin.transform.position + new Vector3(0, yOffsetPinInHole, 0);
-                    _manager.SpawnFloatingText(scoreText, spawnPos);
-                }
-                else
-                {
-                    Vector3 spawnPos = pin.transform.position + new Vector3(0, yOffset, 0);
-                    _manager.SpawnFloatingText(scoreText, spawnPos);
-                }
-            }
-        }
+        pin.TriggerTextForEffects(pin.onFallEffects, _manager.SpawnFloatingText);
     }
 
     private void CalculateScore()
     {
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
-            if (pin == null)
-            {
-                Debug.LogError("Pin is null for some reason gl");
-                break;
-            }
-            
             if (pin.IsFallen)
             {
                 _manager.scoreCalculator.AddStandardPinFallen();

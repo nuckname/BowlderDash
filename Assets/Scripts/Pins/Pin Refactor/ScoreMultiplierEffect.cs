@@ -13,4 +13,9 @@ public class ScoreMultiplierEffect : PinEffect
     {
         context.FrameScoreCalculator.QueueScoreModification(scoreValue, multValue, context.transform.position);
     }
+    
+    public override string GetEffectText()
+    {
+        return scoreValue.ToString();
+    }
 }

@@ -10,4 +10,9 @@ public abstract class PinEffect
     public abstract void Execute(PinBase pinBase, Collider target = null);
     
     public virtual void ResetEffect() { }
+    
+    public virtual string GetEffectText()
+    {
+        return string.Empty;
+    }
 }
