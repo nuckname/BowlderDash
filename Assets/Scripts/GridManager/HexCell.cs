@@ -15,4 +15,6 @@ public class HexCell
         this.center = center;
         this.occupant = null;
     }
+ 
+    
 }

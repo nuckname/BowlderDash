@@ -74,4 +74,46 @@ public class HexGrid : MonoBehaviour
         }
         return bestCell;
     }
+    
+    public Vector3 GetWorldOffsetFromAxial(Vector2Int axialOffset)
+    {
+        float w = Mathf.Sqrt(3f) * hexSize; 
+        float h = 2f * hexSize; 
+        float rowStep = h * 0.75f;
+
+        Vector3 basisQ = new Vector3(w, 0f, 0f);
+        Vector3 basisR = new Vector3(w * 0.5f, 0f, -rowStep);
+
+        return (axialOffset.x * basisQ) + (axialOffset.y * basisR);
+    }
+    
+    public HexCell GetCellAt(int col, int row)
+    {
+        for (int i = 0; i < cells.Count; i++)
+        {
+            if (cells[i].col == col && cells[i].row == row) 
+                return cells[i];
+        }
+        return null;
+    }
+
+    public HexCell GetCellWithOffset(HexCell origin, Vector2Int axialOffset)
+    {
+        if (origin == null) return null;
+
+        // Convert Odd-R (staggered) coordinates to Axial coordinates
+        int q = origin.col - (origin.row - (origin.row & 1)) / 2;
+        int r = origin.row;
+
+        // Apply the pattern offset safely
+        int targetQ = q + axialOffset.x;
+        int targetR = r + axialOffset.y;
+
+        // Convert Axial coordinates back to Odd-R (staggered) coordinates
+        int targetCol = targetQ + (targetR - (targetR & 1)) / 2;
+        int targetRow = targetR;
+
+        return GetCellAt(targetCol, targetRow);
+    }
+
 }
