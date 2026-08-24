@@ -31,7 +31,7 @@ public class GridManager : MonoBehaviour
     }
     
     public HexCell GetCellWithOffset(HexCell origin, Vector2Int axialOffset) => grid.GetCellWithOffset(origin, axialOffset);
-
+    public Vector2Int GetAxialCoordinate(HexCell cell) => grid.GetAxialCoordinate(cell);
     public bool TryCollectTicketForPin(PinBase pin, out int val) => tickets.TryCollectTicketForPin(pin, out val);
     public Vector3 GetWorldOffsetFromAxial(Vector2Int axialOffset) => grid.GetWorldOffsetFromAxial(axialOffset);
     public HexCell GetNearestCell(Vector3 pos) => grid.GetNearestCell(pos);

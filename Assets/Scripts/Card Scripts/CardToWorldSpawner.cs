@@ -161,6 +161,18 @@ public class CardToWorldSpawner : MonoBehaviour
 
         if (canPlaceAll && targetCells.Count == _spawnedWorldObjects.Count)
         {
+            List<WorldObjectToCard> groupedPins = new List<WorldObjectToCard>();
+            
+            // Gather all components to link them together
+            for (int i = 0; i < _spawnedWorldObjects.Count; i++)
+            {
+                WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
+                if (returnScript != null)
+                {
+                    groupedPins.Add(returnScript);
+                }
+            }
+
             for (int i = 0; i < _spawnedWorldObjects.Count; i++)
             {
                 bool reserved = _grid.TryReserveCell(targetCells[i], _spawnedWorldObjects[i].transform);
@@ -169,8 +181,8 @@ public class CardToWorldSpawner : MonoBehaviour
                     WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
                     if (returnScript != null)
                     {
-                        // Inject the pin with card data.
-                        returnScript.SetupCardData(_cardMovement.cardData);
+                        // Inject the pin with card data and its sibling group.
+                        returnScript.SetupCardData(_cardMovement.cardData, groupedPins);
                     }
                 }
             }

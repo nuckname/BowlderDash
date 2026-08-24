@@ -8,6 +8,11 @@ public class WorldObjectToCard : MonoBehaviour
     private bool hasReturnedToDeck;
     
     private HexGrid _grid;
+    
+    [SerializeField] private List<WorldObjectToCard> _groupPeers = new List<WorldObjectToCard>();
+    private bool _isBeingRemoved = false;
+    
+    public List<WorldObjectToCard> GroupPeers => _groupPeers;
 
     private void Start()
     {
@@ -18,16 +23,30 @@ public class WorldObjectToCard : MonoBehaviour
         }
     }
 
-    public void SetupCardData(CardDataSO data)
+    public void SetupCardData(CardDataSO data, List<WorldObjectToCard> peers)
     {
         cardData = data;
+        _groupPeers = peers;
         hasReturnedToDeck = false;
     }
     
     public void ReturnToHand()
     {
+        if (_isBeingRemoved) return;
+        
+        // Flag all peers so we only add one card to the hand, preventing a loop
+        foreach(var peer in _groupPeers)
+        {
+            if (peer != null) peer._isBeingRemoved = true;
+        }
+
         HandManager.Instance.AddCardToHand(cardData);
-        Destroy(gameObject);
+        
+        // Destroy the entire connected shape
+        foreach(var peer in _groupPeers)
+        {
+            if (peer != null) Destroy(peer.gameObject);
+        }
     }
 
     /// <summary>
@@ -36,14 +55,22 @@ public class WorldObjectToCard : MonoBehaviour
     /// </summary>
     public void ReturnToDiscardPile()
     {
-        if (hasReturnedToDeck) return;
+        if (hasReturnedToDeck || _isBeingRemoved) return;
         hasReturnedToDeck = true;
+        
+        foreach(var peer in _groupPeers)
+        {
+            if (peer != null) peer._isBeingRemoved = true;
+        }
 
         if (cardData != null && DeckManager.Instance != null)
         {
             DeckManager.Instance.AddToDiscardPile(cardData);
         }
 
-        Destroy(gameObject);
+        foreach(var peer in _groupPeers)
+        {
+            if (peer != null) Destroy(peer.gameObject);
+        }
     }
 }

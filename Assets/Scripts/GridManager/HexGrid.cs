@@ -87,6 +87,14 @@ public class HexGrid : MonoBehaviour
         return (axialOffset.x * basisQ) + (axialOffset.y * basisR);
     }
     
+    public Vector2Int GetAxialCoordinate(HexCell cell)
+    {
+        if (cell == null) return Vector2Int.zero;
+        int q = cell.col - (cell.row - (cell.row & 1)) / 2;
+        int r = cell.row;
+        return new Vector2Int(q, r);
+    }
+    
     public HexCell GetCellAt(int col, int row)
     {
         for (int i = 0; i < cells.Count; i++)
