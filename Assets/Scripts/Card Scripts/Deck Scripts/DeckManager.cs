@@ -11,6 +11,7 @@ public class DeckManager : MonoBehaviour
     [SerializeField] private DeckDisplayUi deckDisplayUi;
     [SerializeField] private HandManager handManager;
     private ShowPhysicDeck _showPhysicDeck;
+    [SerializeField] private bool showPhysicalDeck = false;
 
     [Header("Deck Settings")]
     public float drawInterval = 0.15f;
@@ -30,8 +31,11 @@ public class DeckManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        
-        _showPhysicDeck = GetComponent<ShowPhysicDeck>();
+
+        if (showPhysicalDeck)
+        {
+            _showPhysicDeck = GetComponent<ShowPhysicDeck>();
+        }
         
         totalDeck = new List<CardDataSO>(startingDeck);
         
@@ -51,8 +55,13 @@ public class DeckManager : MonoBehaviour
             deckDisplayUi.UpdateDeckCount(drawPile.Count);
             deckDisplayUi.UpdateDiscardCount(discardPile.Count);
         }
-      
-        _showPhysicDeck.UpdatePhysicalPiles();
+
+        if (showPhysicalDeck && _showPhysicDeck != null)
+        {
+            _showPhysicDeck.UpdatePhysicalPiles();
+        }
+        
+
     }
 
     /// <summary>

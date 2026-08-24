@@ -6,12 +6,12 @@ public class ScoringState : RoundBaseState
 {
     private bool hasScored = false;
     private bool pinsHaveSettled = false;
-    private float checkInterval = 0.25f;
+    private float checkInterval = 0.1f;
     private float timeSinceLastCheck = 0f;
     
-    private float waitTimeBeforeScoring = 2f;
+    private float waitTimeBeforeScoring = 1.5f;
     
-    private float maxWaitTimeForSettling = 6.0f;
+    private float maxWaitTimeForSettling = 5.0f;
     private float totalWaitTime = 0f;
     
     private RoundStateManager _manager;
@@ -78,7 +78,8 @@ public class ScoringState : RoundBaseState
         {
             timeSinceLastCheck = 0f;
 
-            if (AreAllPinsSettled() || totalWaitTime >= maxWaitTimeForSettling)
+            //if (AreAllPinsSettled() || totalWaitTime >= maxWaitTimeForSettling)
+            if (AreAllPinsSettled())
             {
                 pinsHaveSettled = true;
                 _manager.StartCoroutine(ProcessScoringRoutine());
@@ -134,7 +135,7 @@ public class ScoringState : RoundBaseState
     {
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
-            if (pin.IsFallen)
+            if (pin != null && pin.IsFallen)
             {
                 _manager.scoreCalculator.AddStandardPinFallen();
             }

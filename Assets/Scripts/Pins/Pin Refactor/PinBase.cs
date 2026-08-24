@@ -77,7 +77,7 @@ public class PinBase : MonoBehaviour
             if (_rb == null || _rb.isKinematic) return true;
 
             // Failsafe: If the pin is barely moving (jittering), force it to sleep
-            if (!_rb.IsSleeping() && _rb.linearVelocity.sqrMagnitude < 0.01f && _rb.angularVelocity.sqrMagnitude < 0.01f)
+            if (!_rb.IsSleeping() && _rb.linearVelocity.sqrMagnitude < 1.5f && _rb.angularVelocity.sqrMagnitude < 1.5f)
             {
                 _rb.Sleep();
             }

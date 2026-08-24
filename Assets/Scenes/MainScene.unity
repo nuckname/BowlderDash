@@ -13073,6 +13073,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deckDisplayUi: {fileID: 1168153563}
   handManager: {fileID: 1545294220}
+  showPhysicalDeck: 0
   drawInterval: 0.15
   startingDeck:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}

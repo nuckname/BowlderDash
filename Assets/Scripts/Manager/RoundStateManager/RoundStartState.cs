@@ -8,6 +8,8 @@ public class RoundStartState : RoundBaseState
     {
         manager.scoreCalculator.ResetFrameScore();
 
+        manager.pinsToScore.Clear();
+        
         manager.ResetHandDrawState();
 
         HandleMap(manager);
