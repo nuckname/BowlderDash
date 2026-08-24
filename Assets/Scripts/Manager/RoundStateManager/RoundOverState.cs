@@ -12,12 +12,34 @@ public class RoundOverState : RoundBaseState
         
         waitTimer = 0f;
 
-        
-        // We are getting these twice, maybe can store them later in the manager
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
-            pin.TriggerEndOfRound();
+            // If pin HAS fallen over: Check its onFallEffects list
+            if (pin.IsFallen)
+            {
+                foreach (PinEffect effect in pin.onFallEffects)
+                {
+                    if (effect is ScoreMultiplierEffect scoreMulti)
+                    {
+                        manager.pinsToScore.Add(pin);
+                        break; // Stop searching this pin since we found one and added it
+                    }
+                }
+            }
+            // If pin HAS NOT fallen over: Check its onEndOfRoundEffects list
+            else
+            {
+                foreach (PinEffect effect in pin.onEndOfRoundEffects)
+                {
+                    if (effect is ScoreMultiplierEffect scoreMulti)
+                    {
+                        manager.pinsToScore.Add(pin);
+                        break; 
+                    }
+                }
+            }
         }
+
 
         //manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
     }

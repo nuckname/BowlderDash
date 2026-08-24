@@ -1,6 +1,7 @@
 using UnityEngine;
 
 // does this need mono behaviour?
+// Do I need this?
 public class ScoreCalculator : MonoBehaviour
 {
     [Header("Current Frame Data")]
@@ -12,17 +13,11 @@ public class ScoreCalculator : MonoBehaviour
     public void QueueScoreModification(int scoreValue, float multValue, Vector3 position)
     {
         bonusScore += scoreValue;
-        
-
-        // position for floting text score
     }
 
     public void QueueScoreMulti(int scoreValue, float multValue, Vector3 position)
     {
         totalMultiplier += multValue; 
-        
-        // position for floting text score
-        
     }
 
     // Called by your ScoringState for every standard pin that fell

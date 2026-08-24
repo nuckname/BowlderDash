@@ -7,7 +7,11 @@ using UnityEngine.UI;
 public class RoundStateManager : MonoBehaviour
 {
     public RoundBaseState currentState;
+    [Header("Pins")]
     public PinBase[] allActivePinsInTheFrame;
+    
+    // A queue of pins that need to be scored in ScoringState.cs
+    public List<PinBase> pinsToScore = new List<PinBase>();
     
     [Header("Managers")]
     public CameraPanToLocation cameraPanToLocation;

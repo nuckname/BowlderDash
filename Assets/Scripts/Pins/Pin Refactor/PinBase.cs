@@ -156,6 +156,7 @@ public class PinBase : MonoBehaviour
         HandleHit(other);
     }
     
+    // I dont think I need effectsToProcess?
     public virtual void TriggerTextForEffects(List<PinEffect> effectsToProcess, System.Action<string, Vector3> spawnTextCallback)
     {
         float offset = hasEnterTheHoleAtTheBack ? yOffsetPinInHole : yOffset;

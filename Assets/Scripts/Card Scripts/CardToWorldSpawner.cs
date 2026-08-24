@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class CardToWorldSpawner : MonoBehaviour
     private CardMovement _cardMovement;
     
     private HexCell _lastValidOrigin;
+    [SerializeField] private float previewHeightOffset = 1.5f;
 
     private void Awake()
     {
@@ -70,7 +72,7 @@ public class CardToWorldSpawner : MonoBehaviour
                             _spawnedWorldObjects[i].SetActive(true);
                             _spawnedWorldObjects[i].transform.position = new Vector3(
                                 _lastValidOrigin.center.x + offset.x, 
-                                _lastValidOrigin.center.y + 0.75f + offset.y, 
+                                _lastValidOrigin.center.y + previewHeightOffset + offset.y, 
                                 _lastValidOrigin.center.z + offset.z);
                         }
                     }

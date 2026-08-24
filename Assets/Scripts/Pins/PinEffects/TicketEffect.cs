@@ -31,6 +31,6 @@ public class TicketEffect : PinEffect
     
     public override string GetEffectText()
     {
-        return "+" + ticketValue.ToString();
+        return "+" + ticketValue.ToString() + " Tickets";
     }
 }

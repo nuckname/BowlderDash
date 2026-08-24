@@ -35,21 +35,27 @@ public class ScoringState : RoundBaseState
         manager.MoveCamera(CameraLocation.ScoringCameraLocation);
 
         bool anyPinsFallen = false;
-        
-        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
-        {
-            if (pin.IsFallen)
-            {
-                anyPinsFallen = true;
-                break;
-            }
-        }
+        anyPinsFallen = HaveAnyPinsFallenOver();
 
+        // If no pins have fallen over lets just go to exit state.
         if (!anyPinsFallen)
         {
             hasScored = true;
             GoToNextRound();
         }
+    }
+
+    private bool HaveAnyPinsFallenOver()
+    {
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
+        {
+            if (pin.IsFallen)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public override void UpdateState(RoundStateManager manager) 
@@ -84,17 +90,10 @@ public class ScoringState : RoundBaseState
     {
         yield return new WaitForSeconds(waitTimeBeforeScoring);
         
-        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
+        foreach (PinBase pin in _manager.pinsToScore)
         {
-            if (pin == null)
-            {
-                Debug.LogWarning("Pin is null for some reason.");
-            }
-            if (pin.IsFallen)
-            {
-                SpawnTextForSinglePin(pin);
-                yield return new WaitForSeconds(_textSpawnDelay);
-            }
+            SpawnTextForSinglePin(pin);
+            yield return new WaitForSeconds(_textSpawnDelay);
         }
 
         // Once pins have settled, we start the wait timer before scoring
@@ -130,6 +129,7 @@ public class ScoringState : RoundBaseState
         pin.TriggerTextForEffects(pin.onFallEffects, _manager.SpawnFloatingText);
     }
 
+    // Need to check this out
     private void CalculateScore()
     {
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)

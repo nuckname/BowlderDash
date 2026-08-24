@@ -2539,6 +2539,37 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &191297471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 191297472}
+  m_Layer: 0
+  m_Name: ToStopFloatingtextFromGoingInTheWall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &191297472
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191297471}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1400545773}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &218259674
 GameObject:
   m_ObjectHideFlags: 0
@@ -3408,6 +3439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allActivePinsInTheFrame: []
+  pinsToScore: []
   cameraPanToLocation: {fileID: 1439520103}
   cameraFollowScript: {fileID: 1439520104}
   ballController: {fileID: 6652253181974710232}
@@ -3437,7 +3469,6 @@ MonoBehaviour:
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
-    debugCurrentPhase: Initializing
   spawnBossObjectsState:
     bossObjectPrefabs: []
     bossSpawnLocations: []
@@ -12031,6 +12062,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1359404769}
   m_CullTransparentMesh: 1
+--- !u!1 &1400545772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1400545773}
+  - component: {fileID: 1400545774}
+  m_Layer: 0
+  m_Name: Ramp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1400545773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400545772}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.6532819, y: 0.27059755, z: -0.27059755, w: 0.65328145}
+  m_LocalPosition: {x: -62.6, y: -14.2, z: 11.7}
+  m_LocalScale: {x: 64.56241, y: 74.98919, z: 0.6315908}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 191297472}
+  m_Father: {fileID: 1776242839}
+  m_LocalEulerAnglesHint: {x: -45, y: 90, z: -90}
+--- !u!65 &1400545774
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400545772}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2937919, y: 0.59217334, z: 1}
+  m_Center: {x: -0.13502637, y: 0.2039135, z: -0.0000027863402}
 --- !u!1 &1427237828
 GameObject:
   m_ObjectHideFlags: 0
@@ -15283,6 +15368,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1782973774}
+  - {fileID: 1400545773}
   - {fileID: 1232149672}
   - {fileID: 367063838}
   m_Father: {fileID: 543450652758292814}
@@ -18669,7 +18755,7 @@ Transform:
   m_GameObject: {fileID: 8416272008860606272}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: 0.000000029802322, w: 0.70710677}
-  m_LocalPosition: {x: -62.600002, y: 10.1, z: 0}
+  m_LocalPosition: {x: -62.28, y: 10.1, z: -0}
   m_LocalScale: {x: 1, y: 1.1999999, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
