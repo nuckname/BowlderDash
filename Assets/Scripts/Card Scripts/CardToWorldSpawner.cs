@@ -34,10 +34,7 @@ public class CardToWorldSpawner : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
             {
                 HexCell originCell = _grid.GetNearestCell(hit.point);
-                var pattern = _cardMovement.cardData.spawnPattern;
-                
-                if (pattern == null || pattern.Count == 0)
-                    pattern = new List<Vector2Int> { Vector2Int.zero };
+                var pattern = GetActivePattern();
 
                 if (originCell != null)
                 {
@@ -45,7 +42,7 @@ public class CardToWorldSpawner : MonoBehaviour
 
                     for (int i = 0; i < pattern.Count; i++)
                     {
-                        HexCell targetCell = _grid.GetCellWithOffset(originCell, pattern[i]);
+                        HexCell targetCell = _grid.GetCellWithOffset(originCell, pattern[i].offset);
                         
                         // Check if any part of the pattern is off-grid or occupied
                         if (targetCell == null || targetCell.occupant != null)
@@ -66,7 +63,9 @@ public class CardToWorldSpawner : MonoBehaviour
                     {
                         for (int i = 0; i < _spawnedWorldObjects.Count; i++)
                         {
-                            Vector3 offset = _grid.GetWorldOffsetFromAxial(pattern[i]);
+                            if (i >= pattern.Count) continue;
+
+                            Vector3 offset = _grid.GetWorldOffsetFromAxial(pattern[i].offset);
                             
                             _spawnedWorldObjects[i].SetActive(true);
                             _spawnedWorldObjects[i].transform.position = new Vector3(
@@ -92,15 +91,21 @@ public class CardToWorldSpawner : MonoBehaviour
     {
         _lastValidOrigin = null;
 
-        if (_spawnedWorldObjects.Count == 0 && _cardMovement.cardData != null && _cardMovement.cardData.worldGameObjectPrefab != null)
+        if (_spawnedWorldObjects.Count == 0 && _cardMovement.cardData != null)
         {
-            var pattern = _cardMovement.cardData.spawnPattern;
-            if (pattern == null || pattern.Count == 0)
-                pattern = new List<Vector2Int> { Vector2Int.zero };
+            var pattern = GetActivePattern();
 
             for (int i = 0; i < pattern.Count; i++)
             {
-                _spawnedWorldObjects.Add(Instantiate(_cardMovement.cardData.worldGameObjectPrefab));
+                // Fallback to the old single prefab if the pattern piece didn't assign one
+                GameObject prefabToInstantiate = pattern[i].prefab != null 
+                    ? pattern[i].prefab 
+                    : _cardMovement.cardData.worldGameObjectPrefab;
+
+                if (prefabToInstantiate != null)
+                {
+                    _spawnedWorldObjects.Add(Instantiate(prefabToInstantiate));
+                }
             }
         }
     }
@@ -136,16 +141,13 @@ public class CardToWorldSpawner : MonoBehaviour
             return;
         }
 
-        var pattern = _cardMovement.cardData.spawnPattern;
-        if (pattern == null || pattern.Count == 0)
-            pattern = new List<Vector2Int> { Vector2Int.zero };
-
+        var pattern = GetActivePattern();
         List<HexCell> targetCells = new List<HexCell>();
         bool canPlaceAll = true;
 
         for (int i = 0; i < pattern.Count; i++)
         {
-            HexCell target = _grid.GetCellWithOffset(originCell, pattern[i]);
+            HexCell target = _grid.GetCellWithOffset(originCell, pattern[i].offset);
             
             // Attempt to reserve the cell for our spawned object
             // If any cell in the pattern is invalid or occupied, the whole placement fails (Tetris rules)
@@ -183,6 +185,21 @@ public class CardToWorldSpawner : MonoBehaviour
         }
     }
     
+    // Helper method to safely return the pattern or a fallback if the list is empty
+    private List<PatternPiece> GetActivePattern()
+    {
+        var pattern = _cardMovement.cardData.spawnPattern;
+        
+        if (pattern == null || pattern.Count == 0)
+        {
+            return new List<PatternPiece> { 
+                new PatternPiece { offset = Vector2Int.zero, prefab = _cardMovement.cardData.worldGameObjectPrefab } 
+            };
+        }
+        
+        return pattern;
+    }
+
     private void OnDestroy()
     {
         // Clean up preview if destroyed mid-drag

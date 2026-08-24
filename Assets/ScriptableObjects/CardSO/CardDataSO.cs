@@ -1,5 +1,15 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+
+[System.Serializable]
+public class PatternPiece
+{
+    [Tooltip("Hex Axial Coordinate offset from the origin (0,0)")]
+    public Vector2Int offset;
+    
+    [Tooltip("The specific prefab to spawn at this offset")]
+    public GameObject prefab;
+}
 
 [CreateAssetMenu(fileName = "NewCardData", menuName = "Cards/CardData")]
 public class CardDataSO : ScriptableObject
@@ -10,12 +20,13 @@ public class CardDataSO : ScriptableObject
     [Header("Prefabs")]
     public GameObject cardUIPrefab; 
     public GameObject cardVisualPrefab; 
+    [Tooltip("Fallback prefab if spawn pattern is empty")]
     public GameObject worldGameObjectPrefab; 
     
     [Header("Shop Settings")]
     public int baseCost = 5;
 
     [Header("Spawn Pattern (Hex Axial Coordinates)")]
-    [Tooltip("Leave empty for a single object. (0,0) is the center pin. X is roughly horizontal, Y is vertical diagonal.")]
-    public List<Vector2Int> spawnPattern = new List<Vector2Int> { Vector2Int.zero };
+    [Tooltip("Define the shape and unique prefabs for each piece.")]
+    public List<PatternPiece> spawnPattern = new List<PatternPiece>();
 }
