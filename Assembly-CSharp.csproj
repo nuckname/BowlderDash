@@ -54,6 +54,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\_CardSciptableObjects\CurveParameters.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\MultiEffect.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\ClonePinEffect.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexGrid.cs" />
     <Compile Include="Assets\Scripts\GridManager.cs" />
     <Compile Include="Assets\ScriptableObjects\CardSO\CardDataSO.cs" />

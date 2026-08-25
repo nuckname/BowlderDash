@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  _groupPeers: []
 --- !u!136 &6469380549180960215
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -253,6 +254,8 @@ MonoBehaviour:
   onFallEffects:
   - rid: 6055849852166996033
   onEndOfRoundEffects: []
+  yOffset: 4
+  yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
