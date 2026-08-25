@@ -1856,9 +1856,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d1b95b5eb2f416582d3cdea9c4112b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 4
-  rows: 4
-  hexSize: 2
+  columns: 7
+  rows: 6
+  hexSize: 1.8
   originOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &121324095
 GameObject:

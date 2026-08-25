@@ -72,6 +72,7 @@ public class ShopUIManager : MonoBehaviour
         if (prefabImage != null)
         {
             cardImage.sprite = prefabImage.sprite;
+            cardImage.color = cardData.cardTint;
         }
     }
     
