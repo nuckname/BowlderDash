@@ -123,87 +123,55 @@ public class CardToWorldSpawner : MonoBehaviour
 
     private void TryPlaceObject()
     {
-        if (_spawnedWorldObjects.Count == 0)
+        if (_spawnedWorldObjects.Count == 0 || _lastValidOrigin == null)
         {
-            _cardMovement.ReturnToHand();
-            return;
-        }
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        HexCell originCell = null;
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
-        {
-             originCell = _grid.GetNearestCell(hit.point);
-        }
-
-        if (originCell == null)
-        {
-            DestroyPreview();
-            _cardMovement.ReturnToHand();
             return;
         }
 
         var pattern = GetActivePattern();
         List<HexCell> targetCells = new List<HexCell>();
-        bool canPlaceAll = true;
 
         for (int i = 0; i < pattern.Count; i++)
         {
-            HexCell target = _grid.GetCellWithOffset(originCell, pattern[i].offset);
-            
-            // Attempt to reserve the cell for our spawned object
-            // If any cell in the pattern is invalid or occupied, the whole placement fails (Tetris rules)
-            if (target == null || target.occupant != null)
-            {
-                canPlaceAll = false;
-                break;
-            }
+            HexCell target = _grid.GetCellWithOffset(_lastValidOrigin, pattern[i].offset);
             targetCells.Add(target);
         }
 
-        if (canPlaceAll && targetCells.Count == _spawnedWorldObjects.Count)
+        List<WorldObjectToCard> groupedPins = new List<WorldObjectToCard>();
+        
+        // Gather all components to link them together
+        for (int i = 0; i < _spawnedWorldObjects.Count; i++)
         {
-            List<WorldObjectToCard> groupedPins = new List<WorldObjectToCard>();
-            
-            // Gather all components to link them together
-            for (int i = 0; i < _spawnedWorldObjects.Count; i++)
+            WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
+            if (returnScript != null)
             {
+                groupedPins.Add(returnScript);
+            }
+        }
+
+        for (int i = 0; i < _spawnedWorldObjects.Count; i++)
+        {
+            bool reserved = _grid.TryReserveCell(targetCells[i], _spawnedWorldObjects[i].transform);
+            if (reserved)
+            {
+                // FIX: Force the pin down from the previewHeightOffset so it sits perfectly on the hex floor
+                _spawnedWorldObjects[i].transform.position = new Vector3(
+                    targetCells[i].center.x, 
+                    targetCells[i].center.y, 
+                    targetCells[i].center.z
+                );
+
                 WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
                 if (returnScript != null)
                 {
-                    groupedPins.Add(returnScript);
+                    // Inject the pin with card data and its sibling group.
+                    returnScript.SetupCardData(_cardMovement.cardData, groupedPins);
                 }
             }
-
-            for (int i = 0; i < _spawnedWorldObjects.Count; i++)
-            {
-                bool reserved = _grid.TryReserveCell(targetCells[i], _spawnedWorldObjects[i].transform);
-                if (reserved)
-                {
-                    // FIX: Force the pin down from the previewHeightOffset so it sits perfectly on the hex floor
-                    _spawnedWorldObjects[i].transform.position = new Vector3(
-                        targetCells[i].center.x, 
-                        targetCells[i].center.y, 
-                        targetCells[i].center.z
-                    );
-
-                    WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
-                    if (returnScript != null)
-                    {
-                        // Inject the pin with card data and its sibling group.
-                        returnScript.SetupCardData(_cardMovement.cardData, groupedPins);
-                    }
-                }
-            }
-
-            _spawnedWorldObjects.Clear();
-            _cardMovement.SuccessfulPlay();
         }
-        else
-        {
-            DestroyPreview();
-            _cardMovement.ReturnToHand();
-        }
+
+        _spawnedWorldObjects.Clear();
+        _cardMovement.SuccessfulPlay();
     }
     
     // Helper method to safely return the pattern or a fallback if the list is empty
