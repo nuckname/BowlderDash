@@ -33,29 +33,6 @@ public class ScoringState : RoundBaseState
         totalWaitTime = 0f;
 
         manager.MoveCamera(CameraLocation.ScoringCameraLocation);
-
-        bool anyPinsFallen = false;
-        anyPinsFallen = HaveAnyPinsFallenOver();
-
-        // If no pins have fallen over lets just go to exit state.
-        if (!anyPinsFallen)
-        {
-            hasScored = true;
-            GoToNextRound();
-        }
-    }
-
-    private bool HaveAnyPinsFallenOver()
-    {
-        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
-        {
-            if (pin.IsFallen)
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public override void UpdateState(RoundStateManager manager) 
@@ -90,7 +67,7 @@ public class ScoringState : RoundBaseState
     private IEnumerator ProcessScoringRoutine()
     {
         yield return new WaitForSeconds(waitTimeBeforeScoring);
-        
+
         foreach (PinBase pin in _manager.pinsToScore)
         {
             SpawnTextForSinglePin(pin);
@@ -127,7 +104,12 @@ public class ScoringState : RoundBaseState
 
     private void SpawnTextForSinglePin(PinBase pin)
     {
-        pin.TriggerTextForEffects(pin.onFallEffects, _manager.SpawnFloatingText);
+        List<PinEffect> combinedEffects = new List<PinEffect>();
+        
+        if (pin.onFallEffects != null) combinedEffects.AddRange(pin.onFallEffects);
+        if (pin.onEndOfRoundEffects != null) combinedEffects.AddRange(pin.onEndOfRoundEffects);
+        
+        pin.TriggerTextForEffects(combinedEffects, _manager.SpawnFloatingText);
     }
 
     // Need to check this out

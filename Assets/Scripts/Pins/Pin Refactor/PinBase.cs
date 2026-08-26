@@ -74,8 +74,10 @@ public class PinBase : MonoBehaviour
         get
         {
             if (_isForcedSettled) return true;
-            if (_rb == null || _rb.isKinematic) return true;
 
+            // force End of round effects to settle as we dont need to hit them ?
+            if (onEndOfRoundEffects != null && onEndOfRoundEffects.Count > 0) return true;
+            
             // Failsafe: If the pin is barely moving (jittering), force it to sleep
             if (!_rb.IsSleeping() && _rb.linearVelocity.sqrMagnitude < 1.5f && _rb.angularVelocity.sqrMagnitude < 1.5f)
             {
@@ -196,14 +198,21 @@ public class PinBase : MonoBehaviour
         }
     }
     
-    public virtual void TriggerEndOfRound()
+    public virtual bool TriggerEndOfRound()
     {
+        if (onEndOfRoundEffects == null || onEndOfRoundEffects.Count == 0) return false;
+
         foreach (PinEffect effect in onEndOfRoundEffects)
         {
-            effect.Execute(this);
+            if (effect != null)
+            {
+                effect.Execute(this);
+                return true;
+            }
         }
+        
+        return false;
     }
-
     protected virtual void TriggerFall()
     {
         _isFallen = true;
@@ -213,12 +222,15 @@ public class PinBase : MonoBehaviour
             _rb.linearDamping = fallenDrag;
             _rb.angularDamping = fallenAngularDrag;
         }
-        
-        foreach (PinEffect effect in onFallEffects)
+
+        if (onFallEffects != null && onFallEffects.Count != 0)
         {
-            effect.Execute(this);
+            foreach (PinEffect effect in onFallEffects)
+            {
+                effect.Execute(this);
+            }
         }
-        
+
         // I dont like getting the compoent like this but I dont know another way.
         GridManager gridManager = FindObjectOfType<GridManager>();
         if (gridManager != null && gridManager.TryCollectTicketForPin(this, out int ticketValue))

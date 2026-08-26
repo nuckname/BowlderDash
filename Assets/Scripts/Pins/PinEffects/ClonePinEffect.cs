@@ -33,9 +33,4 @@ public class ClonePinEffect : PinEffect
             cloneRb.linearVelocity = targetRb.linearVelocity * velocityMultiplier;
         }
     }
-
-    public override string GetEffectText()
-    {
-        return "Cloned!";
-    }
 }
