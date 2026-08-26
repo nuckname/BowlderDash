@@ -180,6 +180,13 @@ public class CardToWorldSpawner : MonoBehaviour
                 bool reserved = _grid.TryReserveCell(targetCells[i], _spawnedWorldObjects[i].transform);
                 if (reserved)
                 {
+                    // FIX: Force the pin down from the previewHeightOffset so it sits perfectly on the hex floor
+                    _spawnedWorldObjects[i].transform.position = new Vector3(
+                        targetCells[i].center.x, 
+                        targetCells[i].center.y, 
+                        targetCells[i].center.z
+                    );
+
                     WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
                     if (returnScript != null)
                     {

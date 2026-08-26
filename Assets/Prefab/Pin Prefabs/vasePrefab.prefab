@@ -393,13 +393,12 @@ MonoBehaviour:
   onFallEffects: []
   onEndOfRoundEffects:
   - rid: 6055849687980703749
-  yOffset: 4
+  yOffset: 6
   yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 0}
-  doesNotNeedToHaveFallenOverButWeStillWantToCountItAsFallen: 1
   _isFallen: 0
   references:
     version: 2

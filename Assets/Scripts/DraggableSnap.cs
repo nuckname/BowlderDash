@@ -36,10 +36,24 @@ public class DraggableSnap : MonoBehaviour
         _worldObjectToCard = GetComponent<WorldObjectToCard>();
     }
 
+    private IEnumerable<GameObject> GetGroupObjects()
+    {
+        yield return this.gameObject;
+        
+        if (_worldObjectToCard != null && _worldObjectToCard.GroupPeers != null)
+        {
+            foreach (var peer in _worldObjectToCard.GroupPeers)
+            {
+                if (peer != null && peer.gameObject != this.gameObject)
+                {
+                    yield return peer.gameObject;
+                }
+            }
+        }
+    }
+    
     private void OnMouseDown()
     {
-        if (_worldObjectToCard.GroupPeers == null || _worldObjectToCard.GroupPeers.Count == 0) return;
-
         _peerAxialOffsets.Clear();
         _peerOriginalCells.Clear();
         _peerOriginalPositions.Clear();
@@ -48,24 +62,23 @@ public class DraggableSnap : MonoBehaviour
         Vector2Int myAxial = _gridManager.GetAxialCoordinate(myOriginalCell);
 
         // Gather and release all peers in the group
-        foreach (var peerObj in _worldObjectToCard.GroupPeers)
+        foreach (var obj in GetGroupObjects())
         {
-            if (peerObj == null) continue;
-            var peerSnap = peerObj.GetComponent<DraggableSnap>();
+            var snap = obj.GetComponent<DraggableSnap>();
             
-            HexCell peerCell = _gridOccupancy.GetCellByOccupant(peerObj.transform);
+            HexCell cell = _gridOccupancy.GetCellByOccupant(obj.transform);
             
-            _peerOriginalCells[peerSnap] = peerCell;
-            _peerOriginalPositions[peerSnap] = peerObj.transform.position;
+            _peerOriginalCells[snap] = cell;
+            _peerOriginalPositions[snap] = obj.transform.position;
             
-            Vector2Int peerAxial = _gridManager.GetAxialCoordinate(peerCell);
-            _peerAxialOffsets[peerSnap] = peerAxial - myAxial;
+            Vector2Int axial = _gridManager.GetAxialCoordinate(cell);
+            _peerAxialOffsets[snap] = axial - myAxial;
 
-            if (peerCell != null)
-                _gridOccupancy.ReleaseCell(peerObj.transform);
+            if (cell != null)
+                _gridOccupancy.ReleaseCell(obj.transform);
   
-            float elevatedY = _peerOriginalPositions[peerSnap].y + dragElevation;
-            peerObj.transform.position = new Vector3(peerObj.transform.position.x, elevatedY, peerObj.transform.position.z);
+            float elevatedY = _peerOriginalPositions[snap].y + dragElevation;
+            obj.transform.position = new Vector3(obj.transform.position.x, elevatedY, obj.transform.position.z);
         }
 
         // Establish drag plane offset for the specific pin we clicked
@@ -113,12 +126,11 @@ public class DraggableSnap : MonoBehaviour
                 bool allFit = true;
 
                 // Validate if the entire shape fits relative to the new anchor cell
-                foreach (var peerObj in _worldObjectToCard.GroupPeers)
+                foreach (var obj in GetGroupObjects())
                 {
-                    if (peerObj == null) continue;
-                    var peerSnap = peerObj.GetComponent<DraggableSnap>();
+                    var snap = obj.GetComponent<DraggableSnap>();
                     
-                    HexCell target = _gridManager.GetCellWithOffset(anchorNearest, _peerAxialOffsets[peerSnap]);
+                    HexCell target = _gridManager.GetCellWithOffset(anchorNearest, _peerAxialOffsets[snap]);
                     if (target == null || target.occupant != null)
                     {
                         allFit = false;
@@ -134,43 +146,40 @@ public class DraggableSnap : MonoBehaviour
                 // Snap visuals to the most recent valid cells
                 if (_currentValidAnchor != null)
                 {
-                    foreach (var peerObj in _worldObjectToCard.GroupPeers)
+                    foreach (var obj in GetGroupObjects())
                     {
-                        if (peerObj == null) continue;
-                        var peerSnap = peerObj.GetComponent<DraggableSnap>();
+                        var snap = obj.GetComponent<DraggableSnap>();
                         
-                        HexCell target = _gridManager.GetCellWithOffset(_currentValidAnchor, _peerAxialOffsets[peerSnap]);
-                        float peerElevatedY = _peerOriginalPositions[peerSnap].y + dragElevation;
+                        HexCell target = _gridManager.GetCellWithOffset(_currentValidAnchor, _peerAxialOffsets[snap]);
+                        float peerElevatedY = _peerOriginalPositions[snap].y + dragElevation;
                         
-                        peerObj.transform.position = new Vector3(target.center.x, peerElevatedY, target.center.z);
+                        obj.transform.position = new Vector3(target.center.x, peerElevatedY, target.center.z);
                     }
                 }
             }
         }
     }
     
-    private void OnMouseUp()
+private void OnMouseUp()
     {
         if (!_dragging) return; 
         _dragging = false;
 
         HexCell finalAnchor = _hexGrid.GetNearestCell(transform.position);
         bool allFit = true;
-        List<HexCell> finalCells = new List<HexCell>();
 
         if (finalAnchor != null)
         {
-            foreach (var peerObj in _worldObjectToCard.GroupPeers)
+            foreach (var obj in GetGroupObjects())
             {
-                var peerSnap = peerObj.GetComponent<DraggableSnap>();
-                HexCell target = _gridManager.GetCellWithOffset(finalAnchor, _peerAxialOffsets[peerSnap]);
+                var snap = obj.GetComponent<DraggableSnap>();
+                HexCell target = _gridManager.GetCellWithOffset(finalAnchor, _peerAxialOffsets[snap]);
                 
                 if (target == null || target.occupant != null)
                 {
                     allFit = false;
                     break;
                 }
-                finalCells.Add(target);
             }
         }
         else
@@ -181,32 +190,35 @@ public class DraggableSnap : MonoBehaviour
         if (allFit)
         {
             // Reserve and drop into new spots
-            int idx = 0;
-            foreach (var peerObj in _worldObjectToCard.GroupPeers)
+            foreach (var obj in GetGroupObjects())
             {
-                var peerSnap = peerObj.GetComponent<DraggableSnap>();
-                _gridOccupancy.TryReserveCell(finalCells[idx], peerObj.transform);
+                var snap = obj.GetComponent<DraggableSnap>();
+                HexCell target = _gridManager.GetCellWithOffset(finalAnchor, _peerAxialOffsets[snap]);
                 
-                peerObj.transform.position = new Vector3(
-                    finalCells[idx].center.x, 
-                    _peerOriginalPositions[peerSnap].y, 
-                    finalCells[idx].center.z);
+                _gridOccupancy.TryReserveCell(target, obj.transform);
                 
-                idx++;
+                // FIX: Use target.center.y instead of _peerOriginalPositions[snap].y
+                // This forces the object to snap perfectly to the floor height of the hex cell.
+                obj.transform.position = new Vector3(
+                    target.center.x, 
+                    target.center.y, 
+                    target.center.z);
             }
         }
         else
         {
             // Fallback: Return group to original position
-            foreach (var peerObj in _worldObjectToCard.GroupPeers)
+            foreach (var obj in GetGroupObjects())
             {
-                var peerSnap = peerObj.GetComponent<DraggableSnap>();
+                var snap = obj.GetComponent<DraggableSnap>();
                 
-                if (_peerOriginalCells[peerSnap] != null)
+                if (_peerOriginalCells[snap] != null)
                 {
-                    _gridOccupancy.TryReserveCell(_peerOriginalCells[peerSnap], peerObj.transform);
+                    _gridOccupancy.TryReserveCell(_peerOriginalCells[snap], obj.transform);
                 }
-                peerObj.transform.position = _peerOriginalPositions[peerSnap];
+                
+                // This still uses the original position so it correctly flies back up to the hand if the drop fails
+                obj.transform.position = _peerOriginalPositions[snap];
             }
         }
     }
