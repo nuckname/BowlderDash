@@ -16,6 +16,8 @@ public class CardDataSO : ScriptableObject
 {
     [Header("Card Identity")]
     public string cardID; // If we want unique cards or something
+    [Tooltip("Presentation tint applied to the card art in hand, shop, and deck views.")]
+    public Color cardTint = Color.white;
 
     [Header("Prefabs")]
     public GameObject cardUIPrefab; 

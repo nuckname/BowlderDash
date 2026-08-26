@@ -73,6 +73,7 @@ public class CardAnimator : MonoBehaviour
         parentCardMovement = target;
         cardTransform = target.transform;
         canvas = GetComponent<Canvas>();
+        ApplyCardTint(target.cardData != null ? target.cardData.cardTint : Color.white);
 
         //Event Listening
         parentCardMovement.PointerEnterEvent.AddListener(PointerEnter);
@@ -85,6 +86,18 @@ public class CardAnimator : MonoBehaviour
 
         //Initialization
         initalize = true;
+    }
+
+    /// <summary>
+    /// Applies the CardDataSO presentation colour to this visual's card-art image.
+    /// Kept public so non-interactive views (shop/deck viewer) can use the same binding.
+    /// </summary>
+    public void ApplyCardTint(Color tint)
+    {
+        if (cardImage != null)
+        {
+            cardImage.color = tint;
+        }
     }
 
     public void UpdateLength(int length)
