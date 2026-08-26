@@ -4698,6 +4698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allActivePinsInTheFrame: []
+  pinsToScore: []
   cameraPanToLocation: {fileID: 1439520103}
   cameraFollowScript: {fileID: 1439520104}
   ballController: {fileID: 6652253181974710232}
@@ -8313,6 +8314,68 @@ CanvasRenderer:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1d9313e3302ae14a9da482456836809, type: 3}
   m_PrefabInstance: {fileID: 1126673254}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &696141778
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1228395211}
+    m_Modifications:
+    - target: {fileID: 460871555959359040, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_Name
+      value: BallReturn
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.08997729
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.03924592
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.707107
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071066
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+--- !u!4 &696141779 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5266600464771932687, guid: 7e8018b880f2efb41b54de7bd089daad, type: 3}
+  m_PrefabInstance: {fileID: 696141778}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &706314212
 GameObject:
@@ -15308,6 +15371,7 @@ Transform:
   - {fileID: 500428002}
   - {fileID: 291045587}
   - {fileID: 2147148462}
+  - {fileID: 696141779}
   m_Father: {fileID: 320458993}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1231531801
@@ -17973,6 +18037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deckDisplayUi: {fileID: 1168153563}
   handManager: {fileID: 1545294220}
+  showPhysicalDeck: 0
   drawInterval: 0.15
   startingDeck:
   - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
