@@ -105,7 +105,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4548911073050350972}
   serializedVersion: 5
-  m_Mass: 3
+  m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0.03, z: 0}
@@ -5041,9 +5041,12 @@ MonoBehaviour:
   - rid: 6055849687980703745
   onFallEffects: []
   onEndOfRoundEffects: []
+  yOffset: 4
+  yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
+  boxColliderToDisable: {fileID: 0}
   _isFallen: 0
   references:
     version: 2
@@ -5069,3 +5072,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
+  _groupPeers: []
