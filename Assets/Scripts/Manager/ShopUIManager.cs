@@ -1,6 +1,3 @@
-// ShopUIManager.cs
-
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,10 +22,18 @@ public class ShopUIManager : MonoBehaviour
     [Header("Shop Settings")]
     public int costScalingPerRound = 3;
     
+    [Header("Grid Expansion")]
+    public HexGrid targetGrid;
+    public Button buyColumnButton;
+    public Button buyRowButton;
+    public int baseGridCost = 1;
+    public int gridCostScaling = 2;
+
     private RoundStateManager stateManager;
     private CardDataSO[] currentShopCards = new CardDataSO[3];
     
     private int _cardCost = 0;
+    private int totalGridUpgrades = 0;
     
     public void ShowShop(RoundStateManager manager)
     {
@@ -36,6 +41,7 @@ public class ShopUIManager : MonoBehaviour
         
         stateManager = manager;
         GenerateShopCards();
+        UpdateGridButtonsUI();
     }
 
     public void Hide()
@@ -155,6 +161,68 @@ public class ShopUIManager : MonoBehaviour
             {
                 Debug.LogWarning("Not enough tickets to buy this card!");
             }
+        }
+    }
+
+    private int GetGridUpgradeCost()
+    {
+        return baseGridCost + (totalGridUpgrades + gridCostScaling);
+    }
+
+    private void UpdateGridButtonsUI()
+    {
+        int cost = GetGridUpgradeCost();
+
+        if (buyColumnButton != null)
+        {
+            TextMeshProUGUI colText = buyColumnButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (colText != null) colText.text = $"+1 Column ({cost})";
+        }
+
+        if (buyRowButton != null)
+        {
+            TextMeshProUGUI rowText = buyRowButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (rowText != null) rowText.text = $"+1 Row ({cost})";
+        }
+    }
+
+    public void BuyColumn()
+    {
+        int cost = GetGridUpgradeCost();
+        if (targetGrid != null && SessionData.Instance.SpendTickets(cost))
+        {
+            targetGrid.columns++;
+            targetGrid.GenerateGrid();
+            
+            HexGridVisuals gridVisuals = targetGrid.GetComponent<HexGridVisuals>();
+            if (gridVisuals != null)
+            {
+                gridVisuals.RebuildVisuals();
+                gridVisuals.RefreshColors();
+            }
+
+            totalGridUpgrades++;
+            UpdateGridButtonsUI();
+        }
+    }
+
+    public void BuyRow()
+    {
+        int cost = GetGridUpgradeCost();
+        if (targetGrid != null && SessionData.Instance.SpendTickets(cost))
+        {
+            targetGrid.rows++;
+            targetGrid.GenerateGrid();
+            
+            HexGridVisuals gridVisuals = targetGrid.GetComponent<HexGridVisuals>();
+            if (gridVisuals != null)
+            {
+                gridVisuals.RebuildVisuals();
+                gridVisuals.RefreshColors();
+            }
+
+            totalGridUpgrades++;
+            UpdateGridButtonsUI();
         }
     }
     
