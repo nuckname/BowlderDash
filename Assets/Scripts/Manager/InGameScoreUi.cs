@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class InGameScoreUi : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class InGameScoreUi : MonoBehaviour
 
     public static InGameScoreUi Instance;
 
+    private int _currentDisplayedScore = 0;
+    private Coroutine _scoreAnimateRoutine;
+
     private void Awake()
     {
         Instance = this;
@@ -24,7 +28,8 @@ public class InGameScoreUi : MonoBehaviour
     // Update score UI with default values, for starting a new round when we win the frame/round
     public void RefreshHUD(int totalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
     {
-        UpdateScoreText(totalScore);
+        _currentDisplayedScore = totalScore;
+        totalScoreText.text = $"Total Score: {_currentDisplayedScore}";
         UpdateRoundText(currentRound, maxRounds);
         UpdateScoreToBeatText(roundData.scoreNeededToBeat);
         UpdateBallsText(currentBalls, roundData.maxBallsAllowedToThrow);
@@ -32,7 +37,38 @@ public class InGameScoreUi : MonoBehaviour
     
     public void UpdateScoreText(int newScore)
     {
-        totalScoreText.text = $"Total Score: {newScore}";
+        if (_scoreAnimateRoutine != null)
+        {
+            StopCoroutine(_scoreAnimateRoutine);
+        }
+        _scoreAnimateRoutine = StartCoroutine(AnimateScoreByTwos(newScore));
+    }
+
+    private IEnumerator AnimateScoreByTwos(int targetScore)
+    {
+        while (_currentDisplayedScore != targetScore)
+        {
+            if (_currentDisplayedScore < targetScore)
+            {
+                _currentDisplayedScore += 2;
+                if (_currentDisplayedScore > targetScore)
+                {
+                    _currentDisplayedScore = targetScore;
+                }
+            }
+            else
+            {
+                _currentDisplayedScore -= 2;
+                if (_currentDisplayedScore < targetScore)
+                {
+                    _currentDisplayedScore = targetScore;
+                }
+            }
+            
+            totalScoreText.text = $"Total Score: {_currentDisplayedScore}";
+            
+            yield return new WaitForSeconds(0.05f); 
+        }
     }
     
     public void UpdateTicketText(int newTickets)
@@ -51,7 +87,6 @@ public class InGameScoreUi : MonoBehaviour
     {
         roundText.text = $"Rounds: {currentRound} / {maxRounds}";
     }
-
     
     public void UpdateBallsText(int ball, int maxBalls)
     {

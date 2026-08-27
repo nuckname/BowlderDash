@@ -10,7 +10,10 @@ public enum CameraLocation
     SpawnBossObjectsCameraPosition,
     ScoringCameraLocation,
     RoundOverCameraLocation,
-    ShowInGameUiLocation
+    ShowInGameUiLocation,
+    
+    ScoreToBeat,
+    BallsThrow
 }
 
 [System.Serializable]

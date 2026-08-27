@@ -113,6 +113,7 @@ public class ScoringState : RoundBaseState
     }
 
     // Need to check this out
+    // Need to refactor this
     private void CalculateScore()
     {
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
@@ -125,7 +126,7 @@ public class ScoringState : RoundBaseState
         
         int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
         
-        _manager.inGameScoreUi.UpdateScoreText(finalScoreThisRound);
+        //_manager.inGameScoreUi.UpdateScoreText(finalScoreThisRound);
         _manager.sessionData.AddScore(finalScoreThisRound);
     }
 
@@ -145,6 +146,9 @@ public class ScoringState : RoundBaseState
             Debug.Log("Win");
             Debug.Log("Win");
             Debug.Log("Win");
+            
+            _manager.StartCoroutine(TransitionToPinPlacementRoutine());
+            
             _manager.ResetUiForNewRound();
             _manager.SwitchState(_manager.roundWinState);
         }
@@ -166,7 +170,26 @@ public class ScoringState : RoundBaseState
     {
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
+        // we want to only incremental the UI here and only here.
         _manager.MoveCamera(CameraLocation.ShowInGameUiLocation);
+        yield return new WaitForSeconds(waitBeforeUiCamera);
+        
+        RoundScore roundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
+        _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
+        _manager.MoveCamera(CameraLocation.ScoreToBeat);
+        
+        yield return new WaitForSeconds(waitBeforeUiCamera);
+        
+        _manager.MoveCamera(CameraLocation.BallsThrow);
+        _manager.inGameScoreUi.UpdateBallsText(_manager.sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+        yield return new WaitForSeconds(waitBeforeUiCamera);
+        
+        
+        _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
+        yield return new WaitForSeconds(waitBeforeUiCamera);
+        
+        
+        _manager.AddBallThrownToSession();
         
         yield return new WaitForSeconds(waitBeforePinPlacement);
         
