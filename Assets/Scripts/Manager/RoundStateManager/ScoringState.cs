@@ -129,7 +129,7 @@ public class ScoringState : RoundBaseState
         //_manager.inGameScoreUi.UpdateScoreText(finalScoreThisRound);
         _manager.sessionData.AddScore(finalScoreThisRound);
     }
-
+    
     private void GoToNextRound()
     {
         int ballsThrown = _manager.sessionData.ballsThrown;
@@ -147,10 +147,7 @@ public class ScoringState : RoundBaseState
             Debug.Log("Win");
             Debug.Log("Win");
             
-            _manager.StartCoroutine(TransitionToPinPlacementRoutine());
-            
-            _manager.ResetUiForNewRound();
-            _manager.SwitchState(_manager.roundWinState);
+            _manager.StartCoroutine(TransitionToPinPlacementRoutine(_manager.roundWinState, true));
         }
         else if (ballsThrown >= maxBallsAllowed)
         {
@@ -162,25 +159,27 @@ public class ScoringState : RoundBaseState
             // Else throw the ball again and try to reach the quota.
             
             // I want to show the in game UI before we go to the next round.
-            _manager.StartCoroutine(TransitionToPinPlacementRoutine());
+            _manager.StartCoroutine(TransitionToPinPlacementRoutine(_manager.roundStartState, false));
         }
     }
     
-    private IEnumerator TransitionToPinPlacementRoutine()
+    private IEnumerator TransitionToPinPlacementRoutine(RoundBaseState nextState, bool isWinState)
     {
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
         // we want to only incremental the UI here and only here.
+        // We also want to move cameras to the TVs where the score is showing.
+        
         _manager.MoveCamera(CameraLocation.ShowInGameUiLocation);
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
         RoundScore roundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
         _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
-        _manager.MoveCamera(CameraLocation.ScoreToBeat);
+        //_manager.MoveCamera(CameraLocation.ScoreToBeat);
         
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
-        _manager.MoveCamera(CameraLocation.BallsThrow);
+       // _manager.MoveCamera(CameraLocation.BallsThrow);
         _manager.inGameScoreUi.UpdateBallsText(_manager.sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
@@ -192,8 +191,13 @@ public class ScoringState : RoundBaseState
         _manager.AddBallThrownToSession();
         
         yield return new WaitForSeconds(waitBeforePinPlacement);
+
+        if (isWinState)
+        {
+            _manager.ResetUiForNewRound();
+        }
         
-        _manager.SwitchState(_manager.roundStartState);
+        _manager.SwitchState(nextState);
     }
     
     public override void FixedUpdateState(RoundStateManager manager) { }

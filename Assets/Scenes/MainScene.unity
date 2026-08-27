@@ -2020,8 +2020,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06d1b95b5eb2f416582d3cdea9c4112b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 7
-  rows: 6
+  columns: 3
+  rows: 3
   hexSize: 1.8
   originOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &121324095
@@ -14471,11 +14471,18 @@ MonoBehaviour:
   drawInterval: 0.15
   startingDeck:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
-  - {fileID: 11400000, guid: c8e72f5a3b694aef9b7d25e1c064fb31, type: 2}
-  - {fileID: 11400000, guid: 3d45a7e190c846b39f2ad7b6e84c1d52, type: 2}
   - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
