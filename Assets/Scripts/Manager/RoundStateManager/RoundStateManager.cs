@@ -21,7 +21,7 @@ public class RoundStateManager : MonoBehaviour
 
     [Header("Core Dependencies")]
     public ScoreCalculator scoreCalculator;
-    public GridManager grid;
+    public GridManager gridManager;
     public ShopUIManager shopUI;
     public GameObject cardHand;
     public Text instructionText;
@@ -96,7 +96,7 @@ public class RoundStateManager : MonoBehaviour
     {
         sessionData.StartBrandNewSession();
         
-        grid.GenerateGrid();
+        gridManager.GenerateGrid();
         
         RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
         

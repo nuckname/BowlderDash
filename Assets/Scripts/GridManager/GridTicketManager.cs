@@ -14,8 +14,7 @@ public class GridTicketManager : MonoBehaviour
 
     [Header("Ticket Economy")]
     // Scale with round number?
-    public int minTicketsPerFrame = 3;
-    public int maxTicketsPerFrame = 3;
+    public int ticketsPerFrame = 1;
     public int ticketValue = 1;
     public float ticketHeightOffset = 0.08f;
     public Color ticketCellColor = new Color(1f, 0.82f, 0.18f, 0.92f);
@@ -51,12 +50,9 @@ public class GridTicketManager : MonoBehaviour
         ClearTickets();
         if (grid.Cells.Count == 0) return;
 
-        int count = Random.Range(Mathf.Clamp(minTicketsPerFrame, 0, grid.Cells.Count), 
-            Mathf.Clamp(maxTicketsPerFrame, 0, grid.Cells.Count) + 1);
-
         List<HexCell> available = new List<HexCell>(grid.Cells);
         
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < ticketsPerFrame; i++)
         {
             int r = Random.Range(0, available.Count);
             HexCell chosen = available[r];

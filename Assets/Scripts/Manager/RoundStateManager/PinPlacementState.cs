@@ -26,11 +26,11 @@ public class PinPlacementState : RoundBaseState
         {
             if (pin != null && !pin._isFallen)
             {
-                HexCell nearestCell = manager.grid.GetNearestCell(pin.transform.position);
+                HexCell nearestCell = manager.gridManager.GetNearestCell(pin.transform.position);
                 if (nearestCell != null)
                 {
                     pin.transform.position = new Vector3(nearestCell.center.x, pin.transform.position.y, nearestCell.center.z);
-                    manager.grid.TryReserveCell(nearestCell, pin.transform);
+                    manager.gridManager.TryReserveCell(nearestCell, pin.transform);
                 }
             }
         }

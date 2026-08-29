@@ -139,14 +139,10 @@ public class ScoringState : RoundBaseState
         
         if (currentScore >= scoreNeeded)
         {
-            // Next Frame and go to shop
-            Debug.Log("Win");
-            Debug.Log("Win");
-            Debug.Log("Win");
-            Debug.Log("Win");
-            Debug.Log("Win");
-            Debug.Log("Win");
-            
+            // if we have ball throws left, give them more tickets plus a bonus for not using all their balls.
+            // I have no idea how to tell the user this. Floating text?
+            GiveBonusTickets(maxBallsAllowed, ballsThrown);
+
             _manager.StartCoroutine(TransitionToPinPlacementRoutine(_manager.roundWinState, true));
         }
         else if (ballsThrown >= maxBallsAllowed)
@@ -162,7 +158,17 @@ public class ScoringState : RoundBaseState
             _manager.StartCoroutine(TransitionToPinPlacementRoutine(_manager.roundStartState, false));
         }
     }
-    
+
+    private void GiveBonusTickets(int maxBallsAllowed, int ballsThrown)
+    {
+        int ballsLeft = maxBallsAllowed - ballsThrown;
+        if (ballsLeft > 0)
+        {
+            int bonusTickets = (ballsLeft * _manager.gridManager.gridTicketManager.ticketsPerFrame) + 1;
+            _manager.sessionData.AddTickets(bonusTickets);
+        }
+    }
+
     private IEnumerator TransitionToPinPlacementRoutine(RoundBaseState nextState, bool isWinState)
     {
         yield return new WaitForSeconds(waitBeforeUiCamera);

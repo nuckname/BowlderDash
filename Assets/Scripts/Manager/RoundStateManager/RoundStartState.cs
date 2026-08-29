@@ -9,6 +9,8 @@ public class RoundStartState : RoundBaseState
         manager.scoreCalculator.ResetFrameScore();
 
         manager.pinsToScore.Clear();
+
+        UpdateTicketAmountPerRound(manager);
         
         manager.ResetHandDrawState();
 
@@ -21,8 +23,8 @@ public class RoundStartState : RoundBaseState
 
     private void HandleGrid(RoundStateManager manager)
     {
-        manager.grid?.ClearAllOccupants();
-        manager.grid?.SpawnTicketsForFrame();
+        manager.gridManager?.ClearAllOccupants();
+        manager.gridManager?.SpawnTicketsForFrame();
     }
 
     private void HandleMap(RoundStateManager manager)
@@ -31,6 +33,37 @@ public class RoundStartState : RoundBaseState
         manager.ResetLaneExploders();
         //manager.pinHandInventory?.ResetInventoryAndPins();
         manager.RefreshRuntimePools();
+    }
+    
+    private static void UpdateTicketAmountPerRound(RoundStateManager manager)
+    {
+        switch (manager.sessionData.currentRound)
+        {
+            case 1:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 1;
+                break;
+            case 2:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 2;
+                break;
+            case 3:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 3;
+                break;
+            case 4:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 4;
+                break;
+            case 5:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 5;
+                break;
+            case 6:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 6;
+                break;
+            case 7:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 7;
+                break;
+            case 8:
+                manager.gridManager.gridTicketManager.ticketsPerFrame += 8;
+                break;
+        }
     }
 
     public override void UpdateState(RoundStateManager manager) { }
