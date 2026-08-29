@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -35,6 +36,11 @@ public class ShopUIManager : MonoBehaviour
     private int _cardCost = 0;
     private int totalGridUpgrades = 0;
     
+    [Header("Remove Pin Settings")]
+    public Button removePinButton;
+    public string singlePinCardID = "SingleNormalPin";
+    public int removePinCost = 1;
+    
     public void ShowShop(RoundStateManager manager)
     {
         shopGameObject.SetActive(true);
@@ -42,6 +48,7 @@ public class ShopUIManager : MonoBehaviour
         stateManager = manager;
         GenerateShopCards();
         UpdateGridButtonsUI();
+        UpdateRemovePinUI();
     }
 
     public void Hide()
@@ -60,8 +67,8 @@ public class ShopUIManager : MonoBehaviour
         
         for (int i = 0; i < 3; i++)
         {
-            int randomIndex = Random.Range(0, stateManager.masterCardList.Count);
-            currentShopCards[i] = stateManager.masterCardList[randomIndex];
+            int randomIndex = Random.Range(0, stateManager.shopCardsToPickFrom.Count);
+            currentShopCards[i] = stateManager.shopCardsToPickFrom[randomIndex];
             
             UpdateButtonText(i);
         }
@@ -161,6 +168,41 @@ public class ShopUIManager : MonoBehaviour
             {
                 Debug.LogWarning("Not enough tickets to buy this card!");
             }
+        }
+    }
+
+    private void UpdateRemovePinUI()
+    {
+        if (removePinButton != null)
+        {
+            // Checks if there are any cards in the total deck that match the single pin ID
+            bool hasSinglePin = DeckManager.Instance.totalDeck.Any(card => card.cardID == singlePinCardID);
+            
+            // Only allow clicking if a pin actually exists in the deck
+            removePinButton.interactable = hasSinglePin;
+
+            TextMeshProUGUI btnText = removePinButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (btnText != null)
+            {
+                btnText.text = $"Remove Pin ({removePinCost})";
+            }
+        }
+    }
+
+    // Call from Button click in shop
+    public void BuyRemovePin()
+    {
+        // Loops through deck to see if there is a single pin card in the deck
+        bool hasSinglePin = DeckManager.Instance.totalDeck.Any(card => card.cardID == singlePinCardID);
+        
+        if (hasSinglePin && SessionData.Instance.SpendTickets(removePinCost))
+        {
+            DeckManager.Instance.RemoveCardByID(singlePinCardID);
+            UpdateRemovePinUI();
+        }
+        else if (!hasSinglePin)
+        {
+            Debug.LogWarning("No single pins left to remove!");
         }
     }
 

@@ -14,9 +14,10 @@ public class PatternPiece
 [CreateAssetMenu(fileName = "NewCardData", menuName = "Cards/CardData")]
 public class CardDataSO : ScriptableObject
 {
-    [Header("Card Identity")]
-    public string cardID; // If we want unique cards or something
-    [Tooltip("Presentation tint applied to the card art in hand, shop, and deck views.")]
+    [Header("Card Identity")] 
+    public string cardID; 
+
+    // Rarity Maybe?
     public Color cardTint = Color.white;
 
     [Header("Prefabs")]
@@ -31,4 +32,9 @@ public class CardDataSO : ScriptableObject
     [Header("Spawn Pattern (Hex Axial Coordinates)")]
     [Tooltip("Define the shape and unique prefabs for each piece.")]
     public List<PatternPiece> spawnPattern = new List<PatternPiece>();
+    
+    private void OnValidate()
+    {
+        cardID = name;
+    }
 }

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db6ce27693d5166469e200c59288faf8, type: 3}
-  m_Name: NormalPinTriangle
+  m_Name: NormalPinDiagonalLeft
   m_EditorClassIdentifier: 
-  cardID: normal-pin-triangle
-  cardTint: {r: 0.7, g: 0.25, b: 1, a: 1}
+  cardID: NormalPinDiagonalLeft
+  cardTint: {r: 1, g: 0.55, b: 0.1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
-  cardVisualPrefab: {fileID: 5740910511806353211, guid: 33a9b8138cefa024aa18a27216b22f9b, type: 3}
+  cardVisualPrefab: {fileID: 5740910511806353211, guid: 346d76aa4ea7fc0459d3796c568ef959, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}
   baseCost: 1
   spawnPattern:
-  - offset: {x: 0, y: 0}
+  - offset: {x: 0, y: -1}
     prefab: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}
-  - offset: {x: 1, y: 0}
+  - offset: {x: 0, y: 0}
     prefab: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}
   - offset: {x: 0, y: 1}
     prefab: {fileID: 5919451674846626430, guid: 8971976a1df076f4489a7b817e836191, type: 3}

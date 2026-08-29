@@ -103,6 +103,30 @@ public class DeckManager : MonoBehaviour
             yield return new WaitForSeconds(drawInterval);
         }
     }
+    
+    /// <summary>
+    /// Finds a single instance of a card by its ID and safely removes it from the entire deck system.
+    /// </summary>
+    public void RemoveCardByID(string targetID)
+    {
+        CardDataSO cardToRemove = totalDeck.FirstOrDefault(card => card.cardID == targetID);
+        
+        if (cardToRemove != null)
+        {
+            totalDeck.Remove(cardToRemove);
+            
+            if (drawPile.Contains(cardToRemove))
+            {
+                drawPile.Remove(cardToRemove);
+            }
+            else if (discardPile.Contains(cardToRemove))
+            {
+                discardPile.Remove(cardToRemove);
+            }
+            
+            UpdateUIDeckCounts();
+        }
+    }
 
     public void RemoveFromDiscardPile(CardDataSO discardedCard)
     {

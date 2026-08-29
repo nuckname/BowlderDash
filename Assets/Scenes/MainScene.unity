@@ -1989,8 +1989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0547af66771449b8b812c3127a04ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minTicketsPerFrame: 3
-  maxTicketsPerFrame: 3
+  ticketsPerFrame: 3
   ticketValue: 1
   ticketHeightOffset: 1.15
   ticketCellColor: {r: 1, g: 0.82, b: 0.18, a: 0.92}
@@ -3831,7 +3830,7 @@ MonoBehaviour:
   cameraFollowScript: {fileID: 1439520104}
   ballController: {fileID: 6652253181974710232}
   scoreCalculator: {fileID: 1627406035}
-  grid: {fileID: 120957812}
+  gridManager: {fileID: 120957812}
   shopUI: {fileID: 1168153566}
   cardHand: {fileID: 516170647}
   instructionText: {fileID: 538931267}
@@ -3853,9 +3852,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
   - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
   - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
+  shopCardsToPickFrom:
+  - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
+  - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
+  - {fileID: 11400000, guid: c8e72f5a3b694aef9b7d25e1c064fb31, type: 2}
+  - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
   amountOfCardsToDrawEachTurn: 5
   hasDrawnCardsThisTurn: 0
   isHandDrawReady: 0
+  gameOverText: {fileID: 906246235}
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
@@ -8421,6 +8427,143 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2140304003}
   m_LocalEulerAnglesHint: {x: 141.83301, y: 90, z: 90}
+--- !u!1 &906246234
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 906246237}
+  - component: {fileID: 906246236}
+  - component: {fileID: 906246235}
+  m_Layer: 5
+  m_Name: Game Over Texr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &906246235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906246234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Game Over
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 100
+  m_fontSizeBase: 100
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -791.47656, y: 0, z: -840.70935, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &906246236
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906246234}
+  m_CullTransparentMesh: 1
+--- !u!224 &906246237
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906246234}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1320631406}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!64 &912394428
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -11309,12 +11452,15 @@ MonoBehaviour:
   CardVisual1: {fileID: 593323458}
   CardVisual2: {fileID: 2072535365}
   CardVisual3: {fileID: 338407411}
-  costScalingPerRound: 5
+  costScalingPerRound: 1
   targetGrid: {fileID: 120957818}
   buyColumnButton: {fileID: 799966836}
   buyRowButton: {fileID: 943670857}
   baseGridCost: 1
   gridCostScaling: 2
+  removePinButton: {fileID: 1638082805}
+  singlePinCardID: SinglePin
+  removePinCost: 1
 --- !u!1001 &1173153164
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12165,8 +12311,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -12855,6 +13001,7 @@ RectTransform:
   - {fileID: 972618802}
   - {fileID: 1433756409}
   - {fileID: 516170651}
+  - {fileID: 906246237}
   m_Father: {fileID: 930433113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -14758,18 +14905,19 @@ MonoBehaviour:
   showPhysicalDeck: 0
   drawInterval: 0.15
   startingDeck:
-  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
+  - {fileID: 11400000, guid: c8e72f5a3b694aef9b7d25e1c064fb31, type: 2}
+  - {fileID: 11400000, guid: 3d45a7e190c846b39f2ad7b6e84c1d52, type: 2}
   - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: 508d704d2e77edf45bd9a1e1ff49abda, type: 2}
+  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
+  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
+  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
@@ -16147,7 +16295,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1638082806}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1168153566}
+        m_TargetAssemblyTypeName: ShopUIManager, Assembly-CSharp
+        m_MethodName: BuyRemovePin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1638082806
 MonoBehaviour:
   m_ObjectHideFlags: 0

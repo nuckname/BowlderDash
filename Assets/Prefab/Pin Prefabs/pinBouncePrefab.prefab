@@ -172,7 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardData: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  cardData: {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
+  _groupPeers: []
 --- !u!136 &6469380549180960215
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -261,6 +262,8 @@ MonoBehaviour:
   - rid: 6055849890551955519
   onFallEffects: []
   onEndOfRoundEffects: []
+  yOffset: 4
+  yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
@@ -273,6 +276,6 @@ MonoBehaviour:
       type: {class: DeflectBallEffect, ns: , asm: Assembly-CSharp}
       data:
         deflectAngle: 45
-        randomizeDirection: 1
+        randomizeDirection: 0
         deflectToRight: 1
         speedMultiplier: 1
