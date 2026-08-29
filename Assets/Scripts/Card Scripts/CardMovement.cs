@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Collections;
+using TMPro;
 using UnityEngine.UI;
 
 // https://www.youtube.com/watch?v=I1dAZuWurw4
@@ -30,7 +31,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     
     [Header("Visual")]
     [HideInInspector] public CardAnimator cardAnimator;
-
+    public TextMeshProUGUI hotkeyText;
+    
     [Header("Play Area Threshold")]
     [Tooltip("How high up the screen we the spawn the pin, in pixels")]
     [SerializeField] private float playAreaThresholdY = 500f; 

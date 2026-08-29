@@ -79,6 +79,7 @@ public class HandInteractionManager : MonoBehaviour
         
         HandleCardSwapping();
         HandleHotkeyInput();
+        UpdateHotkeyVisuals();
     }
     
     private void HandleHotkeyInput()
@@ -129,6 +130,39 @@ public class HandInteractionManager : MonoBehaviour
         }
     }
 
+    private void UpdateHotkeyVisuals()
+    {
+        for (int i = 0; i < handManager.cardsInHand.Count; i++)
+        {
+            if (handManager.cardsInHand[i] != null && handManager.cardsInHand[i].hotkeyText != null)
+            {
+                // We only have 5 hotkeys mapped in HandleHotkeyInput()
+                // Hide the text if we cross the Y threshold and start previewing in the world
+                if (i < 5 && !handManager.cardsInHand[i].isPreviewingInWorld) 
+                {
+                    if (!handManager.cardsInHand[i].hotkeyText.gameObject.activeSelf)
+                        handManager.cardsInHand[i].hotkeyText.gameObject.SetActive(true);
+
+                    string expectedText = (i + 1).ToString();
+                    
+                    // Only update the text if it's different to prevent UI allocation every frame
+                    if (handManager.cardsInHand[i].hotkeyText.text != expectedText)
+                    {
+                        handManager.cardsInHand[i].hotkeyText.text = expectedText;
+                    }
+                }
+                else
+                {
+                    // Hide the text if the card is beyond the 5th slot or is currently in the play area
+                    if (handManager.cardsInHand[i].hotkeyText.gameObject.activeSelf)
+                    {
+                        handManager.cardsInHand[i].hotkeyText.gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+    }
+    
     private void Swap(int index)
     {
         isCrossing = true;
