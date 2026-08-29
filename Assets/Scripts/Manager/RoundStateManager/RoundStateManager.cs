@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,6 +40,8 @@ public class RoundStateManager : MonoBehaviour
     [HideInInspector] public bool isHandDrawReady;
 
     private Coroutine handDrawReadinessRoutine;
+
+    public TextMeshProUGUI gameOverText;
     
     // States
     public RoundStartState roundStartState = new RoundStartState();
@@ -290,6 +293,8 @@ public class RoundStateManager : MonoBehaviour
             laneExploder.ResetMesh();
         }
     }
+
+    
     public void RefreshRuntimePools() { }
 
     public void TurnOnCardHand(bool turnOn) => cardHand.SetActive(turnOn);

@@ -14760,7 +14760,6 @@ MonoBehaviour:
   startingDeck:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
-  - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
