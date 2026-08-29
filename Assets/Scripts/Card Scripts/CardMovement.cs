@@ -41,7 +41,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     public bool isHovering;
     public bool isDragging;
     [HideInInspector] public bool wasDragged;
-
+    [HideInInspector] public bool wasSuccessfullyPlayed = false;
+    
     [Header("Events")]
     [HideInInspector] public UnityEvent<CardMovement> PointerEnterEvent;
     [HideInInspector] public UnityEvent<CardMovement> PointerExitEvent;
@@ -74,6 +75,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Forces the card into a drag state programmatically
     public void ForceStartDrag()
     {
+        wasSuccessfullyPlayed = false;
+
         // Tell HorizontalCardHolder to set this as the selected card
         BeginDragEvent.Invoke(this); 
         
@@ -86,7 +89,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         // Prevent the card from blocking raycasts while dragging
         _imageComponent.raycastTarget = false; 
     }
-
     void Update()
     {
         ClampPosition();
@@ -158,6 +160,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Triggers drag events, calculates the grab offset.
     public void OnBeginDrag(PointerEventData eventData)
     {
+        wasSuccessfullyPlayed = false;
+
         BeginDragEvent.Invoke(this);
         
         offset = Input.mousePosition - transform.position;
@@ -177,6 +181,16 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             EndDragEvent.Invoke(this);
             OnDropInPlayArea?.Invoke();
+
+            if (!wasSuccessfullyPlayed)
+            {
+                if (transform.parent != null && !transform.parent.CompareTag("Slot") && HandManager.Instance != null)
+                {
+                    HandManager.Instance.AssignSlotToCard(this);
+                }
+                
+                ReturnToHand();
+            }
         }
         else
         {
@@ -238,6 +252,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Cleans up the card and its container slot after being successfully played.
     public void SuccessfulPlay()
     {
+        wasSuccessfullyPlayed = true;
+
         // The placed world object now owns this card and returns it to the deck later.
         if (HandManager.Instance != null)
         {
