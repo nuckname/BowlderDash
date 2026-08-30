@@ -121,11 +121,13 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Scripts\exploder.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\VisualCardsHandler.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\TeleportBallPinEffect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Hand Scripts\HandInteractionManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
     <Compile Include="Assets\Scripts\UiScripts\TutorialScripts\BallThrowingTutorial.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\SplitBallPinEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\CameraPanToLocation.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\GameOverState.cs" />
     <Compile Include="Assets\Scripts\MainMenuController.cs" />

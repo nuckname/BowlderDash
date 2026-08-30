@@ -306,7 +306,7 @@ public class RoundStateManager : MonoBehaviour
     {
         if (newPin == null) return;
 
-        List<PinBase> activeGameplayPins = new List<PinBase>(allActivePinsInTheFrame ?? System.Array.Empty<PinBase>());
+        List<PinBase> activeGameplayPins = new List<PinBase>(allActivePinsInTheFrame);
         
         if (!activeGameplayPins.Contains(newPin))
         {
