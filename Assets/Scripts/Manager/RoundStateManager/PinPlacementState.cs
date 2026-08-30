@@ -1,10 +1,15 @@
 using UnityEngine;
+using UnityEngine.UI;
 
+[System.Serializable]
 public class PinPlacementState : RoundBaseState
 {
+    [SerializeField] private Button throwBallButton;
     public override void EnterState(RoundStateManager manager)
     {
         Debug.Log("Entering Pin Placement State");
+     
+        throwBallButton.gameObject.SetActive(true);
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
@@ -49,6 +54,8 @@ public class PinPlacementState : RoundBaseState
             manager.SwitchState(manager.throwingBallState);
         }
     }
+    
+
 
     public override void FixedUpdateState(RoundStateManager manager) { }
 
@@ -61,6 +68,8 @@ public class PinPlacementState : RoundBaseState
     {
         manager.GetAllPinsInCurrentFrame(manager);
 
+        throwBallButton.gameObject.SetActive(false);
+        
         manager.AllowPinsToFallOver(false);
     }
 }

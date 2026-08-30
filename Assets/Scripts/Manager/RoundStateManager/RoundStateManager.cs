@@ -296,6 +296,11 @@ public class RoundStateManager : MonoBehaviour
             laneExploder.ResetMesh();
         }
     }
+    
+    public void OnThrowBallButtonClicked()
+    {
+        SwitchState(throwingBallState);
+    }
 
     
     public void RefreshRuntimePools() { }
