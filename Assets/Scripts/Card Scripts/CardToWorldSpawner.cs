@@ -167,6 +167,12 @@ public class CardToWorldSpawner : MonoBehaviour
                     // Inject the pin with card data and its sibling group.
                     returnScript.SetupCardData(_cardMovement.cardData, groupedPins);
                 }
+                
+                PinBase pin = _spawnedWorldObjects[i].GetComponent<PinBase>();
+                if (pin != null)
+                {
+                    pin.OnPlaced();
+                }
             }
         }
 

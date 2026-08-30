@@ -19,7 +19,7 @@ public class RoundOverState : RoundBaseState
             {
                 foreach (PinEffect effect in pin.onFallEffects)
                 {
-                    if (effect is ScoreMultiplierEffect)
+                    if (effect is ScoreMultiplierEffect || effect is MultiEffect)
                     {
                         manager.pinsToScore.Add(pin);
                         break; // Stop searching this pin since we found one and added it

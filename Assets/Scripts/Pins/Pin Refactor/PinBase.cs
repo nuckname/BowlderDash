@@ -122,7 +122,7 @@ public class PinBase : MonoBehaviour
         }
     }
     
-    protected virtual void Start()
+    public virtual void OnPlaced()
     {
         if (onPlaceEffects != null && onPlaceEffects.Count > 0)
         {

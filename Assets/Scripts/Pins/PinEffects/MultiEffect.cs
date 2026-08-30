@@ -18,4 +18,9 @@ public class MultiEffect : PinEffect
     {
         // particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
+    
+    public override string GetEffectText()
+    {
+        return "* " + multValue;
+    }
 }
