@@ -176,27 +176,21 @@ public class ScoringState : RoundBaseState
         // we want to only incremental the UI here and only here.
         // We also want to move cameras to the TVs where the score is showing.
         
-        _manager.MoveCamera(CameraLocation.ShowInGameUiLocation);
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-        
         RoundScore roundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
-        _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
-        //_manager.MoveCamera(CameraLocation.ScoreToBeat);
         
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-        
-       // _manager.MoveCamera(CameraLocation.BallsThrow);
-        _manager.inGameScoreUi.UpdateBallsText(_manager.sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-        
-        
-        _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-        
+        _manager.MoveCamera(CameraLocation.BallsThrow);
+        yield return new WaitForSeconds(1f);
         
         _manager.AddBallThrownToSession();
+        yield return new WaitForSeconds(waitBeforeUiCamera + 2f);
         
-        yield return new WaitForSeconds(waitBeforePinPlacement);
+        _manager.MoveCamera(CameraLocation.ScoreToBeat);
+        yield return new WaitForSeconds(1f);
+        
+        _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
+        _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
+        
+        yield return new WaitForSeconds(waitBeforeUiCamera + 2f);
 
         if (isWinState)
         {
