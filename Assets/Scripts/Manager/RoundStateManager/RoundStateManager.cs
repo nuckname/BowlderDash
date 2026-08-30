@@ -301,6 +301,21 @@ public class RoundStateManager : MonoBehaviour
     {
         SwitchState(throwingBallState);
     }
+    
+    public void AddPinToActiveList(PinBase newPin)
+    {
+        if (newPin == null) return;
+
+        List<PinBase> activeGameplayPins = new List<PinBase>(allActivePinsInTheFrame ?? System.Array.Empty<PinBase>());
+        
+        if (!activeGameplayPins.Contains(newPin))
+        {
+            activeGameplayPins.Add(newPin);
+            allActivePinsInTheFrame = activeGameplayPins.ToArray();
+            
+            newPin.InjectDependencies(scoreCalculator);
+        }
+    }
 
     
     public void RefreshRuntimePools() { }
