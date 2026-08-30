@@ -152,6 +152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragElevation: 3
   playAreaThresholdY: 500
+  canBeReturnedToHand: 1
 --- !u!114 &7218449948874417426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   _groupPeers: []
+  canBePickedUp: 1
 --- !u!136 &6469380549180960215
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -196,7 +198,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5919451674846626430}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 2ee7286fd08b4884893d3f3c49d282c9, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -250,6 +252,7 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.5
   fallenAngularDrag: 5
+  onPlaceEffects: []
   onHitEffects: []
   onFallEffects:
   - rid: 6055849852166996033
