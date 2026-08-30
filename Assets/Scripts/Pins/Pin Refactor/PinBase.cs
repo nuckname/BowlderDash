@@ -23,6 +23,7 @@ public class PinBase : MonoBehaviour
     private float _originalAngularDrag;
     
     [Header("Effects")]
+    [SerializeReference] public List<PinEffect> onPlaceEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onHitEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onEndOfRoundEffects = new List<PinEffect>();
@@ -120,7 +121,18 @@ public class PinBase : MonoBehaviour
             _originalAngularDrag = _rb.angularDamping;
         }
     }
-
+    
+    protected virtual void Start()
+    {
+        if (onPlaceEffects != null && onPlaceEffects.Count > 0)
+        {
+            foreach (PinEffect effect in onPlaceEffects)
+            {
+                effect?.Execute(this);
+            }
+        }
+    }
+    
     protected virtual void Update()
     {
         if (!allowPinToFallOver)

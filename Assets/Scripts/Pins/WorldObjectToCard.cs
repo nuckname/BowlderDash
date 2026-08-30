@@ -12,6 +12,8 @@ public class WorldObjectToCard : MonoBehaviour
     [SerializeField] private List<WorldObjectToCard> _groupPeers = new List<WorldObjectToCard>();
     private bool _isBeingRemoved = false;
     
+    [SerializeField] private bool canBePickedUp = true;
+    
     public List<WorldObjectToCard> GroupPeers => _groupPeers;
 
     private void Start()
@@ -32,7 +34,7 @@ public class WorldObjectToCard : MonoBehaviour
     
     public void ReturnToHand()
     {
-        if (_isBeingRemoved) return;
+        if (_isBeingRemoved || !canBePickedUp) return;
         
         // Flag all peers so we only add one card to the hand, preventing a loop
         foreach(var peer in _groupPeers)

@@ -20,7 +20,6 @@ public class SessionData
 
     public void AddRound()
     {
-        Debug.unityLogger.Log("AddRound");
         currentRound++;
     }
 

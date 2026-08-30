@@ -140,6 +140,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\BallCollisionTrigger.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\DrawCardPinEffect.cs" />
     <Compile Include="Assets\Scripts\Ball\CameraFollowBallScript.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardMovement.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\PinBase.cs" />

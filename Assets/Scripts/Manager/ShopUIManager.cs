@@ -20,6 +20,10 @@ public class ShopUIManager : MonoBehaviour
     public Image CardVisual2;
     public Image CardVisual3;
     
+    [Header("Reroll Settings")]
+    public Button rerollButton;
+    public int rerollCost = 1;
+    
     [Header("Shop Settings")]
     public int costScalingPerRound = 3;
     
@@ -49,6 +53,7 @@ public class ShopUIManager : MonoBehaviour
         GenerateShopCards();
         UpdateGridButtonsUI();
         UpdateRemovePinUI();
+        UpdateRerollUI();
     }
 
     public void Hide()
@@ -56,6 +61,30 @@ public class ShopUIManager : MonoBehaviour
         if (shopGameObject != null)
         {
             shopGameObject.SetActive(false);
+        }
+    }
+    
+    private void UpdateRerollUI()
+    {
+        if (rerollButton != null)
+        {
+            TextMeshProUGUI btnText = rerollButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (btnText != null)
+            {
+                btnText.text = $"Reroll ({rerollCost})";
+            }
+        }
+    }
+
+    public void RerollShop()
+    {
+        if (SessionData.Instance.SpendTickets(rerollCost))
+        {
+            GenerateShopCards();
+        }
+        else
+        {
+            Debug.LogWarning("Not enough tickets to reroll!");
         }
     }
 

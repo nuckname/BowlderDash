@@ -171,6 +171,9 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator TransitionToPinPlacementRoutine(RoundBaseState nextState, bool isWinState)
     {
+        // lets just update this before so the player doesnt see it
+        _manager.inGameScoreUi.UpdateRoundText(_manager.sessionData.currentRound, _manager.roundData.GetMaxRoundNumber());
+        
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
         // we want to only incremental the UI here and only here.
@@ -183,6 +186,7 @@ public class ScoringState : RoundBaseState
         
         _manager.AddBallThrownToSession();
         yield return new WaitForSeconds(waitBeforeUiCamera + 2f);
+        
         
         _manager.MoveCamera(CameraLocation.ScoreToBeat);
         yield return new WaitForSeconds(1f);

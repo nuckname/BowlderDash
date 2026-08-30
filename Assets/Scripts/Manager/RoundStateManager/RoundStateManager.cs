@@ -114,8 +114,6 @@ public class RoundStateManager : MonoBehaviour
     // The player has completed a frame/round/they meet quota. call This:
     public void ResetUiForNewRound()
     {
-        sessionData.AddRound();
-        
         sessionData.RoundOverResetValues();
 
         RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);

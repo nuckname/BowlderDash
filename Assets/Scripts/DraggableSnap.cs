@@ -10,6 +10,8 @@ public class DraggableSnap : MonoBehaviour
     [Tooltip("Must match the playAreaThresholdY from CardMovement!")]
     public float playAreaThresholdY = 500f; 
 
+    [SerializeField] private bool canBeReturnedToHand = true;
+    
     private Camera _cam;
     private bool _dragging = false;
     private Vector3 _offset;
@@ -99,7 +101,7 @@ public class DraggableSnap : MonoBehaviour
     {
         if (!_dragging) return;
         
-        if (Input.mousePosition.y < playAreaThresholdY)
+        if (Input.mousePosition.y < playAreaThresholdY && canBeReturnedToHand)
         {
             _dragging = false;
             
