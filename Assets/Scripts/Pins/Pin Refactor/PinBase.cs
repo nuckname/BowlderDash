@@ -28,6 +28,10 @@ public class PinBase : MonoBehaviour
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
     // Look into this
     [SerializeReference] public List<PinEffect> onEndOfRoundEffects = new List<PinEffect>();
+
+    [Header("Strike")]
+    [SerializeField] private bool excludeFromStrike = false;
+    public bool CountsTowardStrike => !excludeFromStrike;
     
     [Header("Floating Text Offsets")]
     [SerializeField] protected float yOffset = 4.0f;

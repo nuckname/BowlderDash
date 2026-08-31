@@ -395,6 +395,7 @@ MonoBehaviour:
   onFallEffects: []
   onEndOfRoundEffects:
   - rid: 6055849687980703749
+  excludeFromStrike: 1
   yOffset: 6
   yOffsetPinInHole: 10
   allowPinToFallOver: 0
