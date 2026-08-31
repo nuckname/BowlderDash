@@ -14,6 +14,11 @@ public class RoundStateManager : MonoBehaviour
     
     // A queue of pins that need to be scored in ScoringState.cs
     public List<PinBase> pinsToScore = new List<PinBase>();
+
+    [Header("Strike")]
+    [SerializeField, Min(0f)] private float strikeMultiplierBonus = 0.5f;
+    private readonly List<PinBase> strikeTargetsForCurrentThrow = new List<PinBase>();
+    private bool strikeMultiplierAppliedForCurrentThrow;
     
     [Header("Managers")]
     public CameraPanToLocation cameraPanToLocation;
@@ -182,6 +187,39 @@ public class RoundStateManager : MonoBehaviour
         sessionData.AddBallThrown();
         RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+    }
+
+    public void CaptureStrikeTargetsForCurrentThrow()
+    {
+        strikeTargetsForCurrentThrow.Clear();
+        strikeMultiplierAppliedForCurrentThrow = false;
+
+        if (allActivePinsInTheFrame == null) return;
+
+        foreach (PinBase pin in allActivePinsInTheFrame)
+        {
+            if (pin != null && !pin.IsFallen && pin.CountsTowardStrike)
+            {
+                strikeTargetsForCurrentThrow.Add(pin);
+            }
+        }
+    }
+
+    public bool TryApplyStrikeMultiplier()
+    {
+        if (strikeMultiplierAppliedForCurrentThrow || strikeTargetsForCurrentThrow.Count == 0) return false;
+
+        foreach (PinBase pin in strikeTargetsForCurrentThrow)
+        {
+            if (pin == null || !pin.IsFallen)
+            {
+                return false;
+            }
+        }
+
+        scoreCalculator.AddMultiplier(strikeMultiplierBonus);
+        strikeMultiplierAppliedForCurrentThrow = true;
+        return true;
     }
 
     void OnCollisionEnter(Collision collision) => currentState?.OnCollisionEnter(this, collision);

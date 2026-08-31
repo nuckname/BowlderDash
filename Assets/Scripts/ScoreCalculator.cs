@@ -17,7 +17,12 @@ public class ScoreCalculator : MonoBehaviour
 
     public void QueueScoreMulti(int scoreValue, float multValue, Vector3 position)
     {
-        totalMultiplier += multValue; 
+        AddMultiplier(multValue);
+    }
+
+    public void AddMultiplier(float multiplierBonus)
+    {
+        totalMultiplier += multiplierBonus;
     }
 
     // Called by your ScoringState for every standard pin that fell

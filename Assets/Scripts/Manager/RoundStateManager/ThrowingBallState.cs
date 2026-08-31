@@ -14,6 +14,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         currentManager = manager;
         ballHasBeenReleased = false;
+
+        manager.CaptureStrikeTargetsForCurrentThrow();
         
         manager.ballController.ResetBall();
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
