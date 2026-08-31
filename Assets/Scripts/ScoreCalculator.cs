@@ -5,14 +5,13 @@ using UnityEngine;
 public class ScoreCalculator : MonoBehaviour
 {
     [Header("Current Frame Data")]
-    private int standardPinsFallen = 0;
-    private int bonusScore = 0;
+    private int queuedScore = 0;
     private float totalMultiplier = 1.0f; 
 
-    // Called by PinEffects when a special pin falls
+    // Called by scoring PinEffects when their configured trigger occurs.
     public void QueueScoreModification(int scoreValue, float multValue, Vector3 position)
     {
-        bonusScore += scoreValue;
+        queuedScore += scoreValue;
     }
 
     public void QueueScoreMulti(int scoreValue, float multValue, Vector3 position)
@@ -25,20 +24,14 @@ public class ScoreCalculator : MonoBehaviour
         totalMultiplier += multiplierBonus;
     }
 
-    // Called by your ScoringState for every standard pin that fell
-    public void AddStandardPinFallen()
-    {
-        standardPinsFallen++;
-    }
-
     // Called by ScoringState to get the final result
     public int CalculateFinalScore()
     {
-        float rawScore = (standardPinsFallen + bonusScore) * totalMultiplier;
+        float rawScore = queuedScore * totalMultiplier;
         
         int finalScore = Mathf.RoundToInt(rawScore);
 
-        Debug.Log($"Scoring Math: ({standardPinsFallen} + {bonusScore}) * {totalMultiplier}x = {finalScore}");
+        Debug.Log($"Scoring Math: {queuedScore} * {totalMultiplier}x = {finalScore}");
         
         return finalScore;
     }
@@ -46,8 +39,7 @@ public class ScoreCalculator : MonoBehaviour
     // Called by RoundStartState to clean the slate for the next throw
     public void ResetFrameScore()
     {
-        standardPinsFallen = 0;
-        bonusScore = 0;
+        queuedScore = 0;
         totalMultiplier = 1.0f;
     }
 }

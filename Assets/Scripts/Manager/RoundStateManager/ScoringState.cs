@@ -145,21 +145,9 @@ public class ScoringState : RoundBaseState
         pin.TriggerTextForEffects(combinedEffects, _manager.SpawnPinFloatingText);
     }
 
-    // Need to check this out
-    // Need to refactor this
     private void CalculateScore()
     {
-        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
-        {
-            if (pin != null && pin.IsFallen)
-            {
-                _manager.scoreCalculator.AddStandardPinFallen();
-            }
-        }
-        
         int finalScoreThisRound = _manager.scoreCalculator.CalculateFinalScore();
-        
-        //_manager.inGameScoreUi.UpdateScoreText(finalScoreThisRound);
         _manager.sessionData.AddScore(finalScoreThisRound);
     }
     
