@@ -18,7 +18,19 @@ public class RoundStartState : RoundBaseState
 
         HandleGrid(manager);
 
-        manager.SwitchState(manager.pinPlacementState);
+        EnterNextState(manager);
+    }
+
+    private static void EnterNextState(RoundStateManager manager)
+    {
+        int currentRoundNumber = manager.sessionData.currentRound;
+        bool isLastRound = manager.roundData != null &&
+                           manager.roundData.IsLastRound(currentRoundNumber);
+        bool bossPhaseHasRun = manager.spawnBossObjectsState.HasRunForRound(currentRoundNumber);
+
+        manager.SwitchState(isLastRound && !bossPhaseHasRun
+            ? manager.spawnBossObjectsState
+            : manager.pinPlacementState);
     }
 
     private void HandleGrid(RoundStateManager manager)

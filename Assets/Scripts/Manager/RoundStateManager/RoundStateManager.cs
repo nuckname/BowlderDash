@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class RoundStateManager : MonoBehaviour
@@ -56,8 +57,11 @@ public class RoundStateManager : MonoBehaviour
     public SpawnBossObjectsState spawnBossObjectsState = new SpawnBossObjectsState();
     public GameOverState gameOverState = new GameOverState();
     public RoundWinState roundWinState = new RoundWinState();
-    
-    [SerializeField] private GameObject floatingTextPrefab;
+
+    [Header("Floating Text Prefabs")]
+    [FormerlySerializedAs("floatingTextPrefab")]
+    [SerializeField] private GameObject pinFloatingTextPrefab;
+    [SerializeField] private GameObject bossFloatingTextPrefab;
 
     private void Awake()
     {
@@ -97,6 +101,7 @@ public class RoundStateManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        spawnBossObjectsState.ResetRuntimeState();
         sessionData.StartBrandNewSession();
         
         gridManager.GenerateGrid();
@@ -265,9 +270,33 @@ public class RoundStateManager : MonoBehaviour
         }
     }
     
-    public void SpawnFloatingText(string text, Vector3 position)
+    public void SpawnPinFloatingText(string text, Vector3 position)
     {
-        Instantiate(floatingTextPrefab, position, Quaternion.identity).GetComponent<FloatingText>().Initialize(text);
+        SpawnFloatingText(pinFloatingTextPrefab, text, position);
+    }
+
+    public void SpawnBossFloatingText(string text, Vector3 position)
+    {
+        SpawnFloatingText(bossFloatingTextPrefab, text, position);
+    }
+
+    private static void SpawnFloatingText(GameObject prefab, string text, Vector3 position)
+    {
+        if (prefab == null)
+        {
+            Debug.LogWarning("Cannot spawn floating text because its prefab is not assigned");
+            return;
+        }
+
+        GameObject floatingTextObject = Instantiate(prefab, position, Quaternion.identity);
+        if (floatingTextObject.TryGetComponent(out FloatingText floatingText))
+        {
+            floatingText.Initialize(text);
+            return;
+        }
+
+        Debug.LogWarning($"Floating text prefab '{prefab.name}' is missing a FloatingText component");
+        Destroy(floatingTextObject);
     }
 
     /// <summary>

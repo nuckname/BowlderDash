@@ -124,7 +124,7 @@ public class ScoringState : RoundBaseState
         if (pin.onFallEffects != null) combinedEffects.AddRange(pin.onFallEffects);
         if (pin.onEndOfRoundEffects != null) combinedEffects.AddRange(pin.onEndOfRoundEffects);
         
-        pin.TriggerTextForEffects(combinedEffects, _manager.SpawnFloatingText);
+        pin.TriggerTextForEffects(combinedEffects, _manager.SpawnPinFloatingText);
     }
 
     // Need to check this out

@@ -13,6 +13,9 @@ public class SpawnBossObjectsState : RoundBaseState
     public Vector3 minimumScale = Vector3.one;
     public Vector3 maximumScale = Vector3.one;
 
+    [Header("Rotation Settings")]
+    public Vector3 rotationOffset = Vector3.zero;
+
     [Header("Reveal Settings")]
     public string announcementText = "Boss obstacle incoming!";
     public Vector3 floatingTextOffset = new Vector3(0f, 2f, 0f);
@@ -20,16 +23,28 @@ public class SpawnBossObjectsState : RoundBaseState
 
     private GameObject spawnedBossObject;
     private Coroutine transitionRoutine;
+    private int lastActivatedRoundNumber = -1;
 
     public bool HasSpawnedBoss => spawnedBossObject != null;
+
+    public bool HasRunForRound(int roundNumber)
+    {
+        return lastActivatedRoundNumber == roundNumber;
+    }
 
     public override void EnterState(RoundStateManager manager)
     {
         manager.MoveCamera(CameraLocation.SpawnBossObjectsCameraPosition);
 
-        if (!HasSpawnedBoss)
+        int currentRoundNumber = manager.sessionData.currentRound;
+        if (!HasRunForRound(currentRoundNumber))
         {
-            SpawnBossObject(manager);
+            lastActivatedRoundNumber = currentRoundNumber;
+
+            if (!HasSpawnedBoss)
+            {
+                SpawnBossObject(manager);
+            }
         }
 
         if (transitionRoutine != null)
@@ -52,15 +67,16 @@ public class SpawnBossObjectsState : RoundBaseState
         }
 
         Vector3 spawnPosition = randomArea.GetRandomPoint();
+        Quaternion spawnRotation = randomArea.transform.rotation * Quaternion.Euler(rotationOffset);
         spawnedBossObject = Object.Instantiate(
             randomPrefab,
             spawnPosition,
-            randomArea.transform.rotation);
+            spawnRotation);
         spawnedBossObject.transform.localScale = GetRandomScale();
 
         if (!string.IsNullOrWhiteSpace(announcementText))
         {
-            manager.SpawnFloatingText(announcementText, spawnPosition + floatingTextOffset);
+            manager.SpawnBossFloatingText(announcementText, spawnPosition + floatingTextOffset);
         }
     }
 
@@ -120,6 +136,8 @@ public class SpawnBossObjectsState : RoundBaseState
 
     public void ResetRuntimeState()
     {
+        lastActivatedRoundNumber = -1;
+
         if (spawnedBossObject != null)
         {
             Object.Destroy(spawnedBossObject);
