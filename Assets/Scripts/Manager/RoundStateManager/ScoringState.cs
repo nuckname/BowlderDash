@@ -68,6 +68,8 @@ public class ScoringState : RoundBaseState
     {
         yield return new WaitForSeconds(waitTimeBeforeScoring);
 
+        TriggerEndOfRoundEffects();
+
         int pinCount = _manager.pinsToScore.Count;
         
         if (pinCount <= 4)
@@ -95,6 +97,17 @@ public class ScoringState : RoundBaseState
         CalculateScore();
         hasScored = true;
         GoToNextRound();
+    }
+
+    private void TriggerEndOfRoundEffects()
+    {
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
+        {
+            if (pin != null && !pin.IsFallen)
+            {
+                pin.TriggerEndOfRound();
+            }
+        }
     }
 
     private bool AreAllPinsSettled()

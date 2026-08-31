@@ -12243,7 +12243,7 @@ Transform:
   m_GameObject: {fileID: 1332888232}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -1062.3651, y: -282.25, z: -908.03}
+  m_LocalPosition: {x: -1062.3651, y: -282.25, z: -900.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12262,7 +12262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossSpawnArea
   center: {x: 0, y: 0, z: 0}
-  size: {x: 8.96, y: 1, z: 12.78}
+  size: {x: 11.78, y: 1, z: 13.5}
 --- !u!1 &1346736463
 GameObject:
   m_ObjectHideFlags: 0
@@ -13870,15 +13870,11 @@ MonoBehaviour:
   showPhysicalDeck: 0
   drawInterval: 0.15
   startingDeck:
-  - {fileID: 11400000, guid: c8e72f5a3b694aef9b7d25e1c064fb31, type: 2}
-  - {fileID: 11400000, guid: 3d45a7e190c846b39f2ad7b6e84c1d52, type: 2}
-  - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
-  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
-  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
-  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
-  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
+  - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

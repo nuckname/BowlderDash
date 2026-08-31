@@ -219,16 +219,18 @@ public class PinBase : MonoBehaviour
     {
         if (onEndOfRoundEffects == null || onEndOfRoundEffects.Count == 0) return false;
 
+        bool triggeredAnyEffect = false;
+
         foreach (PinEffect effect in onEndOfRoundEffects)
         {
             if (effect != null)
             {
                 effect.Execute(this);
-                return true;
+                triggeredAnyEffect = true;
             }
         }
         
-        return false;
+        return triggeredAnyEffect;
     }
     protected virtual void TriggerFall()
     {
