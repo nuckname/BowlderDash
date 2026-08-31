@@ -19,10 +19,16 @@ public class RoundData : ScriptableObject
 
     public RoundScore GetRoundInfo(int targetRoundNumber)
     {
+        if (rounds == null)
+        {
+            Debug.LogWarning("Round data has no configured rounds");
+            return null;
+        }
+
         // Search through the list for a matching round number
         foreach (RoundScore round in rounds)
         {
-            if (round.roundNumber == targetRoundNumber)
+            if (round != null && round.roundNumber == targetRoundNumber)
             {
                 return round;
             }
@@ -35,15 +41,51 @@ public class RoundData : ScriptableObject
     public int GetMaxRoundNumber()
     {
         int maxRound = 0;
-        
+
+        if (rounds == null)
+        {
+            return maxRound;
+        }
+
         foreach (RoundScore round in rounds)
         {
-            if (round.roundNumber > maxRound)
+            if (round != null && round.roundNumber > maxRound)
             {
                 maxRound = round.roundNumber;
             }
         }
         
         return maxRound;
+    }
+
+    public bool IsLastRound(int targetRoundNumber)
+    {
+        if (rounds == null || rounds.Count == 0)
+        {
+            return false;
+        }
+
+        bool targetRoundExists = false;
+        int maxRoundNumber = 0;
+
+        foreach (RoundScore round in rounds)
+        {
+            if (round == null)
+            {
+                continue;
+            }
+
+            if (round.roundNumber == targetRoundNumber)
+            {
+                targetRoundExists = true;
+            }
+
+            if (round.roundNumber > maxRoundNumber)
+            {
+                maxRoundNumber = round.roundNumber;
+            }
+        }
+
+        return targetRoundExists && targetRoundNumber == maxRoundNumber;
     }
 }
