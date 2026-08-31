@@ -26,6 +26,7 @@ public class PinBase : MonoBehaviour
     [SerializeReference] public List<PinEffect> onPlaceEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onHitEffects = new List<PinEffect>();
     [SerializeReference] public List<PinEffect> onFallEffects = new List<PinEffect>();
+    // Look into this
     [SerializeReference] public List<PinEffect> onEndOfRoundEffects = new List<PinEffect>();
     
     [Header("Floating Text Offsets")]
@@ -53,6 +54,8 @@ public class PinBase : MonoBehaviour
     
     private bool _isForcedSettled = false;
 
+    public bool isClone = false;
+    
     // dependency injection 
     public ScoreCalculator FrameScoreCalculator { get; private set; }
     
@@ -189,7 +192,7 @@ public class PinBase : MonoBehaviour
 
     protected virtual void HandleHit(Collider other)
     {
-        if (_hasBeenHit || !allowCollisionEffects) return;
+        if ((_hasBeenHit && !isClone) || !allowCollisionEffects) return;
 
         bool isAnotherPin = other.GetComponent<PinBase>() != null;
 
@@ -197,6 +200,7 @@ public class PinBase : MonoBehaviour
             
         {
             _hasBeenHit = true;
+            isClone = false; // Turn the clone flag off so it can only be hit one extra time
             
             if (boxColliderToDisable != null)
             {
@@ -210,6 +214,7 @@ public class PinBase : MonoBehaviour
         }
     }
     
+    // Right now for the vase we just have a score multi in End of round triggers
     public virtual bool TriggerEndOfRound()
     {
         if (onEndOfRoundEffects == null || onEndOfRoundEffects.Count == 0) return false;

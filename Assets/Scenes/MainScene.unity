@@ -3681,7 +3681,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
   - {fileID: 11400000, guid: 36f08b64e7d55104ead70610e2423e18, type: 2}
-  - {fileID: 11400000, guid: 1c376dacc5d69a145b90fb6ec03ee1ba, type: 2}
   - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
   - {fileID: 11400000, guid: 42aeef7c33ffadb408333770abf43cfc, type: 2}
   - {fileID: 11400000, guid: 7863ead928667f9438d4e5039ef3800c, type: 2}
@@ -13871,13 +13870,14 @@ MonoBehaviour:
   showPhysicalDeck: 0
   drawInterval: 0.15
   startingDeck:
-  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: c8e72f5a3b694aef9b7d25e1c064fb31, type: 2}
   - {fileID: 11400000, guid: 3d45a7e190c846b39f2ad7b6e84c1d52, type: 2}
   - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   drawPile: []
   totalDeck: []

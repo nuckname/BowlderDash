@@ -281,6 +281,7 @@ MonoBehaviour:
       data:
         velocityMultiplier: 1
         heightOffset: 0.5
+        cloneMaterial: {fileID: 2100000, guid: d7b18e8eb8f5c754e8184e64df981fb9, type: 2}
         adjacentOffsets:
         - {x: 1, y: 0}
         - {x: 1, y: -1}

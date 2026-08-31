@@ -5,10 +5,14 @@ using UnityEngine;
 public class SplitBallPinEffect : PinEffect
 {
     [SerializeField] private float splitAngle = 85f;
-
+    private bool hasTriggered = false;
+    
     public override void Execute(PinBase pinBase, Collider target = null)
     {
+        if (hasTriggered) return;
         if (pinBase == null || target == null) return;
+
+        hasTriggered = true;
 
         Rigidbody originalBallRb = target.attachedRigidbody;
         if (originalBallRb == null) return;
