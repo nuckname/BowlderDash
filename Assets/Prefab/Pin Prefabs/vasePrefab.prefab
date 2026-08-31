@@ -323,6 +323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragElevation: 0.5
   playAreaThresholdY: 500
+  canBeReturnedToHand: 1
 --- !u!54 &8812345678901234568
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -388,6 +389,7 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
+  onPlaceEffects: []
   onHitEffects:
   - rid: 6055849687980703747
   onFallEffects: []
@@ -415,7 +417,7 @@ MonoBehaviour:
     - rid: 6055849687980703749
       type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
       data:
-        scoreValue: 10
+        scoreValue: 50
         multValue: 0
 --- !u!114 &7932745912026453913
 MonoBehaviour:
@@ -431,3 +433,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
   _groupPeers: []
+  canBePickedUp: 1

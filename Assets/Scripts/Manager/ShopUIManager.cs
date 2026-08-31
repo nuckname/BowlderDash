@@ -31,14 +31,15 @@ public class ShopUIManager : MonoBehaviour
     public HexGrid targetGrid;
     public Button buyColumnButton;
     public Button buyRowButton;
-    public int baseGridCost = 1;
-    public int gridCostScaling = 2;
+    
+    public int baseGridCost = 5;
+    public float gridCostScaling = 2;
+    private int totalGridUpgrades = 0;
 
     private RoundStateManager stateManager;
     private CardDataSO[] currentShopCards = new CardDataSO[3];
     
     private int _cardCost = 0;
-    private int totalGridUpgrades = 0;
     
     [Header("Remove Pin Settings")]
     public Button removePinButton;
@@ -129,11 +130,10 @@ public class ShopUIManager : MonoBehaviour
 
         TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
 
-
-        // We start on round 2
+        // we first see shop on round 2
         if (stateManager.sessionData.currentRound == 2)
         {
-            _cardCost = currentShopCards[index].baseCost;
+            _cardCost = currentShopCards[index].baseCost + 1;
             buttonText.text = $"Buy ({_cardCost})";
         }
         else if (stateManager.sessionData.currentRound == 3)
@@ -153,15 +153,20 @@ public class ShopUIManager : MonoBehaviour
         }
         else if (stateManager.sessionData.currentRound == 6)
         {
-            _cardCost = currentShopCards[index].baseCost + 3;
+            _cardCost = currentShopCards[index].baseCost + 2;
             buttonText.text = $"Buy ({_cardCost})";
         }
-        else
+        else if (stateManager.sessionData.currentRound == 7)
         {
-            // Apply no scaling to first round
-            _cardCost = currentShopCards[index].baseCost + (stateManager.sessionData.currentRound * costScalingPerRound);
+            _cardCost = currentShopCards[index].baseCost + 4;
             buttonText.text = $"Buy ({_cardCost})";
         }
+        else if (stateManager.sessionData.currentRound == 8)
+        {
+            _cardCost = currentShopCards[index].baseCost + 4;
+            buttonText.text = $"Buy ({_cardCost})";
+        }
+
     }
 
     public void OnContinueClicked()
@@ -237,7 +242,7 @@ public class ShopUIManager : MonoBehaviour
 
     private int GetGridUpgradeCost()
     {
-        return baseGridCost + (totalGridUpgrades + gridCostScaling);
+        return Mathf.RoundToInt(baseGridCost + (totalGridUpgrades * gridCostScaling));
     }
 
     private void UpdateGridButtonsUI()

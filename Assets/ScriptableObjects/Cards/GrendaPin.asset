@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db6ce27693d5166469e200c59288faf8, type: 3}
   m_Name: GrendaPin
   m_EditorClassIdentifier: 
-  cardID: 
+  cardID: GrendaPin
+  cardTint: {r: 1, g: 1, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: ccbfad81fca0d8e44bfef1087f371478, type: 3}
   worldGameObjectPrefab: {fileID: 4548911073050350972, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
-  baseCost: 1
+  baseCost: 2
+  spawnPattern: []

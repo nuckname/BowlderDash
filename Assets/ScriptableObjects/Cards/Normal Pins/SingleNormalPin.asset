@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db6ce27693d5166469e200c59288faf8, type: 3}
   m_Name: SingleNormalPin
   m_EditorClassIdentifier: 
-  cardID: 
+  cardID: SingleNormalPin
   cardTint: {r: 1, g: 1, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: 33a9b8138cefa024aa18a27216b22f9b, type: 3}

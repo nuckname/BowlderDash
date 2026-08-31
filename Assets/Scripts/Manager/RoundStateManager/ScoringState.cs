@@ -185,7 +185,7 @@ public class ScoringState : RoundBaseState
         yield return new WaitForSeconds(1f);
         
         _manager.AddBallThrownToSession();
-        yield return new WaitForSeconds(waitBeforeUiCamera + 2f);
+        yield return new WaitForSeconds(waitBeforeUiCamera);
         
         
         _manager.MoveCamera(CameraLocation.ScoreToBeat);
@@ -194,7 +194,7 @@ public class ScoringState : RoundBaseState
         _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
         _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
         
-        yield return new WaitForSeconds(waitBeforeUiCamera + 2f);
+        yield return new WaitForSeconds(waitBeforeUiCamera + 1.5f);
 
         if (isWinState)
         {

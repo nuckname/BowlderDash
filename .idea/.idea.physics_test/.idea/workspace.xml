@@ -9,14 +9,23 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/MultiPin.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/MultiPin.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LaneMat.physicMaterial" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/LaneMat.physicMaterial" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Physics Materials/PinPhysicsMaterial.physicMaterial" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Physics Materials/PinPhysicsMaterial.physicMaterial" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/vasePrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/vasePrefab.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/DrawCardPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/DrawCardPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/GrendaPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/GrendaPin.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/MultiPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/MultiPin.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardToWorldSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardToWorldSpawner.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/MultiEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/MultiEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/HorizontalDoubleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/HorizontalDoubleNormalPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/SingleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/SingleNormalPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/VertTrippleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/VertTrippleNormalPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/PinataPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/PinataPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/VasePin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/VasePin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTest.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTest.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTestToAnotherPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTestToAnotherPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/tinyPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/tinyPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +72,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/InGameScoreUi.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/PinPlacementState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundBaseState.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStartState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundWinState.cs" root0="FORCE_HIGHLIGHTING" />
@@ -285,6 +295,7 @@
       <workItem from="1787961368362" duration="9907000" />
       <workItem from="1787985917608" duration="842000" />
       <workItem from="1788046552312" duration="11015000" />
+      <workItem from="1788131814965" duration="2727000" />
     </task>
     <servers />
   </component>
@@ -327,32 +338,6 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs</url>
-          <line>105</line>
-          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" containingFunctionPresentation="Method 'SpawnTextForSinglePin'">
-            <startOffsets>
-              <option value="2835" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2836" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs</url>
-          <line>68</line>
-          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Manager\RoundStateManager\ScoringState.cs" containingFunctionPresentation="Method 'ProcessScoringRoutine'">
-            <startOffsets>
-              <option value="1878" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1933" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

@@ -27,7 +27,7 @@ public class CardDataSO : ScriptableObject
     public GameObject worldGameObjectPrefab; 
     
     [Header("Shop Settings")]
-    public int baseCost = 5;
+    public int baseCost = 2;
 
     [Header("Spawn Pattern (Hex Axial Coordinates)")]
     [Tooltip("Define the shape and unique prefabs for each piece.")]
