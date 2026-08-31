@@ -124,6 +124,7 @@
     <Compile Include="Assets\Scripts\Pins\PinEffects\TeleportBallPinEffect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Hand Scripts\HandInteractionManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\RoundStateManager\GameCompleteState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
     <Compile Include="Assets\Scripts\UiScripts\TutorialScripts\BallThrowingTutorial.cs" />

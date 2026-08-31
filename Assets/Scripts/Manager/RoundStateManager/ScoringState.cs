@@ -158,7 +158,12 @@ public class ScoringState : RoundBaseState
             // I have no idea how to tell the user this. Floating text?
             GiveBonusTickets(maxBallsAllowed, ballsThrown);
 
-            _manager.StartCoroutine(TransitionToPinPlacementRoutine(_manager.roundWinState, true));
+            bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound);
+            RoundBaseState nextState = isLastRound
+                ? _manager.gameCompleteState
+                : _manager.roundWinState;
+
+            _manager.StartCoroutine(TransitionToPinPlacementRoutine(nextState, !isLastRound));
         }
         else if (ballsThrown >= maxBallsAllowed)
         {
@@ -184,7 +189,7 @@ public class ScoringState : RoundBaseState
         }
     }
 
-    private IEnumerator TransitionToPinPlacementRoutine(RoundBaseState nextState, bool isWinState)
+    private IEnumerator TransitionToPinPlacementRoutine(RoundBaseState nextState, bool prepareNextRound)
     {
         // lets just update this before so the player doesnt see it
         _manager.inGameScoreUi.UpdateRoundText(_manager.sessionData.currentRound, _manager.roundData.GetMaxRoundNumber());
@@ -211,7 +216,7 @@ public class ScoringState : RoundBaseState
         
         yield return new WaitForSeconds(waitBeforeUiCamera + 1.5f);
 
-        if (isWinState)
+        if (prepareNextRound)
         {
             _manager.ResetUiForNewRound();
         }

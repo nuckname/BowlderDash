@@ -402,6 +402,7 @@ MonoBehaviour:
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 0}
   _isFallen: 0
+  isClone: 0
   references:
     version: 2
     RefIds:
@@ -412,13 +413,13 @@ MonoBehaviour:
         vase: {fileID: 114782181947271798}
         flower1: {fileID: 594026184152654567}
         flower2: {fileID: 3125624124259819643}
-        intactBonusScore: 10
+        intactBonusScore: 50
         flowerShrinkDuration: 0.4
     - rid: 6055849687980703749
       type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
       data:
         scoreValue: 50
-        multValue: 0
+        multValue: 1
 --- !u!114 &7932745912026453913
 MonoBehaviour:
   m_ObjectHideFlags: 0

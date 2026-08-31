@@ -3705,7 +3705,12 @@ MonoBehaviour:
     announcementText: Boss obstacle incoming!
     floatingTextOffset: {x: 0, y: 5, z: 0}
     revealDuration: 6
-  floatingTextPrefab: {fileID: 2221769346915677457, guid: 30139dc5cd464d5419b72b57dd721caa, type: 3}
+  gameCompleteState:
+    completionMessage: 'You Win!
+
+      Press Enter to play again.'
+  pinFloatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
+  bossFloatingTextPrefab: {fileID: 2221769346915677457, guid: 30139dc5cd464d5419b72b57dd721caa, type: 3}
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -12238,7 +12243,7 @@ Transform:
   m_GameObject: {fileID: 1332888232}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -1062.3651, y: -281.51, z: -908.03}
+  m_LocalPosition: {x: -1062.3651, y: -282.25, z: -908.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12257,7 +12262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossSpawnArea
   center: {x: 0, y: 0, z: 0}
-  size: {x: 6.69, y: 1, z: 28.4}
+  size: {x: 8.96, y: 1, z: 12.78}
 --- !u!1 &1346736463
 GameObject:
   m_ObjectHideFlags: 0

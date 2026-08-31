@@ -56,6 +56,7 @@ public class RoundStateManager : MonoBehaviour
     public  RoundOverState roundOverState = new RoundOverState();
     public SpawnBossObjectsState spawnBossObjectsState = new SpawnBossObjectsState();
     public GameOverState gameOverState = new GameOverState();
+    public GameCompleteState gameCompleteState = new GameCompleteState();
     public RoundWinState roundWinState = new RoundWinState();
 
     [Header("Floating Text Prefabs")]
