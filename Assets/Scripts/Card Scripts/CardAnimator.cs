@@ -73,6 +73,7 @@ public class CardAnimator : MonoBehaviour
         parentCardMovement = target;
         cardTransform = target.transform;
         canvas = GetComponent<Canvas>();
+        
         ApplyCardTint(target.cardData != null ? target.cardData.cardTint : Color.white);
 
         //Event Listening

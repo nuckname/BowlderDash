@@ -110,12 +110,11 @@ public class ShopUIManager : MonoBehaviour
 
     private void UpdateCardVisual(Image cardImage, CardDataSO cardData)
     {
-        Image prefabImage = cardData.cardVisualPrefab.GetComponentInChildren<Image>();
-        
-        if (prefabImage != null)
-        {
-            cardImage.sprite = prefabImage.sprite;
-            cardImage.color = cardData.cardTint;
+        if (cardData.cardVisualPrefab != null)
+        { 
+            GameObject card = Instantiate(cardData.cardVisualPrefab, cardImage.transform);
+            card.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            cardImage.enabled = false;
         }
     }
     

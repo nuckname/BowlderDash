@@ -6525,6 +6525,7 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
+  onPlaceEffects: []
   onHitEffects:
   - rid: 6055849943401234495
   onFallEffects: []
@@ -6558,6 +6559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragElevation: 2
   playAreaThresholdY: 500
+  canBeReturnedToHand: 1
 --- !u!114 &3966506406019630799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6571,6 +6573,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
+  _groupPeers: []
+  canBePickedUp: 1
 --- !u!136 &4640395973791459692
 CapsuleCollider:
   m_ObjectHideFlags: 0

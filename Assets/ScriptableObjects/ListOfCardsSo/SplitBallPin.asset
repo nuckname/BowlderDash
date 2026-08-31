@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db6ce27693d5166469e200c59288faf8, type: 3}
-  m_Name: pinBounceTest
+  m_Name: SplitBallPin
   m_EditorClassIdentifier: 
-  cardID: pinBounceTest
-  cardTint: {r: 1, g: 1, b: 1, a: 1}
+  cardID: SplitBallPin
+  cardTint: {r: 0, g: 0, b: 0, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
-  cardVisualPrefab: {fileID: 5740910511806353211, guid: 016645942b85e8848bc1967ad538a3eb, type: 3}
-  worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 49e95e6564324e448b132749e20f3ddf, type: 3}
-  baseCost: 2
+  cardVisualPrefab: {fileID: 5919451674846626430, guid: 9090343e83ba6714b9ef396c69beffe8, type: 3}
+  worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 9090343e83ba6714b9ef396c69beffe8, type: 3}
+  baseCost: 1
   spawnPattern: []

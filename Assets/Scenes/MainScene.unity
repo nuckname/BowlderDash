@@ -3681,6 +3681,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
   - {fileID: 11400000, guid: 36f08b64e7d55104ead70610e2423e18, type: 2}
+  - {fileID: 11400000, guid: 1c376dacc5d69a145b90fb6ec03ee1ba, type: 2}
+  - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
+  - {fileID: 11400000, guid: 42aeef7c33ffadb408333770abf43cfc, type: 2}
   amountOfCardsToDrawEachTurn: 5
   hasDrawnCardsThisTurn: 0
   isHandDrawReady: 0
@@ -10579,7 +10582,7 @@ MonoBehaviour:
   targetGrid: {fileID: 120957818}
   buyColumnButton: {fileID: 799966836}
   buyRowButton: {fileID: 943670857}
-  baseGridCost: 1
+  baseGridCost: 5
   gridCostScaling: 2
   removePinButton: {fileID: 1638082805}
   singlePinCardID: SinglePin
@@ -13874,8 +13877,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
-  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
-  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

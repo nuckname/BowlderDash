@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db6ce27693d5166469e200c59288faf8, type: 3}
+  m_Name: ClonePin
+  m_EditorClassIdentifier: 
+  cardID: ClonePin
+  cardTint: {r: 0, g: 0, b: 0, a: 1}
+  cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
+  cardVisualPrefab: {fileID: 5740910511806353211, guid: ee870101bd013f446ab0368fba048322, type: 3}
+  worldGameObjectPrefab: {fileID: 5919451674846626430, guid: fcdd196977115ef479fe6b79fc1753f7, type: 3}
+  baseCost: 2
+  spawnPattern: []
