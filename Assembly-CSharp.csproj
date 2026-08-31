@@ -127,6 +127,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
     <Compile Include="Assets\Scripts\UiScripts\TutorialScripts\BallThrowingTutorial.cs" />
+    <Compile Include="Assets\Scripts\Manager\RoundStateManager\BossSpawnArea.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\SplitBallPinEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\CameraPanToLocation.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\GameOverState.cs" />
