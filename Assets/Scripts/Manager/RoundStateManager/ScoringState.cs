@@ -68,6 +68,21 @@ public class ScoringState : RoundBaseState
     {
         yield return new WaitForSeconds(waitTimeBeforeScoring);
 
+        int pinCount = _manager.pinsToScore.Count;
+        
+        if (pinCount <= 4)
+        {
+            _textSpawnDelay = 1.25f;
+        }
+        else if (pinCount > 5 && pinCount <= 8)
+        {
+            _textSpawnDelay = 0.75f;
+        }
+        else
+        {
+            _textSpawnDelay = 0.5f;
+        }
+
         foreach (PinBase pin in _manager.pinsToScore)
         {
             SpawnTextForSinglePin(pin);
