@@ -17,6 +17,8 @@ public class RoundStateManager : MonoBehaviour
 
     [Header("Strike")]
     [SerializeField, Min(0f)] private float strikeMultiplierBonus = 0.5f;
+    [SerializeField] private GameObject strikeFloatingTextPrefab;
+    [SerializeField] private Transform strikeFloatingTextSpawnPoint;
     private readonly List<PinBase> strikeTargetsForCurrentThrow = new List<PinBase>();
     private bool strikeMultiplierAppliedForCurrentThrow;
     
@@ -317,6 +319,18 @@ public class RoundStateManager : MonoBehaviour
     public void SpawnBossFloatingText(string text, Vector3 position)
     {
         SpawnFloatingText(bossFloatingTextPrefab, text, position);
+    }
+
+    public void SpawnStrikeFloatingText()
+    {
+        if (strikeFloatingTextSpawnPoint == null)
+        {
+            Debug.LogWarning("Cannot spawn strike floating text because its spawn point is not assigned");
+            return;
+        }
+
+        string text = $"STRIKE!\n+{strikeMultiplierBonus:0.##}x";
+        SpawnFloatingText(strikeFloatingTextPrefab, text, strikeFloatingTextSpawnPoint.position);
     }
 
     private static void SpawnFloatingText(GameObject prefab, string text, Vector3 position)

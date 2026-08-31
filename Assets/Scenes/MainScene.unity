@@ -3649,6 +3649,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allActivePinsInTheFrame: []
   pinsToScore: []
+  strikeMultiplierBonus: 0.5
+  strikeFloatingTextPrefab: {fileID: 2221769346915677457, guid: a84263db370e4c9ba25386ee61140991, type: 3}
+  strikeFloatingTextSpawnPoint: {fileID: 731420260831510002}
   cameraPanToLocation: {fileID: 1439520103}
   cameraFollowScript: {fileID: 1439520104}
   ballController: {fileID: 6652253181974710232}
@@ -12296,6 +12299,7 @@ Transform:
   - {fileID: 1439520102}
   - {fileID: 1168153560}
   - {fileID: 120957813}
+  - {fileID: 731420260831510002}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &1353803850
@@ -18978,6 +18982,37 @@ Transform:
   - {fileID: 1691471228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &731420260831510001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 731420260831510002}
+  m_Layer: 0
+  m_Name: StrikeFloatingTextSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &731420260831510002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731420260831510001}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1062.3651, y: -272.29144, z: -871.75946}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1346736464}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &763392349860867474
 MeshFilter:
   m_ObjectHideFlags: 0

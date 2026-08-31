@@ -68,7 +68,11 @@ public class ScoringState : RoundBaseState
     {
         yield return new WaitForSeconds(waitTimeBeforeScoring);
 
-        _manager.TryApplyStrikeMultiplier();
+        if (_manager.TryApplyStrikeMultiplier())
+        {
+            _manager.SpawnStrikeFloatingText();
+        }
+
         TriggerEndOfRoundEffects();
 
         int pinCount = _manager.pinsToScore.Count;
