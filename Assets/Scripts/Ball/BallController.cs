@@ -15,6 +15,9 @@ public class BallController : MonoBehaviour
     private bool _isFollowingCurve = false;
     private List<CurvePoint> _currentPath;
 
+    private Transform _homingTarget;
+    private float _homingSpeed;
+    
     void Awake()
     {
         _ballRb = GetComponent<Rigidbody>();
@@ -41,6 +44,24 @@ public class BallController : MonoBehaviour
     {
         _currentPath = path;
         StartCoroutine(ThrowSequence(launchSpeed));
+    }
+    
+    // Add these two new methods anywhere in the class:
+    public void SetHomingTarget(Transform targetPin, float speed)
+    {
+        _isFollowingCurve = false;
+        _homingTarget = targetPin;
+        _homingSpeed = speed;
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        // Stop homing once we actually hit the pin we were tracking, 
+        // letting physics take over and go straight/bounce
+        if (_homingTarget != null && collision.transform == _homingTarget)
+        {
+            _homingTarget = null;
+        }
     }
 
     private IEnumerator ThrowSequence(float speed)
@@ -100,6 +121,14 @@ public class BallController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // Continuously apply velocity towards the target pin until we hit it
+        if (_homingTarget != null)
+        {
+            Vector3 directionToTarget = (_homingTarget.position - transform.position).normalized;
+            _ballRb.linearVelocity = directionToTarget * _homingSpeed;
+            return;
+        }
+        
         if (!_isLaunched || !_isFollowingCurve) return;
         
         Vector3 currentPos = transform.position;

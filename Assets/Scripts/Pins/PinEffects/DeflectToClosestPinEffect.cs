@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 // https://share.gemini.google/0AGkQerN0q9f
+// https://share.gemini.google/ixae2fsPWvEY
 [Serializable]
 public class DeflectToClosestPinEffect : PinEffect
 {
@@ -41,13 +42,23 @@ public class DeflectToClosestPinEffect : PinEffect
 
             if (currentSpeed > 0.1f)
             {
-                Vector3 directionToClosest = (closestPin.transform.position - target.transform.position).normalized;
-                
-                // Ensure the ball stays on the same vertical plane if needed, or allow true 3D deflection.
-                // directionToClosest.y = 0; 
-                // directionToClosest.Normalize();
-                
-                targetRb.linearVelocity = directionToClosest * (currentSpeed * speedMultiplier);
+                BallController ballCtrl = target.GetComponent<BallController>();
+                if (ballCtrl != null)
+                {
+                    // Let the BallController handle continuous tracking towards the pin
+                    ballCtrl.SetHomingTarget(closestPin.transform, currentSpeed * speedMultiplier);
+                }
+                else
+                {
+                    // Fallback to instant velocity change if BallController is missing
+                    Vector3 directionToClosest = (closestPin.transform.position - target.transform.position).normalized;
+                    
+                    // Ensure the ball stays on the same vertical plane if needed, or allow true 3D deflection.
+                    // directionToClosest.y = 0; 
+                    // directionToClosest.Normalize();
+                    
+                    targetRb.linearVelocity = directionToClosest * (currentSpeed * speedMultiplier);
+                }
             }
         }
     }

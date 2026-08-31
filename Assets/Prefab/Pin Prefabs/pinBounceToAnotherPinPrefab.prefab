@@ -279,7 +279,7 @@ MonoBehaviour:
     - rid: 6055849890551955520
       type: {class: DeflectToClosestPinEffect, ns: , asm: Assembly-CSharp}
       data:
-        speedMultiplier: 2
+        speedMultiplier: 1
     - rid: 6055850163024429125
       type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
       data:

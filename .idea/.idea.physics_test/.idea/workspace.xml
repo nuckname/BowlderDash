@@ -8,46 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinBouncePrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinBouncePrefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinBounceToAnotherPinPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/pinBounceToAnotherPinPrefab.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/ticketPinataPinPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/ticketPinataPinPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/DrawCardPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/DrawCardPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/GrendaPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/GrendaPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/MultiPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/MultiPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/HorizontalDoubleNormalPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/HorizontalDoubleNormalPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/NormalPinDiagonalLeft.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/NormalPinDiagonalLeft.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/NormalPinDiagonalRight.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/NormalPinDiagonalRight.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/NormalPinTriangle.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/NormalPinTriangle.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/SingleNormalPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/SingleNormalPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/VertDoubleNormalPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/VertDoubleNormalPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/VertTrippleNormalPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/Normal Pins/VertTrippleNormalPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/PinataPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/PinataPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/VasePin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/VasePin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTest.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTest.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTestToAnotherPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/pinBounceTestToAnotherPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/tinyPin.asset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/Cards/tinyPin.asset.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardAnimator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardAnimator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/PinataEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/PinataEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/SplitBallPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/SplitBallPin.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -317,7 +279,7 @@
       <workItem from="1787961368362" duration="9907000" />
       <workItem from="1787985917608" duration="842000" />
       <workItem from="1788046552312" duration="11015000" />
-      <workItem from="1788131814965" duration="5061000" />
+      <workItem from="1788131814965" duration="5421000" />
     </task>
     <servers />
   </component>
