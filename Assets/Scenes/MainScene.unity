@@ -10560,7 +10560,7 @@ MonoBehaviour:
   CardVisual1: {fileID: 593323458}
   CardVisual2: {fileID: 2072535365}
   CardVisual3: {fileID: 338407411}
-  rerollButton: {fileID: 0}
+  rerollButton: {fileID: 1621557523}
   rerollCost: 1
   costScalingPerRound: 1
   targetGrid: {fileID: 120957818}

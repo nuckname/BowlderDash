@@ -46,24 +46,24 @@ public class ShopUIManager : MonoBehaviour
     public string singlePinCardID = "SingleNormalPin";
     public int removePinCost = 1;
     
-    public void ShowShop(RoundStateManager manager)
+    public void ToggleShop(bool show, RoundStateManager manager = null)
     {
-        shopGameObject.SetActive(true);
+        shopGameObject.SetActive(show);
         
-        stateManager = manager;
-        GenerateShopCards();
-        UpdateGridButtonsUI();
-        UpdateRemovePinUI();
-        UpdateRerollUI();
-    }
-
-    public void Hide()
-    {
-        if (shopGameObject != null)
+        if (show)
         {
-            shopGameObject.SetActive(false);
+            if (manager != null)
+            {
+                stateManager = manager;
+            }
+            
+            GenerateShopCards();
+            UpdateGridButtonsUI();
+            UpdateRemovePinUI();
+            UpdateRerollUI();
         }
     }
+
     
     private void UpdateRerollUI()
     {

@@ -112,6 +112,8 @@ public class RoundStateManager : MonoBehaviour
         spawnBossObjectsState.ResetRuntimeState();
         sessionData.StartBrandNewSession();
         
+        shopUI.ToggleShop(false);
+        
         gridManager.GenerateGrid();
         
         RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
