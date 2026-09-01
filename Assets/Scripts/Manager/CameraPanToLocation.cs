@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 public enum CameraLocation 
 { 
@@ -40,6 +41,8 @@ public class CameraPanToLocation : MonoBehaviour
         {
             if (mapping.location == location)
             {
+                Debug.Log("Camera" + mapping.location);
+                Debug.Log("Camera" + location);
                 target = mapping.target;
                 break;
             }

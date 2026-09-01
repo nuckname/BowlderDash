@@ -39,9 +39,6 @@ public class RoundOverState : RoundBaseState
                 }
             }
         }
-
-
-        //manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
     }
 
     public override void UpdateState(RoundStateManager manager)

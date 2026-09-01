@@ -167,7 +167,7 @@ public class ScoringState : RoundBaseState
         int maxBallsAllowed = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound).maxBallsAllowedToThrow;
         int scoreNeeded = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound).scoreNeededToBeat;
         int currentScore = _manager.sessionData.currentScore;
-        
+    
         if (currentScore >= scoreNeeded)
         {
             // if we have ball throws left, give them more tickets plus a bonus for not using all their balls.
@@ -175,11 +175,19 @@ public class ScoringState : RoundBaseState
             GiveBonusTickets(maxBallsAllowed, ballsThrown);
 
             bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound);
-            RoundBaseState nextState = isLastRound
-                ? _manager.gameCompleteState
-                : _manager.roundWinState;
+            
+            RoundBaseState nextState;
 
-            _manager.StartCoroutine(TransitionToPinPlacementRoutine(nextState, !isLastRound));
+            if (isLastRound)
+            {
+                nextState = _manager.gameCompleteState;
+            }
+            else
+            {
+                nextState = _manager.roundWinState;
+            }
+            
+            _manager.StartCoroutine(new EndOfRoundSequence().Execute(_manager, nextState, !isLastRound));
         }
         else if (ballsThrown >= maxBallsAllowed)
         {
@@ -189,12 +197,12 @@ public class ScoringState : RoundBaseState
         else
         {
             // Else throw the ball again and try to reach the quota.
-            
+        
             // I want to show the in game UI before we go to the next round.
-            _manager.StartCoroutine(TransitionToPinPlacementRoutine(_manager.roundStartState, false));
+            _manager.StartCoroutine(new EndOfRoundSequence().Execute(_manager, _manager.roundStartState, false));
         }
     }
-
+    
     // If we complete the round early, we want to give them extra tickets for not using all their balls.
     // This is a bonus for being efficient.
     private void GiveBonusTickets(int maxBallsAllowed, int ballsThrown)
@@ -205,54 +213,6 @@ public class ScoringState : RoundBaseState
             int bonusTickets = (ballsLeft * _manager.gridManager.gridTicketManager.ticketsPerFrame) + 1;
             _manager.sessionData.AddTickets(bonusTickets);
         }
-    }
-
-    private IEnumerator TransitionToPinPlacementRoutine(RoundBaseState nextState, bool prepareNextRound)
-    {
-        // lets just update this before so the player doesnt see it
-        _manager.inGameScoreUi.UpdateRoundText(_manager.sessionData.currentRound, _manager.roundData.GetMaxRoundNumber());
-        
-        _manager.MoveCamera(CameraLocation.BallsThrowUi);
-        
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-        _manager.AddBallThrownToSession();
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-        
-        _manager.MoveCamera(CameraLocation.ScoreToBeatUi);
-        
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-        
-        // we want to only incremental the UI here and only here.
-        Coroutine scoreCountUpRoutine = _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
-        
-        if (scoreCountUpRoutine != null)
-        {
-            yield return scoreCountUpRoutine;
-        }
-
-        yield return new WaitForSeconds(scoreDisplayHoldTime + waitBeforeUiCamera);
-        
-        // Move to the Ticket Camera and animate tickets
-        _manager.MoveCamera(CameraLocation.TicketCameraUi);
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-
-        Coroutine ticketCountUpRoutine = _manager.inGameScoreUi.UpdateTicketTextAnimated(_manager.sessionData.tickets);
-        
-        if (ticketCountUpRoutine != null)
-        {
-            yield return ticketCountUpRoutine;
-        }
-
-        yield return new WaitForSeconds(scoreDisplayHoldTime);
-        
-        yield return new WaitForSeconds(waitBeforeUiCamera);
-
-        if (prepareNextRound)
-        {
-            _manager.ResetUiForNewRound();
-        }
-        
-        _manager.SwitchState(nextState);
     }
     
     public override void FixedUpdateState(RoundStateManager manager) { }
