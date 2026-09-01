@@ -55,9 +55,16 @@ public class ScoringState : RoundBaseState
         {
             timeSinceLastCheck = 0f;
 
-            //if (AreAllPinsSettled() || totalWaitTime >= maxWaitTimeForSettling)
-            if (AreAllPinsSettled())
+            bool allPinsSettled = AreAllPinsSettled();
+            bool settlementTimedOut = maxWaitTimeForSettling > 0f && totalWaitTime >= maxWaitTimeForSettling;
+
+            if (allPinsSettled || settlementTimedOut)
             {
+                if (settlementTimedOut && !allPinsSettled)
+                {
+                    Debug.LogWarning($"Pin settlement exceeded {maxWaitTimeForSettling:0.##} seconds; continuing to scoring.");
+                }
+
                 pinsHaveSettled = true;
                 _manager.StartCoroutine(ProcessScoringRoutine());
             }
