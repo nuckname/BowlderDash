@@ -28,6 +28,8 @@ public class CameraPanToLocation : MonoBehaviour
     public Camera mainCamera;
     public float lerpSpeed = 3f;
 
+    [SerializeField] private bool showDebugMenu = true;
+    
     [Header("Transform Targets")]
     public List<CameraLocationMapping> cameraMappings = new List<CameraLocationMapping>();
 
@@ -82,5 +84,24 @@ public class CameraPanToLocation : MonoBehaviour
 
         mainCamera.transform.SetPositionAndRotation(target.position, target.rotation);
         activeLerp = null;
+    }
+    
+    // Debug GUI for testing camera locations, turn on showDebugMenu and look top right, just ai slop
+    private void OnGUI()
+    {
+        // This will hide the entire GUI when set to false in the Inspector or by another script
+        if (!showDebugMenu) return;
+
+        GUILayout.BeginArea(new Rect(10, 10, 250, 400));
+        
+        foreach (CameraLocation location in System.Enum.GetValues(typeof(CameraLocation)))
+        {
+            if (GUILayout.Button(location.ToString(), GUILayout.Height(30)))
+            {
+                MoveCameraTo(location);
+            }
+        }
+        
+        GUILayout.EndArea();
     }
 }
