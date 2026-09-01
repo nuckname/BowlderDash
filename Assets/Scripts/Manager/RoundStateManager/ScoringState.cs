@@ -195,12 +195,26 @@ public class ScoringState : RoundBaseState
         }
     }
 
+    private IEnumerator WaitOrSkip(float waitTime)
+    {
+        float timer = 0f;
+        while (timer < waitTime)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                break;
+            }
+            timer += Time.deltaTime;
+            yield return null;
+        }
+    }
+
     private IEnumerator TransitionToPinPlacementRoutine(RoundBaseState nextState, bool prepareNextRound)
     {
         // lets just update this before so the player doesnt see it
         _manager.inGameScoreUi.UpdateRoundText(_manager.sessionData.currentRound, _manager.roundData.GetMaxRoundNumber());
         
-        yield return new WaitForSeconds(waitBeforeUiCamera);
+        yield return WaitOrSkip(waitBeforeUiCamera);
         
         // we want to only incremental the UI here and only here.
         // We also want to move cameras to the TVs where the score is showing.
@@ -208,19 +222,19 @@ public class ScoringState : RoundBaseState
         RoundScore roundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
         
         _manager.MoveCamera(CameraLocation.BallsThrow);
-        yield return new WaitForSeconds(1f);
+        yield return WaitOrSkip(1f);
         
         _manager.AddBallThrownToSession();
-        yield return new WaitForSeconds(waitBeforeUiCamera);
+        yield return WaitOrSkip(waitBeforeUiCamera);
         
         
         _manager.MoveCamera(CameraLocation.ScoreToBeat);
-        yield return new WaitForSeconds(1f);
+        yield return WaitOrSkip(1f);
         
         _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
         _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
         
-        yield return new WaitForSeconds(waitBeforeUiCamera + 1.5f);
+        yield return WaitOrSkip(waitBeforeUiCamera + 1.5f);
 
         if (prepareNextRound)
         {
