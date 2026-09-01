@@ -384,6 +384,11 @@ public class RoundStateManager : MonoBehaviour
         SwitchState(throwingBallState);
     }
     
+    public void OnPinPlacementButtonClicked()
+    {
+        SwitchState(pinPlacementState);
+    }
+    
     public void AddPinToActiveList(PinBase newPin)
     {
         if (newPin == null) return;
