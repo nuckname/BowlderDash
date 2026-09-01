@@ -194,6 +194,8 @@ public class ScoringState : RoundBaseState
         }
     }
 
+    // If we complete the round early, we want to give them extra tickets for not using all their balls.
+    // This is a bonus for being efficient.
     private void GiveBonusTickets(int maxBallsAllowed, int ballsThrown)
     {
         int ballsLeft = maxBallsAllowed - ballsThrown;
@@ -209,18 +211,6 @@ public class ScoringState : RoundBaseState
         // lets just update this before so the player doesnt see it
         _manager.inGameScoreUi.UpdateRoundText(_manager.sessionData.currentRound, _manager.roundData.GetMaxRoundNumber());
         
-        Coroutine scoreCountUpRoutine = _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
-        
-        if (scoreCountUpRoutine != null)
-        {
-            yield return scoreCountUpRoutine;
-        }
-
-        yield return new WaitForSeconds(scoreDisplayHoldTime);
-        
-        // we want to only incremental the UI here and only here.
-        // We also want to move cameras to the TVs where the score is showing.
-        
         RoundScore roundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
         
         _manager.MoveCamera(CameraLocation.BallsThrow);
@@ -229,12 +219,18 @@ public class ScoringState : RoundBaseState
         _manager.AddBallThrownToSession();
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
-        
         _manager.MoveCamera(CameraLocation.ScoreToBeat);
-        yield return new WaitForSeconds(1f);
-        
-        _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
         _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
+        
+        // we want to only incremental the UI here and only here.
+        Coroutine scoreCountUpRoutine = _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
+        
+        if (scoreCountUpRoutine != null)
+        {
+            yield return scoreCountUpRoutine;
+        }
+
+        yield return new WaitForSeconds(scoreDisplayHoldTime);
         
         yield return new WaitForSeconds(waitBeforeUiCamera + 1.5f);
 

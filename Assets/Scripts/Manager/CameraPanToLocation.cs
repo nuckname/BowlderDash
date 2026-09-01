@@ -26,7 +26,7 @@ public struct CameraLocationMapping
 public class CameraPanToLocation : MonoBehaviour
 {
     public Camera mainCamera;
-    public float lerpSpeed = 5f;
+    public float lerpSpeed = 3f;
 
     [Header("Transform Targets")]
     public List<CameraLocationMapping> cameraMappings = new List<CameraLocationMapping>();
