@@ -120,7 +120,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         HandManager.Instance.DiscardHand();
 
         // Camera
-        currentManager.cameraFollowScript.StartTracking();
+        currentManager.StartBallCameraTracking();
     }
 
     public void OnDrawCancelled()

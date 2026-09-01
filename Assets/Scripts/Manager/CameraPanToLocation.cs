@@ -35,19 +35,38 @@ public class CameraPanToLocation : MonoBehaviour
 
     public void MoveCameraTo(CameraLocation location)
     {
-        Transform target = mainCamera.transform; // Fallback
+        CancelActiveMove();
 
-        foreach (var mapping in cameraMappings)
+        if (!TryGetCameraTarget(location, out Transform target))
         {
-            if (mapping.location == location)
+            Debug.LogWarning($"No camera target is assigned for {location}.");
+            return;
+        }
+
+        activeLerp = StartCoroutine(LerpCamera(target));
+    }
+
+    public bool TryGetCameraTarget(CameraLocation location, out Transform target)
+    {
+        foreach (CameraLocationMapping mapping in cameraMappings)
+        {
+            if (mapping.location == location && mapping.target != null)
             {
                 target = mapping.target;
-                break;
+                return true;
             }
         }
 
-        if (activeLerp != null) StopCoroutine(activeLerp);
-        activeLerp = StartCoroutine(LerpCamera(target));
+        target = null;
+        return false;
+    }
+
+    public void CancelActiveMove()
+    {
+        if (activeLerp == null) return;
+
+        StopCoroutine(activeLerp);
+        activeLerp = null;
     }
 
     private IEnumerator LerpCamera(Transform target)
@@ -59,5 +78,8 @@ public class CameraPanToLocation : MonoBehaviour
             mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, target.rotation, Time.deltaTime * lerpSpeed);
             yield return null;
         }
+
+        mainCamera.transform.SetPositionAndRotation(target.position, target.rotation);
+        activeLerp = null;
     }
 }

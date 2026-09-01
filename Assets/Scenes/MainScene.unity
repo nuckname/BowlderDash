@@ -3514,6 +3514,7 @@ GameObject:
   - component: {fileID: 367063841}
   - component: {fileID: 367063840}
   - component: {fileID: 367063839}
+  - component: {fileID: 367063842}
   m_Layer: 0
   m_Name: ThePitBoxCollider
   m_TagString: ThePit
@@ -3614,6 +3615,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367063837}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &367063842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367063837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20933692dbaf6429ba750f46e5a6d4dd, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  stateManager: {fileID: 374269889}
 --- !u!1 &374269887
 GameObject:
   m_ObjectHideFlags: 0
@@ -11225,6 +11239,7 @@ GameObject:
   - component: {fileID: 1232149675}
   - component: {fileID: 1232149674}
   - component: {fileID: 1232149673}
+  - component: {fileID: 1232149677}
   m_Layer: 0
   m_Name: StopAllMovementOnEnter
   m_TagString: Untagged
@@ -11337,6 +11352,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1232149671}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1232149677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232149671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20933692dbaf6429ba750f46e5a6d4dd, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  stateManager: {fileID: 374269889}
 --- !u!1 &1247829671
 GameObject:
   m_ObjectHideFlags: 0

@@ -402,5 +402,21 @@ public class RoundStateManager : MonoBehaviour
 
     public void TurnOnCardHand(bool turnOn) => cardHand.SetActive(turnOn);
     
-    public void MoveCamera(CameraLocation location) => cameraPanToLocation.MoveCameraTo(location);
+    public void MoveCamera(CameraLocation location)
+    {
+        cameraFollowScript.StopTracking();
+        cameraPanToLocation.MoveCameraTo(location);
+    }
+
+    public void StartBallCameraTracking()
+    {
+        if (!cameraPanToLocation.TryGetCameraTarget(CameraLocation.BallThrowingCameraLocation, out Transform trackingStartTransform))
+        {
+            Debug.LogWarning("Cannot start ball camera tracking because BallThrowingCameraLocation has no target.");
+            return;
+        }
+
+        cameraPanToLocation.CancelActiveMove();
+        cameraFollowScript.StartTracking(trackingStartTransform);
+    }
 }
