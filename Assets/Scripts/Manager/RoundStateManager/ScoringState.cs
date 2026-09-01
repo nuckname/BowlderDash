@@ -20,6 +20,8 @@ public class ScoringState : RoundBaseState
     // Camera settings
     private float waitBeforeUiCamera = 1.5f;
     private float waitBeforePinPlacement = 2.0f;
+    
+    private float scoreDisplayHoldTime = 1.5f;
 
     public override void EnterState(RoundStateManager manager)
     {
@@ -207,7 +209,14 @@ public class ScoringState : RoundBaseState
         // lets just update this before so the player doesnt see it
         _manager.inGameScoreUi.UpdateRoundText(_manager.sessionData.currentRound, _manager.roundData.GetMaxRoundNumber());
         
-        yield return new WaitForSeconds(waitBeforeUiCamera);
+        Coroutine scoreCountUpRoutine = _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
+        
+        if (scoreCountUpRoutine != null)
+        {
+            yield return scoreCountUpRoutine;
+        }
+
+        yield return new WaitForSeconds(scoreDisplayHoldTime);
         
         // we want to only incremental the UI here and only here.
         // We also want to move cameras to the TVs where the score is showing.
