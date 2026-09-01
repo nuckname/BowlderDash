@@ -19,7 +19,7 @@ public class ScoringState : RoundBaseState
     
     // Camera settings
     private float waitBeforeUiCamera = 1.5f;
-    private float waitBeforePinPlacement = 2.0f;
+    private float scoreDisplayHoldTime = 1.5f;
 
     public override void EnterState(RoundStateManager manager)
     {
@@ -224,10 +224,15 @@ public class ScoringState : RoundBaseState
         _manager.MoveCamera(CameraLocation.ScoreToBeat);
         yield return new WaitForSeconds(1f);
         
-        _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
+        Coroutine scoreCountUpRoutine = _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
         _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
-        
-        yield return new WaitForSeconds(waitBeforeUiCamera + 1.5f);
+
+        if (scoreCountUpRoutine != null)
+        {
+            yield return scoreCountUpRoutine;
+        }
+
+        yield return new WaitForSeconds(scoreDisplayHoldTime);
 
         if (prepareNextRound)
         {

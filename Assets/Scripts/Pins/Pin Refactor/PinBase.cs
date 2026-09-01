@@ -21,6 +21,10 @@ public class PinBase : MonoBehaviour
     
     private float _originalDrag;
     private float _originalAngularDrag;
+    private bool _originalUseGravity;
+    private bool _originalIsKinematic;
+    private RigidbodyConstraints _originalConstraints;
+    private bool _physicsStateCaptured;
     
     [Header("Effects")]
     [SerializeReference] public List<PinEffect> onPlaceEffects = new List<PinEffect>();
@@ -126,7 +130,47 @@ public class PinBase : MonoBehaviour
         {
             _originalDrag = _rb.linearDamping;
             _originalAngularDrag = _rb.angularDamping;
+            _originalUseGravity = _rb.useGravity;
+            _originalIsKinematic = _rb.isKinematic;
+            _originalConstraints = _rb.constraints;
+            _physicsStateCaptured = true;
         }
+    }
+
+    public void EnterPlacementPhysicsMode()
+    {
+        if (_rb == null || !_physicsStateCaptured) return;
+
+        if (!_rb.isKinematic)
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+        }
+
+        _rb.useGravity = false;
+        _rb.isKinematic = true;
+        _rb.Sleep();
+        _isForcedSettled = true;
+    }
+
+    public void EnterThrowPhysicsMode()
+    {
+        if (_rb == null || !_physicsStateCaptured) return;
+
+        _rb.constraints = _originalConstraints;
+        _rb.linearDamping = _originalDrag;
+        _rb.angularDamping = _originalAngularDrag;
+        _rb.isKinematic = _originalIsKinematic;
+        _rb.useGravity = _originalUseGravity;
+
+        if (!_rb.isKinematic)
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+            _rb.Sleep();
+        }
+
+        _isForcedSettled = false;
     }
     
     public virtual void OnPlaced()

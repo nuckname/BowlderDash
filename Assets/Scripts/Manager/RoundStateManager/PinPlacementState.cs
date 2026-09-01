@@ -13,14 +13,14 @@ public class PinPlacementState : RoundBaseState
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
-        
-        manager.AllowPinCollisionEffects(false);
-        manager.AllowPinsToFallOver(false);
-        
-        manager.DrawHandForCurrentTurn();
 
         manager.GetAllPinsInCurrentFrame(manager);
+        manager.AllowPinCollisionEffects(false);
+        manager.AllowPinsToFallOver(false);
+        manager.SetPinPlacementPhysics(true);
         manager.SetPinPlacementInteraction(true);
+
+        manager.DrawHandForCurrentTurn();
 
         SnapPinToClosestHexCell(manager);
     }

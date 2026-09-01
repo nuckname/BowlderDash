@@ -287,6 +287,30 @@ public class RoundStateManager : MonoBehaviour
             }
         }
     }
+
+    public void SetPinPlacementPhysics(bool placementMode)
+    {
+        if (allActivePinsInTheFrame == null) return;
+
+        if (!placementMode)
+        {
+            Physics.SyncTransforms();
+        }
+
+        foreach (PinBase pin in allActivePinsInTheFrame)
+        {
+            if (pin == null) continue;
+
+            if (placementMode)
+            {
+                pin.EnterPlacementPhysicsMode();
+            }
+            else
+            {
+                pin.EnterThrowPhysicsMode();
+            }
+        }
+    }
     
     public void DeleteAllActivePins()
     {
