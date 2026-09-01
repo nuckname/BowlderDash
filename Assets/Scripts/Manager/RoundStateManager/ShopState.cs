@@ -8,7 +8,7 @@ public class ShopState : RoundBaseState
         manager.MoveCamera(CameraLocation.ShopCameraLocation);
         manager.UpdateInstructionText("Shop phase. Spend tickets, then click Continue.");
 
-        manager.shopUI.ShowShop(manager);
+        manager.shopUI.ToggleShop(true, manager);
 
         manager.DeleteAllActivePins();
     }
@@ -22,9 +22,7 @@ public class ShopState : RoundBaseState
     
     public override void ExitState(RoundStateManager manager)
     {
-        if (manager.shopUI != null)
-        {
-            manager.shopUI.Hide();
-        }
+        manager.shopUI.ToggleShop(false);
+
     }
 }
