@@ -66,6 +66,8 @@ public class RoundStateManager : MonoBehaviour
     public GameCompleteState gameCompleteState = new GameCompleteState();
     public RoundWinState roundWinState = new RoundWinState();
 
+    public bool IsPinPlacementActive => currentState == pinPlacementState;
+
     [Header("Floating Text Prefabs")]
     [FormerlySerializedAs("floatingTextPrefab")]
     [SerializeField] private GameObject pinFloatingTextPrefab;
@@ -272,6 +274,19 @@ public class RoundStateManager : MonoBehaviour
             pin.AllowCollisionEffects = allow;
         }
     }
+
+    public void SetPinPlacementInteraction(bool allow)
+    {
+        if (allActivePinsInTheFrame == null) return;
+
+        foreach (PinBase pin in allActivePinsInTheFrame)
+        {
+            if (pin != null && pin.TryGetComponent(out DraggableSnap draggableSnap))
+            {
+                draggableSnap.SetInteractionEnabled(allow);
+            }
+        }
+    }
     
     public void DeleteAllActivePins()
     {
@@ -381,6 +396,14 @@ public class RoundStateManager : MonoBehaviour
     
     public void OnThrowBallButtonClicked()
     {
+        if (!IsPinPlacementActive) return;
+
+        if (!isHandDrawReady)
+        {
+            UpdateInstructionText("Drawing cards...");
+            return;
+        }
+
         SwitchState(throwingBallState);
     }
     

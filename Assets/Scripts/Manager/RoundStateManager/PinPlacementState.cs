@@ -20,6 +20,7 @@ public class PinPlacementState : RoundBaseState
         manager.DrawHandForCurrentTurn();
 
         manager.GetAllPinsInCurrentFrame(manager);
+        manager.SetPinPlacementInteraction(true);
 
         SnapPinToClosestHexCell(manager);
     }
@@ -67,6 +68,7 @@ public class PinPlacementState : RoundBaseState
     public override void ExitState(RoundStateManager manager)
     {
         manager.GetAllPinsInCurrentFrame(manager);
+        manager.SetPinPlacementInteraction(false);
 
         throwBallButton.gameObject.SetActive(false);
         
