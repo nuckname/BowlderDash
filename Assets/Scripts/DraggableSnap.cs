@@ -19,7 +19,9 @@ public class DraggableSnap : MonoBehaviour
     private GridOccupancy _gridOccupancy;
     private HexGrid _hexGrid;
     private GridManager _gridManager;
+    private RoundStateManager _roundStateManager;
     private WorldObjectToCard _worldObjectToCard;
+    private bool _interactionEnabled = true;
 
     // Group tracking data
     private Dictionary<DraggableSnap, Vector2Int> _peerAxialOffsets = new Dictionary<DraggableSnap, Vector2Int>();
@@ -34,8 +36,33 @@ public class DraggableSnap : MonoBehaviour
         _gridOccupancy = FindFirstObjectByType<GridOccupancy>();
         _hexGrid = FindFirstObjectByType<HexGrid>();
         _gridManager = FindFirstObjectByType<GridManager>();
+        _roundStateManager = FindFirstObjectByType<RoundStateManager>();
         
         _worldObjectToCard = GetComponent<WorldObjectToCard>();
+    }
+
+    private bool CanInteract =>
+        _interactionEnabled &&
+        _roundStateManager != null &&
+        _roundStateManager.IsPinPlacementActive;
+
+    public void SetInteractionEnabled(bool interactionEnabled)
+    {
+        if (!interactionEnabled)
+        {
+            CancelDrag();
+        }
+
+        _interactionEnabled = interactionEnabled;
+    }
+
+    public void CancelDrag()
+    {
+        if (!_dragging) return;
+
+        _dragging = false;
+        RestoreOriginalPlacement();
+        ClearDragState();
     }
 
     private IEnumerable<GameObject> GetGroupObjects()
@@ -56,11 +83,21 @@ public class DraggableSnap : MonoBehaviour
     
     private void OnMouseDown()
     {
+        if (!CanInteract || _gridOccupancy == null || _hexGrid == null || _gridManager == null || _cam == null)
+        {
+            return;
+        }
+
         _peerAxialOffsets.Clear();
         _peerOriginalCells.Clear();
         _peerOriginalPositions.Clear();
 
         HexCell myOriginalCell = _gridOccupancy.GetCellByOccupant(transform);
+        if (myOriginalCell == null)
+        {
+            return;
+        }
+
         Vector2Int myAxial = _gridManager.GetAxialCoordinate(myOriginalCell);
 
         // Gather and release all peers in the group
@@ -100,6 +137,12 @@ public class DraggableSnap : MonoBehaviour
     private void OnMouseDrag()
     {
         if (!_dragging) return;
+
+        if (!CanInteract)
+        {
+            CancelDrag();
+            return;
+        }
         
         if (Input.mousePosition.y < playAreaThresholdY && canBeReturnedToHand)
         {
@@ -161,10 +204,16 @@ public class DraggableSnap : MonoBehaviour
             }
         }
     }
-    
-private void OnMouseUp()
+    private void OnMouseUp()
     {
-        if (!_dragging) return; 
+        if (!_dragging) return;
+
+        if (!CanInteract)
+        {
+            CancelDrag();
+            return;
+        }
+
         _dragging = false;
 
         HexCell finalAnchor = _hexGrid.GetNearestCell(transform.position);
@@ -209,19 +258,36 @@ private void OnMouseUp()
         }
         else
         {
-            // Fallback: Return group to original position
-            foreach (var obj in GetGroupObjects())
-            {
-                var snap = obj.GetComponent<DraggableSnap>();
-                
-                if (_peerOriginalCells[snap] != null)
-                {
-                    _gridOccupancy.TryReserveCell(_peerOriginalCells[snap], obj.transform);
-                }
-                
-                // This still uses the original position so it correctly flies back up to the hand if the drop fails
-                obj.transform.position = _peerOriginalPositions[snap];
-            }
+            RestoreOriginalPlacement();
         }
+
+        ClearDragState();
+    }
+
+    private void RestoreOriginalPlacement()
+    {
+        foreach (var obj in GetGroupObjects())
+        {
+            var snap = obj.GetComponent<DraggableSnap>();
+            if (snap == null || !_peerOriginalPositions.TryGetValue(snap, out Vector3 originalPosition))
+            {
+                continue;
+            }
+
+            if (_peerOriginalCells.TryGetValue(snap, out HexCell originalCell) && originalCell != null)
+            {
+                _gridOccupancy.TryReserveCell(originalCell, obj.transform);
+            }
+
+            obj.transform.position = originalPosition;
+        }
+    }
+
+    private void ClearDragState()
+    {
+        _peerAxialOffsets.Clear();
+        _peerOriginalCells.Clear();
+        _peerOriginalPositions.Clear();
+        _currentValidAnchor = null;
     }
 }

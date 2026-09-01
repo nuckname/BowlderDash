@@ -66,6 +66,8 @@ public class RoundStateManager : MonoBehaviour
     public GameCompleteState gameCompleteState = new GameCompleteState();
     public RoundWinState roundWinState = new RoundWinState();
 
+    public bool IsPinPlacementActive => currentState == pinPlacementState;
+
     [Header("Floating Text Prefabs")]
     [FormerlySerializedAs("floatingTextPrefab")]
     [SerializeField] private GameObject pinFloatingTextPrefab;
@@ -272,6 +274,43 @@ public class RoundStateManager : MonoBehaviour
             pin.AllowCollisionEffects = allow;
         }
     }
+
+    public void SetPinPlacementInteraction(bool allow)
+    {
+        if (allActivePinsInTheFrame == null) return;
+
+        foreach (PinBase pin in allActivePinsInTheFrame)
+        {
+            if (pin != null && pin.TryGetComponent(out DraggableSnap draggableSnap))
+            {
+                draggableSnap.SetInteractionEnabled(allow);
+            }
+        }
+    }
+
+    public void SetPinPlacementPhysics(bool placementMode)
+    {
+        if (allActivePinsInTheFrame == null) return;
+
+        if (!placementMode)
+        {
+            Physics.SyncTransforms();
+        }
+
+        foreach (PinBase pin in allActivePinsInTheFrame)
+        {
+            if (pin == null) continue;
+
+            if (placementMode)
+            {
+                pin.EnterPlacementPhysicsMode();
+            }
+            else
+            {
+                pin.EnterThrowPhysicsMode();
+            }
+        }
+    }
     
     public void DeleteAllActivePins()
     {
@@ -381,6 +420,14 @@ public class RoundStateManager : MonoBehaviour
     
     public void OnThrowBallButtonClicked()
     {
+        if (!IsPinPlacementActive) return;
+
+        if (!isHandDrawReady)
+        {
+            UpdateInstructionText("Drawing cards...");
+            return;
+        }
+
         SwitchState(throwingBallState);
     }
     
@@ -409,5 +456,21 @@ public class RoundStateManager : MonoBehaviour
 
     public void TurnOnCardHand(bool turnOn) => cardHand.SetActive(turnOn);
     
-    public void MoveCamera(CameraLocation location) => cameraPanToLocation.MoveCameraTo(location);
+    public void MoveCamera(CameraLocation location)
+    {
+        cameraFollowScript.StopTracking();
+        cameraPanToLocation.MoveCameraTo(location);
+    }
+
+    public void StartBallCameraTracking()
+    {
+        if (!cameraPanToLocation.TryGetCameraTarget(CameraLocation.BallThrowingCameraLocation, out Transform trackingStartTransform))
+        {
+            Debug.LogWarning("Cannot start ball camera tracking because BallThrowingCameraLocation has no target.");
+            return;
+        }
+
+        cameraPanToLocation.CancelActiveMove();
+        cameraFollowScript.StartTracking(trackingStartTransform);
+    }
 }

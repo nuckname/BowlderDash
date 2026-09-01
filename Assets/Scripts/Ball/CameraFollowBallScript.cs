@@ -16,13 +16,19 @@ public class CameraFollowBallScript : MonoBehaviour
     private bool isTrackingBall = false;
     private Vector3 cameraOffset;
     private Quaternion cameraInitialRotation;
+    private float cameraFixedX;
 
-    public void StartTracking()
+    public void StartTracking(Transform trackingStartTransform)
     {
         if (targetCamera != null && ballController != null)
         {
-            cameraOffset = targetCamera.transform.position - ballController.transform.position;
-            cameraInitialRotation = targetCamera.transform.rotation;
+            Transform trackingReference = trackingStartTransform != null
+                ? trackingStartTransform
+                : targetCamera.transform;
+
+            cameraOffset = trackingReference.position - ballController.transform.position;
+            cameraInitialRotation = trackingReference.rotation;
+            cameraFixedX = trackingReference.position.x;
             isTrackingBall = true;
         }
     }
@@ -38,7 +44,7 @@ public class CameraFollowBallScript : MonoBehaviour
 
         // 1. Calculate where the camera normally wants to be to follow the ball
         float rawFollowZ = ballController.transform.position.z + cameraOffset.z;
-        Vector3 followPosition = new Vector3(targetCamera.transform.position.x, cameraOffset.y, rawFollowZ);
+        Vector3 followPosition = new Vector3(cameraFixedX, cameraOffset.y, rawFollowZ);
         
         Vector3 desiredPosition = followPosition;
         Quaternion desiredRotation = cameraInitialRotation;
@@ -54,8 +60,12 @@ public class CameraFollowBallScript : MonoBehaviour
             desiredRotation = Quaternion.Slerp(cameraInitialRotation, cameraFinalTransform.rotation, blendFactor);
         }
 
-        // Apply the final smoothed movement
-        targetCamera.transform.position = Vector3.Lerp(targetCamera.transform.position, desiredPosition, cameraSmoothSpeed);
-        targetCamera.transform.rotation = Quaternion.Slerp(targetCamera.transform.rotation, desiredRotation, cameraSmoothSpeed);
+        // Preserve the configured smoothing feel at 60 FPS while making it frame-rate independent.
+        float smoothingFactor = 1f - Mathf.Pow(
+            1f - Mathf.Clamp01(cameraSmoothSpeed),
+            Time.deltaTime * 60f);
+
+        targetCamera.transform.position = Vector3.Lerp(targetCamera.transform.position, desiredPosition, smoothingFactor);
+        targetCamera.transform.rotation = Quaternion.Slerp(targetCamera.transform.rotation, desiredRotation, smoothingFactor);
     }
 }

@@ -106,7 +106,13 @@ public class CardToWorldSpawner : MonoBehaviour
 
                 if (prefabToInstantiate != null)
                 {
-                    _spawnedWorldObjects.Add(Instantiate(prefabToInstantiate));
+                    GameObject previewObject = Instantiate(prefabToInstantiate);
+                    if (previewObject.TryGetComponent(out PinBase previewPin))
+                    {
+                        previewPin.EnterPlacementPhysicsMode();
+                    }
+
+                    _spawnedWorldObjects.Add(previewObject);
                 }
             }
         }

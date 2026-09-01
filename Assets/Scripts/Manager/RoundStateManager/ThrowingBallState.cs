@@ -33,7 +33,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
         
         manager.TurnOnCardHand(false);
-        
+
+        manager.SetPinPlacementPhysics(false);
         manager.AllowPinCollisionEffects(true);
         
         manager.AllowPinsToFallOver(true);
@@ -120,7 +121,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         HandManager.Instance.DiscardHand();
 
         // Camera
-        currentManager.cameraFollowScript.StartTracking();
+        currentManager.StartBallCameraTracking();
     }
 
     public void OnDrawCancelled()
