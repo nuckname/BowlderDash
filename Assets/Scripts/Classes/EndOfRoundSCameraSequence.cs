@@ -10,7 +10,7 @@ public enum TransitionPhase
     FinishTransition
 }
 
-public class EndOfRoundSequence
+public class EndOfRoundSCameraSequence
 {
     // Moved camera settings here
     private float waitBeforeUiCamera = 2f;

@@ -41,8 +41,7 @@ public class CameraPanToLocation : MonoBehaviour
         {
             if (mapping.location == location)
             {
-                Debug.Log("Camera" + mapping.location);
-                Debug.Log("Camera" + location);
+                Debug.Log("if this does the weird camera thing where it zooms out and then goes to score please tell sam this variable name" + location);
                 target = mapping.target;
                 break;
             }
