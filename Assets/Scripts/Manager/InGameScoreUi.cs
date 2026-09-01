@@ -11,6 +11,9 @@ public class InGameScoreUi : MonoBehaviour
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI ballsText;
     
+    private int _currentDisplayedTickets = 0;
+    private Coroutine _ticketAnimateRoutine;
+    
     // Tickets
     public TextMeshProUGUI inGameUiTicketsText;
     public Text shopUiTicketsText;
@@ -29,7 +32,7 @@ public class InGameScoreUi : MonoBehaviour
     public void RefreshHUD(int totalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
     {
         _currentDisplayedScore = totalScore;
-        totalScoreText.text = $"Total Score: {_currentDisplayedScore}";
+        UpdateYourScoreText(_currentDisplayedScore);
         UpdateRoundText(currentRound, maxRounds);
         UpdateScoreToBeatText(roundData.scoreNeededToBeat);
         UpdateBallsText(currentBalls, roundData.maxBallsAllowedToThrow);
@@ -45,7 +48,7 @@ public class InGameScoreUi : MonoBehaviour
 
         if (_currentDisplayedScore == newScore)
         {
-            totalScoreText.text = $"Total Score: {_currentDisplayedScore}";
+            UpdateYourScoreText(_currentDisplayedScore);
             return null;
         }
 
@@ -74,7 +77,7 @@ public class InGameScoreUi : MonoBehaviour
                 }
             }
             
-            totalScoreText.text = $"Total Score: {_currentDisplayedScore}";
+            UpdateYourScoreText(_currentDisplayedScore);
             
             yield return new WaitForSeconds(0.05f); 
         }
@@ -84,14 +87,68 @@ public class InGameScoreUi : MonoBehaviour
     
     public void UpdateTicketText(int newTickets)
     {
+        _currentDisplayedTickets = newTickets;
+        
         // In Game
-        inGameUiTicketsText.text = $"Tickets: {newTickets}";
+        inGameUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
         
         // In Shop
         if (shopUiTicketsText != null)
         {
-            shopUiTicketsText.text = $"Tickets: {newTickets}";
+            shopUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
         }
+    }
+    
+    public Coroutine UpdateTicketTextAnimated(int newTickets)
+    {
+        if (_ticketAnimateRoutine != null)
+        {
+            StopCoroutine(_ticketAnimateRoutine);
+            _ticketAnimateRoutine = null;
+        }
+
+        if (_currentDisplayedTickets == newTickets)
+        {
+            UpdateTicketText(_currentDisplayedTickets);
+            return null;
+        }
+
+        _ticketAnimateRoutine = StartCoroutine(AnimateTicketsByOne(newTickets));
+        return _ticketAnimateRoutine;
+    }
+    
+    // Might need to extract this to a new class
+    private IEnumerator AnimateTicketsByOne(int targetTickets)
+    {
+        while (_currentDisplayedTickets != targetTickets)
+        {
+            if (_currentDisplayedTickets < targetTickets)
+            {
+                _currentDisplayedTickets += 1;
+            }
+            else
+            {
+                _currentDisplayedTickets -= 1;
+            }
+            
+            // In Game
+            inGameUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
+            
+            // In Shop
+            if (shopUiTicketsText != null)
+            {
+                shopUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
+            }
+            
+            yield return new WaitForSeconds(0.05f); 
+        }
+
+        _ticketAnimateRoutine = null;
+    }
+
+    public void UpdateYourScoreText(int currentScore)
+    {
+        totalScoreText.text = $"Your Score: {currentScore}";
     }
     
     public void UpdateRoundText(int currentRound, int maxRounds)

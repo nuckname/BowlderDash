@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.FullSerializer;
 
 public class ScoringState : RoundBaseState
 {
@@ -18,7 +19,7 @@ public class ScoringState : RoundBaseState
     private float _textSpawnDelay = 1f;
     
     // Camera settings
-    private float waitBeforeUiCamera = 1.5f;
+    private float waitBeforeUiCamera = 2f;
     private float waitBeforePinPlacement = 2.0f;
     
     private float scoreDisplayHoldTime = 1.5f;
@@ -211,16 +212,15 @@ public class ScoringState : RoundBaseState
         // lets just update this before so the player doesnt see it
         _manager.inGameScoreUi.UpdateRoundText(_manager.sessionData.currentRound, _manager.roundData.GetMaxRoundNumber());
         
-        RoundScore roundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
+        _manager.MoveCamera(CameraLocation.BallsThrowUi);
         
-        _manager.MoveCamera(CameraLocation.BallsThrow);
-        yield return new WaitForSeconds(1f);
-        
+        yield return new WaitForSeconds(waitBeforeUiCamera);
         _manager.AddBallThrownToSession();
         yield return new WaitForSeconds(waitBeforeUiCamera);
         
-        _manager.MoveCamera(CameraLocation.ScoreToBeat);
-        _manager.inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
+        _manager.MoveCamera(CameraLocation.ScoreToBeatUi);
+        
+        yield return new WaitForSeconds(waitBeforeUiCamera);
         
         // we want to only incremental the UI here and only here.
         Coroutine scoreCountUpRoutine = _manager.inGameScoreUi.UpdateScoreText(_manager.sessionData.currentScore);
@@ -230,9 +230,22 @@ public class ScoringState : RoundBaseState
             yield return scoreCountUpRoutine;
         }
 
+        yield return new WaitForSeconds(scoreDisplayHoldTime + waitBeforeUiCamera);
+        
+        // Move to the Ticket Camera and animate tickets
+        _manager.MoveCamera(CameraLocation.TicketCameraUi);
+        yield return new WaitForSeconds(waitBeforeUiCamera);
+
+        Coroutine ticketCountUpRoutine = _manager.inGameScoreUi.UpdateTicketTextAnimated(_manager.sessionData.tickets);
+        
+        if (ticketCountUpRoutine != null)
+        {
+            yield return ticketCountUpRoutine;
+        }
+
         yield return new WaitForSeconds(scoreDisplayHoldTime);
         
-        yield return new WaitForSeconds(waitBeforeUiCamera + 1.5f);
+        yield return new WaitForSeconds(waitBeforeUiCamera);
 
         if (prepareNextRound)
         {

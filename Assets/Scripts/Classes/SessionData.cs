@@ -31,7 +31,6 @@ public class SessionData
     public void AddTickets(int amount)
     {
         tickets += amount;
-        InGameScoreUi.Instance.UpdateTicketText(tickets);
     }
 
     private bool CanAfford(int amount)
@@ -44,7 +43,7 @@ public class SessionData
         if (CanAfford(amount))
         {
             tickets -= amount;
-            InGameScoreUi.Instance.UpdateTicketText(tickets);
+            InGameScoreUi.Instance.UpdateTicketText(tickets); // this is for the shop
             return true;
         }
         return false;
