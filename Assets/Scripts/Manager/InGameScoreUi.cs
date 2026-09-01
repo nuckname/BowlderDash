@@ -35,13 +35,22 @@ public class InGameScoreUi : MonoBehaviour
         UpdateBallsText(currentBalls, roundData.maxBallsAllowedToThrow);
     }
     
-    public void UpdateScoreText(int newScore)
+    public Coroutine UpdateScoreText(int newScore)
     {
         if (_scoreAnimateRoutine != null)
         {
             StopCoroutine(_scoreAnimateRoutine);
+            _scoreAnimateRoutine = null;
         }
+
+        if (_currentDisplayedScore == newScore)
+        {
+            totalScoreText.text = $"Total Score: {_currentDisplayedScore}";
+            return null;
+        }
+
         _scoreAnimateRoutine = StartCoroutine(AnimateScoreByTwos(newScore));
+        return _scoreAnimateRoutine;
     }
 
     private IEnumerator AnimateScoreByTwos(int targetScore)
@@ -69,6 +78,8 @@ public class InGameScoreUi : MonoBehaviour
             
             yield return new WaitForSeconds(0.05f); 
         }
+
+        _scoreAnimateRoutine = null;
     }
     
     public void UpdateTicketText(int newTickets)
