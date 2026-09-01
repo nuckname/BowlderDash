@@ -1315,7 +1315,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: 'Total Score: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -10591,7 +10591,7 @@ MonoBehaviour:
   CardVisual1: {fileID: 593323458}
   CardVisual2: {fileID: 2072535365}
   CardVisual3: {fileID: 338407411}
-  rerollButton: {fileID: 0}
+  rerollButton: {fileID: 1621557523}
   rerollCost: 1
   costScalingPerRound: 1
   targetGrid: {fileID: 120957818}
