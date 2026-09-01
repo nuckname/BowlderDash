@@ -7,13 +7,25 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public PathDrawer pathDrawer;
     public ThrowTuningDataSO tuningData;
 
+    [Header("Throw Completion")]
+    [SerializeField, Min(0f)] private float minimumFlightTime = 1f;
+    [SerializeField, Min(0f)] private float stallSpeedThreshold = 0.35f;
+    [SerializeField, Min(0f)] private float stallGracePeriod = 1.5f;
+    [SerializeField, Min(0f)] private float maximumFlightTime = 15f;
+
     private RoundStateManager currentManager;
     private bool ballHasBeenReleased;
+    private bool throwCompletionRequested;
+    private float flightTimer;
+    private float stallTimer;
 
     public override void EnterState(RoundStateManager manager)
     {
         currentManager = manager;
         ballHasBeenReleased = false;
+        throwCompletionRequested = false;
+        flightTimer = 0f;
+        stallTimer = 0f;
 
         manager.CaptureStrikeTargetsForCurrentThrow();
         
@@ -42,6 +54,41 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         if (Input.GetMouseButtonDown(1) && !ballHasBeenReleased)
         {
             OnDrawCancelled();
+            return;
+        }
+
+        if (!ballHasBeenReleased || throwCompletionRequested || !manager.ballController.IsLaunched)
+        {
+            return;
+        }
+
+        flightTimer += Time.deltaTime;
+
+        if (maximumFlightTime > 0f && flightTimer >= maximumFlightTime)
+        {
+            CompleteThrow(manager, "maximum flight time reached");
+            return;
+        }
+
+        if (flightTimer < minimumFlightTime)
+        {
+            stallTimer = 0f;
+            return;
+        }
+
+        float stallSpeedSquared = stallSpeedThreshold * stallSpeedThreshold;
+        if (manager.ballController.LinearSpeedSquared <= stallSpeedSquared)
+        {
+            stallTimer += Time.deltaTime;
+        }
+        else
+        {
+            stallTimer = 0f;
+        }
+
+        if (stallGracePeriod > 0f && stallTimer >= stallGracePeriod)
+        {
+            CompleteThrow(manager, "primary ball stalled");
         }
     }
 
@@ -107,10 +154,19 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public override void OnTriggerEnter(RoundStateManager manager, Collider other)
     {
-        if (other.gameObject.CompareTag("Ball"))
+        if (ballHasBeenReleased && other.gameObject.CompareTag("Ball"))
         {
-            manager.SwitchState(manager.roundOverState);
+            CompleteThrow(manager, $"{other.gameObject.name} entered a completion trigger");
         }
+    }
+
+    private void CompleteThrow(RoundStateManager manager, string reason)
+    {
+        if (throwCompletionRequested || manager.currentState != this) return;
+
+        throwCompletionRequested = true;
+        Debug.Log($"Throw completed: {reason}.");
+        manager.SwitchState(manager.roundOverState);
     }
 
     public override void OnTriggerExit(RoundStateManager manager, Collider other)

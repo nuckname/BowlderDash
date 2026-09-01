@@ -17,6 +17,9 @@ public class BallController : MonoBehaviour
 
     private Transform _homingTarget;
     private float _homingSpeed;
+
+    public bool IsLaunched => _isLaunched;
+    public float LinearSpeedSquared => _ballRb != null ? _ballRb.linearVelocity.sqrMagnitude : 0f;
     
     void Awake()
     {
