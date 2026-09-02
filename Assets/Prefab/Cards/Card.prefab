@@ -288,11 +288,11 @@ MonoBehaviour:
   instantiateVisual: 1
   moveSpeedLimit: 3000
   selected: 0
-  selectionOffset: 25
+  selectionOffset: 30
   cardData: {fileID: 0}
   cardAnimator: {fileID: 0}
   hotkeyText: {fileID: 503124020404017289}
-  playAreaThresholdY: 500
+  playAreaThresholdY: 90
   isPreviewingInWorld: 0
   isHovering: 0
   isDragging: 0

@@ -6416,11 +6416,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 695.66
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_LocalScale.x
@@ -6468,7 +6468,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -391
+      value: -355
       objectReference: {fileID: 0}
     - target: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -15820,8 +15820,8 @@ MonoBehaviour:
   pinTextTransform: {fileID: 99673196}
   throwStartTransform: {fileID: 823505502}
   throwEndTransform: {fileID: 1361972838}
-  pinStartTransform: {fileID: 1035503048}
-  pinEndTransform: {fileID: 926523603}
+  pinStartTransform: {fileID: 1163952631}
+  pinEndTransform: {fileID: 1631484123}
   clickToThrowTextTransform: {fileID: 1163952631}
   clickToThrowStartTransform: {fileID: 1631484123}
   moveSpeed: 500
@@ -15829,7 +15829,7 @@ MonoBehaviour:
   flickDistance: 800
   stopAreaBox: {fileID: 2097545094}
   buttonTransform: {fileID: 1026965932}
-  delayBeforeShowButton: 6
+  delayBeforeShowButton: 5
 --- !u!1 &1588884240
 GameObject:
   m_ObjectHideFlags: 0
