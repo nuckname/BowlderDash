@@ -43,7 +43,8 @@ public class TutorialManager : MonoBehaviour
     [Header("Interaction Areas")]
     public RectTransform stopAreaBox;
     public Transform buttonTransform;
-
+    public float delayBeforeShowButton = 5f;
+    
     private List<GameObject> activeTutorialImages = new List<GameObject>();
     private Coroutine currentSequence;
 
@@ -59,7 +60,8 @@ public class TutorialManager : MonoBehaviour
                 if (currentState == TutorialState.PinPlacement)
                 {
                     Debug.Log("Stop area clicked! Transitioning from PinPlacement to ShowButtonToThrow.");
-                    ShowButtonToBallThrow();
+                    StopTutorial();
+                    StartCoroutine(DelayedShowButtonToThrow());
                 }
                 else
                 {
@@ -72,13 +74,19 @@ public class TutorialManager : MonoBehaviour
                 RectTransform buttonRect = buttonTransform as RectTransform;
                 if (buttonRect != null && RectTransformUtility.RectangleContainsScreenPoint(buttonRect, Input.mousePosition, null))
                 {
-                    Debug.Log("Button clicked! Stopping tutorial.");
-                    StopTutorial(); 
+                    Debug.Log("Button clicked! Transitioning to Throw tutorial.");
+                    PlayThrowTutorial(); 
                 }
             }
         }
     }
-
+    
+    private IEnumerator DelayedShowButtonToThrow()
+    {
+        yield return new WaitForSeconds(delayBeforeShowButton);
+        ShowButtonToBallThrow();
+    }
+    
     public void PlayThrowTutorial()
     {
         StopTutorial();
