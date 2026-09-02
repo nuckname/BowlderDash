@@ -1301,9 +1301,9 @@ RectTransform:
   m_Father: {fileID: 1760836270}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00029309498, y: -0.000011175871}
-  m_SizeDelta: {x: 900, y: 1000}
+  m_AnchorMax: {x: 0.5001611, y: 0.5}
+  m_AnchoredPosition: {x: -0.07220701, y: -0.000011175871}
+  m_SizeDelta: {x: 899.855, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &95199136
 MonoBehaviour:
@@ -11347,7 +11347,7 @@ MonoBehaviour:
   rerollButton: {fileID: 1621557523}
   rerollCost: 1
   costScalingPerRound: 1
-  shopCost: {fileID: 11400000, guid: 40d0a46b6813fb74885915fbe6d4316e, type: 2}
+  shopCost: {fileID: 0}
   targetGrid: {fileID: 120957818}
   buyColumnButton: {fileID: 799966836}
   buyRowButton: {fileID: 943670857}
