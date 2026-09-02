@@ -17,6 +17,7 @@ public class ScoringState : RoundBaseState
     
     private RoundStateManager _manager;
     private float _textSpawnDelay = 1f;
+    private bool _skipAnimation = false;
     
     // Camera settings
     private float waitBeforeUiCamera = 2f;
@@ -32,6 +33,7 @@ public class ScoringState : RoundBaseState
         
         hasScored = false;
         pinsHaveSettled = false;
+        _skipAnimation = false;
         timeSinceLastCheck = 0f;
         totalWaitTime = 0f;
 
@@ -41,6 +43,11 @@ public class ScoringState : RoundBaseState
     public override void UpdateState(RoundStateManager manager) 
     { 
         if (hasScored) return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            _skipAnimation = true;
+        }
 
         if (!pinsHaveSettled)
         {
@@ -76,12 +83,12 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator ProcessScoringRoutine()
     {
-        yield return new WaitForSeconds(waitTimeBeforeScoring);
+        yield return SkippableWait(waitTimeBeforeScoring);
 
         if (_manager.TryApplyStrikeMultiplier())
         {
             _manager.SpawnStrikeFloatingText();
-            yield return new WaitForSeconds(waitTimeBeforeScoring + 1f);
+            yield return SkippableWait(waitTimeBeforeScoring + 1f);
         }
 
         TriggerEndOfRoundEffects();
@@ -104,15 +111,28 @@ public class ScoringState : RoundBaseState
         foreach (PinBase pin in _manager.pinsToScore)
         {
             SpawnTextForSinglePin(pin);
-            yield return new WaitForSeconds(_textSpawnDelay);
+            if (!_skipAnimation)
+            {
+                yield return SkippableWait(_textSpawnDelay);
+            }
         }
 
         // Once pins have settled, we start the wait timer before scoring
-        yield return new WaitForSeconds(waitTimeBeforeScoring);
+        yield return SkippableWait(waitTimeBeforeScoring);
 
         CalculateScore();
         hasScored = true;
         GoToNextRound();
+    }
+
+    private IEnumerator SkippableWait(float waitTime)
+    {
+        float timer = 0f;
+        while (timer < waitTime && !_skipAnimation)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
 
     private void TriggerEndOfRoundEffects()
@@ -237,6 +257,4 @@ public class ScoringState : RoundBaseState
             }
         }
     }
-
-
 }
