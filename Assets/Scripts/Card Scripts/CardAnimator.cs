@@ -27,6 +27,7 @@ public class CardAnimator : MonoBehaviour
     [SerializeField] private Transform shakeParent;
     [SerializeField] private Transform tiltParent;
     [SerializeField] private Image cardImage;
+    [SerializeField] private CardVisualPresenter visualPresenter;
 
     [Header("Follow Parameters")]
     [SerializeField] private float followSpeed = 30;
@@ -74,7 +75,19 @@ public class CardAnimator : MonoBehaviour
         cardTransform = target.transform;
         canvas = GetComponent<Canvas>();
         
-        ApplyCardTint(target.cardData != null ? target.cardData.cardTint : Color.white);
+        if (visualPresenter == null)
+        {
+            visualPresenter = GetComponentInChildren<CardVisualPresenter>(true);
+        }
+
+        if (visualPresenter != null)
+        {
+            visualPresenter.Bind(target.cardData);
+        }
+        else
+        {
+            ApplyCardTint(target.cardData != null ? target.cardData.cardTint : Color.white);
+        }
 
         //Event Listening
         parentCardMovement.PointerEnterEvent.AddListener(PointerEnter);
@@ -95,6 +108,12 @@ public class CardAnimator : MonoBehaviour
     /// </summary>
     public void ApplyCardTint(Color tint)
     {
+        if (visualPresenter != null)
+        {
+            visualPresenter.ApplyTint(tint);
+            return;
+        }
+
         if (cardImage != null)
         {
             cardImage.color = tint;

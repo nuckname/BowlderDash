@@ -156,6 +156,7 @@
     <Compile Include="Assets\Scripts\Pins\PinEffects\DeflectBallEffect.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\VaseVisualEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundBaseState.cs" />
+    <Compile Include="Assets\Scripts\Card Scripts\CardVisualPresenter.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - License.txt" />

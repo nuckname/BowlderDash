@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 7994647478966201829}
   - component: {fileID: 4132845374223140069}
   - component: {fileID: 404130344431792101}
+  - component: {fileID: 2050514473895786839}
   m_Layer: 5
   m_Name: CardVisual
   m_TagString: Untagged
@@ -233,6 +234,7 @@ MonoBehaviour:
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
+  visualPresenter: {fileID: 0}
   followSpeed: 25
   rotationAmount: 70
   rotationSpeed: 50
@@ -287,3 +289,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &2050514473895786839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7310339964073049012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f28f86eea13d44fd8c9410c5bd42a9a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardVisualPresenter
+  titleText: {fileID: 0}
+  descriptionText: {fileID: 0}
+  artworkImage: {fileID: 0}
+  tintTarget: {fileID: 0}
