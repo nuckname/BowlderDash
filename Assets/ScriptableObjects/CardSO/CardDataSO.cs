@@ -17,6 +17,17 @@ public class CardDataSO : ScriptableObject
     [Header("Card Identity")] 
     public string cardID; 
 
+    [Header("Card Presentation")]
+    [Tooltip("Player-facing card name shown in card UI.")]
+    public string displayName;
+
+    [Tooltip("Player-facing explanation of what the card or pin does.")]
+    [TextArea(2, 5)]
+    public string description;
+
+    [Tooltip("Pin artwork displayed in the card's image area.")]
+    public Sprite cardArtwork;
+
     // Rarity Maybe?
     public Color cardTint = Color.white;
 

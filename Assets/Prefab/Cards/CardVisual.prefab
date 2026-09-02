@@ -230,7 +230,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentCardMovement: {fileID: 0}
-  visualShadow: {fileID: 0}
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
