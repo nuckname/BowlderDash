@@ -26,6 +26,7 @@ public class ShopUIManager : MonoBehaviour
     
     [Header("Shop Settings")]
     public int costScalingPerRound = 3;
+    public ShopCostSO shopCost;
     
     [Header("Grid Expansion")]
     public HexGrid targetGrid;
@@ -118,7 +119,6 @@ public class ShopUIManager : MonoBehaviour
         }
     }
     
-    // Shop Cost
     private void UpdateButtonText(int index)
     {
         Button targetButton = null;
@@ -129,43 +129,31 @@ public class ShopUIManager : MonoBehaviour
 
         TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        // we first see shop on round 2
-        if (stateManager.sessionData.currentRound == 2)
+        int currentRound = stateManager.sessionData.currentRound;
+        int costModifier = 1;
+
+        costModifier = GetShopCostModifier(currentRound, costModifier);
+
+        // we first see shop on round 1 ?
+        _cardCost = currentShopCards[index].baseCost + costModifier;
+        buttonText.text = $"Buy ({_cardCost})";
+    }
+
+    private int GetShopCostModifier(int currentRound, int costModifier)
+    {
+        if (shopCost != null && shopCost.roundCostModifiers != null && shopCost.roundCostModifiers.Length > 0)
         {
-            _cardCost = currentShopCards[index].baseCost + 1;
-            buttonText.text = $"Buy ({_cardCost})";
-        }
-        else if (stateManager.sessionData.currentRound == 3)
-        {
-            _cardCost = currentShopCards[index].baseCost + 1;
-            buttonText.text = $"Buy ({_cardCost})";
-        }
-        else if (stateManager.sessionData.currentRound == 4)
-        {
-            _cardCost = currentShopCards[index].baseCost + 2;
-            buttonText.text = $"Buy ({_cardCost})";
-        }
-        else if (stateManager.sessionData.currentRound == 5)
-        {
-            _cardCost = currentShopCards[index].baseCost + 2;
-            buttonText.text = $"Buy ({_cardCost})";
-        }
-        else if (stateManager.sessionData.currentRound == 6)
-        {
-            _cardCost = currentShopCards[index].baseCost + 2;
-            buttonText.text = $"Buy ({_cardCost})";
-        }
-        else if (stateManager.sessionData.currentRound == 7)
-        {
-            _cardCost = currentShopCards[index].baseCost + 4;
-            buttonText.text = $"Buy ({_cardCost})";
-        }
-        else if (stateManager.sessionData.currentRound == 8)
-        {
-            _cardCost = currentShopCards[index].baseCost + 4;
-            buttonText.text = $"Buy ({_cardCost})";
+            if (currentRound >= 0 && currentRound < shopCost.roundCostModifiers.Length)
+            {
+                costModifier = shopCost.roundCostModifiers[currentRound].costModifier;
+            }
+            else
+            {
+                costModifier = shopCost.roundCostModifiers[shopCost.roundCostModifiers.Length - 1].costModifier;
+            }
         }
 
+        return costModifier;
     }
 
     public void OnContinueClicked()

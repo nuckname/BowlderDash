@@ -456,7 +456,17 @@ public class RoundStateManager : MonoBehaviour
     
     public void RefreshRuntimePools() { }
 
-    public void TurnOnCardHand(bool turnOn) => cardHand.SetActive(turnOn);
+    // Turns off all children of the gameobjet reference, not the parent itself.
+    public void TurnOnCardHand(bool turnOn)
+    {
+        // Turn off image to lazy to get a reference in editor
+        cardHand.GetComponent<Image>().enabled = turnOn;
+        
+        foreach (Transform child in cardHand.transform)
+        {
+            child.gameObject.SetActive(turnOn);
+        }
+    }
     
     public void MoveCamera(CameraLocation location)
     {

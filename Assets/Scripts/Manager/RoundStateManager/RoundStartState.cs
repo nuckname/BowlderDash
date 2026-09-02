@@ -51,6 +51,9 @@ public class RoundStartState : RoundBaseState
     {
         switch (manager.sessionData.currentRound)
         {
+            case 0:
+                manager.gridManager.gridTicketManager.ticketsPerFrame = 1;
+                break;
             case 1:
                 manager.gridManager.gridTicketManager.ticketsPerFrame = 1;
                 break;

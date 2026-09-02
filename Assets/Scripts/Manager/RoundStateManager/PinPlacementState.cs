@@ -11,7 +11,7 @@ public class PinPlacementState : RoundBaseState
      
         throwBallButton.gameObject.SetActive(true);
 
-        if (manager.sessionData.currentRound == 0)
+        if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0)
         {
             manager.tutorialManager.PlayPinPlacementTutorial();
         }

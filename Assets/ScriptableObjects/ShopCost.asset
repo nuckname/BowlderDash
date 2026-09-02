@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ee6888b60a2dbb49b31b853ee4e379c, type: 3}
+  m_Name: ShopCost
+  m_EditorClassIdentifier: Assembly-CSharp::ShopCostSO
+  roundCostModifiers:
+  - roundName: Round 0
+    costModifier: 1
+  - roundName: Round 1
+    costModifier: 1
+  - roundName: Round 2
+    costModifier: 2
+  - roundName: Round 3
+    costModifier: 2
+  - roundName: Round 4
+    costModifier: 3
+  - roundName: Round 5
+    costModifier: 5
+  - roundName: Round 6
+    costModifier: 5
+  - roundName: Round 7
+    costModifier: 6
+  - roundName: Round 8
+    costModifier: 7

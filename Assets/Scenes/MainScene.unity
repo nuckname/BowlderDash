@@ -3511,7 +3511,7 @@ MonoBehaviour:
   scoreCalculator: {fileID: 1627406035}
   gridManager: {fileID: 120957812}
   shopUI: {fileID: 1168153566}
-  cardHand: {fileID: 516170647}
+  cardHand: {fileID: 292756688}
   instructionText: {fileID: 0}
   inGameScoreUi: {fileID: 1168153564}
   roundData: {fileID: 11400000, guid: 9b97d23778ffc45478280cb2b71a7499, type: 2}
@@ -4211,7 +4211,6 @@ RectTransform:
   - {fileID: 1433756409}
   - {fileID: 1004255354}
   - {fileID: 1545294216}
-  - {fileID: 967875292}
   - {fileID: 1790490390}
   m_Father: {fileID: 1320631406}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6483,9 +6482,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7088106447052585681, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: m_Padding.m_Left
+      value: -150
+      objectReference: {fileID: 0}
+    - target: {fileID: 8435867485320735339, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 967875292}
     - targetCorrespondingSourceObject: {fileID: 6478565876164341399, guid: 59ca4f5e794db9a43a54475ed7ee13d7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 920505716}
@@ -9277,16 +9287,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 967875291}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 937.5895}
+  m_LocalPosition: {x: 0, y: 0, z: 935.68945}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 516170651}
+  m_Father: {fileID: 1545294216}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 102.36511, y: -267.90857}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &967875293
 MonoBehaviour:
@@ -11337,6 +11347,7 @@ MonoBehaviour:
   rerollButton: {fileID: 1621557523}
   rerollCost: 1
   costScalingPerRound: 1
+  shopCost: {fileID: 11400000, guid: 40d0a46b6813fb74885915fbe6d4316e, type: 2}
   targetGrid: {fileID: 120957818}
   buyColumnButton: {fileID: 799966836}
   buyRowButton: {fileID: 943670857}
