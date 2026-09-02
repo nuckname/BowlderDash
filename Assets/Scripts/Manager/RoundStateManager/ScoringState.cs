@@ -10,7 +10,7 @@ public class ScoringState : RoundBaseState
     private float checkInterval = 0.1f;
     private float timeSinceLastCheck = 0f;
     
-    private float waitTimeBeforeScoring = 1.5f;
+    private float waitTimeBeforeScoring = 1.0f;
     
     private float maxWaitTimeForSettling = 5.0f;
     private float totalWaitTime = 0f;
@@ -90,15 +90,15 @@ public class ScoringState : RoundBaseState
         
         if (pinCount <= 4)
         {
-            _textSpawnDelay = 1.25f;
+            _textSpawnDelay = 0.6f;
         }
         else if (pinCount > 5 && pinCount <= 8)
         {
-            _textSpawnDelay = 0.75f;
+            _textSpawnDelay = 0.4f;
         }
         else
         {
-            _textSpawnDelay = 0.5f;
+            _textSpawnDelay = 0.25f;
         }
 
         foreach (PinBase pin in _manager.pinsToScore)

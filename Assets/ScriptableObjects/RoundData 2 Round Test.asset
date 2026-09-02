@@ -20,5 +20,5 @@ MonoBehaviour:
     scoreNeededToBeat: 50
     maxBallsAllowedToThrow: 3
   - roundNumber: 2
-    scoreNeededToBeat: 60
+    scoreNeededToBeat: 200
     maxBallsAllowedToThrow: 3

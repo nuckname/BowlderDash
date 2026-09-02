@@ -158,7 +158,7 @@ public class InGameScoreUi : MonoBehaviour
     
     public void UpdateBallsText(int ball, int maxBalls)
     {
-        ballsText.text = $"Balls Thrown:\n{ball} / {maxBalls}";
+        ballsText.text = $"Balls Thrown:\n{ball} / {maxBalls + 1}";
     }
 
     public void UpdateScoreToBeatText(int scoreToBeat)

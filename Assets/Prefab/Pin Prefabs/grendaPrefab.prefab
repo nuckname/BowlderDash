@@ -105,7 +105,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4548911073050350972}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 3
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0.03, z: 0}
@@ -138,6 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragElevation: 0.5
   playAreaThresholdY: 500
+  canBeReturnedToHand: 1
 --- !u!198 &4918979806117386139
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5037,10 +5038,12 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
+  onPlaceEffects: []
   onHitEffects:
   - rid: 6055849687980703745
   onFallEffects: []
   onEndOfRoundEffects: []
+  excludeFromStrike: 0
   yOffset: 4
   yOffsetPinInHole: 10
   allowPinToFallOver: 0
@@ -5048,16 +5051,17 @@ MonoBehaviour:
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 0}
   _isFallen: 0
+  isClone: 0
   references:
     version: 2
     RefIds:
     - rid: 6055849687980703745
       type: {class: ExplosionEffect, ns: , asm: Assembly-CSharp}
       data:
-        explosionForce: 15
-        explosionRadius: 5
+        explosionForce: 18
+        explosionRadius: 8
         upwardModifier: 1
-        detonationDelay: 1
+        detonationDelay: 0.8
         explosionParticles: {fileID: 4918979806117386139}
 --- !u!114 &5373738608955730648
 MonoBehaviour:
@@ -5073,3 +5077,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   _groupPeers: []
+  canBePickedUp: 1
