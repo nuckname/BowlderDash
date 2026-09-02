@@ -13,6 +13,9 @@ public class CardVisualPresenter : MonoBehaviour
     [Tooltip("Optional image used for the card's presentation tint or accent colour.")]
     [SerializeField] private Graphic tintTarget;
 
+    [Header("Placement Pattern")]
+    [SerializeField] private CardPlacementPatternDisplay placementPatternDisplay;
+
     public void Bind(CardDataSO cardData)
     {
         if (cardData == null)
@@ -35,6 +38,11 @@ public class CardVisualPresenter : MonoBehaviour
 
         SetArtwork(cardData.cardArtwork);
         ApplyTint(cardData.cardTint);
+
+        if (placementPatternDisplay != null)
+        {
+            placementPatternDisplay.Bind(cardData);
+        }
     }
 
     public void ApplyTint(Color tint)
@@ -70,5 +78,10 @@ public class CardVisualPresenter : MonoBehaviour
 
         SetArtwork(null);
         ApplyTint(Color.white);
+
+        if (placementPatternDisplay != null)
+        {
+            placementPatternDisplay.Clear();
+        }
     }
 }
