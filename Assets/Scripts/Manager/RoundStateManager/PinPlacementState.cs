@@ -10,6 +10,11 @@ public class PinPlacementState : RoundBaseState
         Debug.Log("Entering Pin Placement State");
      
         throwBallButton.gameObject.SetActive(true);
+
+        if (manager.sessionData.currentRound == 1)
+        {
+            manager.tutorialManager.PlayPinPlacementTutorial();
+        }
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);

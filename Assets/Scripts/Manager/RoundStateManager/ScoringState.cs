@@ -81,6 +81,7 @@ public class ScoringState : RoundBaseState
         if (_manager.TryApplyStrikeMultiplier())
         {
             _manager.SpawnStrikeFloatingText();
+            yield return new WaitForSeconds(waitTimeBeforeScoring + 1f);
         }
 
         TriggerEndOfRoundEffects();

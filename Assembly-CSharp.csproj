@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Assets\ScriptableObjects\ThrowTuningDataSO.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
+    <Compile Include="Assets\Scripts\UiScripts\TutorialScripts\TutorialManager.cs" />
     <Compile Include="Assets\Scripts\ScoreCalculator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\GameCompleteState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
-    <Compile Include="Assets\Scripts\UiScripts\TutorialScripts\BallThrowingTutorial.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\BossSpawnArea.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\SplitBallPinEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\CameraPanToLocation.cs" />

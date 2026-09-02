@@ -33,6 +33,11 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
         
         manager.TurnOnCardHand(false);
+        
+        if (manager.sessionData.currentRound == 1)
+        {
+            manager.tutorialManager.PlayThrowTutorial();
+        }
 
         manager.SetPinPlacementPhysics(false);
         manager.AllowPinCollisionEffects(true);

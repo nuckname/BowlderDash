@@ -54,6 +54,8 @@ public class RoundStateManager : MonoBehaviour
 
     public TextMeshProUGUI gameOverText;
     
+    public TutorialManager tutorialManager;
+       
     // States
     public RoundStartState roundStartState = new RoundStartState();
     public ThrowingBallState throwingBallState = new ThrowingBallState();
