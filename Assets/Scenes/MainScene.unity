@@ -15809,8 +15809,8 @@ MonoBehaviour:
   pinTextTransform: {fileID: 99673196}
   throwStartTransform: {fileID: 823505502}
   throwEndTransform: {fileID: 1361972838}
-  pinStartTransform: {fileID: 1163952631}
-  pinEndTransform: {fileID: 1631484123}
+  pinStartTransform: {fileID: 1035503048}
+  pinEndTransform: {fileID: 926523603}
   clickToThrowTextTransform: {fileID: 1163952631}
   clickToThrowStartTransform: {fileID: 1631484123}
   moveSpeed: 500
@@ -15818,6 +15818,7 @@ MonoBehaviour:
   flickDistance: 800
   stopAreaBox: {fileID: 2097545094}
   buttonTransform: {fileID: 1026965932}
+  delayBeforeShowButton: 6
 --- !u!1 &1588884240
 GameObject:
   m_ObjectHideFlags: 0
