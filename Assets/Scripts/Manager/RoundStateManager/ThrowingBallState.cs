@@ -34,7 +34,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         manager.TurnOnCardHand(false);
         
-        if (manager.sessionData.currentRound == 1)
+        if (manager.sessionData.currentRound == 0)
         {
             manager.tutorialManager.PlayThrowTutorial();
         }
