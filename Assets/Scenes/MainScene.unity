@@ -3240,7 +3240,7 @@ RectTransform:
   m_GameObject: {fileID: 338407409}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -7}
-  m_LocalScale: {x: 1.8681344, y: 2.6660292, z: 1.7559304}
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1155569976}
@@ -4826,7 +4826,7 @@ RectTransform:
   m_GameObject: {fileID: 593323456}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 6}
-  m_LocalScale: {x: 1.8681344, y: 2.6660292, z: 1.7559304}
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1155569976}
@@ -11347,6 +11347,7 @@ MonoBehaviour:
   rerollButton: {fileID: 1621557523}
   rerollCost: 1
   costScalingPerRound: 1
+  shopCardVisualScale: 0.5
   shopCost: {fileID: 0}
   targetGrid: {fileID: 120957818}
   buyColumnButton: {fileID: 799966836}
@@ -19730,7 +19731,7 @@ RectTransform:
   m_GameObject: {fileID: 2072535363}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 1.8681344, y: 2.6660292, z: 1.7559304}
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1155569976}

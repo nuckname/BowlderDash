@@ -26,6 +26,8 @@ public class ShopUIManager : MonoBehaviour
     
     [Header("Shop Settings")]
     public int costScalingPerRound = 3;
+    [Min(0.01f)]
+    [SerializeField] private float shopCardVisualScale = 0.5f;
     public ShopCostSO shopCost;
     
     [Header("Grid Expansion")]
@@ -39,6 +41,7 @@ public class ShopUIManager : MonoBehaviour
 
     private RoundStateManager stateManager;
     private CardDataSO[] currentShopCards = new CardDataSO[3];
+    private readonly GameObject[] spawnedShopCardVisuals = new GameObject[3];
     
     private int _cardCost = 0;
     
@@ -92,10 +95,6 @@ public class ShopUIManager : MonoBehaviour
 
     private void GenerateShopCards()
     {
-        SetCardAlpha(Card1Button, CardVisual1, 1f);
-        SetCardAlpha(Card2Button, CardVisual2, 1f);
-        SetCardAlpha(Card3Button, CardVisual3, 1f);
-        
         for (int i = 0; i < 3; i++)
         {
             int randomIndex = Random.Range(0, stateManager.shopCardsToPickFrom.Count);
@@ -104,18 +103,92 @@ public class ShopUIManager : MonoBehaviour
             UpdateButtonText(i);
         }
 
-        UpdateCardVisual(CardVisual1, currentShopCards[0]);
-        UpdateCardVisual(CardVisual2, currentShopCards[1]);
-        UpdateCardVisual(CardVisual3, currentShopCards[2]);
+        UpdateCardVisual(0, CardVisual1, currentShopCards[0]);
+        UpdateCardVisual(1, CardVisual2, currentShopCards[1]);
+        UpdateCardVisual(2, CardVisual3, currentShopCards[2]);
+
+        SetCardAlpha(0, Card1Button, CardVisual1, 1f);
+        SetCardAlpha(1, Card2Button, CardVisual2, 1f);
+        SetCardAlpha(2, Card3Button, CardVisual3, 1f);
     }
 
-    private void UpdateCardVisual(Image cardImage, CardDataSO cardData)
+    private void UpdateCardVisual(int index, Image cardImage, CardDataSO cardData)
     {
-        if (cardData.cardVisualPrefab != null)
-        { 
-            GameObject card = Instantiate(cardData.cardVisualPrefab, cardImage.transform);
-            card.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            cardImage.enabled = false;
+        ClearCardVisual(index, cardImage);
+
+        if (cardImage == null || cardData == null || cardData.cardVisualPrefab == null)
+        {
+            Debug.LogWarning($"Cannot display shop card at index {index}: card visual data is incomplete.");
+            return;
+        }
+
+        GameObject card = Instantiate(cardData.cardVisualPrefab, cardImage.transform);
+        spawnedShopCardVisuals[index] = card;
+
+        RectTransform cardRect = card.GetComponent<RectTransform>();
+        if (cardRect != null)
+        {
+            cardRect.anchorMin = new Vector2(0.5f, 0.5f);
+            cardRect.anchorMax = new Vector2(0.5f, 0.5f);
+            cardRect.pivot = new Vector2(0.5f, 0.5f);
+            cardRect.anchoredPosition = Vector2.zero;
+        }
+
+        card.transform.localRotation = Quaternion.identity;
+        card.transform.localScale = Vector3.one * shopCardVisualScale;
+
+        CardVisualPresenter presenter = card.GetComponentInChildren<CardVisualPresenter>(true);
+        if (presenter != null)
+        {
+            presenter.Bind(cardData);
+        }
+        else
+        {
+            Debug.LogWarning($"Shop card visual '{card.name}' has no CardVisualPresenter.");
+        }
+
+        CanvasGroup cardGroup = card.GetComponent<CanvasGroup>();
+        if (cardGroup != null)
+        {
+            cardGroup.enabled = true;
+            cardGroup.alpha = 1f;
+            cardGroup.interactable = false;
+            cardGroup.blocksRaycasts = false;
+        }
+
+        cardImage.enabled = false;
+    }
+
+    private void ClearCardVisual(int index, Image cardImage)
+    {
+        GameObject trackedVisual = spawnedShopCardVisuals[index];
+        if (trackedVisual != null)
+        {
+            trackedVisual.SetActive(false);
+            Destroy(trackedVisual);
+            spawnedShopCardVisuals[index] = null;
+        }
+
+        if (cardImage == null)
+        {
+            return;
+        }
+
+        cardImage.enabled = true;
+
+        for (int childIndex = cardImage.transform.childCount - 1; childIndex >= 0; childIndex--)
+        {
+            Transform child = cardImage.transform.GetChild(childIndex);
+            if (child.gameObject == trackedVisual)
+            {
+                continue;
+            }
+
+            if (child.GetComponent<CardVisualPresenter>() != null || child.GetComponent<CardAnimator>() != null)
+            {
+                child.gameObject.SetActive(false);
+                Destroy(child.gameObject);
+            }
         }
     }
     
@@ -174,15 +247,15 @@ public class ShopUIManager : MonoBehaviour
 
                 if (index == 0)
                 {
-                    SetCardAlpha(Card1Button, CardVisual1, 0.15f);
+                    SetCardAlpha(0, Card1Button, CardVisual1, 0.15f);
                 }
                 else if (index == 1)
                 {
-                    SetCardAlpha(Card2Button, CardVisual2, 0.15f);
+                    SetCardAlpha(1, Card2Button, CardVisual2, 0.15f);
                 }
                 else if (index == 2)
                 {
-                    SetCardAlpha(Card3Button, CardVisual3, 0.15f);
+                    SetCardAlpha(2, Card3Button, CardVisual3, 0.15f);
                 }
             }
             else
@@ -290,14 +363,14 @@ public class ShopUIManager : MonoBehaviour
     }
     
     // AI https://share.gemini.google/lIdrnSIvV63b
-    private void SetCardAlpha(Button button, Image visual, float alpha)
+    private void SetCardAlpha(int index, Button button, Image visual, float alpha)
     {
         // Ensure they remain active in the hierarchy
         button.gameObject.SetActive(true);
         visual.gameObject.SetActive(true);
         
         // Disable interaction if transparent so it can't be clicked
-        button.interactable = (alpha > 0f);
+        button.interactable = alpha >= 0.99f;
 
         // Update visual image alpha
         Color visualColor = visual.color;
@@ -311,6 +384,21 @@ public class ShopUIManager : MonoBehaviour
             Color buttonColor = buttonImage.color;
             buttonColor.a = alpha;
             buttonImage.color = buttonColor;
+        }
+
+        GameObject spawnedVisual = spawnedShopCardVisuals[index];
+        if (spawnedVisual != null)
+        {
+            CanvasGroup cardGroup = spawnedVisual.GetComponent<CanvasGroup>();
+            if (cardGroup == null)
+            {
+                cardGroup = spawnedVisual.AddComponent<CanvasGroup>();
+            }
+
+            cardGroup.enabled = true;
+            cardGroup.alpha = alpha;
+            cardGroup.interactable = false;
+            cardGroup.blocksRaycasts = false;
         }
     }
 }

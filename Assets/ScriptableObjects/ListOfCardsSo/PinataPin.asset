@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: PinataPin
   m_EditorClassIdentifier: 
   cardID: PinataPin
-  cardTint: {r: 1, g: 1, b: 1, a: 1}
+  displayName: Pinata Pin
+  description: Gives a ticket when knocked over.
+  cardArtwork: {fileID: 21300000, guid: 6cb2a3e531ab4a245b0f76fbdbc48f62, type: 3}
+  cardTint: {r: 0.7, g: 0.25, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: 1476631d82aa0bc4c99c0833effc7634, type: 3}
   worldGameObjectPrefab: {fileID: 3811477678882886870, guid: b0baf59a9012f15489bba9304e796f0b, type: 3}
