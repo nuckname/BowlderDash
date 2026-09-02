@@ -148,21 +148,21 @@ public class InGameScoreUi : MonoBehaviour
 
     public void UpdateYourScoreText(int currentScore)
     {
-        totalScoreText.text = $"Your\n Score:\n {currentScore}";
+        totalScoreText.text = $"Your\nScore:\n{currentScore}";
     }
     
     public void UpdateRoundText(int currentRound, int maxRounds)
     {
-        roundText.text = $"Rounds:\n {currentRound} / {maxRounds}";
+        roundText.text = $"Rounds:\n{currentRound} / {maxRounds}";
     }
     
     public void UpdateBallsText(int ball, int maxBalls)
     {
-        ballsText.text = $"Balls Thrown:\n {ball} / {maxBalls}";
+        ballsText.text = $"Balls Thrown:\n{ball} / {maxBalls}";
     }
 
     public void UpdateScoreToBeatText(int scoreToBeat)
     {
-        scoreToBeatText.text = $"Score To Beat:\n {scoreToBeat}";
+        scoreToBeatText.text = $"Score To Beat:\n{scoreToBeat}";
     }
 }
