@@ -3557,12 +3557,12 @@ MonoBehaviour:
     throwBallButton: {fileID: 1620589241}
   spawnBossObjectsState:
     bossObjectPrefabs:
-    - {fileID: 1238112542193477042, guid: 5578e49b7303f5c40b8f1274744035f2, type: 3}
+    - {fileID: 5278486286205888367, guid: b019ee74ba7afdb4099fc790b9e61740, type: 3}
     bossSpawnAreas:
     - {fileID: 1332888234}
-    minimumScale: {x: 4, y: 1.5, z: 2.1}
-    maximumScale: {x: 4.5, y: 2, z: 2.5}
-    rotationOffset: {x: 0, y: 0, z: 0}
+    minimumScale: {x: 3, y: 2, z: 1.5}
+    maximumScale: {x: 3.5, y: 2.5, z: 2}
+    rotationOffset: {x: 90, y: -90, z: 0}
     announcementText: Boss obstacle incoming!
     floatingTextOffset: {x: 0, y: 5, z: 0}
     revealDuration: 5
@@ -12917,8 +12917,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1332888232}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -1062.3651, y: -282.25, z: -900.07}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: -1062.3651, y: -281.83, z: -904.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13585,8 +13585,8 @@ Transform:
   - {fileID: 2145173074}
   - {fileID: 679290144}
   - {fileID: 1316218692}
-  - {fileID: 1574878350}
   - {fileID: 1799454501}
+  - {fileID: 1574878350}
   - {fileID: 1906495015}
   - {fileID: 1616962209}
   m_Father: {fileID: 1346736464}
@@ -15822,8 +15822,8 @@ MonoBehaviour:
   pinTextTransform: {fileID: 99673196}
   throwStartTransform: {fileID: 823505502}
   throwEndTransform: {fileID: 1361972838}
-  pinStartTransform: {fileID: 1163952631}
-  pinEndTransform: {fileID: 1631484123}
+  pinStartTransform: {fileID: 1035503048}
+  pinEndTransform: {fileID: 926523603}
   clickToThrowTextTransform: {fileID: 1163952631}
   clickToThrowStartTransform: {fileID: 1631484123}
   moveSpeed: 500
@@ -19441,7 +19441,7 @@ Transform:
   m_GameObject: {fileID: 2015311222}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.2722867, z: -0, w: 0.9622162}
-  m_LocalPosition: {x: -17.300049, y: -35.99, z: -6.119995}
+  m_LocalPosition: {x: -17.300049, y: -37.93, z: -6.119995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

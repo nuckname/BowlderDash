@@ -14,11 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rounds:
   - roundNumber: 0
-    scoreNeededToBeat: 0
-    maxBallsAllowedToThrow: 0
+    scoreNeededToBeat: 10
+    maxBallsAllowedToThrow: 3
   - roundNumber: 1
     scoreNeededToBeat: 50
-    maxBallsAllowedToThrow: 3
-  - roundNumber: 2
-    scoreNeededToBeat: 200
     maxBallsAllowedToThrow: 3
