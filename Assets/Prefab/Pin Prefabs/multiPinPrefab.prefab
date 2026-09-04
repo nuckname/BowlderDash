@@ -371,4 +371,4 @@ MonoBehaviour:
   highlightHeightOffset: 0.1
   pinLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967291
+    m_Bits: 8179

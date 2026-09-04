@@ -6662,7 +6662,7 @@ MonoBehaviour:
   highlightHeightOffset: 0.1
   pinLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967291
+    m_Bits: 8179
 --- !u!1 &4199497254964305983
 GameObject:
   m_ObjectHideFlags: 0

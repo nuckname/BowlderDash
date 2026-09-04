@@ -723,7 +723,7 @@ Transform:
   m_GameObject: {fileID: 49965616}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1.3, z: -24.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -742,8 +742,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OnLaneSquareGrid
   columns: 5
+  rows: 5
   cellSize: 1
   prefabToSpawn: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
+  ticketHeightOffset: 0.5
 --- !u!1 &53320772
 GameObject:
   m_ObjectHideFlags: 0
