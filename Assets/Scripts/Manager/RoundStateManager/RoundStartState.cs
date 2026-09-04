@@ -17,6 +17,8 @@ public class RoundStartState : RoundBaseState
         HandleMap(manager);
 
         HandleGrid(manager);
+        
+        
 
         EnterNextState(manager);
     }
@@ -37,6 +39,8 @@ public class RoundStartState : RoundBaseState
     {
         manager.gridManager?.ClearAllOccupants();
         manager.gridManager?.SpawnTicketsForFrame();
+        
+        manager.onLaneSquareGrid.GenerateGridForRound(manager);
     }
 
     private void HandleMap(RoundStateManager manager)

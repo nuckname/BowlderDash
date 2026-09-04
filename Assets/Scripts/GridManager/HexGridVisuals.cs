@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Legacy
+
 [RequireComponent(typeof(HexGrid), typeof(GridTicketManager))]
 public class HexGridVisuals : MonoBehaviour
 {

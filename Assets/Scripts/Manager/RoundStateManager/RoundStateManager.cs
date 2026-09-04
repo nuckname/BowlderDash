@@ -38,6 +38,8 @@ public class RoundStateManager : MonoBehaviour
     [Header("Data Objects")]
     public RoundData roundData;
     public SessionData sessionData = new SessionData();
+
+    public OnLaneSquareGrid onLaneSquareGrid;
     
     // Let's put all our SOs here so we only have to refernce / update one list
     // Maybe not
