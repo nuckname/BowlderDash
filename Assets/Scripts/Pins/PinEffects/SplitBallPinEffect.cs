@@ -31,14 +31,13 @@ public class SplitBallPinEffect : PinEffect
         }
 
         // Spawn right angled ball
-        /*
         GameObject rightBall = UnityEngine.Object.Instantiate(target.gameObject, originalPos, originalRot);
         UnityEngine.Object.Destroy(rightBall, 5f);
         Rigidbody rightRb = rightBall.GetComponent<Rigidbody>();
         if (rightRb != null)
         {
             rightRb.linearVelocity = Quaternion.Euler(0, splitAngle, 0) * currentVelocity;
-        }*/
+        }
 
         // Force the original ball to continue with its velocity, counteracting any impact physics
         originalBallRb.linearVelocity = currentVelocity; 

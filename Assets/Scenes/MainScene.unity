@@ -3257,7 +3257,7 @@ Transform:
   m_GameObject: {fileID: 324871814}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.43, y: -7.29, z: -4.49}
+  m_LocalPosition: {x: 4.15, y: -7.29, z: -4.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5589,7 +5589,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -719, y: 566}
+  m_AnchoredPosition: {x: -719, y: 663}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &683764254
@@ -14947,7 +14947,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deckDisplayUi: {fileID: 1168153563}
   handManager: {fileID: 1545294220}
-  showPhysicalDeck: 0
+  showPhysicalDeck: 1
   drawInterval: 0.08
   startingDeck:
   - {fileID: 11400000, guid: c8e72f5a3b694aef9b7d25e1c064fb31, type: 2}
@@ -14979,8 +14979,8 @@ MonoBehaviour:
   roundStateManager: {fileID: 374269889}
   drawPileSpawnPoint: {fileID: 2141039435}
   discardPileSpawnPoint: {fileID: 324871815}
-  spawnRandomRange: {x: 3, y: 0.25, z: 3}
-  minSpawnDistance: 1.25
+  spawnRandomRange: {x: 3, y: 0, z: 3}
+  minSpawnDistance: 2
   maxSpawnAttempts: 25
 --- !u!1 &1546402768
 GameObject:
@@ -18828,7 +18828,7 @@ Transform:
   m_GameObject: {fileID: 1888780054}
   serializedVersion: 2
   m_LocalRotation: {x: 0.10807914, y: -0.2438034, z: 0.027351242, w: 0.9633954}
-  m_LocalPosition: {x: -15.780029, y: -33.369995, z: -36.559998}
+  m_LocalPosition: {x: -16.64, y: -34.48, z: -36.559998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19494,7 +19494,7 @@ Transform:
   m_GameObject: {fileID: 2015311222}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.2722867, z: -0, w: 0.9622162}
-  m_LocalPosition: {x: -17.300049, y: -37.93, z: -6.119995}
+  m_LocalPosition: {x: -17.300049, y: -38.87, z: -6.119995}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -20576,7 +20576,7 @@ Transform:
   m_GameObject: {fileID: 2141039434}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.16, y: 7.17, z: -4.49}
+  m_LocalPosition: {x: 4.13, y: 7.17, z: -4.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -21516,6 +21516,7 @@ GameObject:
   - component: {fileID: 4321851933409994487}
   - component: {fileID: 2199397639573709637}
   - component: {fileID: 5811517545600373559}
+  - component: {fileID: 5811517545600373560}
   m_Layer: 0
   m_Name: Plane.004
   m_TagString: Untagged
@@ -21667,8 +21668,29 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 54.757904, y: 300, z: 3.6379784e-12}
-  m_Center: {x: -17.378918, y: 140, z: 0.000009449199}
+  m_Size: {x: 126.532074, y: 55.06713, z: 3.6379784e-12}
+  m_Center: {x: -53.266018, y: 189.24312, z: 0.00000081259424}
+--- !u!65 &5811517545600373560
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4767400413453061398}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 121.296265, y: 79.60891, z: 3.6379784e-12}
+  m_Center: {x: -50.648155, y: 79.91743, z: 0.000014047768}
 --- !u!33 &5873270184790161782
 MeshFilter:
   m_ObjectHideFlags: 0
