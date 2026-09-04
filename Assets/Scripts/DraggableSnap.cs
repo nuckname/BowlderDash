@@ -8,10 +8,13 @@ public class DraggableSnap : MonoBehaviour
     public float dragElevation = 0.5f;
     
     [Tooltip("Must match the playAreaThresholdY from CardMovement!")]
-    public float playAreaThresholdY = 500f; 
+    public float playAreaThresholdY; 
 
     [SerializeField] private bool canBeReturnedToHand = true;
     
+    [Header("Invalid Placement Visualization")]
+    [SerializeField] private Material invalidPlacementMaterial;
+
     private Camera _cam;
     private bool _dragging = false;
     private Vector3 _offset;
@@ -27,12 +30,14 @@ public class DraggableSnap : MonoBehaviour
     private Dictionary<DraggableSnap, Vector2Int> _peerAxialOffsets = new Dictionary<DraggableSnap, Vector2Int>();
     private Dictionary<DraggableSnap, HexCell> _peerOriginalCells = new Dictionary<DraggableSnap, HexCell>();
     private Dictionary<DraggableSnap, Vector3> _peerOriginalPositions = new Dictionary<DraggableSnap, Vector3>();
-    private HexCell _currentValidAnchor;
+    
+    // Visual tracking data
+    private Dictionary<GameObject, bool> _pinValidityStates = new Dictionary<GameObject, bool>();
+    private Dictionary<Renderer, Material[]> _originalMaterials = new Dictionary<Renderer, Material[]>();
 
     private void Awake()
     {
         _cam = Camera.main;
-        // Is this better then using a string tag?
         _gridOccupancy = FindFirstObjectByType<GridOccupancy>();
         _hexGrid = FindFirstObjectByType<HexGrid>();
         _gridManager = FindFirstObjectByType<GridManager>();
@@ -91,6 +96,8 @@ public class DraggableSnap : MonoBehaviour
         _peerAxialOffsets.Clear();
         _peerOriginalCells.Clear();
         _peerOriginalPositions.Clear();
+        _originalMaterials.Clear();
+        _pinValidityStates.Clear();
 
         HexCell myOriginalCell = _gridOccupancy.GetCellByOccupant(transform);
         if (myOriginalCell == null)
@@ -118,6 +125,13 @@ public class DraggableSnap : MonoBehaviour
   
             float elevatedY = _peerOriginalPositions[snap].y + dragElevation;
             obj.transform.position = new Vector3(obj.transform.position.x, elevatedY, obj.transform.position.z);
+
+            // Save original materials and set default validity
+            foreach (var renderer in obj.GetComponentsInChildren<Renderer>())
+            {
+                _originalMaterials[renderer] = renderer.materials;
+            }
+            _pinValidityStates[obj] = true;
         }
 
         // Establish drag plane offset for the specific pin we clicked
@@ -130,7 +144,6 @@ public class DraggableSnap : MonoBehaviour
             _offset = transform.position - ray.GetPoint(enter);
         }
         
-        _currentValidAnchor = myOriginalCell;
         _dragging = true;
     }
 
@@ -148,6 +161,12 @@ public class DraggableSnap : MonoBehaviour
         {
             _dragging = false;
             
+            // Clean up visuals before returning to hand
+            foreach (var obj in GetGroupObjects())
+            {
+                UpdatePreviewVisuals(obj, true); 
+            }
+
             if (_worldObjectToCard != null)
             {
                 _worldObjectToCard.ReturnToHand(); 
@@ -168,42 +187,34 @@ public class DraggableSnap : MonoBehaviour
             
             if (anchorNearest != null)
             {
-                bool allFit = true;
-
-                // Validate if the entire shape fits relative to the new anchor cell
+                // Snap visuals to the nearest cell and check validity for each piece
                 foreach (var obj in GetGroupObjects())
                 {
                     var snap = obj.GetComponent<DraggableSnap>();
-                    
                     HexCell target = _gridManager.GetCellWithOffset(anchorNearest, _peerAxialOffsets[snap]);
-                    if (target == null || target.occupant != null)
-                    {
-                        allFit = false;
-                        break;
-                    }
-                }
+                    
+                    bool isThisPinValid = target != null && target.occupant == null;
 
-                if (allFit)
-                {
-                    _currentValidAnchor = anchorNearest;
-                }
+                    Vector3 axialWorldOffset = _gridManager.GetWorldOffsetFromAxial(_peerAxialOffsets[snap]);
+                    float peerElevatedY = _peerOriginalPositions[snap].y + dragElevation;
 
-                // Snap visuals to the most recent valid cells
-                if (_currentValidAnchor != null)
-                {
-                    foreach (var obj in GetGroupObjects())
+                    // Move pin relative to the anchor cell
+                    obj.transform.position = new Vector3(
+                        anchorNearest.center.x + axialWorldOffset.x, 
+                        peerElevatedY, 
+                        anchorNearest.center.z + axialWorldOffset.z);
+
+                    // Update material/colliders if validity changed
+                    if (!_pinValidityStates.ContainsKey(obj) || _pinValidityStates[obj] != isThisPinValid)
                     {
-                        var snap = obj.GetComponent<DraggableSnap>();
-                        
-                        HexCell target = _gridManager.GetCellWithOffset(_currentValidAnchor, _peerAxialOffsets[snap]);
-                        float peerElevatedY = _peerOriginalPositions[snap].y + dragElevation;
-                        
-                        obj.transform.position = new Vector3(target.center.x, peerElevatedY, target.center.z);
+                        UpdatePreviewVisuals(obj, isThisPinValid);
+                        _pinValidityStates[obj] = isThisPinValid;
                     }
                 }
             }
         }
     }
+
     private void OnMouseUp()
     {
         if (!_dragging) return;
@@ -248,12 +259,14 @@ public class DraggableSnap : MonoBehaviour
                 
                 _gridOccupancy.TryReserveCell(target, obj.transform);
                 
-                // FIX: Use target.center.y instead of _peerOriginalPositions[snap].y
-                // This forces the object to snap perfectly to the floor height of the hex cell.
+                // Force the object to snap perfectly to the floor height of the hex cell.
                 obj.transform.position = new Vector3(
                     target.center.x, 
                     target.center.y, 
                     target.center.z);
+
+                // Ensure visuals are restored
+                UpdatePreviewVisuals(obj, true);
             }
         }
         else
@@ -280,6 +293,39 @@ public class DraggableSnap : MonoBehaviour
             }
 
             obj.transform.position = originalPosition;
+            
+            // Revert materials and re-enable colliders 
+            UpdatePreviewVisuals(obj, true);
+        }
+    }
+
+    private void UpdatePreviewVisuals(GameObject previewObject, bool isValid)
+    {
+        var colliders = previewObject.GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = isValid;
+        }
+
+        var renderers = previewObject.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers)
+        {
+            if (isValid)
+            {
+                if (_originalMaterials.TryGetValue(renderer, out Material[] originalMats))
+                {
+                    renderer.materials = originalMats;
+                }
+            }
+            else if (invalidPlacementMaterial != null)
+            {
+                Material[] invalidMats = new Material[renderer.materials.Length];
+                for (int j = 0; j < invalidMats.Length; j++)
+                {
+                    invalidMats[j] = invalidPlacementMaterial;
+                }
+                renderer.materials = invalidMats;
+            }
         }
     }
 
@@ -288,6 +334,7 @@ public class DraggableSnap : MonoBehaviour
         _peerAxialOffsets.Clear();
         _peerOriginalCells.Clear();
         _peerOriginalPositions.Clear();
-        _currentValidAnchor = null;
+        _originalMaterials.Clear();
+        _pinValidityStates.Clear();
     }
 }
