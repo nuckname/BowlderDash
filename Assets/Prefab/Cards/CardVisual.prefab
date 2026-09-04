@@ -953,7 +953,7 @@ MonoBehaviour:
   cardImage: {fileID: 7697484841366769644}
   visualPresenter: {fileID: 2050514473895786839}
   followSpeed: 25
-  rotationAmount: 70
+  rotationAmount: 50
   rotationSpeed: 50
   autoTiltAmount: 8
   manualTiltAmount: 30
@@ -963,7 +963,7 @@ MonoBehaviour:
   scaleOnSelect: 1.2
   scaleTransition: 0.15
   scaleEase: 27
-  selectPunchAmount: 20
+  selectPunchAmount: 10
   hoverPunchAngle: 5
   hoverTransition: 0.15
   swapAnimations: 1

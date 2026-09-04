@@ -322,7 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragElevation: 0.5
-  playAreaThresholdY: 500
+  playAreaThresholdY: 390
   canBeReturnedToHand: 1
 --- !u!54 &8812345678901234568
 Rigidbody:

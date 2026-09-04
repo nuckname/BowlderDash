@@ -13,8 +13,14 @@ public class CardToWorldSpawner : MonoBehaviour
     private GridManager _grid;
     private CardMovement _cardMovement;
     
-    private HexCell _lastValidOrigin;
+    private HexCell _currentHoveredCell;
     [SerializeField] private float previewHeightOffset = 1.5f;
+
+    [Header("Invalid Placement Visualization")]
+    [SerializeField] private Material invalidPlacementMaterial;
+    private bool _isValidPlacement = false;
+    private List<bool> _pinValidityStates = new List<bool>();
+    private Dictionary<Renderer, Material[]> _originalMaterials = new Dictionary<Renderer, Material[]>();
 
     private void Awake()
     {
@@ -40,49 +46,45 @@ public class CardToWorldSpawner : MonoBehaviour
 
                 if (originCell != null)
                 {
-                    bool isValidPlacement = true;
+                    _currentHoveredCell = originCell;
+                    _isValidPlacement = true; // Assume true until a specific pin fails
 
                     for (int i = 0; i < pattern.Count; i++)
                     {
+                        if (i >= _spawnedWorldObjects.Count) continue;
+
                         HexCell targetCell = _grid.GetCellWithOffset(originCell, pattern[i].offset);
                         
-                        // Check if any part of the pattern is off-grid or occupied
-                        if (targetCell == null || targetCell.occupant != null)
+                        // Check if THIS specific pattern piece is off-grid or occupied
+                        bool isThisPinValid = targetCell != null && targetCell.occupant == null;
+                        
+                        if (!isThisPinValid)
                         {
-                            isValidPlacement = false;
-                            break;
+                            _isValidPlacement = false; // Block overall placement if any pin fails
+                        }
+
+                        Vector3 offset = _grid.GetWorldOffsetFromAxial(pattern[i].offset);
+                        
+                        _spawnedWorldObjects[i].SetActive(true);
+                        _spawnedWorldObjects[i].transform.position = new Vector3(
+                            _currentHoveredCell.center.x + offset.x, 
+                            _currentHoveredCell.center.y + previewHeightOffset + offset.y, 
+                            _currentHoveredCell.center.z + offset.z);
+
+                        // Only update visuals if the validity state for this specific pin changed
+                        if (_pinValidityStates.Count > i && _pinValidityStates[i] != isThisPinValid)
+                        {
+                            UpdatePreviewVisuals(_spawnedWorldObjects[i], isThisPinValid);
+                            _pinValidityStates[i] = isThisPinValid;
                         }
                     }
-
-                    // Update our anchor point only if the entire shape fits
-                    if (isValidPlacement)
+                }
+                else
+                {
+                    // Hide preview entirely if we haven't hit a valid cell yet this drag
+                    for (int i = 0; i < _spawnedWorldObjects.Count; i++)
                     {
-                        _lastValidOrigin = originCell;
-                    }
-
-                    // Draw the preview locked to the last valid cell we hovered over
-                    if (_lastValidOrigin != null)
-                    {
-                        for (int i = 0; i < _spawnedWorldObjects.Count; i++)
-                        {
-                            if (i >= pattern.Count) continue;
-
-                            Vector3 offset = _grid.GetWorldOffsetFromAxial(pattern[i].offset);
-                            
-                            _spawnedWorldObjects[i].SetActive(true);
-                            _spawnedWorldObjects[i].transform.position = new Vector3(
-                                _lastValidOrigin.center.x + offset.x, 
-                                _lastValidOrigin.center.y + previewHeightOffset + offset.y, 
-                                _lastValidOrigin.center.z + offset.z);
-                        }
-                    }
-                    else
-                    {
-                        // Hide preview entirely if we haven't hit a valid cell yet this drag
-                        for (int i = 0; i < _spawnedWorldObjects.Count; i++)
-                        {
-                            _spawnedWorldObjects[i].SetActive(false);
-                        }
+                        _spawnedWorldObjects[i].SetActive(false);
                     }
                 }
             }
@@ -91,7 +93,9 @@ public class CardToWorldSpawner : MonoBehaviour
 
     private void CreatePreview()
     {
-        _lastValidOrigin = null;
+        _currentHoveredCell = null;
+        _originalMaterials.Clear();
+        _pinValidityStates.Clear();
 
         if (_spawnedWorldObjects.Count == 0 && _cardMovement.cardData != null)
         {
@@ -112,7 +116,13 @@ public class CardToWorldSpawner : MonoBehaviour
                         previewPin.EnterPlacementPhysicsMode();
                     }
 
+                    foreach (var renderer in previewObject.GetComponentsInChildren<Renderer>())
+                    {
+                        _originalMaterials[renderer] = renderer.materials;
+                    }
+
                     _spawnedWorldObjects.Add(previewObject);
+                    _pinValidityStates.Add(true); // Default to true when spawned
                 }
             }
         }
@@ -125,11 +135,13 @@ public class CardToWorldSpawner : MonoBehaviour
             if (obj != null) Destroy(obj);
         }
         _spawnedWorldObjects.Clear();
+        _originalMaterials.Clear();
+        _pinValidityStates.Clear();
     }
 
     private void TryPlaceObject()
     {
-        if (_spawnedWorldObjects.Count == 0 || _lastValidOrigin == null)
+        if (_spawnedWorldObjects.Count == 0 || _currentHoveredCell == null || !_isValidPlacement)
         {
             return;
         }
@@ -139,7 +151,7 @@ public class CardToWorldSpawner : MonoBehaviour
 
         for (int i = 0; i < pattern.Count; i++)
         {
-            HexCell target = _grid.GetCellWithOffset(_lastValidOrigin, pattern[i].offset);
+            HexCell target = _grid.GetCellWithOffset(_currentHoveredCell, pattern[i].offset);
             targetCells.Add(target);
         }
 
@@ -160,6 +172,8 @@ public class CardToWorldSpawner : MonoBehaviour
             bool reserved = _grid.TryReserveCell(targetCells[i], _spawnedWorldObjects[i].transform);
             if (reserved)
             {
+                UpdatePreviewVisuals(_spawnedWorldObjects[i], true);
+
                 // FIX: Force the pin down from the previewHeightOffset so it sits perfectly on the hex floor
                 _spawnedWorldObjects[i].transform.position = new Vector3(
                     targetCells[i].center.x, 
@@ -183,7 +197,39 @@ public class CardToWorldSpawner : MonoBehaviour
         }
 
         _spawnedWorldObjects.Clear();
+        _originalMaterials.Clear();
+        _pinValidityStates.Clear();
         _cardMovement.SuccessfulPlay();
+    }
+
+    private void UpdatePreviewVisuals(GameObject previewObject, bool isValid)
+    {
+        var colliders = previewObject.GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = isValid;
+        }
+
+        var renderers = previewObject.GetComponentsInChildren<Renderer>();
+        foreach (var renderer in renderers)
+        {
+            if (isValid)
+            {
+                if (_originalMaterials.TryGetValue(renderer, out Material[] originalMats))
+                {
+                    renderer.materials = originalMats;
+                }
+            }
+            else if (invalidPlacementMaterial != null)
+            {
+                Material[] invalidMats = new Material[renderer.materials.Length];
+                for (int j = 0; j < invalidMats.Length; j++)
+                {
+                    invalidMats[j] = invalidPlacementMaterial;
+                }
+                renderer.materials = invalidMats;
+            }
+        }
     }
     
     // Helper method to safely return the pattern or a fallback if the list is empty
@@ -209,5 +255,7 @@ public class CardToWorldSpawner : MonoBehaviour
             if (obj != null) Destroy(obj);
         }
         _spawnedWorldObjects.Clear();
+        _originalMaterials.Clear();
+        _pinValidityStates.Clear();
     }
 }

@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragElevation: 0.5
-  playAreaThresholdY: 500
+  playAreaThresholdY: 390
   canBeReturnedToHand: 1
 --- !u!198 &4918979806117386139
 ParticleSystem:

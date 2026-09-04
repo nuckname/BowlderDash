@@ -343,4 +343,5 @@ MonoBehaviour:
   worldPlacementMask:
     serializedVersion: 2
     m_Bits: 64
+  invalidPlacementMaterial: {fileID: 2100000, guid: d0559ab28d3e69440898d03adad3e3b3, type: 2}
   previewHeightOffset: 1.5

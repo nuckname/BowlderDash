@@ -6442,6 +6442,7 @@ GameObject:
   - component: {fileID: 4377073858204794061}
   - component: {fileID: 6083968275749209475}
   - component: {fileID: 403700797616552847}
+  - component: {fileID: 4825516996930088350}
   m_Layer: 9
   m_Name: ticketPinataPinPrefab
   m_TagString: Pin
@@ -6561,7 +6562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragElevation: 2
-  playAreaThresholdY: 500
+  playAreaThresholdY: 390
   canBeReturnedToHand: 1
 --- !u!114 &3966506406019630799
 MonoBehaviour:
@@ -6663,6 +6664,21 @@ MonoBehaviour:
   pinLayerMask:
     serializedVersion: 2
     m_Bits: 8179
+--- !u!114 &4825516996930088350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811477678882886870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1715c49f43a68de4b8fd61e63504c104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldObjectToCard
+  cardData: {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
+  _groupPeers: []
+  canBePickedUp: 1
 --- !u!1 &4199497254964305983
 GameObject:
   m_ObjectHideFlags: 0
