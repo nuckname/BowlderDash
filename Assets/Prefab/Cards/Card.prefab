@@ -292,7 +292,7 @@ MonoBehaviour:
   cardData: {fileID: 0}
   cardAnimator: {fileID: 0}
   hotkeyText: {fileID: 503124020404017289}
-  playAreaThresholdY: 90
+  playAreaThresholdY: 600
   isPreviewingInWorld: 0
   isHovering: 0
   isDragging: 0
