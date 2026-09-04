@@ -105,6 +105,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6729171101795101776}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2101483563373068868}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!1 &5919451674846626430 stripped
 GameObject:
@@ -152,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dragElevation: 0.5
   playAreaThresholdY: 500
+  canBeReturnedToHand: 1
 --- !u!65 &7255105352160713147
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -190,10 +194,12 @@ MonoBehaviour:
   hasEnterTheHoleAtTheBack: 0
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
+  onPlaceEffects: []
   onHitEffects: []
   onFallEffects:
   - rid: 7536170535209140224
   onEndOfRoundEffects: []
+  excludeFromStrike: 0
   yOffset: 4
   yOffsetPinInHole: 10
   allowPinToFallOver: 0
@@ -201,6 +207,7 @@ MonoBehaviour:
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 7255105352160713147}
   _isFallen: 0
+  isClone: 0
   references:
     version: 2
     RefIds:
@@ -223,6 +230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardData: {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
   _groupPeers: []
+  canBePickedUp: 1
 --- !u!136 &3091567656159905709
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -269,3 +277,21 @@ CapsuleCollider:
   m_Height: 2.1681356
   m_Direction: 1
   m_Center: {x: 0, y: 5.035934, z: -0.008519664}
+--- !u!114 &-2101483563373068868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919451674846626430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f7fd9f0cc765344a63a7085ac60480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HighlightGroupedPins
+  highlightColor: {r: 0, g: 0.3773585, b: 0.20123464, a: 1}
+  highlightLineWidth: 0.12
+  highlightHeightOffset: 0.1
+  pinLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967291
