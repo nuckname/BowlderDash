@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public enum TransitionPhase
 {
@@ -49,10 +50,17 @@ public class EndOfRoundSCameraSequence
                     if (wonRound)
                     {
                         manager.inGameScoreUi.TriggerWinRoundText();
+                        yield return WaitOrSkip(1);
                     }
                     else if (lostGame)
                     {
                         manager.inGameScoreUi.TriggerGameLostText();
+                        
+                        // Wait a bit longer to let the player see the game lost text
+                        // and then break so we dont show tickets earned
+                        yield return WaitOrSkip(scoreDisplayHoldTime + 3);
+                        currentPhase = TransitionPhase.FinishTransition;
+                        break;
                     }
                     
                     yield return WaitOrSkip(scoreDisplayHoldTime);

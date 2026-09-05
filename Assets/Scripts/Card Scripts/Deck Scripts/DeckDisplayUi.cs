@@ -15,7 +15,7 @@ public class DeckDisplayUi : MonoBehaviour
         currentDeckCount = count;
         if (deckCountText != null)
         {
-            deckCountText.text = currentDeckCount.ToString();
+            deckCountText.text = "Draw\nPile:\n" + currentDeckCount;
         }
     }
 
@@ -24,7 +24,7 @@ public class DeckDisplayUi : MonoBehaviour
         currentDiscardCount = count;
         if (discardCountText != null)
         {
-            discardCountText.text = currentDiscardCount.ToString();
+            discardCountText.text = "Discard\nPile:\n" + currentDiscardCount;
         }
     }
 

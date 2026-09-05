@@ -3688,13 +3688,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 369005841}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0867558, y: 0.20596805, z: -0.03228875, w: 0.9741705}
-  m_LocalPosition: {x: 21.33, y: -39.34, z: -13.21}
+  m_LocalRotation: {x: 0.08820073, y: 0.25232235, z: -0.028102672, w: 0.9632052}
+  m_LocalPosition: {x: 20.815248, y: -39.229897, z: -17.327747}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1616962209}
-  m_LocalEulerAnglesHint: {x: 10.506, y: 23.731, z: -1.584}
+  m_LocalEulerAnglesHint: {x: 10.608, y: 29.307, z: -0.561}
 --- !u!1 &374269887
 GameObject:
   m_ObjectHideFlags: 0
@@ -3945,8 +3945,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379687216}
-  m_LocalRotation: {x: -0, y: -0.71212447, z: -0, w: 0.70205337}
-  m_LocalPosition: {x: 0, y: 0, z: 0.097}
+  m_LocalRotation: {x: -0.000000029802315, y: -0.71212435, z: -0.00000007450579, w: 0.7020533}
+  m_LocalPosition: {x: 0, y: 0, z: 0.21799986}
   m_LocalScale: {x: 0.0015, y: 0.0015, z: 0.0015}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -3955,7 +3955,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: -90.816, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.956, y: 0.029}
+  m_AnchoredPosition: {x: 0.95400035, y: 0.028999558}
   m_SizeDelta: {x: 900, y: 1000}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &379687218
@@ -6127,7 +6127,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Draw Pile
+  m_text: 'Draw\nPile:\n0
 
 '
   m_isRightToLeft: 0
@@ -6156,8 +6156,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11359,14 +11359,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086567705}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.018030189, y: -0.29063502, z: 0.059234947, w: 0.9548285}
-  m_LocalPosition: {x: 0.36053514, y: 3.259163, z: -29.529621}
+  m_LocalRotation: {x: -0.020842485, y: -0.24463749, z: 0.058304865, w: 0.9676356}
+  m_LocalPosition: {x: 2.6, y: 3.35, z: -26.94}
   m_LocalScale: {x: 2.665668, y: 2.6656675, z: 2.665668}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 178985063}
   m_Father: {fileID: 20957723}
-  m_LocalEulerAnglesHint: {x: 0, y: -33.859, z: 7.1}
+  m_LocalEulerAnglesHint: {x: -0.677, y: -28.418, z: 7.068}
 --- !u!65 &1086567707
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12177,8 +12177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 716443b3d75264ba5aa2423c70131d16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deckCountText: {fileID: 1433756407}
-  discardCountText: {fileID: 972618800}
+  deckCountText: {fileID: 651437604}
+  discardCountText: {fileID: 1600253252}
 --- !u!114 &1168153564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12204,7 +12204,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1168153559}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd3f387b32b11ce4d9f810aa3c8188c0, type: 3}
   m_Name: 
@@ -17086,7 +17086,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Discard Pile
+  m_text: 'Discard\nPile:\n0
 
 '
   m_isRightToLeft: 0
@@ -17115,8 +17115,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 200
+  m_fontSizeBase: 200
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -17154,7 +17154,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -4.3601837, y: -12.558119, z: -4.7141647, w: -7.4149437}
+  m_margin: {x: -4.3601837, y: -12.558119, z: -32.69741, w: -7.4149437}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
