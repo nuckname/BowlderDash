@@ -142,6 +142,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ShopState.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundStartState.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\RemoveCardEffect.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\DeckModifierManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />

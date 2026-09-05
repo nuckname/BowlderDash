@@ -15,7 +15,7 @@ MonoBehaviour:
   rounds:
   - roundNumber: 0
     scoreNeededToBeat: 50
-    maxBallsAllowedToThrow: 1
+    maxBallsAllowedToThrow: 3
   - roundNumber: 1
     scoreNeededToBeat: 80
     maxBallsAllowedToThrow: 3
