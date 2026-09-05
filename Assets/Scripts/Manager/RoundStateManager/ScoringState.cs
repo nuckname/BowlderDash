@@ -208,19 +208,19 @@ public class ScoringState : RoundBaseState
                 nextState = _manager.roundWinState;
             }
             
-            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound));
+            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound, true, false));
         }
         else if (ballsThrown >= maxBallsAllowed)
         {
             // Lost the game
-            _manager.SwitchState(_manager.gameOverState);
+            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, _manager.gameOverState, false, false, true));
         }
         else
         {
             // Else throw the ball again and try to reach the quota.
         
             // I want to show the in game UI before we go to the next round.
-            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, _manager.roundStartState, false));
+            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, _manager.roundStartState, false, false, false));
         }
     }
     

@@ -16,7 +16,7 @@ public class EndOfRoundSCameraSequence
     private float waitBeforeUiCamera = 2f;
     private float scoreDisplayHoldTime = 1.5f;
 
-    public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound)
+ public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false)
     {
         TransitionPhase currentPhase = TransitionPhase.InitializeUI;
 
@@ -45,6 +45,15 @@ public class EndOfRoundSCameraSequence
                     // we want to only incremental the UI here and only here.
                     Coroutine scoreCountUpRoutine = manager.inGameScoreUi.UpdateScoreText(manager.sessionData.currentScore);
                     if (scoreCountUpRoutine != null) yield return scoreCountUpRoutine;
+                    
+                    if (wonRound)
+                    {
+                        manager.inGameScoreUi.TriggerWinRoundText();
+                    }
+                    else if (lostGame)
+                    {
+                        manager.inGameScoreUi.TriggerGameLostText();
+                    }
                     
                     yield return WaitOrSkip(scoreDisplayHoldTime);
                     currentPhase = TransitionPhase.ShowTicketsEarned;

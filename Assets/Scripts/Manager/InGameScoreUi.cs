@@ -193,11 +193,6 @@ public class InGameScoreUi : MonoBehaviour
         return _ticketAnimateRoutine;
     }
     
-    public void UpdateYourScoreText(int currentScore)
-    {
-        totalScoreText.text = $"Your\nScore:\n{currentScore}";
-    }
-    
     public void UpdateRoundText(int currentRound, int maxRounds)
     {
         roundText.text = $"Rounds:\n{currentRound} / {maxRounds}";
@@ -211,5 +206,45 @@ public class InGameScoreUi : MonoBehaviour
     public void UpdateScoreToBeatText(int scoreToBeat)
     {
         scoreToBeatText.text = $"Score To Beat:\n{scoreToBeat}";
+    }
+    
+    private Coroutine _flashRoutine;
+
+    public void UpdateYourScoreText(int currentScore)
+    {
+        if (_flashRoutine != null)
+        {
+            StopCoroutine(_flashRoutine);
+            _flashRoutine = null;
+        }
+        
+        totalScoreText.color = Color.white; // reset color
+        totalScoreText.text = $"Your\nScore:\n{currentScore}";
+    }
+
+    public void TriggerWinRoundText()
+    {
+        if (_flashRoutine != null) StopCoroutine(_flashRoutine);
+        _flashRoutine = StartCoroutine(FlashWinText());
+    }
+
+    public void TriggerGameLostText()
+    {
+        if (_flashRoutine != null) StopCoroutine(_flashRoutine);
+        totalScoreText.color = Color.red;
+        totalScoreText.text = "Game\nLost :(";
+    }
+
+    private IEnumerator FlashWinText()
+    {
+        totalScoreText.text = "Win\nRound!";
+        
+        while (true)
+        {
+            totalScoreText.color = Color.yellow;
+            yield return new WaitForSeconds(0.2f);
+            totalScoreText.color = Color.white;
+            yield return new WaitForSeconds(0.2f);
+        }
     }
 }
