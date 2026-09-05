@@ -16699,6 +16699,7 @@ MonoBehaviour:
   pinEndTransform: {fileID: 926523603}
   clickToThrowTextTransform: {fileID: 1163952631}
   clickToThrowStartTransform: {fileID: 1631484123}
+  enableTutorial: 0
   moveSpeed: 500
   flickSpeed: 1000
   flickDistance: 800

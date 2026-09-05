@@ -36,6 +36,7 @@ public class TutorialManager : MonoBehaviour
     public Transform clickToThrowStartTransform;
     
     [Header("Settings")]
+    public bool enableTutorial = true;
     public float moveSpeed = 500f;
     public float flickSpeed = 1500f;
     public float flickDistance = 800f;
@@ -89,6 +90,8 @@ public class TutorialManager : MonoBehaviour
     
     public void PlayThrowTutorial()
     {
+        if (!enableTutorial) return;
+        
         StopTutorial();
         currentState = TutorialState.Throw;
         currentSequence = StartCoroutine(ThrowTutorialSequence());
@@ -96,6 +99,8 @@ public class TutorialManager : MonoBehaviour
 
     public void PlayPinPlacementTutorial()
     {
+        if (!enableTutorial) return;
+        
         StopTutorial();
         currentState = TutorialState.PinPlacement;
         currentSequence = StartCoroutine(PinPlacementSequence());
@@ -103,6 +108,8 @@ public class TutorialManager : MonoBehaviour
 
     public void ShowButtonToBallThrow()
     {
+        if (!enableTutorial) return;
+        
         StopTutorial();
         currentState = TutorialState.ShowButtonToThrow;
         currentSequence = StartCoroutine(ClickToThrowPinTutorial());
