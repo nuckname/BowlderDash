@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: triangleTinyPin
   displayName: Tiny Pin
-  description: Worth twice as much. Half the size!
+  description: 'On Fall: +20 Score'
   cardArtwork: {fileID: 21300000, guid: 15517ea769f4a4d40b2590f40e0f6b29, type: 3}
   cardTint: {r: 0.2528302, g: 0.2528302, b: 0.2528302, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
