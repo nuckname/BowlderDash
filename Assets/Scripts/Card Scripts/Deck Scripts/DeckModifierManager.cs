@@ -22,6 +22,7 @@ public class DeckModifierManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) AddPinCardToDeck(Pins.Pinata);
     }
     
+    // Just used for debuging
     public void AddPinCardToDeck(Pins pinToAdd)
     {
         foreach (PinCardMapping mapping in cardMappings)

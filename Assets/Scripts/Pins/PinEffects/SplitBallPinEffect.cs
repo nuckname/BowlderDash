@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
+
 // https://share.gemini.google/oyy5yFMYdH97
+
 [Serializable]
 public class SplitBallPinEffect : PinEffect
 {
@@ -11,6 +13,9 @@ public class SplitBallPinEffect : PinEffect
     {
         if (hasTriggered) return;
         if (pinBase == null || target == null) return;
+
+        // Prevent other pins from being split if they get knocked into this pin, which causes a recursive spawning loop
+        if (!target.CompareTag("Ball")) return;
 
         hasTriggered = true;
 

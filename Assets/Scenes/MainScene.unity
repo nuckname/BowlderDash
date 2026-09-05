@@ -3787,6 +3787,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b651e3ec529500b428c7ecfbfc79cc93, type: 2}
   - {fileID: 11400000, guid: 6fbb79da6015dc24cab7bbb24d014476, type: 2}
   - {fileID: 11400000, guid: 683ce16cabbc4fe439a85ab6e39a7542, type: 2}
+  - {fileID: 11400000, guid: 1c376dacc5d69a145b90fb6ec03ee1ba, type: 2}
   amountOfCardsToDrawEachTurn: 5
   hasDrawnCardsThisTurn: 0
   isHandDrawReady: 0

@@ -13,12 +13,10 @@ public class RoundStartState : RoundBaseState
         UpdateTicketAmountPerRound(manager);
         
         manager.ResetHandDrawState();
-
+        
         HandleMap(manager);
 
         HandleGrid(manager);
-        
-        
 
         EnterNextState(manager);
     }

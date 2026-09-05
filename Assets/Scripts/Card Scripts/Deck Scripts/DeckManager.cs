@@ -43,11 +43,6 @@ public class DeckManager : MonoBehaviour
         ShuffleDeck(drawPile);
     }
 
-    private void Start()
-    {
-        UpdateUIDeckCounts();
-    }
-
     public void UpdateUIDeckCounts()
     {
         if (deckDisplayUi != null)

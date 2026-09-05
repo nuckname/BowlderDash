@@ -17,11 +17,7 @@ public class ClonePinEffect : PinEffect
     [SerializeField] private List<Vector2Int> adjacentOffsets = new List<Vector2Int>
     {
         new Vector2Int(1, 0),  
-        new Vector2Int(1, -1), 
         new Vector2Int(0, -1), 
-        new Vector2Int(-1, 0), 
-        new Vector2Int(-1, 1), 
-        new Vector2Int(0, 1)   
     };
 
     public override void Execute(PinBase pinBase, Collider target = null)
@@ -78,7 +74,8 @@ public class ClonePinEffect : PinEffect
                     PinBase clonePinBase = clone.GetComponent<PinBase>();
                     if (clonePinBase != null)
                     {
-                        clonePinBase.onHitEffects.RemoveAll(effect => effect is ClonePinEffect);
+                        // Ensure cloned pins cannot further split balls or clone to prevent exponential crashes
+                        clonePinBase.onHitEffects.RemoveAll(effect => effect is ClonePinEffect || effect is SplitBallPinEffect);
                         clonePinBase.isClone = true;
                         
                         if (roundStateManager != null)
@@ -86,6 +83,13 @@ public class ClonePinEffect : PinEffect
                             roundStateManager.AddPinToActiveList(clonePinBase);
                         }
                     }
+                    
+                    WorldObjectToCard worldObjectToCard = clone.GetComponent<WorldObjectToCard>();
+                    if (worldObjectToCard != null)
+                    { 
+                        worldObjectToCard.cannotBeReturnedToDeck = true;
+                    }
+                    
                     
                     Rigidbody cloneRb = clone.GetComponent<Rigidbody>();
 

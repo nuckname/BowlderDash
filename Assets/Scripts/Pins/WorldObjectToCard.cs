@@ -13,6 +13,7 @@ public class WorldObjectToCard : MonoBehaviour
     private bool _isBeingRemoved = false;
     
     [SerializeField] private bool canBePickedUp = true;
+    public bool cannotBeReturnedToDeck = false;
     
     public List<WorldObjectToCard> GroupPeers => _groupPeers;
 
@@ -57,7 +58,7 @@ public class WorldObjectToCard : MonoBehaviour
     /// </summary>
     public void ReturnToDiscardPile()
     {
-        if (hasReturnedToDeck || _isBeingRemoved) return;
+        if (hasReturnedToDeck || _isBeingRemoved || cannotBeReturnedToDeck) return;
         hasReturnedToDeck = true;
         
         foreach(var peer in _groupPeers)
