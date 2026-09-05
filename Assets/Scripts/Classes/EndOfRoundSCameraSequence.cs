@@ -17,7 +17,7 @@ public class EndOfRoundSCameraSequence
     private float waitBeforeUiCamera = 2f;
     private float scoreDisplayHoldTime = 1.5f;
 
- public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false)
+    public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false)
     {
         TransitionPhase currentPhase = TransitionPhase.InitializeUI;
 
@@ -33,49 +33,49 @@ public class EndOfRoundSCameraSequence
 
                 case TransitionPhase.ShowBallsThrown:
                     manager.MoveCamera(CameraLocation.BallsThrowUi);
-                    yield return WaitOrSkip(waitBeforeUiCamera);
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
                     manager.AddBallThrownToSession();
-                    yield return WaitOrSkip(waitBeforeUiCamera);
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
                     currentPhase = TransitionPhase.ShowScoreUpdate;
                     break;
 
                 case TransitionPhase.ShowScoreUpdate:
                     manager.MoveCamera(CameraLocation.ScoreToBeatUi);
-                    yield return WaitOrSkip(waitBeforeUiCamera);
-                    
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
+
                     // we want to only incremental the UI here and only here.
                     Coroutine scoreCountUpRoutine = manager.inGameScoreUi.UpdateScoreText(manager.sessionData.currentScore);
                     if (scoreCountUpRoutine != null) yield return scoreCountUpRoutine;
-                    
+
                     if (wonRound)
                     {
                         manager.inGameScoreUi.TriggerWinRoundText();
-                        yield return WaitOrSkip(1);
+                        yield return new WaitForSeconds(1);
                     }
                     else if (lostGame)
                     {
                         manager.inGameScoreUi.TriggerGameLostText();
-                        
+
                         // Wait a bit longer to let the player see the game lost text
                         // and then break so we dont show tickets earned
-                        yield return WaitOrSkip(scoreDisplayHoldTime + 3);
+                        yield return new WaitForSeconds(scoreDisplayHoldTime + 3);
                         currentPhase = TransitionPhase.FinishTransition;
                         break;
                     }
-                    
-                    yield return WaitOrSkip(scoreDisplayHoldTime);
+
+                    yield return new WaitForSeconds(scoreDisplayHoldTime);
                     currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
 
                 case TransitionPhase.ShowTicketsEarned:
                     // Move to the Ticket Camera and animate tickets
                     manager.MoveCamera(CameraLocation.TicketCameraUi);
-                    yield return WaitOrSkip(waitBeforeUiCamera);
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
 
                     Coroutine ticketCountUpRoutine = manager.inGameScoreUi.UpdateTicketTextAnimated(manager.sessionData.tickets);
                     if (ticketCountUpRoutine != null) yield return ticketCountUpRoutine;
 
-                    yield return WaitOrSkip(scoreDisplayHoldTime);
+                    yield return new WaitForSeconds(scoreDisplayHoldTime);
                     currentPhase = TransitionPhase.FinishTransition;
                     break;
             }
@@ -85,22 +85,7 @@ public class EndOfRoundSCameraSequence
         {
             manager.ResetUiForNewRound();
         }
-        
-        manager.SwitchState(nextState);
-    }
 
-    private IEnumerator WaitOrSkip(float duration)
-    {
-        float timer = 0f;
-        while (timer < duration)
-        {
-            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-            {
-                break;
-            }
-            
-            timer += Time.deltaTime;
-            yield return null;
-        }
+        manager.SwitchState(nextState);
     }
 }
