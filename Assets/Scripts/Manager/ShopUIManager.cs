@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -12,13 +13,8 @@ public class ShopUIManager : MonoBehaviour
     public Text ticketText;
     
     [Header("Card References")]
-    public Button Card1Button;
-    public Button Card2Button;
-    public Button Card3Button;
-    
-    public Image CardVisual1;
-    public Image CardVisual2;
-    public Image CardVisual3;
+    public List<Button> cardButtons = new List<Button>();
+    public List<Image> cardVisuals = new List<Image>();
     
     [Header("Reroll Settings")]
     public Button rerollButton;
@@ -40,8 +36,8 @@ public class ShopUIManager : MonoBehaviour
     private int totalGridUpgrades = 0;
 
     private RoundStateManager stateManager;
-    private CardDataSO[] currentShopCards = new CardDataSO[3];
-    private readonly GameObject[] spawnedShopCardVisuals = new GameObject[3];
+    private List<CardDataSO> currentShopCards = new List<CardDataSO>();
+    private List<GameObject> spawnedShopCardVisuals = new List<GameObject>();
     
     private int _cardCost = 0;
     
@@ -95,21 +91,22 @@ public class ShopUIManager : MonoBehaviour
 
     private void GenerateShopCards()
     {
-        for (int i = 0; i < 3; i++)
+        currentShopCards.Clear();
+
+        while (spawnedShopCardVisuals.Count < cardButtons.Count)
         {
-            int randomIndex = Random.Range(0, stateManager.shopCardsToPickFrom.Count);
-            currentShopCards[i] = stateManager.shopCardsToPickFrom[randomIndex];
-            
-            UpdateButtonText(i);
+            spawnedShopCardVisuals.Add(null);
         }
 
-        UpdateCardVisual(0, CardVisual1, currentShopCards[0]);
-        UpdateCardVisual(1, CardVisual2, currentShopCards[1]);
-        UpdateCardVisual(2, CardVisual3, currentShopCards[2]);
-
-        SetCardAlpha(0, Card1Button, CardVisual1, 1f);
-        SetCardAlpha(1, Card2Button, CardVisual2, 1f);
-        SetCardAlpha(2, Card3Button, CardVisual3, 1f);
+        for (int i = 0; i < cardButtons.Count; i++)
+        {
+            int randomIndex = Random.Range(0, stateManager.shopCardsToPickFrom.Count);
+            currentShopCards.Add(stateManager.shopCardsToPickFrom[randomIndex]);
+            
+            UpdateButtonText(i);
+            UpdateCardVisual(i, cardVisuals[i], currentShopCards[i]);
+            SetCardAlpha(i, cardButtons[i], cardVisuals[i], 1f);
+        }
     }
 
     private void UpdateCardVisual(int index, Image cardImage, CardDataSO cardData)
@@ -194,11 +191,7 @@ public class ShopUIManager : MonoBehaviour
     
     private void UpdateButtonText(int index)
     {
-        Button targetButton = null;
-        
-        if (index == 0) targetButton = Card1Button;
-        else if (index == 1) targetButton = Card2Button;
-        else if (index == 2) targetButton = Card3Button;
+        Button targetButton = cardButtons[index];
 
         TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
 
@@ -236,7 +229,7 @@ public class ShopUIManager : MonoBehaviour
 
     public void BuyCard(int index)
     {
-        if (currentShopCards[index] != null)
+        if (index < currentShopCards.Count && currentShopCards[index] != null)
         {
             if (SessionData.Instance.SpendTickets(_cardCost))
             {
@@ -245,18 +238,7 @@ public class ShopUIManager : MonoBehaviour
                 // Remove from the array so it can't be bought again
                 currentShopCards[index] = null; 
 
-                if (index == 0)
-                {
-                    SetCardAlpha(0, Card1Button, CardVisual1, 0.15f);
-                }
-                else if (index == 1)
-                {
-                    SetCardAlpha(1, Card2Button, CardVisual2, 0.15f);
-                }
-                else if (index == 2)
-                {
-                    SetCardAlpha(2, Card3Button, CardVisual3, 0.15f);
-                }
+                SetCardAlpha(index, cardButtons[index], cardVisuals[index], 0.15f);
             }
             else
             {

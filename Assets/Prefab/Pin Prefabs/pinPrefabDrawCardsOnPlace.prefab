@@ -276,7 +276,7 @@ MonoBehaviour:
     - rid: 6055850140824502353
       type: {class: DrawCardPinEffect, ns: , asm: Assembly-CSharp}
       data:
-        drawAmount: 2
+        drawAmount: 1
 --- !u!114 &9070514593192863231
 MonoBehaviour:
   m_ObjectHideFlags: 0

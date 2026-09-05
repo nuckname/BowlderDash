@@ -78,11 +78,87 @@ public class InGameScoreUi : MonoBehaviour
             }
             
             UpdateYourScoreText(_currentDisplayedScore);
+
+            float timer = 0f;
+            bool skipTriggered = false;
             
-            yield return new WaitForSeconds(0.05f); 
+            while (timer < 0.05f)
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
+                    skipTriggered = true;
+                    break;
+                }
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            if (skipTriggered)
+            {
+                _currentDisplayedScore = targetScore;
+                UpdateYourScoreText(_currentDisplayedScore);
+                break;
+            }
         }
 
         _scoreAnimateRoutine = null;
+    }
+    
+    // Might need to extract this to a new class
+    private IEnumerator AnimateTicketsByOne(int targetTickets)
+    {
+        while (_currentDisplayedTickets != targetTickets)
+        {
+            if (_currentDisplayedTickets < targetTickets)
+            {
+                _currentDisplayedTickets += 1;
+            }
+            else
+            {
+                _currentDisplayedTickets -= 1;
+            }
+            
+            // In Game
+            inGameUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
+            
+            // In Shop
+            if (shopUiTicketsText != null)
+            {
+                shopUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
+            }
+            
+            float timer = 0f;
+            bool skipTriggered = false;
+            
+            while (timer < 0.05f)
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
+                    skipTriggered = true;
+                    break;
+                }
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            if (skipTriggered)
+            {
+                _currentDisplayedTickets = targetTickets;
+                
+                // In Game
+                inGameUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
+                
+                // In Shop
+                if (shopUiTicketsText != null)
+                {
+                    shopUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
+                }
+                
+                break;
+            }
+        }
+
+        _ticketAnimateRoutine = null;
     }
     
     public void UpdateTicketText(int newTickets)
@@ -117,35 +193,6 @@ public class InGameScoreUi : MonoBehaviour
         return _ticketAnimateRoutine;
     }
     
-    // Might need to extract this to a new class
-    private IEnumerator AnimateTicketsByOne(int targetTickets)
-    {
-        while (_currentDisplayedTickets != targetTickets)
-        {
-            if (_currentDisplayedTickets < targetTickets)
-            {
-                _currentDisplayedTickets += 1;
-            }
-            else
-            {
-                _currentDisplayedTickets -= 1;
-            }
-            
-            // In Game
-            inGameUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
-            
-            // In Shop
-            if (shopUiTicketsText != null)
-            {
-                shopUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
-            }
-            
-            yield return new WaitForSeconds(0.05f); 
-        }
-
-        _ticketAnimateRoutine = null;
-    }
-
     public void UpdateYourScoreText(int currentScore)
     {
         totalScoreText.text = $"Your\nScore:\n{currentScore}";
