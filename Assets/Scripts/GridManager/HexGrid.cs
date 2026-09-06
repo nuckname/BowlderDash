@@ -75,6 +75,11 @@ public class HexGrid : MonoBehaviour
         return bestCell;
     }
     
+    public void AddCell(HexCell newCell)
+    {
+        cells.Add(newCell);
+    }
+    
     public Vector3 GetWorldOffsetFromAxial(Vector2Int axialOffset)
     {
         float w = Mathf.Sqrt(3f) * hexSize; 

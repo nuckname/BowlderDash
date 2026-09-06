@@ -14,6 +14,10 @@ public class HexGridVisuals : MonoBehaviour
     public float runtimeLineWidth = 0.08f;
     public float runtimeLineHeightOffset = 0.05f;
 
+    [Header("Preview")]
+    public Color previewColor = new Color(1f, 1f, 1f, 0.5f);
+    private LineRenderer previewLine;
+    
     private HexGrid grid;
     private GridTicketManager tickets;
     private List<LineRenderer> lines = new List<LineRenderer>();
@@ -87,5 +91,35 @@ public class HexGridVisuals : MonoBehaviour
             Vector3[] v = GetHexVertices(cell.center, grid.hexSize);
             for (int i = 0; i < 6; i++) Gizmos.DrawLine(v[i], v[(i + 1) % 6]);
         }
+    }
+    
+    // For previewing a hex cell placement
+    // used for HexGridExpander.cs
+    private void SetupPreviewLine()
+    {
+        if (previewLine != null) return;
+        GameObject go = new GameObject("HexPreviewLine");
+        go.transform.SetParent(transform);
+        previewLine = go.AddComponent<LineRenderer>();
+        previewLine.useWorldSpace = true;
+        previewLine.loop = true;
+        previewLine.positionCount = 6;
+        previewLine.widthMultiplier = runtimeLineWidth;
+        previewLine.material = new Material(Shader.Find("Sprites/Default"));
+        previewLine.startColor = previewColor;
+        previewLine.endColor = previewColor;
+        previewLine.enabled = false;
+    }
+
+    public void ShowPreview(Vector3 center)
+    {
+        if (previewLine == null) SetupPreviewLine();
+        previewLine.enabled = true;
+        previewLine.SetPositions(GetHexVertices(center + Vector3.up * runtimeLineHeightOffset, grid.hexSize));
+    }
+
+    public void HidePreview()
+    {
+        if (previewLine != null) previewLine.enabled = false;
     }
 }
