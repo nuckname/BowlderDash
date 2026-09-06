@@ -8,6 +8,12 @@ public class HexGridExpander : MonoBehaviour
     private HexGrid grid;
     private HexGridVisuals visuals;
 
+    [Header("Grid Limits")]
+    public int leftSideExpandingLimit;
+    public int rightSideExpandingLimit;
+    public int upSideExpandingLimit;
+    public int downSideExpandingLimit;
+    
     private void Awake()
     {
         grid = GetComponent<HexGrid>();
@@ -77,6 +83,15 @@ public class HexGridExpander : MonoBehaviour
 
         Vector2Int baseAxial = grid.GetAxialCoordinate(closestCell);
         newAxial = baseAxial + axialOffset;
+
+        int targetCol = newAxial.x + (newAxial.y - (newAxial.y & 1)) / 2;
+        int targetRow = newAxial.y;
+
+        if (targetCol < leftSideExpandingLimit || targetCol > rightSideExpandingLimit || targetRow < upSideExpandingLimit || targetRow > downSideExpandingLimit)
+        {
+            return false;
+        }
+
         newCenter = closestCell.center + grid.GetWorldOffsetFromAxial(axialOffset);
 
         return true;

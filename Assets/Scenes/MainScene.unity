@@ -1609,6 +1609,7 @@ GameObject:
   - component: {fileID: 120957817}
   - component: {fileID: 120957818}
   - component: {fileID: 120957814}
+  - component: {fileID: 120957819}
   m_Layer: 0
   m_Name: HexManager
   m_TagString: HexManager
@@ -1663,6 +1664,7 @@ MonoBehaviour:
   occupiedCellColor: {r: 0, g: 1, b: 0, a: 0.6}
   runtimeLineWidth: 0.08
   runtimeLineHeightOffset: 0.05
+  previewColor: {r: 1, g: 1, b: 1, a: 0.5}
 --- !u!114 &120957816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1708,7 +1710,23 @@ MonoBehaviour:
   columns: 3
   rows: 2
   hexSize: 1.8
-  originOffset: {x: 0, y: 0, z: 0}
+  originOffset: {x: 0, y: 0, z: 2}
+--- !u!114 &120957819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffbc7f7383698bb4a86d41201caace8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HexGridExpander
+  leftSideExpandingLimit: -3
+  rightSideExpandingLimit: 3
+  upSideExpandingLimit: -7
+  downSideExpandingLimit: 1
 --- !u!1 &121324095
 GameObject:
   m_ObjectHideFlags: 0
@@ -16482,7 +16500,7 @@ MonoBehaviour:
   pinEndTransform: {fileID: 926523603}
   clickToThrowTextTransform: {fileID: 1163952631}
   clickToThrowStartTransform: {fileID: 1631484123}
-  enableTutorial: 1
+  enableTutorial: 0
   moveSpeed: 500
   flickSpeed: 1000
   flickDistance: 800
