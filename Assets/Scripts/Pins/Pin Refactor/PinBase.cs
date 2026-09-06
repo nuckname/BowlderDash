@@ -224,6 +224,8 @@ public class PinBase : MonoBehaviour
     // I dont think I need effectsToProcess?
     public virtual void TriggerTextForEffects(List<PinEffect> effectsToProcess, System.Action<string, Vector3> spawnTextCallback)
     {
+        // We have different Y offsets depending if the pin has entered the hole at the back or not.
+        // This is to ensure that the text is spawned in a visible location.
         float offset = hasEnterTheHoleAtTheBack ? yOffsetPinInHole : yOffset;
         Vector3 spawnPos = transform.position + new Vector3(0, offset, 0);
 
