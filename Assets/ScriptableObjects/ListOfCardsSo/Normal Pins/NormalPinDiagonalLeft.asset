@@ -15,7 +15,7 @@ MonoBehaviour:
   cardID: NormalPinDiagonalLeft
   displayName: Triple Pins
   description: Three normal pins, arranged diagonally left.
-  cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
+  cardArtwork: {fileID: 21300000, guid: 9a107926946201041a4285679ef4d6b6, type: 3}
   cardTint: {r: 0.1, g: 0.7, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: 346d76aa4ea7fc0459d3796c568ef959, type: 3}

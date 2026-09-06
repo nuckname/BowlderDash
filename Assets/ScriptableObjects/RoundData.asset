@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rounds:
   - roundNumber: 0
-    scoreNeededToBeat: 50
+    scoreNeededToBeat: 30
     maxBallsAllowedToThrow: 3
   - roundNumber: 1
-    scoreNeededToBeat: 80
+    scoreNeededToBeat: 70
     maxBallsAllowedToThrow: 3
   - roundNumber: 2
-    scoreNeededToBeat: 100
+    scoreNeededToBeat: 90
     maxBallsAllowedToThrow: 3
   - roundNumber: 3
-    scoreNeededToBeat: 140
+    scoreNeededToBeat: 130
     maxBallsAllowedToThrow: 3
   - roundNumber: 4
     scoreNeededToBeat: 160
