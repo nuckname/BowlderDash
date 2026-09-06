@@ -743,7 +743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OnLaneSquareGrid
   columns: 5
   rows: 5
-  cellSize: 1
+  cellSize: 3
   ticketPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
   ticketHeightOffset: 0.5
 --- !u!1 &53320772
@@ -1706,7 +1706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   columns: 3
-  rows: 3
+  rows: 2
   hexSize: 1.8
   originOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &121324095
@@ -15771,8 +15771,6 @@ MonoBehaviour:
   showPhysicalDeck: 1
   drawInterval: 0.08
   startingDeck:
-  - {fileID: 11400000, guid: c8e72f5a3b694aef9b7d25e1c064fb31, type: 2}
-  - {fileID: 11400000, guid: 3d45a7e190c846b39f2ad7b6e84c1d52, type: 2}
   - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
@@ -15782,6 +15780,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
   - {fileID: 11400000, guid: 7863ead928667f9438d4e5039ef3800c, type: 2}
+  - {fileID: 11400000, guid: 508d704d2e77edf45bd9a1e1ff49abda, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

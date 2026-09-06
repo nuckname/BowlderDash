@@ -14,6 +14,7 @@ public class OnLaneSquareGrid : MonoBehaviour
     
     private int amountToSpawn = 0;
     private List<GameObject> spawnedGridObjects = new List<GameObject>();
+    private List<Vector3> ticketOffsets = new List<Vector3>();
 
     public void GenerateGridForRound(RoundStateManager manager)
     {
@@ -68,7 +69,12 @@ public class OnLaneSquareGrid : MonoBehaviour
             int x = i % columns;
             int z = i / columns;
             
-            Vector3 spawnPosition = transform.position + new Vector3(x * cellSize, 0, z * cellSize);
+            float randomX = Random.Range(0f, cellSize);
+            float randomZ = Random.Range(0f, cellSize);
+            Vector3 randomOffset = new Vector3(randomX, 0, randomZ);
+            ticketOffsets.Add(randomOffset);
+            
+            Vector3 spawnPosition = transform.position + new Vector3(x * cellSize, 0, z * cellSize) + randomOffset;
             GameObject spawnedObject = Instantiate(ticketPrefab, spawnPosition, Quaternion.identity, transform);
             spawnedGridObjects.Add(spawnedObject);
             spawnedObject.tag = "GetTicketOnCollision";
@@ -87,13 +93,14 @@ public class OnLaneSquareGrid : MonoBehaviour
 
             int x = i % columns;
             int z = i / columns;
-            Vector3 basePosition = transform.position + new Vector3(x * cellSize, 0, z * cellSize);
+            Vector3 basePosition = transform.position + new Vector3(x * cellSize, 0, z * cellSize) + ticketOffsets[i];
 
             float bob = Mathf.Sin((Time.time * 3f) + i) * 0.025f;
             obj.transform.position = basePosition + Vector3.up * (ticketHeightOffset + bob);
             obj.transform.Rotate(Vector3.up, 60f * Time.deltaTime, Space.World);
         }
     }
+    
     public void ClearGrid()
     {
         foreach (GameObject gridObj in spawnedGridObjects)
@@ -105,5 +112,6 @@ public class OnLaneSquareGrid : MonoBehaviour
         }
         
         spawnedGridObjects.Clear();
+        ticketOffsets.Clear();
     }
 }

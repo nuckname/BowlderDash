@@ -9,13 +9,11 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/multiPinPrefab.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/multiPinPrefab.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Classes/EndOfRoundSCameraSequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Classes/EndOfRoundSCameraSequence.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/MultiPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/MultiPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertTrippleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertTrippleNormalPin.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/GridManager/OnLaneSquareGrid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GridManager/OnLaneSquareGrid.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ticket.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ticket.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -293,7 +291,7 @@
       <workItem from="1788131814965" duration="8843000" />
       <workItem from="1788241484350" duration="6909000" />
       <workItem from="1788309311780" duration="8201000" />
-      <workItem from="1788659565484" duration="1232000" />
+      <workItem from="1788659565484" duration="2220000" />
     </task>
     <servers />
   </component>
