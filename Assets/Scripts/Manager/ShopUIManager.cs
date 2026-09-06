@@ -12,10 +12,6 @@ public class ShopUIManager : MonoBehaviour
     public Button continueButton;
     public Text ticketText;
     
-    [Header("Tv Text Reference")]
-    public TextMeshProUGUI tvScoreAdd;
-    public TextMeshProUGUI tvScoreMulti;
-    
     [Header("Card References")]
     public List<Button> cardButtons = new List<Button>();
     public List<Image> cardVisuals = new List<Image>();
