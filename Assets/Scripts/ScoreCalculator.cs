@@ -9,7 +9,7 @@ public class ScoreCalculator : MonoBehaviour
     private float totalMultiplier = 1.0f; 
 
     // Called by scoring PinEffects when their configured trigger occurs.
-    public void QueueScoreModification(int scoreValue)
+    public void QueueScoreModification(int scoreValue, float multValue, Vector3 position)
     {
         queuedScore += scoreValue;
     }

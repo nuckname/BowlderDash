@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.VisualScripting.FullSerializer;
 
 public class ScoringState : RoundBaseState
@@ -167,8 +166,6 @@ public class ScoringState : RoundBaseState
         return true;
     }
 
-// ScoringState.cs
-
     private void SpawnTextForSinglePin(PinBase pin)
     {
         List<PinEffect> combinedEffects = new List<PinEffect>();
@@ -177,24 +174,6 @@ public class ScoringState : RoundBaseState
         if (pin.onEndOfRoundEffects != null) combinedEffects.AddRange(pin.onEndOfRoundEffects);
         
         pin.TriggerTextForEffects(combinedEffects, _manager.SpawnPinFloatingText);
-
-        // This is for the Text effect, its a bit hacky but im not sure where else to put it.
-        // Not sure if we even want this effect?
-        
-        // Grab the total multi from MultiEffects
-        float totalMultiEffect = combinedEffects.OfType<MultiEffect>().Sum(e => e.multValue);
-        
-        // ScoreMultiplierEffect has both a score and a multi, so we sum up both!
-        int totalScoreEffect = combinedEffects.OfType<ScoreMultiplierEffect>().Sum(e => e.scoreValue);
-        float additionalMultiEffect = combinedEffects.OfType<ScoreMultiplierEffect>().Sum(e => e.multValue);
-
-        float finalMultiToAdd = totalMultiEffect + additionalMultiEffect;
-
-        // Send the real totals directly to the TV UI
-        if (totalScoreEffect > 0 || finalMultiToAdd > 0)
-        {
-            _manager.inGameScoreUi.AddToTvTotals(totalScoreEffect, finalMultiToAdd);
-        }
     }
 
     private void CalculateScore()

@@ -11,13 +11,6 @@ public class InGameScoreUi : MonoBehaviour
     public TextMeshProUGUI roundText;
     public TextMeshProUGUI ballsText;
     
-    [Header("Tv Text Reference")]
-    public TextMeshProUGUI tvScoreAdd;
-    public TextMeshProUGUI tvScoreMulti;
-    
-    private float _currentTvScoreAdd = 0f;
-    private float _currentTvScoreMulti = 1f;
-    
     private int _currentDisplayedTickets = 0;
     private Coroutine _ticketAnimateRoutine;
     
@@ -109,21 +102,6 @@ public class InGameScoreUi : MonoBehaviour
         }
 
         _scoreAnimateRoutine = null;
-    }
-    
-    public void AddToTvTotals(int scoreToAdd, float multiToAdd)
-    {
-        if (scoreToAdd > 0)
-        {
-            _currentTvScoreAdd += scoreToAdd;
-            tvScoreAdd.text = _currentTvScoreAdd.ToString("0");
-        }
-
-        if (multiToAdd > 0)
-        {
-            _currentTvScoreMulti += multiToAdd;
-            tvScoreMulti.text = $"{_currentTvScoreMulti:0.##}x";
-        }
     }
     
     // Might need to extract this to a new class
@@ -268,14 +246,5 @@ public class InGameScoreUi : MonoBehaviour
             totalScoreText.color = Color.white;
             yield return new WaitForSeconds(0.2f);
         }
-    }
-    
-    public void ResetTvScores()
-    {
-        _currentTvScoreAdd = 0f;
-        _currentTvScoreMulti = 1f;
-        
-        tvScoreAdd.text = "0";
-        tvScoreMulti.text = "1";
     }
 }

@@ -11,7 +11,7 @@ public class ScoreMultiplierEffect : PinEffect
 
     public override void Execute(PinBase context, Collider instigator = null) 
     {
-        context.FrameScoreCalculator.QueueScoreModification(scoreValue);
+        context.FrameScoreCalculator.QueueScoreModification(scoreValue, multValue, context.transform.position);
     }
     
     public override string GetEffectText()
