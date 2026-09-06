@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2873815806600060618}
+  - component: {fileID: 5678694934647780627}
   m_Layer: 0
   m_Name: ticket
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 483179382657493270}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.91378933, z: -0, w: 0.40618858}
-  m_LocalPosition: {x: -4.5160985, y: -8.110495, z: 63.02002}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33,6 +34,27 @@ Transform:
   - {fileID: 3673650476000255525}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5678694934647780627
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483179382657493270}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.6229124, y: 2.355731, z: 2.9119506}
+  m_Center: {x: 0.029599788, y: -0.024597645, z: -0.012644768}
 --- !u!1 &6670627353524869537
 GameObject:
   m_ObjectHideFlags: 0

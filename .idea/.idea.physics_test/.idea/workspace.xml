@@ -9,8 +9,13 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/InGameScoreUi.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/InGameScoreUi.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Classes/EndOfRoundSCameraSequence.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Classes/EndOfRoundSCameraSequence.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GridManager/OnLaneSquareGrid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GridManager/OnLaneSquareGrid.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ticket.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ticket.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +193,7 @@
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Applications\UnityEditor\6000.3.9f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity Install\6000.3.9f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;D:\unity projects\bowlderdash\physics_test&quot; -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="D:\unity projects\bowlderdash\physics_test" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -199,7 +204,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Applications\UnityEditor\6000.3.9f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity Install\6000.3.9f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;D:\unity projects\bowlderdash\physics_test&quot; -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="D:\unity projects\bowlderdash\physics_test" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -288,6 +293,7 @@
       <workItem from="1788131814965" duration="8843000" />
       <workItem from="1788241484350" duration="6909000" />
       <workItem from="1788309311780" duration="8201000" />
+      <workItem from="1788659565484" duration="1232000" />
     </task>
     <servers />
   </component>

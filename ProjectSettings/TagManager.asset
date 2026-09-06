@@ -14,6 +14,7 @@ TagManager:
   - VisualCardHandler
   - GridPlane
   - ThePit
+  - GetTicketOnCollision
   layers:
   - Default
   - TransparentFX

@@ -744,7 +744,7 @@ MonoBehaviour:
   columns: 5
   rows: 5
   cellSize: 1
-  prefabToSpawn: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
+  ticketPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
   ticketHeightOffset: 0.5
 --- !u!1 &53320772
 GameObject:
@@ -14477,7 +14477,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1588884242}
   lerpSpeed: 3
-  showDebugMenu: 0
+  showDebugMenu: 1
   cameraMappings:
   - location: 0
     target: {fileID: 1906495015}
@@ -21067,13 +21067,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2015311222}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.052844048, y: -0.24382804, z: -0.013306873, w: 0.9682863}
-  m_LocalPosition: {x: -17.13, y: -39.25, z: -17.19}
+  m_LocalRotation: {x: 0.08195113, y: -0.26265264, z: 0.018897329, w: 0.9612183}
+  m_LocalPosition: {x: -17.359985, y: -36.20999, z: -16.78003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1616962209}
-  m_LocalEulerAnglesHint: {x: -6.248, y: -28.268, z: 0}
+  m_LocalEulerAnglesHint: {x: 9.649, y: -28.268, z: 0}
 --- !u!1001 &2024819684
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23175,6 +23175,7 @@ GameObject:
   - component: {fileID: 1353803851}
   - component: {fileID: 1353803850}
   - component: {fileID: 6652253181974710232}
+  - component: {fileID: 6652253181974710233}
   m_Layer: 11
   m_Name: Ball
   m_TagString: Ball
@@ -23576,6 +23577,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
+--- !u!114 &6652253181974710233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105671971215449031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f4fc52d4d7511d4eaed8373b6dc2b64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GetTicketOnHit
 --- !u!23 &6745302439744477546
 MeshRenderer:
   m_ObjectHideFlags: 0

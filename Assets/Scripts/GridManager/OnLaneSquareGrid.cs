@@ -7,7 +7,7 @@ public class OnLaneSquareGrid : MonoBehaviour
     public int columns = 5;
     public int rows = 5;
     public float cellSize = 1f;
-    public GameObject prefabToSpawn;
+    public GameObject ticketPrefab;
 
     [Header("Animation Settings")]
     public float ticketHeightOffset = 0.5f;
@@ -69,8 +69,9 @@ public class OnLaneSquareGrid : MonoBehaviour
             int z = i / columns;
             
             Vector3 spawnPosition = transform.position + new Vector3(x * cellSize, 0, z * cellSize);
-            GameObject spawnedObject = Instantiate(prefabToSpawn, spawnPosition, Quaternion.identity, transform);
+            GameObject spawnedObject = Instantiate(ticketPrefab, spawnPosition, Quaternion.identity, transform);
             spawnedGridObjects.Add(spawnedObject);
+            spawnedObject.tag = "GetTicketOnCollision";
         }
     }
 

@@ -28,17 +28,9 @@ public class EndOfRoundSCameraSequence
                 case TransitionPhase.InitializeUI:
                     // lets just update this before so the player doesnt see it
                     manager.inGameScoreUi.UpdateRoundText(manager.sessionData.currentRound, manager.roundData.GetMaxRoundNumber());
-                    currentPhase = TransitionPhase.ShowBallsThrown;
-                    break;
-
-                case TransitionPhase.ShowBallsThrown:
-                    manager.MoveCamera(CameraLocation.BallsThrowUi);
-                    yield return new WaitForSeconds(waitBeforeUiCamera);
-                    manager.AddBallThrownToSession();
-                    yield return new WaitForSeconds(waitBeforeUiCamera);
                     currentPhase = TransitionPhase.ShowScoreUpdate;
                     break;
-
+                
                 case TransitionPhase.ShowScoreUpdate:
                     manager.MoveCamera(CameraLocation.ScoreToBeatUi);
                     yield return new WaitForSeconds(waitBeforeUiCamera);
@@ -64,6 +56,15 @@ public class EndOfRoundSCameraSequence
                     }
 
                     yield return new WaitForSeconds(scoreDisplayHoldTime);
+                    currentPhase = TransitionPhase.ShowBallsThrown;
+                    break;
+                
+                
+                case TransitionPhase.ShowBallsThrown:
+                    manager.MoveCamera(CameraLocation.BallsThrowUi);
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
+                    manager.AddBallThrownToSession();
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
                     currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
 
