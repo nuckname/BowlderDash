@@ -30,14 +30,18 @@ public class ShopUIManager : MonoBehaviour
     public HexGrid targetGrid;
     public Button buyColumnButton;
     public Button buyRowButton;
+
+    [Header("TV Game Objects")] 
+    [SerializeField] private GameObject throwBallTv;
+    [SerializeField] private GameObject goBackToShopTv;
     
     public int baseGridCost = 5;
     public float gridCostScaling = 2;
     private int totalGridUpgrades = 0;
 
-    private RoundStateManager stateManager;
-    private List<CardDataSO> currentShopCards = new List<CardDataSO>();
-    private List<GameObject> spawnedShopCardVisuals = new List<GameObject>();
+    private RoundStateManager _roundStateManager;
+    private List<CardDataSO> _currentShopCards = new List<CardDataSO>();
+    private List<GameObject> _spawnedShopCardVisuals = new List<GameObject>();
     
     private int _cardCost = 0;
     
@@ -56,7 +60,7 @@ public class ShopUIManager : MonoBehaviour
         {
             if (manager != null)
             {
-                stateManager = manager;
+                _roundStateManager = manager;
             }
             
             GenerateShopCards();
@@ -93,20 +97,20 @@ public class ShopUIManager : MonoBehaviour
 
     private void GenerateShopCards()
     {
-        currentShopCards.Clear();
+        _currentShopCards.Clear();
 
-        while (spawnedShopCardVisuals.Count < cardButtons.Count)
+        while (_spawnedShopCardVisuals.Count < cardButtons.Count)
         {
-            spawnedShopCardVisuals.Add(null);
+            _spawnedShopCardVisuals.Add(null);
         }
 
         for (int i = 0; i < cardButtons.Count; i++)
         {
-            int randomIndex = Random.Range(0, stateManager.shopCardsToPickFrom.Count);
-            currentShopCards.Add(stateManager.shopCardsToPickFrom[randomIndex]);
+            int randomIndex = Random.Range(0, _roundStateManager.shopCardsToPickFrom.Count);
+            _currentShopCards.Add(_roundStateManager.shopCardsToPickFrom[randomIndex]);
             
             UpdateButtonText(i);
-            UpdateCardVisual(i, cardVisuals[i], currentShopCards[i]);
+            UpdateCardVisual(i, cardVisuals[i], _currentShopCards[i]);
             SetCardAlpha(i, cardButtons[i], cardVisuals[i], 1f);
         }
     }
@@ -122,7 +126,7 @@ public class ShopUIManager : MonoBehaviour
         }
 
         GameObject card = Instantiate(cardData.cardVisualPrefab, cardImage.transform);
-        spawnedShopCardVisuals[index] = card;
+        _spawnedShopCardVisuals[index] = card;
 
         RectTransform cardRect = card.GetComponent<RectTransform>();
         if (cardRect != null)
@@ -157,15 +161,31 @@ public class ShopUIManager : MonoBehaviour
 
         cardImage.enabled = false;
     }
+    
+    public void ToggleHexGridExpander(bool turnOn)
+    {
+        if (turnOn)
+        {
+            _roundStateManager.MoveCamera(CameraLocation.PinCameraLocation);
+        }
+        else
+        {
+            _roundStateManager.MoveCamera(CameraLocation.ShopCameraLocation);
+        }
+
+        throwBallTv.SetActive(!turnOn);
+        goBackToShopTv.SetActive(turnOn);
+        hexGridExpander.enabled = turnOn;
+    }
 
     private void ClearCardVisual(int index, Image cardImage)
     {
-        GameObject trackedVisual = spawnedShopCardVisuals[index];
+        GameObject trackedVisual = _spawnedShopCardVisuals[index];
         if (trackedVisual != null)
         {
             trackedVisual.SetActive(false);
             Destroy(trackedVisual);
-            spawnedShopCardVisuals[index] = null;
+            _spawnedShopCardVisuals[index] = null;
         }
 
         if (cardImage == null)
@@ -197,13 +217,13 @@ public class ShopUIManager : MonoBehaviour
 
         TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
 
-        int currentRound = stateManager.sessionData.currentRound;
+        int currentRound = _roundStateManager.sessionData.currentRound;
         int costModifier = 1;
 
         costModifier = GetShopCostModifier(currentRound, costModifier);
 
         // we first see shop on round 1 ?
-        _cardCost = currentShopCards[index].baseCost + costModifier;
+        _cardCost = _currentShopCards[index].baseCost + costModifier;
         buttonText.text = $"Buy ({_cardCost})";
     }
 
@@ -226,19 +246,19 @@ public class ShopUIManager : MonoBehaviour
 
     public void OnContinueClicked()
     {
-        stateManager.SwitchState(stateManager.roundStartState);
+        _roundStateManager.SwitchState(_roundStateManager.roundStartState);
     }
 
     public void BuyCard(int index)
     {
-        if (index < currentShopCards.Count && currentShopCards[index] != null)
+        if (index < _currentShopCards.Count && _currentShopCards[index] != null)
         {
             if (SessionData.Instance.SpendTickets(_cardCost))
             {
-                DeckManager.Instance.AddCardToDeck(currentShopCards[index]);
+                DeckManager.Instance.AddCardToDeck(_currentShopCards[index]);
                 
                 // Remove from the array so it can't be bought again
-                currentShopCards[index] = null; 
+                _currentShopCards[index] = null; 
 
                 SetCardAlpha(index, cardButtons[index], cardVisuals[index], 0.15f);
             }
@@ -391,7 +411,7 @@ public class ShopUIManager : MonoBehaviour
             buttonImage.color = buttonColor;
         }
 
-        GameObject spawnedVisual = spawnedShopCardVisuals[index];
+        GameObject spawnedVisual = _spawnedShopCardVisuals[index];
         if (spawnedVisual != null)
         {
             CanvasGroup cardGroup = spawnedVisual.GetComponent<CanvasGroup>();
