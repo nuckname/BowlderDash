@@ -257,8 +257,10 @@ public class InGameScoreUi : MonoBehaviour
         {
             StopCoroutine(_roundTextFlashRoutine);
             _roundTextFlashRoutine = null;
-            roundText.color = Color.white;
+            ballsText.color = Color.white;
         }
+        
+        
     }
 
     private IEnumerator FlashTextRoutine(TextMeshProUGUI textComponent, string textToDisplay, Color flashColor, Color baseColor, float flashInterval = 0.5f)
