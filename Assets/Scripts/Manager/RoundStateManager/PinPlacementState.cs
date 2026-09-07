@@ -28,6 +28,8 @@ public class PinPlacementState : RoundBaseState
         manager.DrawHandForCurrentTurn();
 
         SnapPinToClosestHexCell(manager);
+        
+        manager.DeleteAllActivePins();
     }
 
     // Some pins can move but not fall over, so lets just snap them to the nearest hex cell to make sure they are aligned properly.

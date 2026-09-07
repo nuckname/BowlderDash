@@ -9,7 +9,7 @@ public class ShopState : RoundBaseState
         manager.UpdateInstructionText("Shop phase. Spend tickets, then click Continue.");
 
         manager.shopUI.ToggleShop(true, manager);
-
+        
         manager.DeleteAllActivePins();
     }
 
