@@ -41,6 +41,8 @@ public class ShopUIManager : MonoBehaviour
     
     private int _cardCost = 0;
     
+    [SerializeField] private HexGridExpander hexGridExpander;
+    
     [Header("Remove Pin Settings")]
     public Button removePinButton;
     public string singlePinCardID = "SingleNormalPin";
@@ -304,6 +306,27 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
+    public void BuyHexGridUpgrade()
+    {
+        int cost = GetGridUpgradeCost();
+        if (targetGrid != null && SessionData.Instance.SpendTickets(cost))
+        {
+            targetGrid.rows++;
+            targetGrid.columns++;
+            targetGrid.GenerateGrid();
+            
+            HexGridVisuals gridVisuals = targetGrid.GetComponent<HexGridVisuals>();
+            if (gridVisuals != null)
+            {
+                gridVisuals.RebuildVisuals();
+                gridVisuals.RefreshColors();
+            }
+
+            totalGridUpgrades++;
+            UpdateGridButtonsUI();
+        }
+    }
+    
     public void BuyColumn()
     {
         int cost = GetGridUpgradeCost();
