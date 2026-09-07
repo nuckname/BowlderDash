@@ -184,33 +184,26 @@ public class ScoringState : RoundBaseState
     
     private void GoToNextRound()
     {
+        var currentRoundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
+        int maxBallsAllowed = currentRoundInfo.maxBallsAllowedToThrow;
+        int scoreNeeded = currentRoundInfo.scoreNeededToBeat;
+        
         int ballsThrown = _manager.sessionData.ballsThrown;
-        int maxBallsAllowed = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound).maxBallsAllowedToThrow;
-        int scoreNeeded = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound).scoreNeededToBeat;
         int currentScore = _manager.sessionData.currentScore;
-    
+
         if (currentScore >= scoreNeeded)
         {
             // if we have ball throws left, give them more tickets plus a bonus for not using all their balls.
             // I have no idea how to tell the user this. Floating text?
             GiveBonusTickets(maxBallsAllowed, ballsThrown);
 
-            bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound);
-            
-            RoundBaseState nextState;
-
-            if (isLastRound)
-            {
-                nextState = _manager.gameCompleteState;
-            }
-            else
-            {
-                nextState = _manager.roundWinState;
-            }
+            bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound - 1);
+            RoundBaseState nextState = isLastRound ? _manager.gameCompleteState : _manager.roundWinState;
             
             _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound, true, false));
         }
-        else if (ballsThrown >= maxBallsAllowed)
+        // This works, we are updated the ball throw late so we need the +1, after we check this
+        else if (ballsThrown + 1 >= maxBallsAllowed)
         {
             // Lost the game
             _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, _manager.gameOverState, false, false, true));
@@ -257,4 +250,6 @@ public class ScoringState : RoundBaseState
             }
         }
     }
+    
+    
 }

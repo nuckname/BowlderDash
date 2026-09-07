@@ -23,6 +23,8 @@ public class InGameScoreUi : MonoBehaviour
     private int _currentDisplayedScore = 0;
     private Coroutine _scoreAnimateRoutine;
 
+    private Coroutine _roundTextFlashRoutine;
+    
     private void Awake()
     {
         Instance = this;
@@ -225,7 +227,7 @@ public class InGameScoreUi : MonoBehaviour
     public void TriggerWinRoundText()
     {
         if (_flashRoutine != null) StopCoroutine(_flashRoutine);
-        _flashRoutine = StartCoroutine(FlashWinText());
+        _flashRoutine = StartCoroutine(FlashTextRoutine(totalScoreText, "Win\nRound!", Color.black, Color.white));
     }
 
     public void TriggerGameLostText()
@@ -234,17 +236,40 @@ public class InGameScoreUi : MonoBehaviour
         totalScoreText.color = Color.red;
         totalScoreText.text = "Game\nLost :(";
     }
-
-    private IEnumerator FlashWinText()
+    
+    public void TriggerLastThrowText()
     {
-        totalScoreText.text = "Win\nRound!";
+        if (_roundTextFlashRoutine != null) StopCoroutine(_roundTextFlashRoutine);
+        _roundTextFlashRoutine = StartCoroutine(FlashTextRoutine(ballsText, "LAST\nTHROW", Color.black, Color.white));
+    }
+    
+    public void StopAllFlashing()
+    {
+        if (_flashRoutine != null)
+        {
+            StopCoroutine(_flashRoutine);
+            _flashRoutine = null;
+            totalScoreText.color = Color.white;
+        }
+
+        if (_roundTextFlashRoutine != null)
+        {
+            StopCoroutine(_roundTextFlashRoutine);
+            _roundTextFlashRoutine = null;
+            roundText.color = Color.white;
+        }
+    }
+
+    private IEnumerator FlashTextRoutine(TextMeshProUGUI textComponent, string textToDisplay, Color flashColor, Color baseColor, float flashInterval = 0.5f)
+    {
+        textComponent.text = textToDisplay;
         
         while (true)
         {
-            totalScoreText.color = Color.yellow;
-            yield return new WaitForSeconds(0.2f);
-            totalScoreText.color = Color.white;
-            yield return new WaitForSeconds(0.2f);
+            textComponent.color = baseColor;
+            yield return new WaitForSeconds(flashInterval);
+            textComponent.color = flashColor;
+            yield return new WaitForSeconds(flashInterval);
         }
     }
     

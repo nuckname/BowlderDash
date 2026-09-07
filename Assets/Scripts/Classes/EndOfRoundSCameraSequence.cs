@@ -33,6 +33,8 @@ public class EndOfRoundSCameraSequence
                     break;
                 
                 case TransitionPhase.ShowScoreUpdate:
+                    manager.inGameScoreUi.StopAllFlashing();
+                    
                     manager.MoveCamera(CameraLocation.ScoreToBeatUi);
                     yield return new WaitForSeconds(waitBeforeUiCamera);
 
@@ -66,15 +68,29 @@ public class EndOfRoundSCameraSequence
 
                 // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
                 case TransitionPhase.ShowBallsThrown:
+                    manager.inGameScoreUi.StopAllFlashing();
+                    
                     manager.MoveCamera(CameraLocation.BallsThrowUi);
                     yield return new WaitForSeconds(waitBeforeUiCamera);
+                    
                     manager.AddBallThrownToSession();
+                    
+                    if (manager.sessionData.ballsThrown == manager.GetMaxBallsForCurrentRound() - 1)
+                    {
+                        yield return new WaitForSeconds(waitBeforeUiCamera);
+                        manager.inGameScoreUi.TriggerLastThrowText();
+                        yield return new WaitForSeconds(waitBeforeUiCamera + 1);
+                    }
+                    
+                    
                     yield return new WaitForSeconds(waitBeforeUiCamera);
                     currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
                 
                 // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
                 case TransitionPhase.ShowIncreaseRound:
+                    manager.inGameScoreUi.StopAllFlashing();
+                    
                     manager.MoveCamera(CameraLocation.ShowIncreaseRound);
                     
                     if (manager.sessionData.ballsThrown != 0)
@@ -92,6 +108,8 @@ public class EndOfRoundSCameraSequence
                     break;
 
                 case TransitionPhase.ShowTicketsEarned:
+                    manager.inGameScoreUi.StopAllFlashing();
+                    
                     // Move to the Ticket Camera and animate tickets
                     manager.MoveCamera(CameraLocation.TicketCameraUi);
                     yield return new WaitForSeconds(waitBeforeUiCamera);
