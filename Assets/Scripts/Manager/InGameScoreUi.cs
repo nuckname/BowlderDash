@@ -240,6 +240,7 @@ public class InGameScoreUi : MonoBehaviour
     public void TriggerLastThrowText()
     {
         if (_roundTextFlashRoutine != null) StopCoroutine(_roundTextFlashRoutine);
+        
         _roundTextFlashRoutine = StartCoroutine(FlashTextRoutine(ballsText, "LAST\nTHROW", Color.black, Color.white));
     }
     

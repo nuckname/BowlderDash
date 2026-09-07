@@ -80,6 +80,11 @@ public class EndOfRoundSCameraSequence
                         yield return new WaitForSeconds(waitBeforeUiCamera);
                         manager.inGameScoreUi.TriggerLastThrowText();
                         yield return new WaitForSeconds(waitBeforeUiCamera + 1);
+                        manager.inGameScoreUi.StopAllFlashing();
+                        
+                        // Update the text back to OG.
+                        manager.inGameScoreUi.UpdateBallsText(manager.sessionData.ballsThrown, 
+                            manager.roundData.GetMaxRoundNumber());
                     }
                     
                     
