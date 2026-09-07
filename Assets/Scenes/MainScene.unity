@@ -5670,6 +5670,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602475721}
   m_CullTransparentMesh: 1
+--- !u!1 &617020637
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 617020638}
+  m_Layer: 0
+  m_Name: IncreaseRoundCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &617020638
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617020637}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.072199404, y: -0.21919166, z: 0.022290256, w: 0.9727515}
+  m_LocalPosition: {x: -15.26, y: -38, z: -40.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1616962209}
+  m_LocalEulerAnglesHint: {x: 8.641, y: -25.346, z: 0.679}
 --- !u!1 &618267793
 GameObject:
   m_ObjectHideFlags: 0
@@ -14642,18 +14673,20 @@ MonoBehaviour:
     target: {fileID: 1906495015}
   - location: 1
     target: {fileID: 1316218692}
-  - location: 2
-    target: {fileID: 1799454501}
   - location: 3
-    target: {fileID: 1574878350}
+    target: {fileID: 1799454501}
   - location: 4
-    target: {fileID: 679290144}
-  - location: 6
-    target: {fileID: 2015311223}
-  - location: 7
-    target: {fileID: 1888780055}
+    target: {fileID: 1574878350}
   - location: 5
+    target: {fileID: 679290144}
+  - location: 7
+    target: {fileID: 2015311223}
+  - location: 8
+    target: {fileID: 1888780055}
+  - location: 6
     target: {fileID: 369005842}
+  - location: 8
+    target: {fileID: 617020638}
 --- !u!114 &1439520104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17221,6 +17254,7 @@ Transform:
   - {fileID: 2015311223}
   - {fileID: 369005842}
   - {fileID: 1888780055}
+  - {fileID: 617020638}
   m_Father: {fileID: 1439520102}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1620589239

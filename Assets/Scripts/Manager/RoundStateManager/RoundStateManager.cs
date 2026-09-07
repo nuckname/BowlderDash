@@ -126,7 +126,7 @@ public class RoundStateManager : MonoBehaviour
         
         inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
-        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
         inGameScoreUi.UpdateRoundText(0, roundData.GetMaxRoundNumber());
         
         SwitchState(roundStartState);
@@ -141,7 +141,7 @@ public class RoundStateManager : MonoBehaviour
         
         inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
-        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
     }
     
     public void ResetUiForQuotaNotMeetThisTurn()
@@ -195,10 +195,9 @@ public class RoundStateManager : MonoBehaviour
     public void AddBallThrownToSession()
     {
         sessionData.AddBallThrown();
-        RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
-        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, roundInfo.maxBallsAllowedToThrow);
+        inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
     }
-
+    
     public void CaptureStrikeTargetsForCurrentThrow()
     {
         strikeTargetsForCurrentThrow.Clear();
@@ -354,6 +353,12 @@ public class RoundStateManager : MonoBehaviour
         {
             pin.InjectDependencies(manager.scoreCalculator);
         }
+    }
+    
+    public int GetMaxBallsForCurrentRound()
+    {
+        RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
+        return roundInfo.maxBallsAllowedToThrow;
     }
     
     public void SpawnPinFloatingText(string text, Vector3 position)

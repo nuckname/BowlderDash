@@ -5,7 +5,6 @@ public class RoundWinState : RoundBaseState
     public override void EnterState(RoundStateManager manager)
     {
         // We have won the frame so lets reset UI values and increase round number etc.
-        manager.sessionData.AddRound();
         
         RoundScore roundInfo = manager.roundData.GetRoundInfo(manager.sessionData.currentRound);
         

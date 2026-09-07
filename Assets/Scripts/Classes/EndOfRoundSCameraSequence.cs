@@ -6,6 +6,7 @@ public enum TransitionPhase
 {
     InitializeUI,
     ShowBallsThrown,
+    ShowIncreaseRound,
     ShowScoreUpdate,
     ShowTicketsEarned,
     FinishTransition
@@ -42,7 +43,9 @@ public class EndOfRoundSCameraSequence
                     if (wonRound)
                     {
                         manager.inGameScoreUi.TriggerWinRoundText();
-                        yield return new WaitForSeconds(1);
+                        yield return new WaitForSeconds(2);
+                        currentPhase = TransitionPhase.ShowIncreaseRound;
+                        break;
                     }
                     else if (lostGame)
                     {
@@ -54,16 +57,36 @@ public class EndOfRoundSCameraSequence
                         currentPhase = TransitionPhase.FinishTransition;
                         break;
                     }
-
+                    
+                    // If we didnt meet quota
                     yield return new WaitForSeconds(scoreDisplayHoldTime);
                     currentPhase = TransitionPhase.ShowBallsThrown;
                     break;
                 
-                
+
+                // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
                 case TransitionPhase.ShowBallsThrown:
                     manager.MoveCamera(CameraLocation.BallsThrowUi);
                     yield return new WaitForSeconds(waitBeforeUiCamera);
                     manager.AddBallThrownToSession();
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
+                    currentPhase = TransitionPhase.ShowTicketsEarned;
+                    break;
+                
+                // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
+                case TransitionPhase.ShowIncreaseRound:
+                    manager.MoveCamera(CameraLocation.ShowIncreaseRound);
+                    
+                    if (manager.sessionData.ballsThrown != 0)
+                    {
+                        yield return new WaitForSeconds(waitBeforeUiCamera);
+                        manager.inGameScoreUi.ResetBallsTextAnimated(SessionData.Instance.ballsThrown, manager.GetMaxBallsForCurrentRound());
+                    }
+ 
+                    yield return new WaitForSeconds(waitBeforeUiCamera);
+                 
+                    manager.sessionData.AddRound();
+                    manager.inGameScoreUi.UpdateRoundText(manager.sessionData.currentRound, manager.roundData.GetMaxRoundNumber());
                     yield return new WaitForSeconds(waitBeforeUiCamera);
                     currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;

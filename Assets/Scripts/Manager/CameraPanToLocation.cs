@@ -13,7 +13,8 @@ public enum CameraLocation
     
     TicketCameraUi,
     ScoreToBeatUi,
-    BallsThrowUi
+    BallsThrowUi,
+    ShowIncreaseRound
 }
 
 [System.Serializable]

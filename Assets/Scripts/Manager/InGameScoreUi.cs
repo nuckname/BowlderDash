@@ -247,4 +247,41 @@ public class InGameScoreUi : MonoBehaviour
             yield return new WaitForSeconds(0.2f);
         }
     }
+    
+    // Ai 
+    // https://share.gemini.google/AeJz4o3qmN3J
+    public Coroutine ResetBallsTextAnimated(int currentBalls, int maxBalls)
+    {
+        return StartCoroutine(AnimateBallsToZero(currentBalls, maxBalls));
+    }
+
+    private IEnumerator AnimateBallsToZero(int currentBalls, int maxBalls)
+    {
+        while (currentBalls > 0)
+        {
+            currentBalls--;
+            UpdateBallsText(currentBalls, maxBalls);
+
+            float timer = 0f;
+            bool skipTriggered = false;
+
+            while (timer < 0.05f)
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                {
+                    skipTriggered = true;
+                    break;
+                }
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            if (skipTriggered)
+            {
+                currentBalls = 0;
+                UpdateBallsText(currentBalls, maxBalls);
+                break;
+            }
+        }
+    }
 }
