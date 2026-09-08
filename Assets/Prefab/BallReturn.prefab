@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 8468237780089696571}
   - component: {fileID: 7052898668866263476}
   - component: {fileID: 7929458622159354953}
+  - component: {fileID: 7190556405994481291}
   m_Layer: 0
   m_Name: BallReturn_End
   m_TagString: Untagged
@@ -125,6 +126,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7190556405994481291
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3113994517024150258}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6953620887706511270, guid: cf3434f054692494988cde8a82d7a02e, type: 3}
 --- !u!1 &4047456329777237333
 GameObject:
   m_ObjectHideFlags: 0
@@ -136,6 +159,7 @@ GameObject:
   - component: {fileID: 1217351357512043925}
   - component: {fileID: 8984683095568139914}
   - component: {fileID: 2102078532586162076}
+  - component: {fileID: 479757754808433679}
   m_Layer: 0
   m_Name: BallReturn.L
   m_TagString: Untagged
@@ -215,6 +239,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &479757754808433679
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4047456329777237333}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -7107535320551995947, guid: cf3434f054692494988cde8a82d7a02e, type: 3}
 --- !u!1 &4360613952477949381
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,6 +272,7 @@ GameObject:
   - component: {fileID: 3887943282090797013}
   - component: {fileID: 5143578805435340231}
   - component: {fileID: 7253538332153782305}
+  - component: {fileID: 7233651582316024878}
   m_Layer: 0
   m_Name: BallReturn.R
   m_TagString: Untagged
@@ -305,6 +352,28 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7233651582316024878
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360613952477949381}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1287214587398199234, guid: cf3434f054692494988cde8a82d7a02e, type: 3}
 --- !u!1 &7949532759002141773
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,6 +385,7 @@ GameObject:
   - component: {fileID: 3446035438419500682}
   - component: {fileID: 6018717489007944875}
   - component: {fileID: 6260868433939334259}
+  - component: {fileID: 8162703209893570277}
   m_Layer: 0
   m_Name: BallReturn_Base
   m_TagString: Untagged
@@ -395,3 +465,25 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8162703209893570277
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7949532759002141773}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5609407515691045263, guid: cf3434f054692494988cde8a82d7a02e, type: 3}
