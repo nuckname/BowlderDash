@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Assets\ScriptableObjects\ThrowTuningDataSO.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\RethrowBallEffect.cs" />
     <Compile Include="Assets\Scripts\UiScripts\TutorialScripts\TutorialManager.cs" />
     <Compile Include="Assets\Scripts\ScoreCalculator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
@@ -105,8 +106,10 @@
     <Compile Include="Assets\Scripts\Ball\GetTicketOnHit.cs" />
     <Compile Include="Assets\Scripts\Pins\WorldObjectToCard.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\GutterMultiEffect.cs" />
     <Compile Include="Assets\Scripts\GridManager\GridTicketManager.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundOverState.cs" />
+    <Compile Include="Assets\Scripts\Pins\PinEffects\FloatPinEffect.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\ShowPhysicDeck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\HandManager.cs" />
