@@ -50,6 +50,8 @@ public class PinBase : MonoBehaviour
     
     public bool _isFallen = false;
     public bool IsFallen => _isFallen;
+
+    public bool toScorePinFallOver = false;
     
     protected bool _hasBeenHit = false;
 

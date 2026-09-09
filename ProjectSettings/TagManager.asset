@@ -15,6 +15,7 @@ TagManager:
   - GridPlane
   - ThePit
   - GetTicketOnCollision
+  - Gutter
   layers:
   - Default
   - TransparentFX

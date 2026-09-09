@@ -16,9 +16,10 @@ MonoBehaviour:
   displayName: Targeted Bounce Pin
   description: 'On Hit: Bounces the ball towards the nearest pin'
   cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
-  cardTint: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 1}
+  cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: 2483cce24255f36448fa47c451747986, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 1e67738ea57af594a96643f347202eeb, type: 3}
   baseCost: 2
   spawnPattern: []
+  rarity: 1

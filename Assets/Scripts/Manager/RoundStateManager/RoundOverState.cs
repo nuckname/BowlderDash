@@ -26,8 +26,15 @@ public class RoundOverState : RoundBaseState
                     }
                 }
             }
-            // If pin HAS NOT fallen over: Check its onEndOfRoundEffects list
-            else
+
+            if (pin.toScorePinFallOver && pin.IsFallen)
+            {
+                
+            }
+
+
+            // Pin is standing
+            if (!pin.toScorePinFallOver && !pin.IsFallen)
             {
                 foreach (PinEffect effect in pin.onEndOfRoundEffects)
                 {
@@ -38,6 +45,16 @@ public class RoundOverState : RoundBaseState
                     }
                 }
             }
+
+            foreach (PinEffect effect in pin.onEndOfRoundEffects)
+            {
+                if (effect is ScoreMultiplierEffect)
+                {
+                    manager.pinsToScore.Add(pin);
+                    break; 
+                }
+            }
+           
         }
     }
 

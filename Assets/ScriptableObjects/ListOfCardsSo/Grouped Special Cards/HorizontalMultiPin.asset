@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Horizontal Multi Pin
   description: 'On Fall: Adds 0.25x Multiplier'
   cardArtwork: {fileID: 21300000, guid: 4d001e1dfe225404abf9d36affe56d32, type: 3}
-  cardTint: {r: 0.8627452, g: 0.07843138, b: 0.2352941, a: 1}
+  cardTintCardRarity: {r: 1, g: 0.84, b: 0, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: e33b0d8482163994d9f640b16e646376, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 2bd9d418fc5d22941b45278dfa082035, type: 3}
@@ -26,3 +26,4 @@ MonoBehaviour:
     prefab: {fileID: 5919451674846626430, guid: 2bd9d418fc5d22941b45278dfa082035, type: 3}
   - offset: {x: 1, y: 0}
     prefab: {fileID: 5919451674846626430, guid: 2bd9d418fc5d22941b45278dfa082035, type: 3}
+  rarity: 2
