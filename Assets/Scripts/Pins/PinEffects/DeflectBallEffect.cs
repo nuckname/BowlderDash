@@ -49,4 +49,29 @@ public class DeflectBallEffect : PinEffect
             targetRb.linearVelocity = newDir * (currentSpeed * speedMultiplier);
         }
     }
+    
+    public override void DrawGizmos(PinBase pinBase)
+    {
+        Gizmos.color = Color.cyan;
+        Vector3 startPos = pinBase.transform.position;
+        
+        float previewAngle = deflectAngle;
+        
+        if (!randomizeDirection && !deflectToRight)
+        {
+            previewAngle = -previewAngle;
+        }
+
+        // Assuming the ball comes from the pin's forward direction for the preview
+        Vector3 direction = Quaternion.Euler(0, previewAngle, 0) * pinBase.transform.forward;
+        Gizmos.DrawRay(startPos, direction * 3f);
+        Gizmos.DrawSphere(startPos + (direction * 3f), 0.15f);
+
+        if (randomizeDirection)
+        {
+            Vector3 oppositeDir = Quaternion.Euler(0, -previewAngle, 0) * pinBase.transform.forward;
+            Gizmos.DrawRay(startPos, oppositeDir * 3f);
+            Gizmos.DrawSphere(startPos + (oppositeDir * 3f), 0.15f);
+        }
+    }
 }

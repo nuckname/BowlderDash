@@ -15,4 +15,12 @@ public abstract class PinEffect
     {
         return string.Empty;
     }
+    
+    public virtual void DrawGizmos(PinBase pinBase) { }
+    
+    public virtual System.Collections.Generic.List<Vector3> GetPreviewDirections(PinBase pinBase)
+    {
+        return null;
+    }
+
 }

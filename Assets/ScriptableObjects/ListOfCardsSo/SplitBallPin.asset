@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: SplitBallPin
   displayName: Ball Splitter Pin
-  description: <b>On Ball Hit:</b> Clones the ball twice
+  description: <b>On Ball Hit:</b> spawns to balls at a 45 degree angle
   cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
   cardTint: {r: 0.7, g: 0.25, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}

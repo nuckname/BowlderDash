@@ -151,6 +151,8 @@ public class PinBase : MonoBehaviour
         _rb.isKinematic = true;
         _rb.Sleep();
         _isForcedSettled = true;
+
+        GeneratePreviewLines();
     }
 
     public void EnterThrowPhysicsMode()
@@ -171,6 +173,8 @@ public class PinBase : MonoBehaviour
         }
 
         _isForcedSettled = false;
+        
+        ClearPreviewLines();
     }
     
     public virtual void OnPlaced()
@@ -238,6 +242,24 @@ public class PinBase : MonoBehaviour
         }
     }
 
+    protected virtual void OnDrawGizmosSelected()
+    {
+        DrawGizmosForEffects(onPlaceEffects);
+        DrawGizmosForEffects(onHitEffects);
+        DrawGizmosForEffects(onFallEffects);
+        DrawGizmosForEffects(onEndOfRoundEffects);
+    }
+
+    private void DrawGizmosForEffects(List<PinEffect> effects)
+    {
+        if (effects == null) return;
+        
+        foreach (PinEffect effect in effects)
+        {
+            effect?.DrawGizmos(this);
+        }
+    }
+    
     protected virtual void HandleHit(Collider other)
     {
         if ((_hasBeenHit && !isClone) || !allowCollisionEffects) return;
@@ -280,6 +302,8 @@ public class PinBase : MonoBehaviour
         
         return triggeredAnyEffect;
     }
+    
+
     protected virtual void TriggerFall()
     {
         _isFallen = true;
@@ -311,5 +335,76 @@ public class PinBase : MonoBehaviour
     {
         if (ps != null)
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//https://share.gemini.google/L8ykXaebakWE    
+    private GameObject _previewLinesContainer;
+
+
+    private void GeneratePreviewLines()
+    {
+        ClearPreviewLines();
+        
+        _previewLinesContainer = new GameObject("PreviewLines");
+        _previewLinesContainer.transform.SetParent(transform);
+        _previewLinesContainer.transform.localPosition = Vector3.zero;
+        _previewLinesContainer.transform.localRotation = Quaternion.identity;
+
+        List<Vector3> allDirections = new List<Vector3>();
+        CollectDirections(onPlaceEffects, allDirections);
+        CollectDirections(onHitEffects, allDirections);
+        CollectDirections(onFallEffects, allDirections);
+        CollectDirections(onEndOfRoundEffects, allDirections);
+
+        foreach (Vector3 dir in allDirections)
+        {
+            GameObject lineObj = new GameObject("PreviewLine");
+            lineObj.transform.SetParent(_previewLinesContainer.transform);
+            lineObj.transform.localPosition = Vector3.zero;
+            lineObj.transform.localRotation = Quaternion.identity;
+            
+            LineRenderer lr = lineObj.AddComponent<LineRenderer>();
+            lr.useWorldSpace = false; 
+            lr.startWidth = 1f;
+            lr.endWidth = 0.05f;
+            lr.material = new Material(Shader.Find("Sprites/Default"));
+            lr.startColor = Color.cyan;
+            lr.endColor = Color.magenta;
+            
+            lr.positionCount = 2;
+            lr.SetPosition(0, Vector3.zero);
+            
+            Vector3 localDir = transform.InverseTransformDirection(dir);
+            lr.SetPosition(1, localDir * 3f);
+        }
+    }
+
+    private void ClearPreviewLines()
+    {
+        if (_previewLinesContainer != null)
+        {
+            Destroy(_previewLinesContainer);
+        }
+    }
+
+    private void CollectDirections(List<PinEffect> effects, List<Vector3> allDirections)
+    {
+        if (effects == null) return;
+        foreach (PinEffect effect in effects)
+        {
+            var dirs = effect?.GetPreviewDirections(this);
+            if (dirs != null)
+            {
+                allDirections.AddRange(dirs);
+            }
+        }
     }
 }
