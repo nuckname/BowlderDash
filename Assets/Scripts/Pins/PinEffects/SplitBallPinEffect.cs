@@ -55,29 +55,4 @@ public class SplitBallPinEffect : PinEffect
         // Force the original ball to continue with its velocity, counteracting any impact physics
         originalBallRb.linearVelocity = currentVelocity; 
     }
-    
-    public override void DrawGizmos(PinBase pinBase)
-    {
-        Gizmos.color = Color.magenta;
-        Vector3 startPos = pinBase.transform.position + new Vector3(0, 0, 3f);
-        
-        // Assuming the ball comes from the pin's forward direction for the preview
-        Vector3 leftDir = Quaternion.Euler(0, -splitAngle, 0) * pinBase.transform.forward;
-        Vector3 rightDir = Quaternion.Euler(0, splitAngle, 0) * pinBase.transform.forward;
-
-        Gizmos.DrawRay(startPos, leftDir * 3f);
-        Gizmos.DrawSphere(startPos + (leftDir * 3f), 0.15f);
-
-        Gizmos.DrawRay(startPos, rightDir * 3f);
-        Gizmos.DrawSphere(startPos + (rightDir * 3f), 0.15f);
-    }
-    
-    public override System.Collections.Generic.List<Vector3> GetPreviewDirections(PinBase pinBase)
-    {
-        return new System.Collections.Generic.List<Vector3>
-        {
-            Quaternion.Euler(0, -splitAngle, 0) * pinBase.transform.forward,
-            Quaternion.Euler(0, splitAngle, 0) * pinBase.transform.forward
-        };
-    }
 }
