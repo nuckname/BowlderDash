@@ -86,7 +86,7 @@ public class CardAnimator : MonoBehaviour
         }
         else
         {
-            ApplyCardTint(target.cardData != null ? target.cardData.cardTint : Color.white);
+            ApplyCardTint(target.cardData != null ? target.cardData.cardTintCardRarity : Color.white);
         }
 
         //Event Listening

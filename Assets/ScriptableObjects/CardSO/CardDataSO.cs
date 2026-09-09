@@ -27,9 +27,9 @@ public class CardDataSO : ScriptableObject
 
     [Tooltip("Pin artwork displayed in the card's image area.")]
     public Sprite cardArtwork;
-
-    // Rarity Maybe?
-    public Color cardTint = Color.white;
+    
+    [HideInInspector]
+    public Color cardTintCardRarity = Color.white;
 
     [Header("Prefabs")]
     public GameObject cardUIPrefab; 
@@ -44,8 +44,23 @@ public class CardDataSO : ScriptableObject
     [Tooltip("Define the shape and unique prefabs for each piece.")]
     public List<PatternPiece> spawnPattern = new List<PatternPiece>();
     
+    public CardRarity rarity = CardRarity.Common;
+    
     private void OnValidate()
     {
         cardID = name;
+
+        switch (rarity)
+        {
+            case CardRarity.Common:
+                cardTintCardRarity = Color.grey; 
+                break;
+            case CardRarity.Rare:
+                cardTintCardRarity = Color.blue; 
+                break;
+            case CardRarity.Legendary:
+                cardTintCardRarity = new Color(1f, 0.84f, 0f); // Gold
+                break;
+        }
     }
 }

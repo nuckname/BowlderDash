@@ -37,7 +37,7 @@ public class CardVisualPresenter : MonoBehaviour
         }
 
         SetArtwork(cardData.cardArtwork);
-        ApplyTint(cardData.cardTint);
+        ApplyTint(cardData.cardTintCardRarity);
 
         if (placementPatternDisplay != null)
         {

@@ -7,6 +7,7 @@ using UnityEngine;
 public class SplitBallPinEffect : PinEffect
 {
     [SerializeField] private float splitAngle = 85f;
+    [SerializeField] private float divideSplitBallSpeedAmount = 4f;
     private bool hasTriggered = false;
     
     public override void Execute(PinBase pinBase, Collider target = null)
@@ -33,7 +34,7 @@ public class SplitBallPinEffect : PinEffect
         Collider leftCollider = leftBall.GetComponent<Collider>();
         if (leftRb != null)
         {
-            leftRb.linearVelocity = Quaternion.Euler(0, -splitAngle, 0) * currentVelocity;
+            leftRb.linearVelocity = Quaternion.Euler(0, -splitAngle, 0) * currentVelocity / divideSplitBallSpeedAmount;
         }
 
         // Spawn right angled ball
@@ -43,7 +44,8 @@ public class SplitBallPinEffect : PinEffect
         Collider rightCollider = rightBall.GetComponent<Collider>();
         if (rightRb != null)
         {
-            rightRb.linearVelocity = Quaternion.Euler(0, splitAngle, 0) * currentVelocity;
+            // divide by 4 (divideSplitBallSpeedAmount) feels more balanced
+            rightRb.linearVelocity = Quaternion.Euler(0, splitAngle, 0) * currentVelocity / divideSplitBallSpeedAmount;
         }
         
         // Prevent the balls from colliding with each other upon spawning

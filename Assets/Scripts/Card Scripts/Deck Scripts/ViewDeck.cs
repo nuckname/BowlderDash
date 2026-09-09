@@ -54,7 +54,7 @@ public class ViewDeck : MonoBehaviour
                 CardAnimator cardAnimator = newVisualCard.GetComponent<CardAnimator>();
                 if (cardAnimator != null)
                 {
-                    cardAnimator.ApplyCardTint(cardData.cardTint);
+                    cardAnimator.ApplyCardTint(cardData.cardTintCardRarity);
                 }
 
                 spawnedViewerCards.Add(newVisualCard);

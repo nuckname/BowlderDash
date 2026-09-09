@@ -43,7 +43,16 @@ public class ShopUIManager : MonoBehaviour
     private List<CardDataSO> _currentShopCards = new List<CardDataSO>();
     private List<GameObject> _spawnedShopCardVisuals = new List<GameObject>();
     
-    private int _cardCost = 0;
+    private List<int> _currentCardCosts = new List<int>();
+    
+    [Header("Rarity Shop Settings. Its a percentage chance")]
+    public float commonWeight = 40f;
+    public float rareWeight = 35;
+    public float legendaryWeight = 25f;
+    
+    public float commonCostMultiplier = 1f;
+    public float rareCostMultiplier = 1.5f;
+    public float legendaryCostMultiplier = 2f;
     
     [SerializeField] private HexGridExpander hexGridExpander;
     
@@ -98,6 +107,7 @@ public class ShopUIManager : MonoBehaviour
     private void GenerateShopCards()
     {
         _currentShopCards.Clear();
+        _currentCardCosts.Clear();
 
         while (_spawnedShopCardVisuals.Count < cardButtons.Count)
         {
@@ -106,8 +116,8 @@ public class ShopUIManager : MonoBehaviour
 
         for (int i = 0; i < cardButtons.Count; i++)
         {
-            int randomIndex = Random.Range(0, _roundStateManager.shopCardsToPickFrom.Count);
-            _currentShopCards.Add(_roundStateManager.shopCardsToPickFrom[randomIndex]);
+            CardDataSO selectedCard = GetRandomCardByRarity();
+            _currentShopCards.Add(selectedCard);
             
             UpdateButtonText(i);
             UpdateCardVisual(i, cardVisuals[i], _currentShopCards[i]);
@@ -162,6 +172,46 @@ public class ShopUIManager : MonoBehaviour
         cardImage.enabled = false;
     }
     
+    private CardDataSO GetRandomCardByRarity()
+    {
+        List<CardDataSO> pool = _roundStateManager.shopCardsToPickFrom;
+        if (pool == null || pool.Count == 0) return null;
+
+        bool hasCommon = pool.Any(c => c.rarity == CardRarity.Common);
+        bool hasRare = pool.Any(c => c.rarity == CardRarity.Rare);
+        bool hasLegendary = pool.Any(c => c.rarity == CardRarity.Legendary);
+
+        float currentCommonWeight = hasCommon ? commonWeight : 0f;
+        float currentRareWeight = hasRare ? rareWeight : 0f;
+        float currentLegendWeight = hasLegendary ? legendaryWeight : 0f;
+
+        float totalWeight = currentCommonWeight + currentRareWeight + currentLegendWeight;
+
+        if (totalWeight <= 0f) 
+        {
+            return pool[Random.Range(0, pool.Count)];
+        }
+
+        float randomVal = Random.Range(0f, totalWeight);
+        CardRarity selectedRarity;
+
+        if (randomVal <= currentCommonWeight)
+        {
+            selectedRarity = CardRarity.Common;
+        }
+        else if (randomVal <= currentCommonWeight + currentRareWeight)
+        {
+            selectedRarity = CardRarity.Rare;
+        }
+        else
+        {
+            selectedRarity = CardRarity.Legendary;
+        }
+
+        List<CardDataSO> rarityPool = pool.Where(c => c.rarity == selectedRarity).ToList();
+        return rarityPool[Random.Range(0, rarityPool.Count)];
+    }
+    
     public void ToggleHexGridExpander(bool turnOn)
     {
         if (turnOn)
@@ -211,6 +261,7 @@ public class ShopUIManager : MonoBehaviour
         }
     }
     
+    // Replace your existing UpdateButtonText method
     private void UpdateButtonText(int index)
     {
         Button targetButton = cardButtons[index];
@@ -222,9 +273,29 @@ public class ShopUIManager : MonoBehaviour
 
         costModifier = GetShopCostModifier(currentRound, costModifier);
 
+        CardDataSO card = _currentShopCards[index];
+        float rarityMultiplier = 1f;
+        
+        switch (card.rarity)
+        {
+            case CardRarity.Common: rarityMultiplier = commonCostMultiplier; break;
+            case CardRarity.Rare: rarityMultiplier = rareCostMultiplier; break;
+            case CardRarity.Legendary: rarityMultiplier = legendaryCostMultiplier; break;
+        }
+
         // we first see shop on round 1 ?
-        _cardCost = _currentShopCards[index].baseCost + costModifier;
-        buttonText.text = $"Buy ({_cardCost})";
+        int calculatedCost = Mathf.RoundToInt((card.baseCost + costModifier) * rarityMultiplier);
+        
+        if (_currentCardCosts.Count <= index)
+        {
+            _currentCardCosts.Add(calculatedCost);
+        }
+        else
+        {
+            _currentCardCosts[index] = calculatedCost;
+        }
+        
+        buttonText.text = $"Buy ({calculatedCost})";
     }
 
     private int GetShopCostModifier(int currentRound, int costModifier)
@@ -253,7 +324,9 @@ public class ShopUIManager : MonoBehaviour
     {
         if (index < _currentShopCards.Count && _currentShopCards[index] != null)
         {
-            if (SessionData.Instance.SpendTickets(_cardCost))
+            int costToSpend = _currentCardCosts[index];
+            
+            if (SessionData.Instance.SpendTickets(costToSpend))
             {
                 DeckManager.Instance.AddCardToDeck(_currentShopCards[index]);
                 
