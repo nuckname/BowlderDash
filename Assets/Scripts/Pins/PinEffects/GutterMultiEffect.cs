@@ -11,7 +11,7 @@ public class GutterMultiEffect : PinEffect
     {
         if (instigator != null && instigator.CompareTag(targetTag))
         {
-            context.FrameScoreCalculator.QueueScoreMulti(0, multValue, context.transform.position);
+            context.FrameScoreCalculator.QueueScoreMulti(multValue, context.transform.position);
         }
     }
     

@@ -18,7 +18,6 @@ public class ExplosionEffect : PinEffect
     private bool _hasTriggered = false;
     private Coroutine _detonationCoroutine;
 
-    // Triggered automatically by PinBase when the pin tips over
     public override void Execute(PinBase context, Collider instigator = null)
     {
         if (_hasTriggered) return;
