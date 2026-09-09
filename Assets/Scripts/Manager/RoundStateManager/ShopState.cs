@@ -11,6 +11,8 @@ public class ShopState : RoundBaseState
         manager.shopUI.ToggleShop(true, manager);
         
         manager.DeleteAllActivePins();
+        
+        manager.postProcessingEffects.SetActive(false);
     }
 
     public override void UpdateState(RoundStateManager manager) { }
@@ -23,6 +25,8 @@ public class ShopState : RoundBaseState
     public override void ExitState(RoundStateManager manager)
     {
         manager.shopUI.ToggleShop(false);
+        manager.postProcessingEffects.SetActive(true);
+        
 
     }
 }

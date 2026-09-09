@@ -57,7 +57,9 @@ public class RoundStateManager : MonoBehaviour
     public TextMeshProUGUI gameOverText;
     
     public TutorialManager tutorialManager;
-       
+
+    public GameObject postProcessingEffects;
+    
     // States
     public RoundStartState roundStartState = new RoundStartState();
     public ThrowingBallState throwingBallState = new ThrowingBallState();
@@ -212,6 +214,11 @@ public class RoundStateManager : MonoBehaviour
                 strikeTargetsForCurrentThrow.Add(pin);
             }
         }
+    }
+
+    public void TurnOnLevelPins(bool turnOn)
+    {
+        
     }
 
     public bool TryApplyStrikeMultiplier()

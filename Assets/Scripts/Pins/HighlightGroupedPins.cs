@@ -16,6 +16,8 @@ public class HighlightGroupedPins : MonoBehaviour
     private List<LineRenderer> highlightLines = new List<LineRenderer>();
     private Material highlightMaterial;
 
+    public bool allowHighlighting = true;
+    
     private void Start()
     {
         GameObject hexManager = GameObject.FindGameObjectWithTag("HexManager");
@@ -32,6 +34,8 @@ public class HighlightGroupedPins : MonoBehaviour
     {
         if (mainCamera == null || grid == null) return;
 
+        if(!allowHighlighting) return;
+        
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000f, pinLayerMask))
         {
