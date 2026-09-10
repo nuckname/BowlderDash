@@ -25,13 +25,20 @@ public class RoundOverState : RoundBaseState
                         break; // Stop searching this pin since we found one and added it
                     }
                 }
-            }
-
-            if (pin.toScorePinFallOver && pin.IsFallen)
-            {
                 
+                // Gutter Multi Effect ? is there a better way to do this so that we dont have to search through ever pin. 
+                foreach (PinEffect effect in pin.onFallEffects)
+                {
+                    if (effect is GutterMultiEffect)
+                    {
+                        if (pin.hasEnterTheHoleAtTheBack)
+                        {
+                            manager.pinsToScore.Add(pin);
+                            break; 
+                        }
+                    }
+                }
             }
-
 
             // Pin is standing
             if (!pin.toScorePinFallOver && !pin.IsFallen)

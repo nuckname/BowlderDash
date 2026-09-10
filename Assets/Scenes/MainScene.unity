@@ -5934,7 +5934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.12, g: 0.15, b: 0.2, a: 0.98}
+  m_Color: {r: 0.12, g: 0.15, b: 0.2, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12768,7 +12768,7 @@ MonoBehaviour:
   commonCostMultiplier: 1
   rareCostMultiplier: 1.5
   legendaryCostMultiplier: 2
-  hexGridExpander: {fileID: 0}
+  hexGridExpander: {fileID: 120957819}
   removePinButton: {fileID: 1638082805}
   singlePinCardID: SinglePin
   removePinCost: 1

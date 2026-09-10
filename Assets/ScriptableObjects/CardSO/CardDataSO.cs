@@ -27,6 +27,7 @@ public class CardDataSO : ScriptableObject
 
     [Tooltip("Pin artwork displayed in the card's image area.")]
     public Sprite cardArtwork;
+    public List<Sprite> pinImages;
     
     [HideInInspector]
     public Color cardTintCardRarity = Color.white;

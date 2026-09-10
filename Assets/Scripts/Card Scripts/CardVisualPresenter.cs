@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class CardVisualPresenter : MonoBehaviour
 
     [Header("Images")]
     [SerializeField] private Image artworkImage;
+    [SerializeField] private List<Image> pinImages = new List<Image>();
     [Tooltip("Optional image used for the card's presentation tint or accent colour.")]
     [SerializeField] private Graphic tintTarget;
 
