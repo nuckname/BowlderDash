@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: SingleNormalPin
   m_EditorClassIdentifier: 
   cardID: SingleNormalPin
-  displayName: Pin
-  description: Just a normal bowling pin...
+  displayName: A Pin
+  description: 'On Fall: +10'
   cardArtwork: {fileID: 0}
   pinImages:
-  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
-  desiredLayout: 0
+  - {fileID: 1175842804, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  desiredLayout: 4
   cardTintCardRarity: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: 33a9b8138cefa024aa18a27216b22f9b, type: 3}

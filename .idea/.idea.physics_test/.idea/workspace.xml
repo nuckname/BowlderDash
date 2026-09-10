@@ -9,22 +9,23 @@
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Prefab/Cards/CardVisual.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Cards/CardVisual.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/MultiPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/MultiPin.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/HorizontalDoubleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/HorizontalDoubleNormalPin.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalLeft.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalLeft.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalRight.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalRight.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/HorziontalTrippleNormalPin.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/HorziontalTrippleNormalPin.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalLeft.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalLeft.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalRight.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinDiagonalRight.asset.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinTriangle.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/NormalPinTriangle.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/SingleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/SingleNormalPin.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertDoubleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertDoubleNormalPin.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertTrippleNormalPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertTrippleNormalPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertTrippleNormalPin.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/Normal Pins/VertTrippleNormalPin.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/VasePin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/VasePin.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardVisualPresenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardVisualPresenter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -326,7 +327,7 @@
       <workItem from="1788911440212" duration="3349000" />
       <workItem from="1788914846886" duration="7387000" />
       <workItem from="1789018680966" duration="133000" />
-      <workItem from="1789018836038" duration="3133000" />
+      <workItem from="1789018836038" duration="4255000" />
     </task>
     <servers />
   </component>

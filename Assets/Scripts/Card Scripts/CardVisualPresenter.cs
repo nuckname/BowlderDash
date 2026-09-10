@@ -7,7 +7,9 @@ public enum PinLayoutType
 {
     None,
     Triangle,
-    Vertical
+    DoubleVertical,
+    DoubleHorizontal,
+    Single,
 }
 
 [System.Serializable]
@@ -36,9 +38,9 @@ public class CardVisualPresenter : MonoBehaviour
     [SerializeField] private CardPlacementPatternDisplay placementPatternDisplay;
 
     [Header("Pin Randomisation")]
-    [SerializeField] private Vector2 zPositionRange = new Vector2(-3f, -30f);
-    [SerializeField] private Vector2 zRotationRange = new Vector2(-10f, 10f);
-    [SerializeField] private Vector2 sizeRange = new Vector2(0.75f, 0.8f);
+    [SerializeField] private Vector2 zPositionRange;
+    [SerializeField] private Vector2 zRotationRange;
+    [SerializeField] private Vector2 sizeRange;
     
     public void Bind(CardDataSO cardData)
     {
@@ -83,51 +85,88 @@ public class CardVisualPresenter : MonoBehaviour
         List<Sprite> pins = cardData?.pinImages ?? new List<Sprite>();
         PinLayoutType targetLayout = cardData?.desiredLayout ?? PinLayoutType.None;
 
+        // Deactivate all layouts first
         foreach (PinLayout layout in pinLayouts)
         {
-            if (layout == null)
+            if (layout?.layoutContainer != null)
+            {
+                layout.layoutContainer.SetActive(false);
+            }
+        }
+
+        switch (targetLayout)
+        {
+            case PinLayoutType.Triangle:
+                SetupLayout(PinLayoutType.Triangle, pins);
+                break;
+            
+            case PinLayoutType.DoubleVertical:
+                SetupLayout(PinLayoutType.DoubleVertical, pins);
+                break;
+            
+            case PinLayoutType.DoubleHorizontal:
+                SetupLayout(PinLayoutType.DoubleHorizontal, pins);
+                break;
+            
+            case PinLayoutType.Single:
+                SetupLayout(PinLayoutType.Single, pins);
+                break;
+
+            case PinLayoutType.None:
+            default:
+                // Do nothing, all layouts are already off
+                break;
+        }
+    }
+    
+    private void SetupLayout(PinLayoutType type, List<Sprite> pins)
+    {
+        PinLayout activeLayout = pinLayouts.Find(l => l != null && l.layoutType == type);
+        
+        if (activeLayout == null)
+        {
+            return;
+        }
+
+        if (activeLayout.layoutContainer != null)
+        {
+            activeLayout.layoutContainer.SetActive(true);
+        }
+
+        for (int i = 0; i < activeLayout.pinImages.Count; i++)
+        {
+            if (activeLayout.pinImages[i] == null)
             {
                 continue;
             }
 
-            bool isMatchingLayout = layout.layoutType == targetLayout;
-            
-            if (layout.layoutContainer != null)
+            if (i < pins.Count && pins[i] != null)
             {
-                layout.layoutContainer.SetActive(isMatchingLayout && targetLayout != PinLayoutType.None);
+                activeLayout.pinImages[i].sprite = pins[i];
+                activeLayout.pinImages[i].enabled = true;
+
+                RectTransform pinRect = activeLayout.pinImages[i].rectTransform;
+
+                // Rolling new random values individually for each pin in the loop
+                float randomZPos = Random.Range(zPositionRange.x, zPositionRange.y);
+                Vector3 pos = pinRect.localPosition;
+                pos.z = randomZPos;
+                pinRect.localPosition = pos;
+
+                float randomZRot = Random.Range(zRotationRange.x, zRotationRange.y);
+                pinRect.localEulerAngles = new Vector3(0f, 0f, randomZRot);
+
+                float randomScale = Random.Range(sizeRange.x, sizeRange.y);
+                pinRect.localScale = new Vector3(randomScale, randomScale, 1f);
             }
-
-            if (isMatchingLayout)
+            else
             {
-                for (int i = 0; i < layout.pinImages.Count; i++)
-                {
-                    if (i < pins.Count && pins[i] != null)
-                    {
-                        layout.pinImages[i].sprite = pins[i];
-                        layout.pinImages[i].enabled = true;
-
-                        if (!layout.doNotRandomiseValues)
-                        {
-                            RectTransform pinRect = layout.pinImages[i].rectTransform;
-                        
-                            // Rolling new random values individually for each pin in the loop
-                            float randomZPos = Random.Range(zPositionRange.x, zPositionRange.y);
-                            Vector3 pos = pinRect.localPosition;
-                            pos.z = randomZPos;
-                            pinRect.localPosition = pos;
-
-                            float randomZRot = Random.Range(zRotationRange.x, zRotationRange.y);
-                            pinRect.localEulerAngles = new Vector3(0f, 0f, randomZRot);
-
-                            float randomScale = Random.Range(sizeRange.x, sizeRange.y);
-                            pinRect.localScale = new Vector3(randomScale, randomScale, 1f);
-                        }
-                    }
-                }
+                activeLayout.pinImages[i].sprite = null;
+                activeLayout.pinImages[i].enabled = false;
             }
         }
     }
- 
+    
     private void SetArtwork(Sprite artwork)
     {
         if (artworkImage == null)

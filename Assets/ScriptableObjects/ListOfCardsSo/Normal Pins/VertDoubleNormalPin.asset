@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: VertDoubleNormalPin
   m_EditorClassIdentifier: 
   cardID: VertDoubleNormalPin
-  displayName: Double Pins
-  description: Two pins, arranged vertically.
+  displayName: Vertical Pins
+  description: 'On Fall: +10'
   cardArtwork: {fileID: 0}
   pinImages:
-  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
-  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: 1175842804, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: 1175842804, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
   desiredLayout: 2
   cardTintCardRarity: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}

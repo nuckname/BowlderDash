@@ -15,7 +15,10 @@ MonoBehaviour:
   cardID: MultiPin
   displayName: Ace Pin
   description: 'On Fall: Adds 0.25x Multiplier'
-  cardArtwork: {fileID: 21300000, guid: 4d001e1dfe225404abf9d36affe56d32, type: 3}
+  cardArtwork: {fileID: 0}
+  pinImages:
+  - {fileID: 133303568, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  desiredLayout: 4
   cardTintCardRarity: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 5740910511806353211, guid: e33b0d8482163994d9f640b16e646376, type: 3}
