@@ -42,6 +42,14 @@ public class CardVisualPresenter : MonoBehaviour
     [SerializeField] private Vector2 zRotationRange;
     [SerializeField] private Vector2 sizeRange;
     
+    // ai https://share.gemini.google/eZpLzfcrjY4M
+    // I want a slight variation in tint colour so all the card backgrounds don't look exactly the same.
+    [Header("Tint Randomisation")]
+    [Tooltip("Min and Max variation for Hue. Small values like -0.05 to 0.05 are best.")]
+    [SerializeField] private Vector2 hueVariationRange = new Vector2(-0.07f, 0.07f);
+    [SerializeField] private Vector2 saturationVariationRange = new Vector2(-0.3f, 0.3f);
+    [SerializeField] private Vector2 valueVariationRange = new Vector2(-0.3f, 0.3f);
+    
     public void Bind(CardDataSO cardData)
     {
         if (cardData == null)
@@ -76,7 +84,20 @@ public class CardVisualPresenter : MonoBehaviour
     {
         if (tintTarget != null)
         {
-            tintTarget.color = tint;
+            Color.RGBToHSV(tint, out float h, out float s, out float v);
+
+            h += Random.Range(hueVariationRange.x, hueVariationRange.y);
+            s += Random.Range(saturationVariationRange.x, saturationVariationRange.y);
+            v += Random.Range(valueVariationRange.x, valueVariationRange.y);
+
+            h = Mathf.Repeat(h, 1f);
+            s = Mathf.Clamp01(s);
+            v = Mathf.Clamp01(v);
+
+            Color variedColor = Color.HSVToRGB(h, s, v);
+            variedColor.a = tint.a;
+
+            tintTarget.color = variedColor;
         }
     }
 
