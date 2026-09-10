@@ -16,9 +16,11 @@ MonoBehaviour:
   displayName: Deflection Pin
   description: 'On Hit: Bounces the ball 45 degrees right'
   cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
+  pinImages: []
+  desiredLayout: 0
   cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
-  cardVisualPrefab: {fileID: 5740910511806353211, guid: d6d1e803924cb3d4ba753765311ae52f, type: 3}
+  cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 49e95e6564324e448b132749e20f3ddf, type: 3}
   baseCost: 2
   spawnPattern: []
