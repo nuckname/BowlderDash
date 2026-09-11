@@ -1782,8 +1782,8 @@ MonoBehaviour:
   rotationAmount: 50
   rotationSpeed: 50
   autoTiltAmount: 8
-  manualTiltAmount: 30
-  tiltSpeed: 40
+  manualTiltAmount: 1
+  tiltSpeed: 30
   scaleAnimations: 1
   scaleOnHover: 1.07
   scaleOnSelect: 1.2
