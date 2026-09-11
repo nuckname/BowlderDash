@@ -31,6 +31,11 @@ public class ShopUIManager : MonoBehaviour
     public Button buyColumnButton;
     public Button buyRowButton;
 
+    [Header("Grid Expansion TV Spawn")]
+    public Transform tvSpawnPoint;
+    public GameObject ticketCostTvPrefab;
+    private GameObject _spawnedTicketCostTv;
+    
     [Header("TV Game Objects")] 
     [SerializeField] private GameObject throwBallTv;
     [SerializeField] private GameObject goBackToShopTv;
@@ -216,18 +221,40 @@ public class ShopUIManager : MonoBehaviour
     {
         if (turnOn)
         {
+            _roundStateManager.postProcessingEffects.SetActive(true);
+            
             _roundStateManager.MoveCamera(CameraLocation.PinCameraLocation);
+            
+            if (ticketCostTvPrefab != null && tvSpawnPoint != null)
+            {
+                _spawnedTicketCostTv = Instantiate(ticketCostTvPrefab, tvSpawnPoint.position, tvSpawnPoint.rotation);
+
+                _spawnedTicketCostTv.transform.rotation = Quaternion.Euler(0, 90, 90);
+                
+                TextMeshProUGUI textComponent = _spawnedTicketCostTv.GetComponentInChildren<TextMeshProUGUI>();
+                if (textComponent != null)
+                {
+                    textComponent.text = $"Cost: {GetGridUpgradeCost()}\n\n<color=green>Your Tickets: {SessionData.Instance.tickets}";
+                }
+            }
         }
         else
         {
             _roundStateManager.MoveCamera(CameraLocation.ShopCameraLocation);
+            
+            _roundStateManager.postProcessingEffects.SetActive(false);
+            
+            if (_spawnedTicketCostTv != null)
+            {
+                Destroy(_spawnedTicketCostTv);
+            }
         }
 
         throwBallTv.SetActive(!turnOn);
         goBackToShopTv.SetActive(turnOn);
         hexGridExpander.enabled = turnOn;
     }
-
+    
     private void ClearCardVisual(int index, Image cardImage)
     {
         GameObject trackedVisual = _spawnedShopCardVisuals[index];
@@ -396,67 +423,6 @@ public class ShopUIManager : MonoBehaviour
         {
             TextMeshProUGUI rowText = buyRowButton.GetComponentInChildren<TextMeshProUGUI>();
             if (rowText != null) rowText.text = $"+1 Row ({cost})";
-        }
-    }
-
-    public void BuyHexGridUpgrade()
-    {
-        int cost = GetGridUpgradeCost();
-        if (targetGrid != null && SessionData.Instance.SpendTickets(cost))
-        {
-            targetGrid.rows++;
-            targetGrid.columns++;
-            targetGrid.GenerateGrid();
-            
-            HexGridVisuals gridVisuals = targetGrid.GetComponent<HexGridVisuals>();
-            if (gridVisuals != null)
-            {
-                gridVisuals.RebuildVisuals();
-                gridVisuals.RefreshColors();
-            }
-
-            totalGridUpgrades++;
-            UpdateGridButtonsUI();
-        }
-    }
-    
-    public void BuyColumn()
-    {
-        int cost = GetGridUpgradeCost();
-        if (targetGrid != null && SessionData.Instance.SpendTickets(cost))
-        {
-            targetGrid.columns++;
-            targetGrid.GenerateGrid();
-            
-            HexGridVisuals gridVisuals = targetGrid.GetComponent<HexGridVisuals>();
-            if (gridVisuals != null)
-            {
-                gridVisuals.RebuildVisuals();
-                gridVisuals.RefreshColors();
-            }
-
-            totalGridUpgrades++;
-            UpdateGridButtonsUI();
-        }
-    }
-
-    public void BuyRow()
-    {
-        int cost = GetGridUpgradeCost();
-        if (targetGrid != null && SessionData.Instance.SpendTickets(cost))
-        {
-            targetGrid.rows++;
-            targetGrid.GenerateGrid();
-            
-            HexGridVisuals gridVisuals = targetGrid.GetComponent<HexGridVisuals>();
-            if (gridVisuals != null)
-            {
-                gridVisuals.RebuildVisuals();
-                gridVisuals.RefreshColors();
-            }
-
-            totalGridUpgrades++;
-            UpdateGridButtonsUI();
         }
     }
     

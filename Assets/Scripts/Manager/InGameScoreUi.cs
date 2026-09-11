@@ -207,7 +207,7 @@ public class InGameScoreUi : MonoBehaviour
 
     public void UpdateScoreToBeatText(int scoreToBeat)
     {
-        scoreToBeatText.text = $"Score To Beat:\n{scoreToBeat}";
+        scoreToBeatText.text = $"Quota:\n{scoreToBeat}";
     }
     
     private Coroutine _flashRoutine;
