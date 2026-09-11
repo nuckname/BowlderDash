@@ -78,6 +78,7 @@
     <Compile Include="Assets\PathDrawer.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardAnimator.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\PinEffect.cs" />
+    <Compile Include="Assets\Scripts\Classes\LeaderboardEntry.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\ViewDeck.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Assets\Scripts\exploder.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\VisualCardsHandler.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\TeleportBallPinEffect.cs" />
+    <Compile Include="Assets\Scripts\Classes\LeaderboardStorage.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Hand Scripts\HandInteractionManager.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\GameCompleteState.cs" />
