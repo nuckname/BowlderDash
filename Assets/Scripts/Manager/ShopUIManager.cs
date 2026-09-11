@@ -26,10 +26,7 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField] private float shopCardVisualScale = 0.5f;
     public ShopCostSO shopCost;
     
-    [Header("Grid Expansion")]
-    public HexGrid targetGrid;
-    public Button buyColumnButton;
-    public Button buyRowButton;
+    public Button expandGridButton;
 
     [Header("Grid Expansion TV Spawn")]
     public Transform tvSpawnPoint;
@@ -80,6 +77,8 @@ public class ShopUIManager : MonoBehaviour
             GenerateShopCards();
             UpdateRemovePinUI();
             UpdateRerollUI();
+            
+            UpdateGridButtonText();
         }
     }
 
@@ -244,11 +243,25 @@ public class ShopUIManager : MonoBehaviour
             {
                 Destroy(_spawnedTicketCostTv);
             }
+
+            UpdateGridButtonText();
         }
 
         throwBallTv.SetActive(!turnOn);
         goBackToShopTv.SetActive(turnOn);
         hexGridExpander.enabled = turnOn;
+    }
+    
+    private void UpdateGridButtonText()
+    {
+        if (expandGridButton != null)
+        {
+            TextMeshProUGUI btnText = expandGridButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (btnText != null)
+            {
+                btnText.text = $"Increase Grid Size: {GetGridUpgradeCost()}";
+            }
+        }
     }
     
     private void ClearCardVisual(int index, Image cardImage)

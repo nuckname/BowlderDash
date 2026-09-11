@@ -12667,15 +12667,13 @@ MonoBehaviour:
   rerollCost: 1
   costScalingPerRound: 1
   shopCardVisualScale: 0.5
-  shopCost: {fileID: 0}
-  targetGrid: {fileID: 120957818}
-  buyColumnButton: {fileID: 799966836}
-  buyRowButton: {fileID: 0}
+  shopCost: {fileID: 11400000, guid: 40d0a46b6813fb74885915fbe6d4316e, type: 2}
+  expandGridButton: {fileID: 799966836}
   tvSpawnPoint: {fileID: 412851581}
   ticketCostTvPrefab: {fileID: 7284009533937498436, guid: 053be667222c2744cb45b35d61eab960, type: 3}
   throwBallTv: {fileID: 1519937886}
   goBackToShopTv: {fileID: 51501853}
-  baseGridCost: 5
+  baseGridCost: 3
   gridCostScaling: 2
   commonWeight: 70
   rareWeight: 25
