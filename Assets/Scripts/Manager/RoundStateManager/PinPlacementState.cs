@@ -16,6 +16,9 @@ public class PinPlacementState : RoundBaseState
             manager.tutorialManager.PlayPinPlacementTutorial();
         }
         
+        manager.TurnOnBallMesh(true);
+        
+        
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
 

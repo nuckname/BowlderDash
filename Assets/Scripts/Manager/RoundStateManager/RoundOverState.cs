@@ -12,6 +12,8 @@ public class RoundOverState : RoundBaseState
         
         waitTimer = 0f;
 
+        manager.TurnOnBallMesh(false);
+
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
             // If pin HAS fallen over: Check its onFallEffects list

@@ -507,4 +507,10 @@ public class RoundStateManager : MonoBehaviour
         cameraPanToLocation.CancelActiveMove();
         cameraFollowScript.StartTracking(trackingStartTransform);
     }
+
+    // Not sure how the ball is being turned off, easy way to do this.
+    public void TurnOnBallMesh(bool turnOff)
+    {
+        GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().enabled = turnOff;
+    }
 }

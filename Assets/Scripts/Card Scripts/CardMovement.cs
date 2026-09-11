@@ -39,6 +39,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     
     [HideInInspector] public bool isPreviewingInWorld = false;
 
+    private Vector3 _preSelectionPosition;
+    
     [Header("States")]
     public bool isHovering;
     public bool isDragging;
@@ -317,18 +319,13 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         SelectEvent.Invoke(this, selected);
 
         if (selected)
-            transform.localPosition += (cardAnimator.transform.up * selectionOffset);
-        else
-            transform.localPosition = Vector3.zero;
-    }
-
-    // Forces the card out of its selected state and resets its local position.
-    public void Deselect()
-    {
-        if (selected)
         {
-            selected = false;
-            transform.localPosition = Vector3.zero;
+            _preSelectionPosition = transform.localPosition;
+            transform.localPosition += (cardAnimator.transform.up * selectionOffset);
+        }
+        else
+        {
+            transform.localPosition = _preSelectionPosition;
         }
     }
 

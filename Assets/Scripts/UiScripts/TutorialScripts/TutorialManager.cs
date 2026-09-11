@@ -56,7 +56,19 @@ public class TutorialManager : MonoBehaviour
     {
         if (currentState != TutorialState.None && Input.GetMouseButtonDown(0))
         {
-            if (stopAreaBox != null && RectTransformUtility.RectangleContainsScreenPoint(stopAreaBox, Input.mousePosition, null))
+            if (currentState == TutorialState.ShowButtonToThrow)
+            {
+                if (buttonTransform != null)
+                {
+                    RectTransform buttonRect = buttonTransform as RectTransform;
+                    if (buttonRect != null && RectTransformUtility.RectangleContainsScreenPoint(buttonRect, Input.mousePosition, null))
+                    {
+                        Debug.Log("Button clicked! Transitioning to Throw tutorial.");
+                        PlayThrowTutorial(); 
+                    }
+                }
+            }
+            else if (stopAreaBox != null && RectTransformUtility.RectangleContainsScreenPoint(stopAreaBox, Input.mousePosition, null))
             {
                 if (currentState == TutorialState.PinPlacement)
                 {
@@ -67,16 +79,6 @@ public class TutorialManager : MonoBehaviour
                 else
                 {
                     StopTutorial();
-                }
-            }
-
-            if (buttonTransform != null && currentState == TutorialState.ShowButtonToThrow)
-            {
-                RectTransform buttonRect = buttonTransform as RectTransform;
-                if (buttonRect != null && RectTransformUtility.RectangleContainsScreenPoint(buttonRect, Input.mousePosition, null))
-                {
-                    Debug.Log("Button clicked! Transitioning to Throw tutorial.");
-                    PlayThrowTutorial(); 
                 }
             }
         }
