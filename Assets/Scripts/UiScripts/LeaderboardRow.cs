@@ -17,6 +17,7 @@ public class LeaderboardRow : MonoBehaviour
         nameText.text = entry.playerName;
         totalScoreText.text = entry.totalScore.ToString("N0");
         highestRoundScoreText.text = entry.highestRoundScore.ToString("N0");
-        highestRoundText.text = entry.highestRoundReached.ToString();
+        // Saved rounds are zero-based; players see the first round as round 1.
+        highestRoundText.text = (entry.highestRoundReached + 1).ToString();
     }
 }

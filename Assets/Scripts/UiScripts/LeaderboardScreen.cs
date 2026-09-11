@@ -57,7 +57,8 @@ public class LeaderboardScreen : MonoBehaviour
         finished = false;
         isSaving = false;
         outcomeText.text = victory ? "VICTORY" : "GAME OVER";
-        resultText.text = $"TOTAL SCORE  {result.totalScore:N0}     •     HIGHEST ROUND SCORE  {result.highestRoundScore:N0}     •     HIGHEST ROUND  {result.highestRoundReached}";
+        // Match the leaderboard rows while retaining zero-based rounds in saved data.
+        resultText.text = $"TOTAL SCORE  {result.totalScore:N0}     •     HIGHEST ROUND SCORE  {result.highestRoundScore:N0}     •     HIGHEST ROUND  {result.highestRoundReached + 1}";
         nameInput.SetTextWithoutNotify(string.Empty);
         nameInput.interactable = true;
         saveButton.gameObject.SetActive(true);
