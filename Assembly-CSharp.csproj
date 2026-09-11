@@ -172,6 +172,7 @@
     <Compile Include="Assets\Scripts\Pins\PinEffects\DeflectBallEffect.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\VaseVisualEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundBaseState.cs" />
+    <Compile Include="Assets\Scripts\Manager\RoundStateManager\LeaderboardState.cs" />
     <Compile Include="Assets\Scripts\UiScripts\LeaderboardScreen.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardVisualPresenter.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

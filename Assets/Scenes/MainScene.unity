@@ -3945,6 +3945,7 @@ MonoBehaviour:
   hasDrawnCardsThisTurn: 0
   isHandDrawReady: 0
   gameOverText: {fileID: 906246235}
+  leaderboardScreenPrefab: {fileID: 4633033163837582929, guid: 462c0d1ae8c88494ab1b316103872450, type: 3}
   tutorialManager: {fileID: 1588757391}
   postProcessingEffects: {fileID: 683764254}
   throwingBallState:
@@ -3967,10 +3968,6 @@ MonoBehaviour:
     announcementText: Boss obstacle incoming!
     floatingTextOffset: {x: 0, y: 5, z: 0}
     revealDuration: 5
-  gameCompleteState:
-    completionMessage: 'You Win!
-
-      Press Enter to play again.'
   pinFloatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
   bossFloatingTextPrefab: {fileID: 2221769346915677457, guid: 30139dc5cd464d5419b72b57dd721caa, type: 3}
 --- !u!1 &374805130
