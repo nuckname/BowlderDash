@@ -76,7 +76,7 @@ public class TutorialManager : MonoBehaviour
                     StopTutorial();
                     StartCoroutine(DelayedShowButtonToThrow());
                 }
-                else
+                else if (currentState != TutorialState.Throw) 
                 {
                     StopTutorial();
                 }
