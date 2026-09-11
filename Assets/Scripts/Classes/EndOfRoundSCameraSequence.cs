@@ -63,7 +63,10 @@ public class EndOfRoundSCameraSequence
                     {
                         manager.inGameScoreUi.TriggerWinRoundText();
                         yield return SkippableWait(2);
-                        currentPhase = TransitionPhase.ShowIncreaseRound;
+                        // Final victory keeps the completed round and score for the end screen.
+                        currentPhase = prepareNextRound
+                            ? TransitionPhase.ShowIncreaseRound
+                            : TransitionPhase.ShowTicketsEarned;
                         break;
                     }
                     else if (lostGame)
