@@ -78,7 +78,6 @@ public class ShopUIManager : MonoBehaviour
             }
             
             GenerateShopCards();
-            UpdateGridButtonsUI();
             UpdateRemovePinUI();
             UpdateRerollUI();
         }
@@ -231,11 +230,8 @@ public class ShopUIManager : MonoBehaviour
 
                 _spawnedTicketCostTv.transform.rotation = Quaternion.Euler(0, 90, 90);
                 
-                TextMeshProUGUI textComponent = _spawnedTicketCostTv.GetComponentInChildren<TextMeshProUGUI>();
-                if (textComponent != null)
-                {
-                    textComponent.text = $"Cost: {GetGridUpgradeCost()}\n\n<color=green>Your Tickets: {SessionData.Instance.tickets}";
-                }
+                // Changed this part to use the new helper method
+                UpdateGridTVText();
             }
         }
         else
@@ -286,6 +282,32 @@ public class ShopUIManager : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
+    }
+    
+    public void UpdateGridTVText()
+    {
+        if (_spawnedTicketCostTv != null)
+        {
+            TextMeshProUGUI textComponent = _spawnedTicketCostTv.GetComponentInChildren<TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.text = $"Cost: {GetGridUpgradeCost()}\n\n<color=green>Your Tickets: {SessionData.Instance.tickets}</color>";
+            }
+        }
+    }
+    
+    public bool TryBuyGridExpansion()
+    {
+        int cost = GetGridUpgradeCost();
+        
+        if (SessionData.Instance.SpendTickets(cost))
+        {
+            totalGridUpgrades++;
+            UpdateGridTVText();
+            return true;
+        }
+        
+        return false;
     }
     
     // Replace your existing UpdateButtonText method
@@ -407,23 +429,6 @@ public class ShopUIManager : MonoBehaviour
     private int GetGridUpgradeCost()
     {
         return Mathf.RoundToInt(baseGridCost + (totalGridUpgrades * gridCostScaling));
-    }
-
-    private void UpdateGridButtonsUI()
-    {
-        int cost = GetGridUpgradeCost();
-
-        if (buyColumnButton != null)
-        {
-            TextMeshProUGUI colText = buyColumnButton.GetComponentInChildren<TextMeshProUGUI>();
-            if (colText != null) colText.text = $"+1 Column ({cost})";
-        }
-
-        if (buyRowButton != null)
-        {
-            TextMeshProUGUI rowText = buyRowButton.GetComponentInChildren<TextMeshProUGUI>();
-            if (rowText != null) rowText.text = $"+1 Row ({cost})";
-        }
     }
     
     // AI https://share.gemini.google/lIdrnSIvV63b

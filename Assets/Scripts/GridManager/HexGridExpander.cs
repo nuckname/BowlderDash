@@ -8,6 +8,8 @@ public class HexGridExpander : MonoBehaviour
     private HexGrid grid;
     private HexGridVisuals visuals;
 
+    public ShopUIManager shopManager;
+    
     [Header("Grid Limits")]
     public int leftSideExpandingLimit;
     public int rightSideExpandingLimit;
@@ -28,7 +30,21 @@ public class HexGridExpander : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                AddCell(newAxial, newCenter);
+                if (shopManager != null)
+                {
+                    if (shopManager.TryBuyGridExpansion())
+                    {
+                        AddCell(newAxial, newCenter);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Not enough tickets");
+                    }
+                }
+                else
+                {
+                    AddCell(newAxial, newCenter);
+                }
             }
         }
         else
@@ -36,7 +52,6 @@ public class HexGridExpander : MonoBehaviour
             if (visuals != null) visuals.HidePreview();
         }
     }
-
     private bool TryGetExpansionData(out Vector2Int newAxial, out Vector3 newCenter)
     {
         newAxial = Vector2Int.zero;

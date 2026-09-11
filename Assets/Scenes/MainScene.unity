@@ -1814,6 +1814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffbc7f7383698bb4a86d41201caace8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HexGridExpander
+  shopManager: {fileID: 1168153566}
   leftSideExpandingLimit: -3
   rightSideExpandingLimit: 5
   upSideExpandingLimit: -5
