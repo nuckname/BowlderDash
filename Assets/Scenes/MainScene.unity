@@ -1720,6 +1720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0976d5d9c4b963946999cd2dc080ea92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 0}
 --- !u!4 &120957813
 Transform:
   m_ObjectHideFlags: 0
@@ -3908,6 +3909,9 @@ MonoBehaviour:
     currentRound: 0
     ballsThrown: 0
     tickets: 0
+    totalScore: 0
+    highestRoundScore: 0
+    highestRoundReached: 0
   onLaneSquareGrid: {fileID: 49965618}
   masterCardList:
   - {fileID: 11400000, guid: 42aeef7c33ffadb408333770abf43cfc, type: 2}

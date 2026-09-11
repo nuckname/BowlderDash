@@ -47,6 +47,7 @@
     <Analyzer Include="D:\Applications\UnityEditor\6000.3.9f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\UiScripts\LeaderboardRow.cs" />
     <Compile Include="Assets\ScriptableObjects\ThrowTuningDataSO.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\RethrowBallEffect.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\_CardSciptableObjects\CurveParameters.cs" />
     <Compile Include="Assets\Scripts\Classes\EndOfRoundSCameraSequence.cs" />
+    <Compile Include="Assets\Scripts\UiScripts\LeaderboardScreenPreview.cs" />
     <Compile Include="Assets\Scripts\Enums\CardRarity.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\MultiEffect.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ClonePinEffect.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Assets\Scripts\Pins\PinEffects\DeflectBallEffect.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\VaseVisualEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundBaseState.cs" />
+    <Compile Include="Assets\Scripts\UiScripts\LeaderboardScreen.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardVisualPresenter.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
