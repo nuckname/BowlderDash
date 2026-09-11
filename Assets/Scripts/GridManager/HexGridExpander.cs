@@ -126,4 +126,12 @@ public class HexGridExpander : MonoBehaviour
             visuals.RefreshColors();
         }
     }
+    
+    private void OnDisable()
+    {
+        if (visuals != null)
+        {
+            visuals.HidePreview();
+        }
+    }
 }

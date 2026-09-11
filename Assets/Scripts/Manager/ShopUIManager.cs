@@ -40,7 +40,7 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField] private GameObject throwBallTv;
     [SerializeField] private GameObject goBackToShopTv;
     
-    public int baseGridCost = 5;
+    public int baseGridCost;
     public float gridCostScaling = 2;
     private int totalGridUpgrades = 0;
 
