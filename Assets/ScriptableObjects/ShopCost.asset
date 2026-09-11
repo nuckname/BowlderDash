@@ -18,16 +18,16 @@ MonoBehaviour:
   - roundName: Round 1
     costModifier: 1
   - roundName: Round 2
-    costModifier: 2
-  - roundName: Round 3
-    costModifier: 2
-  - roundName: Round 4
     costModifier: 3
+  - roundName: Round 3
+    costModifier: 4
+  - roundName: Round 4
+    costModifier: 4
   - roundName: Round 5
-    costModifier: 5
-  - roundName: Round 6
-    costModifier: 5
-  - roundName: Round 7
     costModifier: 6
-  - roundName: Round 8
+  - roundName: Round 6
     costModifier: 7
+  - roundName: Round 7
+    costModifier: 8
+  - roundName: Round 8
+    costModifier: 9

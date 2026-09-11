@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Legacy Code
 public class HexGrid : MonoBehaviour
 {
     [Header("Grid Settings")]
@@ -12,6 +14,14 @@ public class HexGrid : MonoBehaviour
     private List<HexCell> cells = new List<HexCell>();
     public IReadOnlyList<HexCell> Cells => cells;
 
+
+    private Vector3 basePosition;
+
+    private void Awake()
+    {
+        basePosition = transform.position;
+    }
+    
     public void GenerateGrid()
     {
         cells.Clear();
@@ -56,7 +66,34 @@ public class HexGrid : MonoBehaviour
             }
         }
     }
+    
+    public void MoveGridTransform()
+    {
+        // Need to randomise here so we can use transform.position
+        float randomX = UnityEngine.Random.Range(-4.25f, 4.25f);
+        float randomZ = UnityEngine.Random.Range(-4f, 4f);
+        
+        print(randomZ);
+        print(randomX);
+        
+        Vector3 targetPosition = basePosition + new Vector3(randomX, 0, randomZ);
+        Vector3 offsetDelta = targetPosition - transform.position;
+        
+        transform.position += offsetDelta;
 
+        foreach (HexCell cell in cells)
+        {
+            // Assuming 'center' is the variable holding the world position in HexCell
+            cell.center += offsetDelta; 
+        }
+
+        HexGridVisuals visuals = GetComponent<HexGridVisuals>();
+        if (visuals != null)
+        {
+            visuals.UpdateVisualPositions();
+        }
+    }
+    
     public HexCell GetNearestCell(Vector3 worldPos)
     {
         if (cells.Count == 0) return null;

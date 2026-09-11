@@ -16,6 +16,12 @@ public class RoundWinState : RoundBaseState
         {
             Debug.LogWarning("RoundScore is null");
         }
+
+        
+        if (SessionData.Instance.currentRound > 2)
+        {
+            manager.gridManager.grid.MoveGridTransform();
+        }
         
         manager.SwitchState(manager.shopState);
     }

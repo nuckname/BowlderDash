@@ -86,6 +86,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         offset = Vector3.zero; 
         
         isDragging = true;
+        isDragging = true;
         wasDragged = true;
         
         // Prevent the card from blocking raycasts while dragging

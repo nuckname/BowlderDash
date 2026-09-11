@@ -53,6 +53,21 @@ public class HexGridVisuals : MonoBehaviour
             lines.Add(lr);
         }
     }
+    
+    public void UpdateVisualPositions()
+    {
+        if (lines == null || lines.Count == 0 || grid.Cells == null || grid.Cells.Count == 0) return;
+
+        for (int i = 0; i < lines.Count; i++)
+        {
+            if (i >= grid.Cells.Count) break;
+            
+            if (lines[i] != null)
+            {
+                lines[i].SetPositions(GetHexVertices(grid.Cells[i].center + Vector3.up * runtimeLineHeightOffset, grid.hexSize));
+            }
+        }
+    }
 
     public void RefreshColors()
     {

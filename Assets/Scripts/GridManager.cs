@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    private HexGrid grid;
+    public HexGrid grid;
     private GridOccupancy occupancy;
     public GridTicketManager gridTicketManager { get; private set; }
     private HexGridVisuals visuals;

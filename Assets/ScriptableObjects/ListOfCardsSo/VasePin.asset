@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: VasePin
   displayName: Vase Pin
-  description: 'End Of Round: +50 Score.\nOn Hit: Breaks.'
+  description: 'On Hit: Cannot score\nEnd Of Round: +50 Score.'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: 255342522, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}

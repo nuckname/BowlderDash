@@ -112,6 +112,9 @@ public class RoundStateManager : MonoBehaviour
         {
             AddTicketsToSession(10);
             Debug.Log("Added 10 tickets!");
+            
+            gridManager.grid.MoveGridTransform();
+            
         }
     }
 
@@ -267,6 +270,8 @@ public class RoundStateManager : MonoBehaviour
     
     public void PutRealWorldPinIntoDiscardPile(PinBase pin)
     {
+        if (pin == null) return;
+        
         WorldObjectToCard cardBackedPin = pin.GetComponent<WorldObjectToCard>();
         if (cardBackedPin != null)
         {
@@ -328,7 +333,10 @@ public class RoundStateManager : MonoBehaviour
         {
             foreach (PinBase pin in allActivePinsInTheFrame)
             {
-                PutRealWorldPinIntoDiscardPile(pin);
+                if (pin != null)
+                {
+                    PutRealWorldPinIntoDiscardPile(pin);
+                }
             }
 
             allActivePinsInTheFrame = System.Array.Empty<PinBase>();
