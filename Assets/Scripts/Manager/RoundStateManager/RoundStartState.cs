@@ -6,6 +6,8 @@ public class RoundStartState : RoundBaseState
 {
     public override void EnterState(RoundStateManager manager)
     {
+        manager.sessionData.RecordRoundReached();
+
         manager.scoreCalculator.ResetFrameScore();
 
         manager.pinsToScore.Clear();

@@ -13,9 +13,21 @@ public class SessionData
     public int ballsThrown;
     public int tickets;
 
+    // Game-wide statistics should survive round resets and include the final rounds points.
+    public int totalScore;
+    public int highestRoundScore;
+    public int highestRoundReached;
+
     public void AddScore(int amount)
     {
         currentScore += amount;
+        totalScore += amount;
+        highestRoundScore = Mathf.Max(highestRoundScore, currentScore);
+    }
+
+    public void RecordRoundReached()
+    {
+        highestRoundReached = Mathf.Max(highestRoundReached, currentRound);
     }
 
     public void AddRound()
@@ -55,6 +67,9 @@ public class SessionData
         currentRound = 0;
         ballsThrown = 0;
         tickets = 0;
+        totalScore = 0;
+        highestRoundScore = 0;
+        highestRoundReached = 0;
         InGameScoreUi.Instance.UpdateTicketText(tickets);
     }
     
