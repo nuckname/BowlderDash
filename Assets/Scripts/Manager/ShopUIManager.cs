@@ -53,8 +53,8 @@ public class ShopUIManager : MonoBehaviour
     public float legendaryWeight = 25f;
     
     public float commonCostMultiplier = 1f;
-    public float rareCostMultiplier = 1.5f;
-    public float legendaryCostMultiplier = 2f;
+    public float rareCostMultiplier = 1.25f;
+    public float legendaryCostMultiplier = 1.5f;
     
     [SerializeField] private HexGridExpander hexGridExpander;
     

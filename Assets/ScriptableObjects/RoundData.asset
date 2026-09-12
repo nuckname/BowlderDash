@@ -18,13 +18,13 @@ MonoBehaviour:
     maxBallsAllowedToThrow: 3
   - roundNumber: 1
     scoreNeededToBeat: 70
-    maxBallsAllowedToThrow: 3
+    maxBallsAllowedToThrow: 2
   - roundNumber: 2
     scoreNeededToBeat: 90
-    maxBallsAllowedToThrow: 3
+    maxBallsAllowedToThrow: 2
   - roundNumber: 3
     scoreNeededToBeat: 130
-    maxBallsAllowedToThrow: 3
+    maxBallsAllowedToThrow: 2
   - roundNumber: 4
     scoreNeededToBeat: 160
     maxBallsAllowedToThrow: 2
