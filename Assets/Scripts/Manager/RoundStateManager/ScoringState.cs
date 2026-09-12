@@ -197,7 +197,7 @@ public class ScoringState : RoundBaseState
             // I have no idea how to tell the user this. Floating text?
             GiveBonusTickets(maxBallsAllowed, ballsThrown);
 
-            bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound - 1);
+            bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound);
             RoundBaseState nextState = isLastRound ? _manager.gameCompleteState : _manager.roundWinState;
             
             _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound, true, false));

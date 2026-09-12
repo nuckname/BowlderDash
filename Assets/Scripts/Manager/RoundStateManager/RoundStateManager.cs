@@ -4,6 +4,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class RoundStateManager : MonoBehaviour
@@ -55,6 +56,13 @@ public class RoundStateManager : MonoBehaviour
     private Coroutine handDrawReadinessRoutine;
 
     public TextMeshProUGUI gameOverText;
+
+    [Header("Leaderboard")]
+    [SerializeField] private LeaderboardScreen leaderboardScreenPrefab;
+    private LeaderboardScreen leaderboardScreen;
+    private bool leaderboardPaused;
+    private float timeScaleBeforeLeaderboard;
+    private bool restartingFromLeaderboard;
     
     public TutorialManager tutorialManager;
 
@@ -73,6 +81,7 @@ public class RoundStateManager : MonoBehaviour
     public RoundWinState roundWinState = new RoundWinState();
 
     public bool IsPinPlacementActive => currentState == pinPlacementState;
+    public bool IsLeaderboardActive => currentState is LeaderboardState;
 
     [Header("Floating Text Prefabs")]
     [FormerlySerializedAs("floatingTextPrefab")]
@@ -99,6 +108,8 @@ public class RoundStateManager : MonoBehaviour
         }
         
         // Debug testing
+        if (IsLeaderboardActive) return;
+
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (currentState == roundStartState) SwitchState(pinPlacementState);
@@ -120,6 +131,12 @@ public class RoundStateManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        if (IsLeaderboardActive)
+        {
+            RestartFromLeaderboard();
+            return;
+        }
+
         spawnBossObjectsState.ResetRuntimeState();
         sessionData.StartBrandNewSession();
         
@@ -155,9 +172,85 @@ public class RoundStateManager : MonoBehaviour
     
     public void SwitchState(RoundBaseState newState)
     {
+        // Ignore late gameplay callbacks and repeated end-game transitions.
+        if (IsLeaderboardActive) return;
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         if (currentState != null) currentState.EnterState(this);
+    }
+
+    public void ShowLeaderboardScreen(bool victory)
+    {
+        if (!IsLeaderboardActive || leaderboardScreen != null) return;
+
+        var result = new LeaderboardEntry
+        {
+            totalScore = sessionData.totalScore,
+            highestRoundScore = sessionData.highestRoundScore,
+            highestRoundReached = sessionData.highestRoundReached
+        };
+
+        StopAllCoroutines();
+        cameraFollowScript?.StopTracking();
+        cameraPanToLocation?.CancelActiveMove();
+        tutorialManager?.StopTutorial();
+        inGameScoreUi?.StopAllFlashing();
+        shopUI?.ToggleShop(false);
+        if (cardHand != null) cardHand.SetActive(false);
+        if (gameOverText != null) gameOverText.gameObject.SetActive(false);
+        SetPinPlacementInteraction(false);
+
+        // These components read keyboard/mouse input independently of the round state.
+        DisableLeaderboardGameplayControls<HandInteractionManager>();
+        DisableLeaderboardGameplayControls<DeckModifierManager>();
+        DisableLeaderboardGameplayControls<ViewDeck>();
+        DisableLeaderboardGameplayControls<CardToWorldSpawner>();
+        DisableLeaderboardGameplayControls<HexGridExpander>();
+        DisableLeaderboardGameplayControls<CardMovement>();
+
+        timeScaleBeforeLeaderboard = Time.timeScale;
+        leaderboardPaused = true;
+        Time.timeScale = 0f;
+
+        if (leaderboardScreenPrefab == null)
+        {
+            Debug.LogError("Assign the LeaderboardScreen prefab on RoundStateManager to display the finished game.");
+            return;
+        }
+
+        leaderboardScreen = Instantiate(leaderboardScreenPrefab);
+        SceneManager.MoveGameObjectToScene(leaderboardScreen.gameObject, gameObject.scene);
+        leaderboardScreen.Show(result, victory, RestartFromLeaderboard, RestartFromLeaderboard);
+    }
+
+    private void DisableLeaderboardGameplayControls<T>() where T : MonoBehaviour
+    {
+        foreach (var control in FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (control.gameObject.scene != gameObject.scene) continue;
+            control.StopAllCoroutines();
+            control.enabled = false;
+        }
+    }
+
+    private void RestartFromLeaderboard()
+    {
+        if (restartingFromLeaderboard) return;
+        restartingFromLeaderboard = true;
+        RestoreLeaderboardTimeScale();
+        SceneManager.LoadScene(gameObject.scene.buildIndex);
+    }
+
+    private void RestoreLeaderboardTimeScale()
+    {
+        if (!leaderboardPaused) return;
+        Time.timeScale = timeScaleBeforeLeaderboard;
+        leaderboardPaused = false;
+    }
+
+    private void OnDestroy()
+    {
+        RestoreLeaderboardTimeScale();
     }
 
     public void ResetHandDrawState()
