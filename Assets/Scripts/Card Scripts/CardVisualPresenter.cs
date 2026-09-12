@@ -46,9 +46,9 @@ public class CardVisualPresenter : MonoBehaviour
     // I want a slight variation in tint colour so all the card backgrounds don't look exactly the same.
     [Header("Tint Randomisation")]
     [Tooltip("Min and Max variation for Hue. Small values like -0.05 to 0.05 are best.")]
-    [SerializeField] private Vector2 hueVariationRange = new Vector2(-0.07f, 0.07f);
-    [SerializeField] private Vector2 saturationVariationRange = new Vector2(-0.3f, 0.3f);
-    [SerializeField] private Vector2 valueVariationRange = new Vector2(-0.3f, 0.3f);
+    [SerializeField] private Vector2 hueVariationRange = new Vector2(-0.02f, 0.02f);
+    [SerializeField] private Vector2 saturationVariationRange = new Vector2(-0f, 0f);
+    [SerializeField] private Vector2 valueVariationRange = new Vector2(-0f, 0f);
     
     public void Bind(CardDataSO cardData)
     {
