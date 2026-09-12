@@ -68,6 +68,12 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     void Start()
     {
+        // idk where the hotkey text is being set
+        if (hotkeyText != null)
+        {
+            hotkeyText.gameObject.SetActive(false);
+        }
+
         if (!instantiateVisual || cardData == null || cardData.cardVisualPrefab == null)
             return;
 
@@ -75,7 +81,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         
         cardAnimator.Initialize(this);
     }
-
     // Forces the card into a drag state programmatically
     public void ForceStartDrag()
     {

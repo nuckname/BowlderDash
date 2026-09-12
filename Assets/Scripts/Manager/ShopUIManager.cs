@@ -52,9 +52,9 @@ public class ShopUIManager : MonoBehaviour
     public float rareWeight = 35;
     public float legendaryWeight = 25f;
     
-    public float commonCostMultiplier = 1f;
-    public float rareCostMultiplier = 1.25f;
-    public float legendaryCostMultiplier = 1.5f;
+    public float commonCostMultiplier;
+    public float rareCostMultiplier;
+    public float legendaryCostMultiplier;
     
     [SerializeField] private HexGridExpander hexGridExpander;
     
@@ -346,7 +346,7 @@ public class ShopUIManager : MonoBehaviour
         }
 
         // we first see shop on round 1 ?
-        int calculatedCost = Mathf.RoundToInt((card.baseCost + costModifier) * rarityMultiplier);
+        int calculatedCost = Mathf.RoundToInt(card.baseCost + costModifier + rarityMultiplier);
         
         if (_currentCardCosts.Count <= index)
         {

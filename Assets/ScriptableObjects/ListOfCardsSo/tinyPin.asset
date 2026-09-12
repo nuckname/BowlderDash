@@ -15,13 +15,14 @@ MonoBehaviour:
   cardID: tinyPin
   displayName: Tiny Pin
   description: 'On Fall: +20 Score'
-  cardArtwork: {fileID: 21300000, guid: 15517ea769f4a4d40b2590f40e0f6b29, type: 3}
-  pinImages: []
+  cardArtwork: {fileID: 0}
+  pinImages:
+  - {fileID: 973620358, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
   desiredLayout: 0
   cardTintCardRarity: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 4eb09489445ecd042a6c0d18d9adb519, type: 3}
-  baseCost: 2
+  baseCost: 1
   spawnPattern: []
   rarity: 0

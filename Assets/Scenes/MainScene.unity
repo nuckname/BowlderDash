@@ -12793,8 +12793,8 @@ MonoBehaviour:
   rareWeight: 25
   legendaryWeight: 5
   commonCostMultiplier: 1
-  rareCostMultiplier: 1.5
-  legendaryCostMultiplier: 2
+  rareCostMultiplier: 3
+  legendaryCostMultiplier: 6
   hexGridExpander: {fileID: 120957819}
   removePinButton: {fileID: 1638082805}
   singlePinCardID: SinglePin
