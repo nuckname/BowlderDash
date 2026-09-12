@@ -1054,7 +1054,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6adb7df8d6b04f24690731f51e18d49d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSceneName: altControlTest
+  gameSceneName: MainScene
+  startClick: {fileID: 11400000, guid: 3e3bd9edcb2a45848de3f90eabcba084, type: 2}
 --- !u!4 &1641762120
 Transform:
   m_ObjectHideFlags: 0
@@ -1204,6 +1205,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2129860417}
   m_CullTransparentMesh: 1
+--- !u!1001 &2100000000
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8ab8f42d0153459a8c051673b811c1d2, type: 3}
+--- !u!4 &2100000001 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400000, guid: 8ab8f42d0153459a8c051673b811c1d2, type: 3}
+  m_PrefabInstance: {fileID: 2100000000}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1213,3 +1232,4 @@ SceneRoots:
   - {fileID: 663537058}
   - {fileID: 559629815}
   - {fileID: 1641762120}
+  - {fileID: 2100000001}
