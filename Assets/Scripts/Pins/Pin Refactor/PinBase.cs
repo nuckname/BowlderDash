@@ -262,26 +262,6 @@ public class PinBase : MonoBehaviour
         }
     }
     
-    // Right now for the vase we just have a score multi in End of round triggers
-    public virtual bool TriggerEndOfRound()
-    {
-        if (onEndOfRoundEffects == null || onEndOfRoundEffects.Count == 0) return false;
-
-        bool triggeredAnyEffect = false;
-
-        foreach (PinEffect effect in onEndOfRoundEffects)
-        {
-            if (effect != null)
-            {
-                effect.Execute(this);
-                triggeredAnyEffect = true;
-            }
-        }
-        
-        return triggeredAnyEffect;
-    }
-    
-
     protected virtual void TriggerFall()
     {
         _isFallen = true;
@@ -290,14 +270,6 @@ public class PinBase : MonoBehaviour
         {
             _rb.linearDamping = fallenDrag;
             _rb.angularDamping = fallenAngularDrag;
-        }
-
-        if (onFallEffects != null && onFallEffects.Count != 0)
-        {
-            foreach (PinEffect effect in onFallEffects)
-            {
-                effect.Execute(this);
-            }
         }
 
         // I dont like getting the compoent like this but I dont know another way.

@@ -91,7 +91,7 @@ public class ScoringState : RoundBaseState
             yield return SkippableWait(waitTimeBeforeScoring + 1f);
         }
 
-        TriggerEndOfRoundEffects();
+        ExecutePinScoringEffects();
 
         int pinCount = _manager.pinsToScore.Count;
         
@@ -135,13 +135,32 @@ public class ScoringState : RoundBaseState
         }
     }
 
-    private void TriggerEndOfRoundEffects()
+    private void ExecutePinScoringEffects()
     {
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
-            if (pin != null && !pin.IsFallen)
+            if (pin != null)
             {
-                pin.TriggerEndOfRound();
+                if (pin.IsFallen)
+                {
+                    if (pin.onFallEffects != null)
+                    {
+                        foreach (PinEffect effect in pin.onFallEffects)
+                        {
+                            effect.Execute(pin);
+                        }
+                    }
+                }
+                else
+                {
+                    if (pin.onEndOfRoundEffects != null)
+                    {
+                        foreach (PinEffect effect in pin.onEndOfRoundEffects)
+                        {
+                            effect.Execute(pin);
+                        }
+                    }
+                }
             }
         }
     }

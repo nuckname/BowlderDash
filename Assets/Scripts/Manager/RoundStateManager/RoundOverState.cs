@@ -52,16 +52,6 @@ public class RoundOverState : RoundBaseState
                     }
                 }
             }
-
-            // end of round effects
-            foreach (PinEffect effect in pin.onEndOfRoundEffects)
-            {
-                if (effect is ScoreMultiplierEffect)
-                {
-                    manager.pinsToScore.Add(pin);
-                    break; 
-                }
-            }
            
         }
     }
