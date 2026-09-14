@@ -8,8 +8,6 @@ public class RoundOverState : RoundBaseState
 
     public override void EnterState(RoundStateManager manager)
     {
-        manager.UpdateInstructionText("Round Over! Click to continue.");
-        
         waitTimer = 0f;
 
         manager.TurnOnBallMesh(false);

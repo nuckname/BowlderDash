@@ -357,7 +357,7 @@ public class ShopUIManager : MonoBehaviour
             _currentCardCosts[index] = calculatedCost;
         }
         
-        buttonText.text = $"Buy ({calculatedCost})";
+        buttonText.text = $"Buy (${calculatedCost})";
     }
 
     private int GetShopCostModifier(int currentRound, int costModifier)
