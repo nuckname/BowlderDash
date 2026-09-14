@@ -12,7 +12,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     [SerializeField, Min(0f)] private float stallSpeedThreshold = 0.35f;
     [SerializeField, Min(0f)] private float stallGracePeriod = 1.5f;
     [SerializeField, Min(0f)] private float maximumFlightTime = 15f;
-    [SerializeField, Min(0f)] private float maxPinSettleWaitTime = 4f;
+    [SerializeField, Min(0f)] private float maxPinSettleWaitTime;
 
     private RoundStateManager currentManager;
     private bool ballHasBeenReleased;

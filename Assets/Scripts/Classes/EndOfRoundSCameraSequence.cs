@@ -35,7 +35,7 @@ public class EndOfRoundSCameraSequence
         }
     }
 
-    public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false)
+    public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false, RoundScore roundScore = null)
     {
         TransitionPhase currentPhase = TransitionPhase.InitializeUI;
 
@@ -104,7 +104,7 @@ public class EndOfRoundSCameraSequence
                         
                         // Update the text back to OG.
                         manager.inGameScoreUi.UpdateBallsText(manager.sessionData.ballsThrown, 
-                            manager.roundData.GetMaxRoundNumber());
+                            roundScore.maxBallsAllowedToThrow);
                     }
                     
                     

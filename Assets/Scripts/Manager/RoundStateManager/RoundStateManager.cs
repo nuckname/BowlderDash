@@ -144,9 +144,9 @@ public class RoundStateManager : MonoBehaviour
         
         gridManager.GenerateGrid();
         
-        RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
+        RoundScore roundScore = roundData.GetRoundInfo(sessionData.currentRound);
         
-        inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
+        inGameScoreUi.UpdateScoreToBeatText(roundScore.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
         inGameScoreUi.UpdateRoundText(0, roundData.GetMaxRoundNumber());

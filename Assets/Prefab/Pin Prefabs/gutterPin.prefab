@@ -259,9 +259,9 @@ MonoBehaviour:
   fallenAngularDrag: 5
   onPlaceEffects: []
   onHitEffects: []
-  onFallEffects: []
-  onEndOfRoundEffects:
-  - rid: 5713391375646982218
+  onFallEffects:
+  - rid: 5713391489430061121
+  onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
   yOffsetPinInHole: 10
@@ -270,15 +270,17 @@ MonoBehaviour:
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 8327561609825615850}
   _isFallen: 0
+  toScorePinFallOver: 0
   isClone: 0
   references:
     version: 2
     RefIds:
-    - rid: 5713391375646982218
+    - rid: 5713391489430061121
       type: {class: GutterMultiEffect, ns: , asm: Assembly-CSharp}
       data:
         multValue: 0.25
-        targetTag: Gutter
+        gutterTag: Gutter
+        pitTag: ThePit
 --- !u!114 &488459804700197699
 MonoBehaviour:
   m_ObjectHideFlags: 0
