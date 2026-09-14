@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Card Scripts\_CardSciptableObjects\CurveParameters.cs" />
     <Compile Include="Assets\Scripts\Classes\EndOfRoundSCameraSequence.cs" />
     <Compile Include="Assets\Scripts\Enums\CardRarity.cs" />
+    <Compile Include="Assets\Scripts\Manager\CursorHoverTarget.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\MultiEffect.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ClonePinEffect.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexGrid.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\GameCompleteState.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ExplosionEffect.cs" />
+    <Compile Include="Assets\Scripts\Manager\CursorManager.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\BossSpawnArea.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\SplitBallPinEffect.cs" />
     <Compile Include="Assets\Scripts\Manager\CameraPanToLocation.cs" />
