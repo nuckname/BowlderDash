@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+// Shop buttons wiggle
+//https://share.gemini.google/d4vXsXZzI4Dg
+
 [RequireComponent(typeof(CanvasGroup))]
 public class ShopUIManager : MonoBehaviour
 {
