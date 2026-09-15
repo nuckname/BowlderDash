@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ThrowTuningData
   m_EditorClassIdentifier: 
   forceMinSpeed: 6
-  forceMaxSpeed: 65
+  forceMaxSpeed: 50
   totalMinTime: 0.3
   totalMaxTime: 1.5
   powerFalloffDelay: 0.4

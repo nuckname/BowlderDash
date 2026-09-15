@@ -3,10 +3,13 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CanvasGroup))]
 public class ShopUIManager : MonoBehaviour
 {
+    private Dictionary<GameObject, Coroutine> _wiggleCoroutines = new Dictionary<GameObject, Coroutine>();
+    
     [Header("UI References")]
     public GameObject shopGameObject;
     public Button continueButton;
@@ -80,6 +83,15 @@ public class ShopUIManager : MonoBehaviour
             
             UpdateGridButtonText();
         }
+        else
+        {
+            foreach (var kvp in _wiggleCoroutines)
+            {
+                if (kvp.Value != null) StopCoroutine(kvp.Value);
+                if (kvp.Key != null) kvp.Key.transform.localRotation = Quaternion.identity;
+            }
+            _wiggleCoroutines.Clear();
+        }
     }
 
     
@@ -121,13 +133,15 @@ public class ShopUIManager : MonoBehaviour
         {
             CardDataSO selectedCard = GetRandomCardByRarity();
             _currentShopCards.Add(selectedCard);
-            
+
             UpdateButtonText(i);
             UpdateCardVisual(i, cardVisuals[i], _currentShopCards[i]);
             SetCardAlpha(i, cardButtons[i], cardVisuals[i], 1f);
+
+            AddWiggleEffect(cardButtons[i].gameObject);
         }
     }
-
+    
     private void UpdateCardVisual(int index, Image cardImage, CardDataSO cardData)
     {
         ClearCardVisual(index, cardImage);
@@ -482,5 +496,64 @@ public class ShopUIManager : MonoBehaviour
             cardGroup.interactable = false;
             cardGroup.blocksRaycasts = false;
         }
+    }
+    
+    private void AddWiggleEffect(GameObject buttonGo)
+    {
+        EventTrigger trigger = buttonGo.GetComponent<EventTrigger>();
+        if (trigger == null) 
+        {
+            trigger = buttonGo.AddComponent<EventTrigger>();
+        }
+        else
+        {
+            trigger.triggers.Clear();
+        }
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+        enterEntry.callback.AddListener((data) => 
+        { 
+            Button btn = buttonGo.GetComponent<Button>();
+            if (btn != null && !btn.interactable) return;
+
+            if (_wiggleCoroutines.ContainsKey(buttonGo) && _wiggleCoroutines[buttonGo] != null)
+            {
+                StopCoroutine(_wiggleCoroutines[buttonGo]);
+            }
+            _wiggleCoroutines[buttonGo] = StartCoroutine(WiggleRoutine(buttonGo.transform));
+        });
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+        exitEntry.callback.AddListener((data) => 
+        { 
+            if (_wiggleCoroutines.ContainsKey(buttonGo) && _wiggleCoroutines[buttonGo] != null)
+            {
+                StopCoroutine(_wiggleCoroutines[buttonGo]);
+            }
+            buttonGo.transform.localRotation = Quaternion.identity;
+        });
+        trigger.triggers.Add(exitEntry);
+    }
+
+    private System.Collections.IEnumerator WiggleRoutine(Transform target)
+    {
+        float speed = 40f; 
+        float amount = 6f; 
+        float duration = 0.4f; 
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            
+            float dampening = 1f - (elapsed / duration);
+            float angle = Mathf.Sin(Time.time * speed) * (amount * dampening);
+            
+            target.localRotation = Quaternion.Euler(0, 0, angle);
+            yield return null;
+        }
+
+        target.localRotation = Quaternion.identity;
     }
 }
