@@ -185,6 +185,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }
 
+    // There are trigger in the map like in the gutter, so when the balls enters the gutter we stop the throw
+    // its called BallCollisionTrigger.cs
     public override void OnTriggerEnter(RoundStateManager manager, Collider other)
     {
         if (ballHasBeenReleased && other.gameObject.CompareTag("Ball"))

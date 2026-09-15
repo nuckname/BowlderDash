@@ -1589,8 +1589,8 @@ Transform:
   m_GameObject: {fileID: 105936981}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071066, z: -0, w: 0.707107}
-  m_LocalPosition: {x: -1045.81, y: -282.4, z: -876.1}
-  m_LocalScale: {x: 40.514412, y: 3.3554, z: 0.96415037}
+  m_LocalPosition: {x: -1045.81, y: -282.4, z: -898.4856}
+  m_LocalScale: {x: 85.28689, y: 3.3554, z: 0.96415037}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1627406034}
@@ -1686,6 +1686,73 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105936981}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &110039412
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 110039413}
+  - component: {fileID: 110039415}
+  - component: {fileID: 110039414}
+  m_Layer: 0
+  m_Name: BallSpeedTriggerChecker (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &110039413
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110039412}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 34.4, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1776242839}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &110039414
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110039412}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9218521, y: 18.279024, z: 34.309364}
+  m_Center: {x: -21.667538, y: 6.560031, z: 0.22384262}
+--- !u!114 &110039415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110039412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d158f7c9a540404d964e58a11421d1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  lowSpeedThreshold: 10
 --- !u!1 &120957811
 GameObject:
   m_ObjectHideFlags: 0
@@ -5445,6 +5512,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563444432}
   m_CullTransparentMesh: 1
+--- !u!1 &578373621
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 578373622}
+  - component: {fileID: 578373623}
+  m_Layer: 0
+  m_Name: RedThingLaneStopperBoxColliderLeft
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &578373622
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578373621}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 0.26, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4083501150756243208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &578373623
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578373621}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 43.370373, y: 1.666117, z: 1.978923}
+  m_Center: {x: -18.25683, y: -0.33305895, z: 0.48946053}
 --- !u!1 &580164688
 GameObject:
   m_ObjectHideFlags: 0
@@ -12421,6 +12541,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1136956471}
   m_CullTransparentMesh: 1
+--- !u!1 &1136963655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1136963656}
+  - component: {fileID: 1136963657}
+  m_Layer: 0
+  m_Name: RedThingLaneStopperBoxColliderRight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1136963656
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136963655}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -29.92, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4083501150756243208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1136963657
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1136963655}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 43.370373, y: 1.666117, z: 1.978923}
+  m_Center: {x: -18.25683, y: -0.33305895, z: 0.48946053}
 --- !u!1 &1137028392
 GameObject:
   m_ObjectHideFlags: 0
@@ -13269,6 +13442,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d158f7c9a540404d964e58a11421d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  lowSpeedThreshold: 10
 --- !u!1 &1231531801
 GameObject:
   m_ObjectHideFlags: 0
@@ -15171,7 +15345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1588884242}
   lerpSpeed: 3
-  showDebugMenu: 1
+  showDebugMenu: 0
   cameraMappings:
   - location: 0
     target: {fileID: 1906495015}
@@ -18500,9 +18674,9 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4493585093827132993, guid: 605a2eb34cf1655499d0a29a83b712a3, type: 3}
 --- !u!1 &1690479573 stripped
@@ -19429,6 +19603,7 @@ Transform:
   - {fileID: 1232149672}
   - {fileID: 367063838}
   - {fileID: 1217990353}
+  - {fileID: 110039413}
   m_Father: {fileID: 543450652758292814}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1782973773
@@ -21387,8 +21562,8 @@ Transform:
   m_GameObject: {fileID: 1991545929}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071066, z: -0, w: 0.707107}
-  m_LocalPosition: {x: -1078.08, y: -282.02, z: -876.1}
-  m_LocalScale: {x: 40.514412, y: 3.3554, z: 0.96415037}
+  m_LocalPosition: {x: -1078.08, y: -282.02, z: -898.7308}
+  m_LocalScale: {x: 85.77711, y: 3.3554, z: 0.96415037}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1627406034}
@@ -23597,10 +23772,12 @@ Transform:
   m_GameObject: {fileID: 8707273952415096501}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0.000000029802319, z: 0.000000059604638, w: 0.70710677}
-  m_LocalPosition: {x: 22.7, y: -0.042492867, z: -15.328796}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 22.7, y: -0.042492867, z: -17.49}
+  m_LocalScale: {x: 1, y: 1.1343045, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 578373622}
+  - {fileID: 1136963656}
   m_Father: {fileID: 1408962489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4105671971215449031
@@ -24767,7 +24944,7 @@ GameObject:
   - component: {fileID: 7762067043157802164}
   - component: {fileID: 1679109639}
   m_Layer: 0
-  m_Name: Cube.001
+  m_Name: RedThingLaneStopper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

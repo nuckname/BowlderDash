@@ -121,6 +121,18 @@ public class BallController : MonoBehaviour
         _isLaunched = true;
         _isFollowingCurve = true;
     }
+    
+    public void Apply45DegreeDeflection()
+    {
+        _isFollowingCurve = false;
+        _homingTarget = null;
+
+        float currentSpeed = _ballRb.linearVelocity.magnitude;
+        
+        Vector3 newDirection = Quaternion.Euler(0, 45f, 0) * _ballRb.linearVelocity.normalized;
+        
+        _ballRb.linearVelocity = newDirection * currentSpeed;
+    }
 
     void FixedUpdate()
     {
