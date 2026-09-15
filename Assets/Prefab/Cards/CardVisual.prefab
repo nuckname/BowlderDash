@@ -1876,7 +1876,8 @@ MonoBehaviour:
   placementPatternDisplay: {fileID: 3375602963941749485}
   zPositionRange: {x: -3, y: -30}
   zRotationRange: {x: -5, y: -5}
-  sizeRange: {x: 0.96, y: 1.05}
+  sizeRangeX: {x: 1, y: 1.06}
+  sizeRangeY: {x: 1, y: 1.04}
   hueVariationRange: {x: -0.05, y: 0.05}
   saturationVariationRange: {x: 0, y: 0}
   valueVariationRange: {x: 0, y: 0}

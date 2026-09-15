@@ -40,7 +40,8 @@ public class CardVisualPresenter : MonoBehaviour
     [Header("Pin Randomisation")]
     [SerializeField] private Vector2 zPositionRange;
     [SerializeField] private Vector2 zRotationRange;
-    [SerializeField] private Vector2 sizeRange;
+    [SerializeField] private Vector2 sizeRangeX;
+    [SerializeField] private Vector2 sizeRangeY;
     
     // ai https://share.gemini.google/eZpLzfcrjY4M
     // I want a slight variation in tint colour so all the card backgrounds don't look exactly the same.
@@ -177,8 +178,9 @@ public class CardVisualPresenter : MonoBehaviour
                 float randomZRot = Random.Range(zRotationRange.x, zRotationRange.y);
                 pinRect.localEulerAngles = new Vector3(0f, 0f, randomZRot);
 
-                float randomScale = Random.Range(sizeRange.x, sizeRange.y);
-                pinRect.localScale = new Vector3(randomScale, randomScale, 1f);
+                float randomScaleX = Random.Range(sizeRangeX.x, sizeRangeX.y);
+                float randomScaleY = Random.Range(sizeRangeY.x, sizeRangeY.y);
+                pinRect.localScale = new Vector3(randomScaleX, randomScaleY, 1f);
             }
             else
             {
