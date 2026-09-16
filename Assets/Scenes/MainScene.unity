@@ -16324,17 +16324,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
   - {fileID: 11400000, guid: 7863ead928667f9438d4e5039ef3800c, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
@@ -17254,7 +17243,7 @@ MonoBehaviour:
   pinEndTransform: {fileID: 926523603}
   clickToThrowTextTransform: {fileID: 1163952631}
   clickToThrowStartTransform: {fileID: 1631484123}
-  enableTutorial: 1
+  enableTutorial: 0
   moveSpeed: 500
   flickSpeed: 1000
   flickDistance: 1000

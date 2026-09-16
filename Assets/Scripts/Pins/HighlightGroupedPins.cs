@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 // AI https://share.gemini.google/VYVGuzcYhaHV
+// AI 2: https://share.gemini.google/0ZSCmXAsuGQ7
 public class HighlightGroupedPins : MonoBehaviour
 {
     [Header("Highlight Settings")]
@@ -37,27 +38,37 @@ public class HighlightGroupedPins : MonoBehaviour
         if(!allowHighlighting) return;
         
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, pinLayerMask))
-        {
-            WorldObjectToCard pin = hit.collider.GetComponentInParent<WorldObjectToCard>();
-            
-            if (pin == null)
-            {
-                pin = hit.collider.GetComponent<WorldObjectToCard>();
-            }
+        Plane gridPlane = new Plane(Vector3.up, grid.transform.position);
+        WorldObjectToCard pin = null;
 
-            if (pin != null)
+        if (gridPlane.Raycast(ray, out float hitDistance))
+        {
+            Vector3 hitPoint = ray.GetPoint(hitDistance);
+            HexCell nearestCell = grid.GetNearestCell(hitPoint);
+
+            if (nearestCell != null && Vector3.Distance(hitPoint, nearestCell.center) <= grid.hexSize)
             {
-                if (pin != currentHoveredPin)
+                if (nearestCell.occupant != null)
                 {
-                    currentHoveredPin = pin;
-                    UpdateHighlights();
+                    pin = nearestCell.occupant.GetComponentInParent<WorldObjectToCard>();
+                    
+                    if (pin == null)
+                    {
+                        pin = nearestCell.occupant.GetComponent<WorldObjectToCard>();
+                    }
                 }
-                return;
             }
         }
 
-        if (currentHoveredPin != null)
+        if (pin != null)
+        {
+            if (pin != currentHoveredPin)
+            {
+                currentHoveredPin = pin;
+                UpdateHighlights();
+            }
+        }
+        else if (currentHoveredPin != null)
         {
             currentHoveredPin = null;
             ClearHighlights();

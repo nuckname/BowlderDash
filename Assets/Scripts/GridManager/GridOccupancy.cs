@@ -40,6 +40,7 @@ public class GridOccupancy : MonoBehaviour
 
     public HexCell GetCellByOccupant(Transform t)
     {
+        
         if (t == null) return null;
         foreach (var cell in grid.Cells)
         {
