@@ -79,6 +79,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         cardAnimator = Instantiate(cardData.cardVisualPrefab, _visualHandler.transform).GetComponent<CardAnimator>();
         
+        cardAnimator.transform.SetAsFirstSibling();
+        
         cardAnimator.Initialize(this);
     }
     // Forces the card into a drag state programmatically
