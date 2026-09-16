@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: GrendaPinNormal
   displayName: TNT Pin
-  description: 'On Fall: Has a delay, then explodes'
+  description: 'On Hit: Has a delay, then explodes'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: 21300000, guid: d6c2c5b437f8b0a44a664994c2e17d8d, type: 3}

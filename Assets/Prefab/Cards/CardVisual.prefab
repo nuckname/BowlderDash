@@ -1773,27 +1773,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c73809c3b87e04a6dae1308b12ab4749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShopMode: 0
+  shopIsHovering: 0
   parentCardMovement: {fileID: 0}
   shakeParent: {fileID: 3449025543118524474}
   tiltParent: {fileID: 5862976466474931636}
   cardImage: {fileID: 7697484841366769644}
   visualPresenter: {fileID: 2050514473895786839}
   followSpeed: 25
-  rotationAmount: 50
-  rotationSpeed: 50
-  autoTiltAmount: 8
+  rotationAmount: 20
+  rotationSpeed: 20
+  autoTiltAmount: 7
   manualTiltAmount: 1
-  tiltSpeed: 30
+  tiltSpeed: 5
   scaleAnimations: 1
   scaleOnHover: 1.07
   scaleOnSelect: 1.2
   scaleTransition: 0.15
   scaleEase: 27
-  selectPunchAmount: 10
-  hoverPunchAngle: 5
+  selectPunchAmount: 3
+  hoverPunchAngle: 3
   hoverTransition: 0.15
   swapAnimations: 1
-  swapRotationAngle: 20
+  swapRotationAngle: 10
   swapTransition: 0.2
   swapVibrato: 5
   curve: {fileID: 11400000, guid: 90da9c88cb596624d95e515408496dc4, type: 2}

@@ -5041,9 +5041,9 @@ MonoBehaviour:
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
   onPlaceEffects: []
-  onHitEffects: []
-  onFallEffects:
-  - rid: 5713391538148999233
+  onHitEffects:
+  - rid: 5713391538148999235
+  onFallEffects: []
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
@@ -5058,7 +5058,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 5713391538148999233
+    - rid: 5713391538148999235
       type: {class: ExplosionEffect, ns: , asm: Assembly-CSharp}
       data:
         explosionForce: 8

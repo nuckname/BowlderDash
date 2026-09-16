@@ -11,8 +11,6 @@ using UnityEngine.EventSystems;
 [RequireComponent(typeof(CanvasGroup))]
 public class ShopUIManager : MonoBehaviour
 {
-    private Dictionary<GameObject, Coroutine> _wiggleCoroutines = new Dictionary<GameObject, Coroutine>();
-    
     [Header("UI References")]
     public GameObject shopGameObject;
     public Button continueButton;
@@ -86,17 +84,7 @@ public class ShopUIManager : MonoBehaviour
             
             UpdateGridButtonText();
         }
-        else
-        {
-            foreach (var kvp in _wiggleCoroutines)
-            {
-                if (kvp.Value != null) StopCoroutine(kvp.Value);
-                if (kvp.Key != null) kvp.Key.transform.localRotation = Quaternion.identity;
-            }
-            _wiggleCoroutines.Clear();
-        }
     }
-
     
     private void UpdateRerollUI()
     {
@@ -141,7 +129,10 @@ public class ShopUIManager : MonoBehaviour
             UpdateCardVisual(i, cardVisuals[i], _currentShopCards[i]);
             SetCardAlpha(i, cardButtons[i], cardVisuals[i], 1f);
 
-            AddWiggleEffect(cardButtons[i].gameObject);
+            // Hook up our CardAnimator logic instead of WiggleRoutine
+            GameObject spawnedCard = _spawnedShopCardVisuals[i];
+            CardAnimator animator = spawnedCard != null ? spawnedCard.GetComponent<CardAnimator>() : null;
+            AddCardHoverEvents(cardButtons[i].gameObject, animator);
         }
     }
     
@@ -168,16 +159,22 @@ public class ShopUIManager : MonoBehaviour
         }
 
         card.transform.localRotation = Quaternion.identity;
-        card.transform.localScale = Vector3.one * shopCardVisualScale;
 
-        CardVisualPresenter presenter = card.GetComponentInChildren<CardVisualPresenter>(true);
-        if (presenter != null)
+        CardAnimator cardAnimator = card.GetComponent<CardAnimator>();
+        if (cardAnimator != null)
         {
-            presenter.Bind(cardData);
+            // Initialize Shop Mode - Pass the target button transform and base scale
+            cardAnimator.InitializeShopMode(cardImage.transform, cardData, shopCardVisualScale);
         }
         else
         {
-            Debug.LogWarning($"Shop card visual '{card.name}' has no CardVisualPresenter.");
+            // Fallback scaling just in case the prefab is missing the animator
+            card.transform.localScale = Vector3.one * shopCardVisualScale;
+            CardVisualPresenter presenter = card.GetComponentInChildren<CardVisualPresenter>(true);
+            if (presenter != null)
+            {
+                presenter.Bind(cardData);
+            }
         }
 
         CanvasGroup cardGroup = card.GetComponent<CanvasGroup>();
@@ -500,8 +497,8 @@ public class ShopUIManager : MonoBehaviour
             cardGroup.blocksRaycasts = false;
         }
     }
-    
-    private void AddWiggleEffect(GameObject buttonGo)
+
+    private void AddCardHoverEvents(GameObject buttonGo, CardAnimator animator)
     {
         EventTrigger trigger = buttonGo.GetComponent<EventTrigger>();
         if (trigger == null) 
@@ -519,44 +516,46 @@ public class ShopUIManager : MonoBehaviour
             Button btn = buttonGo.GetComponent<Button>();
             if (btn != null && !btn.interactable) return;
 
-            if (_wiggleCoroutines.ContainsKey(buttonGo) && _wiggleCoroutines[buttonGo] != null)
+            if (animator != null)
             {
-                StopCoroutine(_wiggleCoroutines[buttonGo]);
+                animator.shopIsHovering = true;
+                animator.PlayPointerEnter();
             }
-            _wiggleCoroutines[buttonGo] = StartCoroutine(WiggleRoutine(buttonGo.transform));
         });
         trigger.triggers.Add(enterEntry);
 
         EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
         exitEntry.callback.AddListener((data) => 
         { 
-            if (_wiggleCoroutines.ContainsKey(buttonGo) && _wiggleCoroutines[buttonGo] != null)
+            if (animator != null)
             {
-                StopCoroutine(_wiggleCoroutines[buttonGo]);
+                animator.shopIsHovering = false;
+                animator.PlayPointerExit();
             }
-            buttonGo.transform.localRotation = Quaternion.identity;
         });
         trigger.triggers.Add(exitEntry);
-    }
+        
+        EventTrigger.Entry downEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
+        downEntry.callback.AddListener((data) => 
+        { 
+            Button btn = buttonGo.GetComponent<Button>();
+            if (btn != null && !btn.interactable) return;
 
-    private System.Collections.IEnumerator WiggleRoutine(Transform target)
-    {
-        float speed = 40f; 
-        float amount = 6f; 
-        float duration = 0.4f; 
-        float elapsed = 0f;
+            if (animator != null)
+            {
+                animator.PlayPointerDown();
+            }
+        });
+        trigger.triggers.Add(downEntry);
 
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            
-            float dampening = 1f - (elapsed / duration);
-            float angle = Mathf.Sin(Time.time * speed) * (amount * dampening);
-            
-            target.localRotation = Quaternion.Euler(0, 0, angle);
-            yield return null;
-        }
-
-        target.localRotation = Quaternion.identity;
+        EventTrigger.Entry upEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
+        upEntry.callback.AddListener((data) => 
+        { 
+            if (animator != null)
+            {
+                animator.PlayPointerUp(false);
+            }
+        });
+        trigger.triggers.Add(upEntry);
     }
 }
