@@ -16642,13 +16642,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
   - {fileID: 11400000, guid: 7863ead928667f9438d4e5039ef3800c, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

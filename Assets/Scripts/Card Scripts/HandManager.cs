@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using UnityEngine.UI;
 
 // https://www.youtube.com/watch?v=I1dAZuWurw4
 // https://github.com/mixandjam/balatro-feel
@@ -11,6 +12,9 @@ public class HandManager : MonoBehaviour
 {
     public static HandManager Instance { get; private set; }
 
+    private Tween _paddingTween;
+    [SerializeField] private float layoutTweenDuration = 0.3f;
+    
     [Header("References")]
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private HandInteractionManager interactionManager;
@@ -21,6 +25,8 @@ public class HandManager : MonoBehaviour
     [SerializeField] private bool tweenCardReturn = true;
     public bool TweenCardReturn => tweenCardReturn;
 
+    private HorizontalLayoutGroup _layoutGroup;
+    
     [Header("Discard Settings")]
     [SerializeField] private RectTransform discardPileTransform;
     public float discardAnimationDuration = 0.5f;
@@ -31,6 +37,8 @@ public class HandManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+        
+        _layoutGroup = GetComponent<HorizontalLayoutGroup>();
     }
 
     /// <summary>
@@ -206,5 +214,58 @@ public class HandManager : MonoBehaviour
                 }
             }
         }
+
+        UpdateLayoutPadding(currentLength);
+    }
+
+
+    private void UpdateLayoutPadding(int cardCount)
+    {
+        if (_layoutGroup == null) return;
+
+        int targetPadding = -150;
+
+        print("hello: " + cardCount);
+        switch (cardCount)
+        {
+            // 1 Card in hand idk why it say 3.
+            case 3:
+                targetPadding = -900;
+                break;
+            // 2 Card
+            case 4:
+                targetPadding = -450;
+                break;
+            // 3 Card
+            case 5:
+                targetPadding = -350;
+                break;
+            // 4 Card
+            case 6:
+                targetPadding = -250;
+                break;
+            // 5 Card
+            case 7:
+                targetPadding = -150;
+                break;
+            default:
+                targetPadding = -150;
+                break;
+        }
+
+        // Kill any currently running padding animation so they don't fight
+        _paddingTween?.Kill();
+
+        // Smoothly tween the padding value so the layout shifts naturally with the cards
+        _paddingTween = DOTween.To(
+            getter: () => _layoutGroup.padding.left,
+            setter: x => 
+            {
+                _layoutGroup.padding = new RectOffset(x, _layoutGroup.padding.right, _layoutGroup.padding.top, _layoutGroup.padding.bottom);
+                LayoutRebuilder.MarkLayoutForRebuild(transform as RectTransform);
+            },
+            endValue: targetPadding,
+            duration: layoutTweenDuration
+        ).SetEase(Ease.OutCubic);
     }
 }
