@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MultiPin
   m_EditorClassIdentifier: 
   cardID: MultiPin
-  displayName: Ace Pin
+  displayName: Multi Pin
   description: 'On Fall: Adds 0.25x Multiplier'
   cardArtwork: {fileID: 0}
   pinImages:
