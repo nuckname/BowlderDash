@@ -57,7 +57,12 @@ public class HexGridExpander : MonoBehaviour
         newAxial = Vector2Int.zero;
         newCenter = Vector3.zero;
 
-        float planeY = grid.transform.position.y + grid.originOffset.y;
+        float planeY = grid.transform.position.y;
+        if (grid.Cells != null && grid.Cells.Count > 0)
+        {
+            planeY = grid.Cells[0].center.y;
+        }
+
         if (visuals != null) 
         {
             planeY += visuals.runtimeLineHeightOffset;
