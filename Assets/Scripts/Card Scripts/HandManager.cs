@@ -225,7 +225,6 @@ public class HandManager : MonoBehaviour
 
         int targetPadding = -150;
 
-        print("hello: " + cardCount);
         switch (cardCount)
         {
             // 1 Card in hand idk why it say 3.

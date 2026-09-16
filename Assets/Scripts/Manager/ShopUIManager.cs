@@ -260,6 +260,8 @@ public class ShopUIManager : MonoBehaviour
 
             UpdateGridButtonText();
         }
+        
+        _roundStateManager.gridManager.hexGridVisuals.SetVisualsActive(turnOn);
 
         throwBallTv.SetActive(!turnOn);
         goBackToShopTv.SetActive(turnOn);
