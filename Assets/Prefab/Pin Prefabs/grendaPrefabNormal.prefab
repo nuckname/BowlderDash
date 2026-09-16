@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 5373738608955730648}
   - component: {fileID: 3348751637557106499}
   m_Layer: 9
-  m_Name: grendaPrefab
+  m_Name: grendaPrefabNormal
   m_TagString: Pin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5041,9 +5041,9 @@ MonoBehaviour:
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
   onPlaceEffects: []
-  onHitEffects:
-  - rid: 6055849687980703745
-  onFallEffects: []
+  onHitEffects: []
+  onFallEffects:
+  - rid: 5713391538148999233
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
@@ -5058,13 +5058,13 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 6055849687980703745
+    - rid: 5713391538148999233
       type: {class: ExplosionEffect, ns: , asm: Assembly-CSharp}
       data:
-        explosionForce: 18
-        explosionRadius: 8
+        explosionForce: 8
+        explosionRadius: 5
         upwardModifier: 1
-        detonationDelay: 0.25
+        detonationDelay: 1.3
         explosionParticles: {fileID: 4918979806117386139}
 --- !u!114 &5373738608955730648
 MonoBehaviour:

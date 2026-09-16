@@ -2,6 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class RoundOffset
+{
+    public int startRound;
+    public int endRound;
+    public Transform offset;
+}
+
 // Legacy Code
 public class HexGrid : MonoBehaviour
 {
@@ -9,11 +17,10 @@ public class HexGrid : MonoBehaviour
     public int columns = 10;
     public int rows = 5;
     public float hexSize = 0.5f;
-    public List<Transform> originOffsets = new List<Transform>();
+    public List<RoundOffset> originOffsets = new List<RoundOffset>();
 
     private List<HexCell> cells = new List<HexCell>();
     public IReadOnlyList<HexCell> Cells => cells;
-
 
     private Vector3 basePosition;
 
@@ -59,8 +66,19 @@ public class HexGrid : MonoBehaviour
         Vector3 selectedOffset = Vector3.zero;
         if (originOffsets != null && originOffsets.Count > 0)
         {
-            int randomIndex = UnityEngine.Random.Range(0, originOffsets.Count);
-            selectedOffset = originOffsets[randomIndex].localPosition;
+            int currentRound = SessionData.Instance.currentRound;
+            
+            foreach (var roundOffset in originOffsets)
+            {
+                if (currentRound >= roundOffset.startRound && currentRound <= roundOffset.endRound)
+                {
+                    if (roundOffset.offset != null)
+                    {
+                        selectedOffset = roundOffset.offset.localPosition;
+                    }
+                    break;
+                }
+            }
         }
 
         for (int r = 0; r < rows; r++)

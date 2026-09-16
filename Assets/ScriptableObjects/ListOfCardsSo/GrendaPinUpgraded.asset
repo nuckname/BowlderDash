@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db6ce27693d5166469e200c59288faf8, type: 3}
-  m_Name: GrendaPin
+  m_Name: GrendaPinUpgraded
   m_EditorClassIdentifier: 
-  cardID: GrendaPin
+  cardID: GrendaPinUpgraded
   displayName: TNT Pin
-  description: 'On Fall: Explodes'
+  description: 'On Ball Hit: Instantly Explodes'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: 21300000, guid: d6c2c5b437f8b0a44a664994c2e17d8d, type: 3}
   desiredLayout: 4
-  cardTintCardRarity: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  cardTintCardRarity: {r: 1, g: 0.84, b: 0, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
-  worldGameObjectPrefab: {fileID: 4548911073050350972, guid: a023f4fe1c1115942a52466f0bb60b5a, type: 3}
-  baseCost: 2
+  worldGameObjectPrefab: {fileID: 4548911073050350972, guid: 7a1a08e78675f514fac15d210291b727, type: 3}
+  baseCost: 6
   spawnPattern: []
-  rarity: 0
+  rarity: 2
