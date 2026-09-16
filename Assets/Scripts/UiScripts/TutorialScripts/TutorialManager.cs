@@ -18,6 +18,7 @@ public class TutorialManager : MonoBehaviour
     public string throwTutorialMessage = "Click and drag to draw a path";
     public string pinPlacementMessage = "Drag pins to place them";
     public string clickToThrowMessage = "Click Here";
+    public string tryTryThrowMessage = "Too Slow! Try again!";
 
     [Header("Text Positions")]
     public Transform throwTextTransform;
@@ -52,6 +53,8 @@ public class TutorialManager : MonoBehaviour
     private enum TutorialState { None, Throw, PinPlacement, ShowButtonToThrow }
     private TutorialState currentState = TutorialState.None;
 
+    [SerializeField] private RoundStateManager roundStateManager;
+    
     private void Update()
     {
         if (currentState != TutorialState.None && Input.GetMouseButtonDown(0))
@@ -74,7 +77,16 @@ public class TutorialManager : MonoBehaviour
                 {
                     Debug.Log("Stop area clicked! Transitioning from PinPlacement to ShowButtonToThrow.");
                     StopTutorial();
-                    StartCoroutine(DelayedShowButtonToThrow());
+                    
+                    if (roundStateManager.currentState == roundStateManager.throwingBallState)
+                    {
+                        // if we go to the throw ball state before the hand shows, dont show the hand just go next.
+                        currentState = TutorialState.Throw;
+                    }
+                    else
+                    {
+                        StartCoroutine(DelayedShowButtonToThrow());
+                    }
                 }
                 else if (currentState != TutorialState.Throw) 
                 {
@@ -95,8 +107,26 @@ public class TutorialManager : MonoBehaviour
         if (!enableTutorial) return;
         
         StopTutorial();
-        currentState = TutorialState.Throw;
         currentSequence = StartCoroutine(ThrowTutorialSequence());
+    }
+    
+    public void PlayTryThrowBallAgainTutorial()
+    {
+        if (!enableTutorial) return;
+        
+        StopTutorial();
+        currentSequence = StartCoroutine(ShowPlayTryThrowBallAgainText());
+    }
+
+    private IEnumerator ShowPlayTryThrowBallAgainText()
+    {
+        SpawnText(textBoxPrefab,
+            pinTextTransform.position,
+            tryTryThrowMessage);
+
+        yield return new WaitForSeconds(8f);
+
+        StopTutorial();
     }
 
     public void PlayPinPlacementTutorial()
@@ -116,6 +146,8 @@ public class TutorialManager : MonoBehaviour
         currentState = TutorialState.ShowButtonToThrow;
         currentSequence = StartCoroutine(ClickToThrowPinTutorial());
     }
+    
+    
 
     public void StopTutorial()
     {
@@ -141,7 +173,7 @@ public class TutorialManager : MonoBehaviour
         return instance;
     }
 
-    private GameObject SpawnText(GameObject prefab, Vector3 position, string message)
+    public GameObject SpawnText(GameObject prefab, Vector3 position, string message)
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity, canvasParent);
         

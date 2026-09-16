@@ -5053,6 +5053,7 @@ MonoBehaviour:
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 0}
   _isFallen: 0
+  toScorePinFallOver: 0
   isClone: 0
   references:
     version: 2
@@ -5063,7 +5064,7 @@ MonoBehaviour:
         explosionForce: 18
         explosionRadius: 8
         upwardModifier: 1
-        detonationDelay: 0.8
+        detonationDelay: 0.25
         explosionParticles: {fileID: 4918979806117386139}
 --- !u!114 &5373738608955730648
 MonoBehaviour:
@@ -5080,6 +5081,7 @@ MonoBehaviour:
   cardData: {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   _groupPeers: []
   canBePickedUp: 1
+  cannotBeReturnedToDeck: 0
 --- !u!114 &3348751637557106499
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5093,9 +5095,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HighlightGroupedPins
   highlightColor: {r: 0, g: 0.3773585, b: 0.20123464, a: 1}
-  pinHighlightMaterial: {fileID: 2100000, guid: 97f4e5564a0b4c94db312b0c88b26b93, type: 2}
   highlightLineWidth: 0.12
   highlightHeightOffset: 0.1
   pinLayerMask:
     serializedVersion: 2
     m_Bits: 8179
+  allowHighlighting: 1

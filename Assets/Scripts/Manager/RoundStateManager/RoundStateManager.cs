@@ -166,10 +166,6 @@ public class RoundStateManager : MonoBehaviour
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
     }
     
-    public void ResetUiForQuotaNotMeetThisTurn()
-    {
-    }
-    
     public void SwitchState(RoundBaseState newState)
     {
         // Ignore late gameplay callbacks and repeated end-game transitions.

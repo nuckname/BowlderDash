@@ -1753,6 +1753,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   lowSpeedThreshold: 10
+  roundStateManager: {fileID: 374269889}
+  tutorialManager: {fileID: 1588757391}
 --- !u!1 &120957811
 GameObject:
   m_ObjectHideFlags: 0
@@ -13443,6 +13445,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   lowSpeedThreshold: 10
+  roundStateManager: {fileID: 374269889}
+  tutorialManager: {fileID: 1588757391}
 --- !u!1 &1231531801
 GameObject:
   m_ObjectHideFlags: 0
@@ -17230,6 +17234,7 @@ MonoBehaviour:
   throwTutorialMessage: Click and drag to draw a path
   pinPlacementMessage: Drag pins to place them
   clickToThrowMessage: 
+  tryTryThrowMessage: Too Slow! Try again!
   throwTextTransform: {fileID: 681068257}
   pinTextTransform: {fileID: 99673196}
   throwStartTransform: {fileID: 823505502}
@@ -17238,13 +17243,14 @@ MonoBehaviour:
   pinEndTransform: {fileID: 926523603}
   clickToThrowTextTransform: {fileID: 1163952631}
   clickToThrowStartTransform: {fileID: 1631484123}
-  enableTutorial: 0
+  enableTutorial: 1
   moveSpeed: 500
-  flickSpeed: 600
+  flickSpeed: 1000
   flickDistance: 1000
   stopAreaBox: {fileID: 2097545094}
   buttonTransform: {fileID: 1026965932}
   delayBeforeShowButton: 5
+  roundStateManager: {fileID: 374269889}
 --- !u!1 &1588884240
 GameObject:
   m_ObjectHideFlags: 0
@@ -21679,7 +21685,7 @@ Transform:
   m_GameObject: {fileID: 2015311222}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04107159, y: -0.32709536, z: 0.021851188, w: 0.94384545}
-  m_LocalPosition: {x: -15.21, y: -33.57, z: -6.11}
+  m_LocalPosition: {x: -16.08, y: -35.07, z: -6.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23767,7 +23773,7 @@ Transform:
   m_GameObject: {fileID: 8707273952415096501}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0.000000029802319, z: 0.000000059604638, w: 0.70710677}
-  m_LocalPosition: {x: 22.7, y: -0.042492867, z: -17.49}
+  m_LocalPosition: {x: 22.7, y: 0.17, z: -17.49}
   m_LocalScale: {x: 1, y: 1.1343045, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

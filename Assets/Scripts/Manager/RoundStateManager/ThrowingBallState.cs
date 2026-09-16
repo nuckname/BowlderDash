@@ -22,6 +22,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     private float stallTimer;
     private float pinSettleTimer;
 
+    private bool _hasTutorialTextPlayed = false;
+
     public override void EnterState(RoundStateManager manager)
     {
         currentManager = manager;
@@ -39,8 +41,9 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         manager.TurnOnCardHand(false);
         
-        if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0)
+        if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0 && !_hasTutorialTextPlayed)
         {
+            _hasTutorialTextPlayed = true;
             manager.tutorialManager.PlayThrowTutorial();
         }
 
