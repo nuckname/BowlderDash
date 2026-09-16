@@ -5,21 +5,21 @@ public class GridManager : MonoBehaviour
     public HexGrid grid;
     private GridOccupancy occupancy;
     public GridTicketManager gridTicketManager { get; private set; }
-    private HexGridVisuals visuals;
+    public HexGridVisuals hexGridVisuals;
 
     private void Awake()
     {
         grid = GetComponent<HexGrid>();
         occupancy = GetComponent<GridOccupancy>();
         gridTicketManager = GetComponent<GridTicketManager>();
-        visuals = GetComponent<HexGridVisuals>();
+        hexGridVisuals = GetComponent<HexGridVisuals>();
     }
 
     [ContextMenu("Generate Grid")]
     public void GenerateGrid()
     {
         grid.GenerateGrid();
-        visuals.RebuildVisuals();
+        hexGridVisuals.RebuildVisuals();
     }
 
     public void ClearAllOccupants() => occupancy.ClearAllOccupants();
@@ -27,7 +27,7 @@ public class GridManager : MonoBehaviour
     public void SpawnTicketsForFrame()
     {
         gridTicketManager.SpawnTicketsForFrame();
-        visuals.RefreshColors();
+        hexGridVisuals.RefreshColors();
     }
     
     public HexCell GetCellWithOffset(HexCell origin, Vector2Int axialOffset) => grid.GetCellWithOffset(origin, axialOffset);

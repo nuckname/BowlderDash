@@ -26,7 +26,7 @@ public class EndOfRoundSCameraSequence
 
         while (timer < waitTime)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
             {
                 yield break;
             }

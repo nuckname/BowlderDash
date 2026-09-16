@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+//Legacy Code
+
 [Serializable]
 public class ExplosionEffect : PinEffect
 {
@@ -78,13 +80,24 @@ public class ExplosionEffect : PinEffect
 
     private void ApplyExplosionFeedback(PinBase context)
     {
-        // Hide the bomb pin so it looks like it was destroyed
-        Renderer renderer = context.GetComponentInChildren<Renderer>();
-        Collider collider = context.GetComponent<Collider>();
-        Rigidbody rb = context.GetComponent<Rigidbody>();
+        context.TriggerFall(); 
 
-        if (renderer) renderer.enabled = false;
-        if (collider) collider.enabled = false;
+        // Get ALL renderers (including children) and turn them off, but IGNORE the particle renderer
+        Renderer[] renderers = context.GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
+        {
+            if (r == null || r is ParticleSystemRenderer) continue;
+            r.enabled = false;
+        }
+
+        // Get ALL colliders (including children) and disable them so the invisible pin doesn't block the lane
+        Collider[] colliders = context.GetComponentsInChildren<Collider>();
+        foreach (var c in colliders)
+        {
+            if (c) c.enabled = false;
+        }
+        
+        Rigidbody rb = context.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
 
         if (explosionParticles != null)

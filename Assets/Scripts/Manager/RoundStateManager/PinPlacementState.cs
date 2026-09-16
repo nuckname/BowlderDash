@@ -18,6 +18,7 @@ public class PinPlacementState : RoundBaseState
         
         manager.TurnOnBallMesh(true);
         
+        manager.gridManager.hexGridVisuals.SetVisualsActive(true);
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
@@ -81,5 +82,7 @@ public class PinPlacementState : RoundBaseState
         throwBallButton.gameObject.SetActive(false);
         
         manager.AllowPinsToFallOver(false);
+        
+        manager.gridManager.hexGridVisuals.SetVisualsActive(false);
     }
 }

@@ -37,7 +37,6 @@ public class RoundStartState : RoundBaseState
 
     private void HandleGrid(RoundStateManager manager)
     {
-        manager.gridManager?.ClearAllOccupants();
         manager.gridManager?.SpawnTicketsForFrame();
         
         manager.onLaneSquareGrid.GenerateGridForRound(manager);
@@ -45,10 +44,7 @@ public class RoundStartState : RoundBaseState
 
     private void HandleMap(RoundStateManager manager)
     {
-        //manager.ClearPlacedPinsAndReturnCardsToDeck();
         manager.ResetLaneExploders();
-        //manager.pinHandInventory?.ResetInventoryAndPins();
-        manager.RefreshRuntimePools();
     }
     
     private static void UpdateTicketAmountPerRound(RoundStateManager manager)

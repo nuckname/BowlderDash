@@ -17,7 +17,7 @@ public class RoundStateManager : MonoBehaviour
     public List<PinBase> pinsToScore = new List<PinBase>();
 
     [Header("Strike")]
-    [SerializeField, Min(0f)] private float strikeMultiplierBonus = 0.5f;
+    private float _strikeMultiplierBonus = 0.25f;
     [SerializeField] private GameObject strikeFloatingTextPrefab;
     [SerializeField] private Transform strikeFloatingTextSpawnPoint;
     private readonly List<PinBase> strikeTargetsForCurrentThrow = new List<PinBase>();
@@ -144,14 +144,19 @@ public class RoundStateManager : MonoBehaviour
         
         gridManager.GenerateGrid();
         
+        UpdateInGameScoreUi();
+
+        SwitchState(roundStartState);
+    }
+
+    private void UpdateInGameScoreUi()
+    {
         RoundScore roundScore = roundData.GetRoundInfo(sessionData.currentRound);
         
         inGameScoreUi.UpdateScoreToBeatText(roundScore.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
         inGameScoreUi.UpdateRoundText(0, roundData.GetMaxRoundNumber());
-        
-        SwitchState(roundStartState);
     }
 
     // The player has completed a frame/round/they meet quota. call This:
@@ -308,11 +313,6 @@ public class RoundStateManager : MonoBehaviour
         }
     }
 
-    public void TurnOnLevelPins(bool turnOn)
-    {
-        
-    }
-
     public bool TryApplyStrikeMultiplier()
     {
         if (strikeMultiplierAppliedForCurrentThrow || strikeTargetsForCurrentThrow.Count == 0) return false;
@@ -325,7 +325,7 @@ public class RoundStateManager : MonoBehaviour
             }
         }
 
-        scoreCalculator.AddMultiplier(strikeMultiplierBonus);
+        scoreCalculator.AddMultiplier(_strikeMultiplierBonus);
         strikeMultiplierAppliedForCurrentThrow = true;
         return true;
     }
@@ -347,8 +347,6 @@ public class RoundStateManager : MonoBehaviour
         GUI.Label(new Rect(300, 10, 300, 20), $"Current State: {stateName}");
     }
 
-    public int CalculateFrameScoreTarget(int frame) { return 30; }
-    
     public void AllowPinsToFallOver(bool allow)
     {
         foreach(PinBase pin in allActivePinsInTheFrame)
@@ -483,7 +481,7 @@ public class RoundStateManager : MonoBehaviour
             return;
         }
 
-        string text = $"STRIKE!\n+{strikeMultiplierBonus:0.##}x";
+        string text = $"STRIKE!\n+{_strikeMultiplierBonus:0.##}x";
         SpawnFloatingText(strikeFloatingTextPrefab, text, strikeFloatingTextSpawnPoint.position);
     }
 
@@ -565,8 +563,6 @@ public class RoundStateManager : MonoBehaviour
     }
 
     
-    public void RefreshRuntimePools() { }
-
     // Turns off all children of the gameobjet reference, not the parent itself.
     public void TurnOnCardHand(bool turnOn)
     {

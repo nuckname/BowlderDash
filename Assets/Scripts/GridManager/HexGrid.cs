@@ -9,7 +9,7 @@ public class HexGrid : MonoBehaviour
     public int columns = 10;
     public int rows = 5;
     public float hexSize = 0.5f;
-    public Vector3 originOffset = Vector3.zero;
+    public List<Transform> originOffsets = new List<Transform>();
 
     private List<HexCell> cells = new List<HexCell>();
     public IReadOnlyList<HexCell> Cells => cells;
@@ -56,12 +56,19 @@ public class HexGrid : MonoBehaviour
         Vector3 localCenter = new Vector3((minX + maxX) * 0.5f, 0f, (minZ + maxZ) * 0.5f);
         int idx = 0;
 
+        Vector3 selectedOffset = Vector3.zero;
+        if (originOffsets != null && originOffsets.Count > 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, originOffsets.Count);
+            selectedOffset = originOffsets[randomIndex].localPosition;
+        }
+
         for (int r = 0; r < rows; r++)
         {
             int colsThisRow = Mathf.Max(1, columns - (r % 2));
             for (int c = 0; c < colsThisRow; c++)
             {
-                Vector3 worldPos = transform.position + originOffset + (localCenters[idx++] - localCenter);
+                Vector3 worldPos = transform.position + selectedOffset + (localCenters[idx++] - localCenter);
                 cells.Add(new HexCell(c, r, worldPos));
             }
         }

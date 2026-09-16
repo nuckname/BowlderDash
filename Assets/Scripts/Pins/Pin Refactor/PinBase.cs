@@ -262,7 +262,7 @@ public class PinBase : MonoBehaviour
         }
     }
     
-    protected virtual void TriggerFall()
+    public virtual void TriggerFall()
     {
         _isFallen = true;
         
@@ -277,7 +277,6 @@ public class PinBase : MonoBehaviour
         if (gridManager != null && gridManager.TryCollectTicketForPin(this, out int ticketValue))
         {
             SessionData.Instance.AddTickets(ticketValue);
-            Debug.Log("+1");
         }
     }
 
