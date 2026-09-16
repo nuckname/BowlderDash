@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// AI
 public class TutorialManager : MonoBehaviour
 {
     [Header("UI Prefabs")]
@@ -107,6 +108,7 @@ public class TutorialManager : MonoBehaviour
         if (!enableTutorial) return;
         
         StopTutorial();
+        currentState = TutorialState.Throw;
         currentSequence = StartCoroutine(ThrowTutorialSequence());
     }
     
@@ -115,6 +117,7 @@ public class TutorialManager : MonoBehaviour
         if (!enableTutorial) return;
         
         StopTutorial();
+        currentState = TutorialState.Throw; // Set to throw state so clicks are handled properly
         currentSequence = StartCoroutine(ShowPlayTryThrowBallAgainText());
     }
 
@@ -124,7 +127,8 @@ public class TutorialManager : MonoBehaviour
             pinTextTransform.position,
             tryTryThrowMessage);
 
-        yield return new WaitForSeconds(8f);
+        // Wait for the extracted mouse click and flick sequence instead of just 8 seconds
+        yield return StartCoroutine(MouseFlickSequence(throwStartTransform));
 
         StopTutorial();
     }
@@ -244,9 +248,18 @@ public class TutorialManager : MonoBehaviour
     {
         SpawnText(textBoxPrefab, throwTextTransform.position, throwTutorialMessage);
         
+        // Use the extracted sequence
+        yield return StartCoroutine(MouseFlickSequence(throwStartTransform));
+        
+        StopTutorial();
+    }
+    
+    // Extracted the reusable mouse flashing and flick logic into its own Coroutine
+    private IEnumerator MouseFlickSequence(Transform startTransform)
+    {
         // Spawn both images at the starting position
-        GameObject mouseInstance = SpawnImage(mouseImagePrefab, throwStartTransform.position);
-        GameObject clickInstance = SpawnImage(clickImagePrefab, throwStartTransform.position);
+        GameObject mouseInstance = SpawnImage(mouseImagePrefab, startTransform.position);
+        GameObject clickInstance = SpawnImage(clickImagePrefab, startTransform.position);
         
         // Initial setup
         mouseInstance.SetActive(false);
@@ -287,8 +300,6 @@ public class TutorialManager : MonoBehaviour
             );
             yield return null;
         }
-        
-        StopTutorial();
     }
     
     private IEnumerator PinPlacementSequence()
