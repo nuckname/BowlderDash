@@ -36,6 +36,7 @@ public class PathDrawer : MonoBehaviour
 
     public void ResetDrawing()
     {
+        CancelInvoke(nameof(EndDrawingAndLaunch));
         _isDrawing = false;
         _isValidDraw = false;
         _processedCurve.Clear();
@@ -43,7 +44,7 @@ public class PathDrawer : MonoBehaviour
         if (powerSlider != null) powerSlider.value = 0f;
         _mouseUpTimer = 0f;
     }
-
+    
     void Update()
     {
         if (_iPathDrawListener == null) return;
@@ -67,6 +68,7 @@ public class PathDrawer : MonoBehaviour
 
     private void StartDrawing()
     {
+        CancelInvoke(nameof(EndDrawingAndLaunch));
         _processedCurve.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
         _mouseUpTimer = 0f;
@@ -106,7 +108,8 @@ public class PathDrawer : MonoBehaviour
 
             if (point.z >= tuningData.maxZ)
             {
-                EndDrawingAndLaunch();
+                _isDrawing = false;
+                Invoke(nameof(EndDrawingAndLaunch), 0.3f);
                 return;
             }
 
