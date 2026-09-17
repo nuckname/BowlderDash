@@ -105,6 +105,7 @@
     <Compile Include="Assets/Scripts/Card Scripts/Deck Scripts/DeckManager.cs" />
     <Compile Include="Assets/Scripts/Tumbling.cs" />
     <Compile Include="Assets/Scripts/Ball/BallController.cs" />
+    <Compile Include="Assets/Scripts/Ball/BallRampFollower.cs" />
     <Compile Include="Assets/Scripts/Manager/ShopUIManager.cs" />
     <Compile Include="Assets/Scripts/Card Scripts/Deck Scripts/DeckDisplayUi.cs" />
     <Compile Include="Assets/Scripts/Pins/Pin Refactor/ScoreMultiplierEffect.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Assets/Scripts/Card Scripts/CardPlacementPatternDisplay.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TextConsoleSimulator.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TeleType.cs" />
+    <Compile Include="Assets/Scripts/Ball/BallRampSpawner.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/TMP_TextEventCheck.cs" />
     <Compile Include="Assets/Scripts/GridManager/HexGridExpander.cs" />
     <Compile Include="Assets/Scripts/Manager/InGameScoreUi.cs" />
