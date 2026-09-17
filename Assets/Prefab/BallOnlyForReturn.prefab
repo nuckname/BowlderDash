@@ -156,6 +156,14 @@ MonoBehaviour:
   maxSpeed: 5
   steerForce: 40
   distanceToWaypoint: 1
+  randomMaterials:
+  - {fileID: 2100000, guid: c8c423cb62c0f4cad8afb5648b603df8, type: 2}
+  - {fileID: 2100000, guid: 15467b68eeafb4ecc8033d0cb53f8ac4, type: 2}
+  - {fileID: 2100000, guid: f15d53092c141444c9308ac11b3147f0, type: 2}
+  - {fileID: 2100000, guid: be0f120d72e18407f8d1c8b91e55a6b2, type: 2}
+  - {fileID: 2100000, guid: 6b36698b3783245fc9fc279fb62b4482, type: 2}
+  - {fileID: 2100000, guid: 98c40766c0f1b422a966657509dab0e5, type: 2}
+  - {fileID: 2100000, guid: 98e40c228db4a4972bfe9df5f58bdde5, type: 2}
   ballRenderer: {fileID: 21536282490668571}
   hueChangeRange: {x: 0, y: 217}
   showDebugVisuals: 1

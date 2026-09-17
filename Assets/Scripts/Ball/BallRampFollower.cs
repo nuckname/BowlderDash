@@ -8,7 +8,9 @@ public class BallRampFollower : MonoBehaviour
     [SerializeField] private float maxSpeed = 5f; // Limits speed so momentum doesn't launch it off corners
     [SerializeField] private float steerForce = 10f; // How strongly it corrects its path to turn
     [SerializeField] private float distanceToWaypoint = 1.0f;
-
+   
+    [SerializeField] private Material[] randomMaterials;
+    
     [Header("Material Settings")]
     [SerializeField] private Renderer ballRenderer;
     [SerializeField] private Vector2 hueChangeRange = new Vector2(0f, 1f);
@@ -27,11 +29,10 @@ public class BallRampFollower : MonoBehaviour
             ballRenderer = GetComponentInChildren<Renderer>();
         }
 
-        if (ballRenderer != null)
+        if (ballRenderer != null && randomMaterials != null && randomMaterials.Length > 0)
         {
-            Material uniqueMaterial = ballRenderer.material;
-            float randomHue = Random.Range(hueChangeRange.x, hueChangeRange.y);
-            uniqueMaterial.SetFloat("HueChange", randomHue);
+            int randomIndex = Random.Range(0, randomMaterials.Length);
+            ballRenderer.material = randomMaterials[randomIndex];
         }
     }
 
