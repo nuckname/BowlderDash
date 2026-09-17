@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+// ai https://share.gemini.google/iTGCk8kMEve2
 [RequireComponent(typeof(Rigidbody))]
 public class BallRampFollower : MonoBehaviour
 {
