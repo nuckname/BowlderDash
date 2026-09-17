@@ -9,15 +9,18 @@ public class CursorManager : MonoBehaviour
     public Texture2D defaultCursor;
     public Texture2D clickCursor;
     public Texture2D hoverCursor;
+    public Texture2D grabCursor;
 
     [Header("Cursor Settings")]
     public Vector2 hotspot = Vector2.zero;
+    public LayerMask pinLayer;
 
     [Header("Debug")]
     public bool showDebugHotspot = true;
 
     private bool isHovering = false;
     private bool isClickFlashing = false;
+    private bool isGrabbing = false;
 
     private void Awake()
     {
@@ -34,10 +37,21 @@ public class CursorManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            StartCoroutine(FlashClickRoutine());
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, pinLayer))
+            {
+                isGrabbing = true;
+                UpdateCursorVisual();
+            }
+            else
+            {
+                StartCoroutine(FlashClickRoutine());
+            }
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            isGrabbing = false;
             UpdateCursorVisual();
         }
     }
@@ -50,6 +64,8 @@ public class CursorManager : MonoBehaviour
 
     private IEnumerator FlashClickRoutine()
     {
+        if (isGrabbing) yield break;
+
         isClickFlashing = true;
         SetCursor(clickCursor);
         
@@ -61,25 +77,19 @@ public class CursorManager : MonoBehaviour
 
     private void UpdateCursorVisual()
     {
+        if (isGrabbing)
+        {
+            SetCursor(grabCursor);
+            return;
+        }
+
         if (isClickFlashing) return;
+        
         SetCursor(isHovering ? hoverCursor : defaultCursor);
     }
 
     private void SetCursor(Texture2D cursorTexture)
     {
         Cursor.SetCursor(cursorTexture, hotspot, CursorMode.Auto);
-    }
-
-    private void OnGUI()
-    {
-        if (showDebugHotspot)
-        {
-            Event currentEvent = Event.current;
-            Vector2 mousePos = currentEvent.mousePosition;
-            
-            GUI.color = Color.red;
-            GUI.DrawTexture(new Rect(mousePos.x, mousePos.y, 4, 4), Texture2D.whiteTexture);
-            GUI.color = Color.white;
-        }
     }
 }
