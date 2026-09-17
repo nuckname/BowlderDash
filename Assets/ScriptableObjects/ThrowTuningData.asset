@@ -17,8 +17,8 @@ MonoBehaviour:
   totalMinTime: 0.3
   totalMaxTime: 1.5
   powerFalloffDelay: 0.4
-  minZ: 10
-  maxZ: 55
+  minZ: 8
+  maxZ: 38
   pullbackYScale: 0.15
   pullbackZScale: 0.2
   oppositeXScale: 2
