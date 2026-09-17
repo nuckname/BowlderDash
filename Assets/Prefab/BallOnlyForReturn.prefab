@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 21536282490668571}
   - component: {fileID: 8767473876994948877}
   - component: {fileID: 1980781491129542767}
-  m_Layer: 11
+  - component: {fileID: 4634340061527660765}
+  m_Layer: 0
   m_Name: BallOnlyForReturn
-  m_TagString: Ball
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 9156238627214579844}
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: 0.000000059604638, z: 0.00000008940696, w: 0.7071068}
-  m_LocalPosition: {x: -55.67, y: 4.09, z: -23.04}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5840001, y: 1.5840005, z: 1.5840003}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -100,7 +101,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9156238627214579844}
   serializedVersion: 5
-  m_Mass: 7
+  m_Mass: 2
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -117,7 +118,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 2
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!135 &1980781491129542767
 SphereCollider:
@@ -140,3 +141,21 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.0895715
   m_Center: {x: -0.0000000056706213, y: 3.7571735e-15, z: -0.13454457}
+--- !u!114 &4634340061527660765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9156238627214579844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4239aa1c0077343da88bc15d08b5bec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallRampFollower
+  maxSpeed: 5
+  steerForce: 40
+  distanceToWaypoint: 1
+  ballRenderer: {fileID: 21536282490668571}
+  hueChangeRange: {x: 0, y: 217}
+  showDebugVisuals: 1

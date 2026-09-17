@@ -27,7 +27,8 @@ public class RoundStateManager : MonoBehaviour
     public CameraPanToLocation cameraPanToLocation;
     public CameraFollowBallScript cameraFollowScript;
     public BallController ballController; 
-
+    public BallRampSpawner ballRampSpawner;
+    
     [Header("Core Dependencies")]
     public ScoreCalculator scoreCalculator;
     public GridManager gridManager;
@@ -67,6 +68,7 @@ public class RoundStateManager : MonoBehaviour
     public TutorialManager tutorialManager;
 
     public GameObject postProcessingEffects;
+    
     
     // States
     public RoundStartState roundStartState = new RoundStartState();

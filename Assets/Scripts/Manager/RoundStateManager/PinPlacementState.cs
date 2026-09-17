@@ -21,7 +21,6 @@ public class PinPlacementState : RoundBaseState
         }
 
         manager.TurnOnBallMesh(true);
-
         
         manager.PinPlacementVisuals(true);
         
@@ -35,6 +34,9 @@ public class PinPlacementState : RoundBaseState
         manager.SetPinPlacementInteraction(true);
 
         manager.DrawHandForCurrentTurn();
+        
+        manager.ballRampSpawner.SpawnBallsForRound(SessionData.Instance.currentRound);
+       
 
         //SnapPinToClosestHexCell(manager);
     }
@@ -71,7 +73,7 @@ public class PinPlacementState : RoundBaseState
         }
     }
 
-public override void FixedUpdateState(RoundStateManager manager) { }
+    public override void FixedUpdateState(RoundStateManager manager) { }
 
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }

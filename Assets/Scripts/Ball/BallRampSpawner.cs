@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,12 +10,24 @@ public class BallRampSpawner : MonoBehaviour
     
     [Header("Spawning Setup")]
     [SerializeField] private GameObject ballPrefab;
-    [SerializeField] private Transform spawnPoint; // The empty game object transform to spawn at
-    [SerializeField] private float spawnDelay = 0.5f; // Delay to prevent balls clipping inside each other
+    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private float spawnDelay = 1f; 
     
-    [Header("Ramp Path")]
-    [SerializeField] private List<Transform> rampPath = new List<Transform>();
-    
+    private List<Transform> _rampPath = new List<Transform>();
+
+    private void Awake()
+    {
+        GameObject waypointsParent = GameObject.FindGameObjectWithTag("BallReturnWaypoints");
+
+        if (waypointsParent != null)
+        {
+            foreach (Transform child in waypointsParent.transform)
+            {
+                _rampPath.Add(child);
+            }
+        }
+    }
+
     public void SpawnBallsForRound(int currentRoundNumber)
     {
         RoundScore currentRoundInfo = roundData.GetRoundInfo(currentRoundNumber);
@@ -22,10 +35,6 @@ public class BallRampSpawner : MonoBehaviour
         if (currentRoundInfo != null)
         {
             StartCoroutine(SpawnBallsRoutine(currentRoundInfo.maxBallsAllowedToThrow));
-        }
-        else
-        {
-            Debug.LogWarning($"Cannot spawn balls: Round {currentRoundNumber} data not found.");
         }
     }
 
@@ -38,7 +47,7 @@ public class BallRampSpawner : MonoBehaviour
            BallRampFollower ballFollower = spawnedBall.GetComponent<BallRampFollower>();
           if (ballFollower != null)
           {
-               ballFollower.InitializePath(rampPath);
+               ballFollower.InitializePath(_rampPath);
            }
 
             yield return new WaitForSeconds(spawnDelay);
