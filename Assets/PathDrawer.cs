@@ -20,6 +20,8 @@ public class PathDrawer : MonoBehaviour
     private bool _isValidDraw = false;
     private float _mouseUpTimer = 0f;
 
+    [SerializeField] private int drawMaxDistance; 
+    
     public void Begin(IPathDrawListener listener)
     {
         _iPathDrawListener = listener;
@@ -70,7 +72,7 @@ public class PathDrawer : MonoBehaviour
         _mouseUpTimer = 0f;
 
         Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, floorLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, drawMaxDistance, floorLayer))
         {
             if (hit.point.z < tuningData.minZ)
             {
@@ -92,7 +94,7 @@ public class PathDrawer : MonoBehaviour
     private void UpdateDrawing()
     {
         Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit, 10000f, floorLayer))
+        if (Physics.Raycast(ray, out RaycastHit hit, drawMaxDistance, floorLayer))
         {
             Vector3 point = hit.point;
 
@@ -102,7 +104,11 @@ public class PathDrawer : MonoBehaviour
                 return;
             }
 
-            if (point.z > tuningData.maxZ) return;
+            if (point.z >= tuningData.maxZ)
+            {
+                EndDrawingAndLaunch();
+                return;
+            }
 
             if (_processedCurve.Count == 0 || point.z > _processedCurve[_processedCurve.Count - 1].position.z + 0.1f)
             {
@@ -116,7 +122,7 @@ public class PathDrawer : MonoBehaviour
             powerSlider.value = GetLaunchPowerNormalized(currentDuration);
         }
     }
-
+    
     private void EndDrawingAndLaunch()
     {
         _isDrawing = false;
