@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7eb13f398370803479758c78c55e0be7, type: 3}
   m_Name: ThrowTuningData
   m_EditorClassIdentifier: 
-  forceMinSpeed: 6
+  forceMinSpeed: 14
   forceMaxSpeed: 45
   totalMinTime: 0.3
   totalMaxTime: 1.5

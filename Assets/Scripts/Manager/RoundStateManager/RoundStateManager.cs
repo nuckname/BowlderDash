@@ -88,6 +88,8 @@ public class RoundStateManager : MonoBehaviour
     [SerializeField] private GameObject pinFloatingTextPrefab;
     [SerializeField] private GameObject bossFloatingTextPrefab;
 
+    [Header("In World")] 
+    [SerializeField] private GameObject maxLineGameObject;
     private void Awake()
     {
         // Bind the local reference to the Singleton instance so they share the exact same data
@@ -178,6 +180,12 @@ public class RoundStateManager : MonoBehaviour
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         if (currentState != null) currentState.EnterState(this);
+    }
+    
+    public void PinPlacementVisuals(bool turnOn)
+    {
+        gridManager.hexGridVisuals.SetVisualsActive(turnOn);
+        maxLineGameObject.SetActive(!turnOn);
     }
 
     public void ShowLeaderboardScreen(bool victory)

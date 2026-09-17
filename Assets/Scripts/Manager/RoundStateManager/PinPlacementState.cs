@@ -5,20 +5,25 @@ using UnityEngine.UI;
 public class PinPlacementState : RoundBaseState
 {
     [SerializeField] private Button throwBallButton;
+    private RoundStateManager _manager;
+    
     public override void EnterState(RoundStateManager manager)
     {
         Debug.Log("Entering Pin Placement State");
-     
+
+        _manager = manager;
+        
         throwBallButton.gameObject.SetActive(true);
 
         if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0)
         {
             manager.tutorialManager.PlayPinPlacementTutorial();
         }
-        
+
         manager.TurnOnBallMesh(true);
+
         
-        manager.gridManager.hexGridVisuals.SetVisualsActive(true);
+        manager.PinPlacementVisuals(true);
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
@@ -44,7 +49,8 @@ public class PinPlacementState : RoundBaseState
                 HexCell nearestCell = manager.gridManager.GetNearestCell(pin.transform.position);
                 if (nearestCell != null)
                 {
-                    pin.transform.position = new Vector3(nearestCell.center.x, pin.transform.position.y, nearestCell.center.z);
+                    pin.transform.position =
+                        new Vector3(nearestCell.center.x, pin.transform.position.y, nearestCell.center.z);
                     manager.gridManager.TryReserveCell(nearestCell, pin.transform);
                 }
             }
@@ -64,10 +70,8 @@ public class PinPlacementState : RoundBaseState
             manager.SwitchState(manager.throwingBallState);
         }
     }
-    
 
-
-    public override void FixedUpdateState(RoundStateManager manager) { }
+public override void FixedUpdateState(RoundStateManager manager) { }
 
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }
@@ -82,7 +86,7 @@ public class PinPlacementState : RoundBaseState
         throwBallButton.gameObject.SetActive(false);
         
         manager.AllowPinsToFallOver(false);
-        
-        manager.gridManager.hexGridVisuals.SetVisualsActive(false);
+
+        manager.PinPlacementVisuals(false);
     }
 }

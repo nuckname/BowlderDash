@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -261,7 +262,7 @@ public class ShopUIManager : MonoBehaviour
             UpdateGridButtonText();
         }
         
-        _roundStateManager.gridManager.hexGridVisuals.SetVisualsActive(turnOn);
+        _roundStateManager.PinPlacementVisuals(turnOn);
 
         throwBallTv.SetActive(!turnOn);
         goBackToShopTv.SetActive(turnOn);

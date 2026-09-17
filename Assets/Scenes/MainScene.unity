@@ -4149,6 +4149,7 @@ MonoBehaviour:
     revealDuration: 5
   pinFloatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
   bossFloatingTextPrefab: {fileID: 2221769346915677457, guid: 30139dc5cd464d5419b72b57dd721caa, type: 3}
+  maxLineGameObject: {fileID: 1805183575}
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -15328,6 +15329,7 @@ Transform:
   - {fileID: 8448302367454923613}
   - {fileID: 5951265925158591572}
   - {fileID: 1852705538}
+  - {fileID: 1805183576}
   - {fileID: 4931218026928093841}
   - {fileID: 7685259906293154902}
   - {fileID: 3612539099586531390}
@@ -20170,7 +20172,7 @@ GameObject:
   - component: {fileID: 1805183578}
   - component: {fileID: 1805183577}
   m_Layer: 6
-  m_Name: Cube (1)
+  m_Name: MaxLineGameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20184,12 +20186,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805183575}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000059604645, y: -5.3290705e-15, z: 0.000000042146848, w: 1}
-  m_LocalPosition: {x: -0.02796999, y: -0.002470026, z: 0.100000024}
-  m_LocalScale: {x: 0.057357892, y: 1.9513772, z: 0.017349428}
+  m_LocalRotation: {x: -0.7071068, y: 0.000000029802322, z: 0.000000059604645, w: 0.7071068}
+  m_LocalPosition: {x: -10.622738, y: -0.7300005, z: 0.028953552}
+  m_LocalScale: {x: 2.55495, y: 28.249695, z: 0.15093999}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4931218026928093841}
+  m_Father: {fileID: 1408962489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1805183577
 BoxCollider:
@@ -24456,8 +24458,7 @@ Transform:
   m_LocalPosition: {x: -10.889999, y: -1.6000004, z: 0}
   m_LocalScale: {x: 44.544003, y: 14.476801, z: 8.699999}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1805183576}
+  m_Children: []
   m_Father: {fileID: 1408962489}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5334037120266589365
