@@ -24,6 +24,8 @@ public class PinPlacementState : RoundBaseState
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
+        
+        TurnOnPinSelect(true);
 
         manager.GetAllPinsInCurrentFrame(manager);
         manager.AllowPinCollisionEffects(false);
@@ -68,6 +70,14 @@ public class PinPlacementState : RoundBaseState
         }
     }
 
+    private void TurnOnPinSelect(bool turnOn)
+    {
+        foreach (PinBase pinBase in _manager.allActivePinsInTheFrame)
+        {
+            pinBase.allowPinSelection = turnOn;
+        }
+    }
+
     public override void FixedUpdateState(RoundStateManager manager) { }
 
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
@@ -83,6 +93,8 @@ public class PinPlacementState : RoundBaseState
         throwBallButton.gameObject.SetActive(false);
         
         manager.AllowPinsToFallOver(false);
+        
+        TurnOnPinSelect(false);
 
         manager.PinPlacementVisuals(false);
     }

@@ -42,11 +42,14 @@ public class BallRampSpawner : MonoBehaviour
 
     public void RemoveBallFromRamp()
     {
-        ballsInRamp.Clear();
-        foreach (Transform ball in _rampPath)
+        foreach (GameObject ball in ballsInRamp)
         {
-            Destroy(ball.gameObject);
+            if (ball != null)
+            {
+                Destroy(ball);
+            }
         }
+        ballsInRamp.Clear();
     }
 
     private IEnumerator SpawnBallsRoutine(int amount)

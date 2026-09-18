@@ -53,11 +53,13 @@ public class BallRampFollower : MonoBehaviour
     [Header("Debug Settings")]
     [SerializeField] private bool showDebugVisuals = true;
 
-    private void FixedUpdate()
+private void FixedUpdate()
     {
         if (!_isFollowing || _path == null || _currentWaypointIndex >= _path.Count) return;
 
         Transform targetWaypoint = _path[_currentWaypointIndex];
+        
+        if (targetWaypoint == null) return;
         
         // Ignore Y axis when checking distance so balls don't get stuck orbiting a waypoint slightly above/below them
         Vector3 currentPos = transform.position;
@@ -111,9 +113,12 @@ public class BallRampFollower : MonoBehaviour
     {
         if (!showDebugVisuals || _path == null || _currentWaypointIndex >= _path.Count) return;
 
+        Transform targetWaypoint = _path[_currentWaypointIndex];
+        
+        if (targetWaypoint == null) return;
+
         // Draws a yellow sphere around the target waypoint showing the exact size of 'distanceToWaypoint'
         Gizmos.color = Color.yellow;
-        Transform targetWaypoint = _path[_currentWaypointIndex];
         Gizmos.DrawWireSphere(targetWaypoint.position, distanceToWaypoint);
     }
 }

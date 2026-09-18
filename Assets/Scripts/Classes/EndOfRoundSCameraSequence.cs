@@ -64,9 +64,7 @@ public class EndOfRoundSCameraSequence
                         manager.inGameScoreUi.TriggerWinRoundText();
                         yield return SkippableWait(2);
                         // Final victory keeps the completed round and score for the end screen.
-                        currentPhase = prepareNextRound
-                            ? TransitionPhase.ShowIncreaseRound
-                            : TransitionPhase.ShowTicketsEarned;
+                        currentPhase = TransitionPhase.ShowTicketsEarned;
                         break;
                     }
                     else if (lostGame)
@@ -130,9 +128,9 @@ public class EndOfRoundSCameraSequence
                     manager.sessionData.AddRound();
                     manager.inGameScoreUi.UpdateRoundText(manager.sessionData.currentRound, manager.roundData.GetMaxRoundNumber());
                     yield return SkippableWait(waitBeforeUiCamera);
-                    currentPhase = TransitionPhase.ShowTicketsEarned;
+                    currentPhase = TransitionPhase.FinishTransition;
                     break;
-
+                
                 case TransitionPhase.ShowTicketsEarned:
                     manager.inGameScoreUi.StopAllFlashing();
                     
@@ -144,7 +142,14 @@ public class EndOfRoundSCameraSequence
                     if (ticketCountUpRoutine != null) yield return ticketCountUpRoutine;
 
                     yield return SkippableWait(scoreDisplayHoldTime);
-                    currentPhase = TransitionPhase.FinishTransition;
+                    if (wonRound)
+                    {
+                        currentPhase = TransitionPhase.ShowIncreaseRound;
+                    }
+                    else
+                    {
+                        currentPhase = TransitionPhase.FinishTransition;
+                    }
                     break;
             }
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 // AI https://share.gemini.google/VYVGuzcYhaHV
@@ -14,12 +15,18 @@ public class HighlightGroupedPins : MonoBehaviour
     private HexGrid grid;
     private Camera mainCamera;
     private WorldObjectToCard currentHoveredPin;
+    private PinBase _pinBase;
     
     private List<LineRenderer> highlightLines = new List<LineRenderer>();
     private Material highlightMaterial;
 
     public bool allowHighlighting = true;
-    
+
+    private void Awake()
+    {
+        _pinBase = GetComponent<PinBase>();
+    }
+
     private void Start()
     {
         GameObject hexManager = GameObject.FindGameObjectWithTag("HexManager");
@@ -35,6 +42,7 @@ public class HighlightGroupedPins : MonoBehaviour
     private void Update()
     {
         if (mainCamera == null || grid == null) return;
+        if(!_pinBase.allowPinSelection) return;
 
         if(!allowHighlighting) return;
         

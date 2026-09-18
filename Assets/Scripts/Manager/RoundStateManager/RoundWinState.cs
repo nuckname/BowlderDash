@@ -30,7 +30,7 @@ public class RoundWinState : RoundBaseState
         manager.SwitchState(manager.shopState);
     }
 
-    private static void HandleBallsOnRampVisual(RoundStateManager manager)
+    private void HandleBallsOnRampVisual(RoundStateManager manager)
     {
         manager.ballRampSpawner.RemoveBallFromRamp();
         manager.ballRampSpawner.SpawnBallsForRound(SessionData.Instance.currentRound);
