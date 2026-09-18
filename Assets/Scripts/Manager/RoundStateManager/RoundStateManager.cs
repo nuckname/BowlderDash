@@ -58,6 +58,8 @@ public class RoundStateManager : MonoBehaviour
 
     public TextMeshProUGUI gameOverText;
 
+    [SerializeField] private GameObject clickButtonToGetBallGameObject;
+    
     [Header("Leaderboard")]
     [SerializeField] private LeaderboardScreen leaderboardScreenPrefab;
     private LeaderboardScreen leaderboardScreen;
@@ -148,7 +150,13 @@ public class RoundStateManager : MonoBehaviour
         
         gridManager.GenerateGrid();
         
+        throwingBallState.cannotThrowBall = true;
+        
+        TurnOnBallMesh(false);
+        ballRampSpawner.SpawnBallsForRound(SessionData.Instance.currentRound);
+        
         UpdateInGameScoreUi();
+        TurnOnButtonToClickToGetBall(false);
 
         SwitchState(roundStartState);
     }
@@ -607,5 +615,31 @@ public class RoundStateManager : MonoBehaviour
     public void TurnOnBallMesh(bool turnOff)
     {
         GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().enabled = turnOff;
+    }
+
+
+    // Called via button
+    public void ClickButtonToGetBall()
+    {
+        TurnOnBallMesh(true);
+
+        Material ballRampColour = ballRampSpawner.ballsInRamp[0].GetComponent<BallRampFollower>().getCurrentBallMaterial;
+        // Really do need to cache the ball gameobject
+        // Set the ball we throw to the colour we just clicked
+        GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().material = ballRampColour;
+        
+        Destroy(ballRampSpawner.ballsInRamp[0]); 
+        
+        ballRampSpawner.ballsInRamp.RemoveAt(0);
+
+        throwingBallState.cannotThrowBall = false;
+        
+        // Turn off button when we click it.
+        TurnOnButtonToClickToGetBall(false);
+    }
+
+    public void TurnOnButtonToClickToGetBall(bool turnOn)
+    {
+        clickButtonToGetBallGameObject.SetActive(turnOn);
     }
 }

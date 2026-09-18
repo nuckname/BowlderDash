@@ -82,11 +82,12 @@ public class EndOfRoundSCameraSequence
                     
                     // If we didnt meet quota
                     yield return SkippableWait(scoreDisplayHoldTime);
-                    currentPhase = TransitionPhase.ShowBallsThrown;
+                    currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
                 
 
                 // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
+                /*
                 case TransitionPhase.ShowBallsThrown:
                     manager.inGameScoreUi.StopAllFlashing();
                     
@@ -111,7 +112,7 @@ public class EndOfRoundSCameraSequence
                     yield return SkippableWait(waitBeforeUiCamera);
                     currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
-                
+                */
                 // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
                 case TransitionPhase.ShowIncreaseRound:
                     manager.inGameScoreUi.StopAllFlashing();

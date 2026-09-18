@@ -14,6 +14,8 @@ public class BallRampSpawner : MonoBehaviour
     [SerializeField] private float spawnDelay = 1f; 
     
     private List<Transform> _rampPath = new List<Transform>();
+    
+    public List<GameObject> ballsInRamp = new List<GameObject>();
 
     private void Awake()
     {
@@ -38,15 +40,26 @@ public class BallRampSpawner : MonoBehaviour
         }
     }
 
+    public void RemoveBallFromRamp()
+    {
+        ballsInRamp.Clear();
+        foreach (Transform ball in _rampPath)
+        {
+            Destroy(ball.gameObject);
+        }
+    }
+
     private IEnumerator SpawnBallsRoutine(int amount)
     {
         for (int i = 0; i < amount; i++)
         {
             GameObject spawnedBall = Instantiate(ballPrefab, spawnPoint.position, spawnPoint.rotation);
 
+            ballsInRamp.Add(spawnedBall);
+            
            BallRampFollower ballFollower = spawnedBall.GetComponent<BallRampFollower>();
-          if (ballFollower != null)
-          {
+           if (ballFollower != null)
+           {
                ballFollower.InitializePath(_rampPath);
            }
 

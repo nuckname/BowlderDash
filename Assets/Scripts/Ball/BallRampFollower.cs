@@ -15,6 +15,8 @@ public class BallRampFollower : MonoBehaviour
     [SerializeField] private Renderer ballRenderer;
     [SerializeField] private Vector2 hueChangeRange = new Vector2(0f, 1f);
 
+    public Material getCurrentBallMaterial;
+    
     private List<Transform> _path;
     private int _currentWaypointIndex = 0;
     private Rigidbody _rb;
@@ -32,7 +34,9 @@ public class BallRampFollower : MonoBehaviour
         if (ballRenderer != null && randomMaterials != null && randomMaterials.Length > 0)
         {
             int randomIndex = Random.Range(0, randomMaterials.Length);
-            ballRenderer.material = randomMaterials[randomIndex];
+
+            getCurrentBallMaterial = randomMaterials[randomIndex];
+            ballRenderer.material = getCurrentBallMaterial;
         }
     }
 

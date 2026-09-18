@@ -6,6 +6,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 {
     public PathDrawer pathDrawer;
     public ThrowTuningDataSO tuningData;
+    public bool cannotThrowBall = false;
 
     [Header("Throw Completion")]
     [SerializeField, Min(0f)] private float minimumFlightTime = 1f;
@@ -46,6 +47,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
             _hasTutorialTextPlayed = true;
             manager.tutorialManager.PlayThrowTutorial();
         }
+        
+        manager.TurnOnButtonToClickToGetBall(true);
 
         manager.SetPinPlacementPhysics(false);
         manager.AllowPinCollisionEffects(true);
@@ -62,6 +65,11 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         if (Input.GetKeyDown(KeyCode.Tab) && !ballHasBeenReleased)
         {
             manager.SwitchState(manager.pinPlacementState);
+            return;
+        }
+
+        if (cannotThrowBall)
+        {
             return;
         }
 
@@ -179,6 +187,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public override void ExitState(RoundStateManager manager)
     {
         pathDrawer.Stop();
+        
+        manager.TurnOnButtonToClickToGetBall(false);
         
         manager.cameraFollowScript.StopTracking();
         

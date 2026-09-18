@@ -20,8 +20,6 @@ public class PinPlacementState : RoundBaseState
             manager.tutorialManager.PlayPinPlacementTutorial();
         }
 
-        manager.TurnOnBallMesh(true);
-        
         manager.PinPlacementVisuals(true);
         
         manager.MoveCamera(CameraLocation.PinCameraLocation);
@@ -34,9 +32,6 @@ public class PinPlacementState : RoundBaseState
         manager.SetPinPlacementInteraction(true);
 
         manager.DrawHandForCurrentTurn();
-        
-        manager.ballRampSpawner.SpawnBallsForRound(SessionData.Instance.currentRound);
-       
 
         //SnapPinToClosestHexCell(manager);
     }
