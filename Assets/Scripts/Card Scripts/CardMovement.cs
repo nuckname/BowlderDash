@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
@@ -105,6 +103,21 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         ClampPosition();
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isDragging)
+            {
+                CancelDrag();
+            }
+            
+            if (selected)
+            {
+                selected = false;
+                SelectEvent.Invoke(this, selected);
+                transform.localPosition = _preSelectionPosition;
+            }
+        }
+
         if (isDragging)
         {
             // MOVE MOVEMENT LOGIC HERE: Since the EventSystem won't fire OnDrag 
@@ -187,6 +200,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Fires drop events and resolves placement based on whether the card is in the play area.
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!isDragging) return; // Prevent double-trigger if drag was already canceled by Escape
+
         isDragging = false;
         
         if (isPreviewingInWorld)

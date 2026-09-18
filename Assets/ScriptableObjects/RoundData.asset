@@ -14,29 +14,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rounds:
   - roundNumber: 0
-    scoreNeededToBeat: 30
+    scoreNeededToBeat: 40
     maxBallsAllowedToThrow: 3
   - roundNumber: 1
-    scoreNeededToBeat: 70
-    maxBallsAllowedToThrow: 3
-  - roundNumber: 2
     scoreNeededToBeat: 90
     maxBallsAllowedToThrow: 3
-  - roundNumber: 3
+  - roundNumber: 2
     scoreNeededToBeat: 120
     maxBallsAllowedToThrow: 3
-  - roundNumber: 4
+  - roundNumber: 3
     scoreNeededToBeat: 150
+    maxBallsAllowedToThrow: 3
+  - roundNumber: 4
+    scoreNeededToBeat: 250
     maxBallsAllowedToThrow: 4
   - roundNumber: 5
-    scoreNeededToBeat: 270
+    scoreNeededToBeat: 350
     maxBallsAllowedToThrow: 5
   - roundNumber: 6
     scoreNeededToBeat: 400
     maxBallsAllowedToThrow: 6
   - roundNumber: 7
-    scoreNeededToBeat: 650
+    scoreNeededToBeat: 500
     maxBallsAllowedToThrow: 5
   - roundNumber: 8
-    scoreNeededToBeat: 800
+    scoreNeededToBeat: 600
     maxBallsAllowedToThrow: 5

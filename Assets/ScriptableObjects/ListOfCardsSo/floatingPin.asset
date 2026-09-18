@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'On Ball Hit: the pin to the left starts floating'
   cardArtwork: {fileID: 0}
   pinImages:
-  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: 1175842804, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
   desiredLayout: 4
   cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}

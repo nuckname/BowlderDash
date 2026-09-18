@@ -38,10 +38,10 @@ public class CardAnimator : MonoBehaviour
     [SerializeField] private float followSpeed = 30;
 
     [Header("Rotation Parameters")]
-    [SerializeField] private float rotationAmount = 20;
-    [SerializeField] private float rotationSpeed = 20;
-    [SerializeField] private float autoTiltAmount = 30;
-    [SerializeField] private float manualTiltAmount = 20;
+    [SerializeField] private float rotationAmount = 13;
+    [SerializeField] private float rotationSpeed = 13;
+    [SerializeField] private float autoTiltAmount = 15;
+    [SerializeField] private float manualTiltAmount = 1;
     [SerializeField] private float tiltSpeed = 20;
 
     [Header("Scale Parameters")]
@@ -50,7 +50,9 @@ public class CardAnimator : MonoBehaviour
     [SerializeField] private float scaleOnSelect = 1.25f;
     [SerializeField] private float scaleTransition = .15f;
     [SerializeField] private Ease scaleEase = Ease.OutBack;
-
+    
+    private float randomTimeOffset;
+    
     [Header("Select Parameters")]
     [SerializeField] private float selectPunchAmount = 20;
 
@@ -133,8 +135,10 @@ public class CardAnimator : MonoBehaviour
 
         isShopMode = true;
         initalize = true;
+        
+        randomTimeOffset = UnityEngine.Random.Range(0f, 1000f);
     }
-
+    
     /// <summary>
     /// Applies the CardDataSO presentation colour to this visual's card-art image.
     /// Kept public so non-interactive views (shop/deck viewer) can use the same binding.
@@ -240,8 +244,8 @@ public class CardAnimator : MonoBehaviour
     
     private void ShopCardTilt()
     {
-        float sine = Mathf.Sin(Time.time) * (shopIsHovering ? .2f : 1);
-        float cosine = Mathf.Cos(Time.time) * (shopIsHovering ? .2f : 1);
+        float sine = Mathf.Sin(Time.time + randomTimeOffset) * (shopIsHovering ? .2f : 1);
+        float cosine = Mathf.Cos(Time.time + randomTimeOffset) * (shopIsHovering ? .2f : 1);
 
         Vector3 offset = transform.position - Input.mousePosition;
         float pixelScaleFactor = 100f; 
@@ -258,6 +262,7 @@ public class CardAnimator : MonoBehaviour
     }
 
     private void Select(CardMovement cardMovement, bool state) { PlaySelect(state); }
+    
     public void PlaySelect(bool state)
     {
         DOTween.Kill(2, true);
