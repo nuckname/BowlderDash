@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 // Shop buttons wiggle
 //https://share.gemini.google/d4vXsXZzI4Dg
@@ -67,6 +68,14 @@ public class ShopUIManager : MonoBehaviour
     public Button removePinButton;
     public string singlePinCardID = "SingleNormalPin";
     public int removePinCost = 1;
+
+    private void Start()
+    {
+        AddBounceEffectToButton(rerollButton);
+        AddBounceEffectToButton(continueButton);
+        AddBounceEffectToButton(expandGridButton);
+        AddBounceEffectToButton(removePinButton);
+    }
     
     public void ToggleShop(bool show, RoundStateManager manager = null)
     {
@@ -501,6 +510,7 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
+    // Ai bounce effect stuff dw about it.
     private void AddCardHoverEvents(GameObject buttonGo, CardAnimator animator)
     {
         EventTrigger trigger = buttonGo.GetComponent<EventTrigger>();
@@ -557,6 +567,68 @@ public class ShopUIManager : MonoBehaviour
             if (animator != null)
             {
                 animator.PlayPointerUp(false);
+            }
+        });
+        trigger.triggers.Add(upEntry);
+    }
+    
+    private void AddBounceEffectToButton(Button btn)
+    {
+        if (btn == null) return;
+
+        EventTrigger trigger = btn.GetComponent<EventTrigger>();
+        if (trigger == null) 
+        {
+            trigger = btn.gameObject.AddComponent<EventTrigger>();
+        }
+
+        Vector3 originalScale = btn.transform.localScale;
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+        enterEntry.callback.AddListener((data) => 
+        { 
+            if (btn.interactable)
+            {
+                btn.transform.DOKill();
+                btn.transform.DOScale(originalScale * 1.1f, 0.15f).SetEase(Ease.OutBack);
+            }
+        });
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+        exitEntry.callback.AddListener((data) => 
+        { 
+            btn.transform.DOKill();
+            btn.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
+        });
+        trigger.triggers.Add(exitEntry);
+        
+        EventTrigger.Entry downEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
+        downEntry.callback.AddListener((data) => 
+        { 
+            if (btn.interactable)
+            {
+                btn.transform.DOKill();
+                btn.transform.DOScale(originalScale * 0.9f, 0.1f).SetEase(Ease.OutQuad);
+            }
+        });
+        trigger.triggers.Add(downEntry);
+
+        EventTrigger.Entry upEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
+        upEntry.callback.AddListener((data) => 
+        { 
+            if (btn.interactable)
+            {
+                btn.transform.DOKill();
+                // If the mouse is still over it, pop back to hover scale, otherwise pop to original
+                bool isHovering = RectTransformUtility.RectangleContainsScreenPoint(
+                    btn.GetComponent<RectTransform>(), 
+                    ((PointerEventData)data).position, 
+                    ((PointerEventData)data).pressEventCamera
+                );
+                
+                float targetScale = isHovering ? 1.1f : 1f;
+                btn.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack);
             }
         });
         trigger.triggers.Add(upEntry);
