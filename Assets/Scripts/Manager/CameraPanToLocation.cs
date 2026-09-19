@@ -16,6 +16,8 @@ public enum CameraLocation
     BallsThrowUi,
     ShowIncreaseRound,
     MainMenuCameraLocation,
+    LeaderboardCameraLocation,
+    SettingCameraLocation,
 }
 
 [System.Serializable]
