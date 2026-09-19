@@ -59,10 +59,10 @@ public class CardDataSO : ScriptableObject
                 baseCost = 3;
                 break;
             case CardRarity.Rare:
-                baseCost = 5;
+                baseCost = 4;
                 break;
             case CardRarity.Legendary:
-                baseCost = 8;
+                baseCost = 6;
                 break;
         }
     }

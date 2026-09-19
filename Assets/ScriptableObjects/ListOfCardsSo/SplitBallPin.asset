@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SplitBallPin
   m_EditorClassIdentifier: 
   cardID: SplitBallPin
-  displayName: Ball Splitter Pin
+  displayName: Ball\nSplitter Pin
   description: "<b>On Ball Hit:</b> Spawns 2 extra balls at 45\xB0"
   cardArtwork: {fileID: 0}
   pinImages:

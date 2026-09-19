@@ -42,7 +42,7 @@ public class CardAnimator : MonoBehaviour
     [SerializeField] private float rotationSpeed = 13;
     [SerializeField] private float autoTiltAmount = 15;
     [SerializeField] private float manualTiltAmount = 1;
-    [SerializeField] private float tiltSpeed = 20;
+    public float tiltSpeed = 5;
 
     [Header("Scale Parameters")]
     [SerializeField] private bool scaleAnimations = true;
@@ -115,6 +115,8 @@ public class CardAnimator : MonoBehaviour
         baseScale = customBaseScale;
         transform.localScale = Vector3.one * baseScale;
         canvas = GetComponent<Canvas>();
+
+        tiltSpeed = 0.25f;
         
         if (visualPresenter == null)
         {
@@ -148,6 +150,9 @@ public class CardAnimator : MonoBehaviour
 
         if (isShopMode)
         {
+            // :)
+            tiltSpeed = 0.25f;
+            
             curveYOffset = 0;
             curveRotationOffset = 0;
             SmoothFollow();
@@ -157,7 +162,10 @@ public class CardAnimator : MonoBehaviour
         }
 
         if (parentCardMovement == null) return;
-
+            
+        // :)
+        tiltSpeed = 5f;
+        
         HandPositioning();
         SmoothFollow();
         FollowRotation();
