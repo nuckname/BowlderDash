@@ -16,6 +16,9 @@ public class HexGridExpander : MonoBehaviour
     public int upSideExpandingLimit;
     public int downSideExpandingLimit;
     
+    [Header("Interaction Limits")]
+    public float maxInteractionDistance = 6f;
+    
     private void Awake()
     {
         grid = GetComponent<HexGrid>();
@@ -52,6 +55,7 @@ public class HexGridExpander : MonoBehaviour
             if (visuals != null) visuals.HidePreview();
         }
     }
+
     private bool TryGetExpansionData(out Vector2Int newAxial, out Vector3 newCenter)
     {
         newAxial = Vector2Int.zero;
@@ -76,6 +80,9 @@ public class HexGridExpander : MonoBehaviour
         Vector3 hitPoint = ray.GetPoint(distance);
         HexCell closestCell = grid.GetNearestCell(hitPoint);
         if (closestCell == null) return false;
+
+        float distanceFromBoard = Vector2.Distance(new Vector2(hitPoint.x, hitPoint.z), new Vector2(closestCell.center.x, closestCell.center.z));
+        if (distanceFromBoard > maxInteractionDistance) return false;
 
         Vector3 dir = hitPoint - closestCell.center;
         dir.y = 0;
