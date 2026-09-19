@@ -106,8 +106,9 @@ public class CardAnimator : MonoBehaviour
 
         //Initialization
         initalize = true;
+        randomTimeOffset = UnityEngine.Random.Range(0f, 1000f);
     }
-
+    
     public void InitializeShopMode(Transform targetTransform, CardDataSO cardData, float customBaseScale = 1f)
     {
         cardTransform = targetTransform;
@@ -197,8 +198,8 @@ public class CardAnimator : MonoBehaviour
     private void CardTilt()
     {
         savedIndex = parentCardMovement.isDragging ? savedIndex : parentCardMovement.ParentIndex();
-        float sine = Mathf.Sin(Time.time + savedIndex) * (parentCardMovement.isHovering ? .2f : 1);
-        float cosine = Mathf.Cos(Time.time + savedIndex) * (parentCardMovement.isHovering ? .2f : 1);
+        float sine = Mathf.Sin(Time.time + randomTimeOffset + savedIndex) * (parentCardMovement.isHovering ? .2f : 1);
+        float cosine = Mathf.Cos(Time.time + randomTimeOffset + savedIndex) * (parentCardMovement.isHovering ? .2f : 1);
 
         Vector3 offset = transform.position - Input.mousePosition;
         
