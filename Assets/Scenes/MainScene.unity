@@ -2366,6 +2366,7 @@ MonoBehaviour:
   rightSideExpandingLimit: 5
   upSideExpandingLimit: -5
   downSideExpandingLimit: 2
+  maxInteractionDistance: 6
 --- !u!1 &121324095
 GameObject:
   m_ObjectHideFlags: 0

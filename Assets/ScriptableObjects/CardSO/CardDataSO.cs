@@ -56,16 +56,13 @@ public class CardDataSO : ScriptableObject
         switch (rarity)
         {
             case CardRarity.Common:
-                cardTintCardRarity = Color.grey;
                 baseCost = 3;
                 break;
             case CardRarity.Rare:
-                cardTintCardRarity = Color.blue; 
                 baseCost = 5;
                 break;
             case CardRarity.Legendary:
                 baseCost = 8;
-                cardTintCardRarity = new Color(1f, 0.84f, 0f); // Gold
                 break;
         }
     }

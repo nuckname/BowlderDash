@@ -218,7 +218,6 @@ public class HandManager : MonoBehaviour
         UpdateLayoutPadding(currentLength);
     }
 
-
     private void UpdateLayoutPadding(int cardCount)
     {
         if (_layoutGroup == null) return;
@@ -245,10 +244,10 @@ public class HandManager : MonoBehaviour
                 break;
             // 5 Card
             case 7:
-                targetPadding = -150;
+                targetPadding = -240;
                 break;
             default:
-                targetPadding = -150;
+                targetPadding = -240;
                 break;
         }
 

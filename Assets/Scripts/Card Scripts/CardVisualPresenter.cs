@@ -28,11 +28,13 @@ public class CardVisualPresenter : MonoBehaviour
     [SerializeField] private TextMeshProUGUI descriptionText;
 
     [Header("Images")]
-    [SerializeField] private Image artworkImage;
-    [SerializeField] private List<PinLayout> pinLayouts = new List<PinLayout>();
+    [SerializeField] private Image smallRectangleImage;
+    [SerializeField] private Image backgroundImage;
+    [SerializeField] private Image borderBackgroundImage;
+    [SerializeField] private Sprite[] backgroundSprites;
+    [SerializeField] private Color[] artworkHexColors;
     
-    [Tooltip("Optional image used for the card's presentation tint or accent colour.")]
-    [SerializeField] private Graphic tintTarget;
+    [SerializeField] private List<PinLayout> pinLayouts = new List<PinLayout>();
 
     [Header("Placement Pattern")]
     [SerializeField] private CardPlacementPatternDisplay placementPatternDisplay;
@@ -43,14 +45,6 @@ public class CardVisualPresenter : MonoBehaviour
     [SerializeField] private Vector2 sizeRangeX;
     [SerializeField] private Vector2 sizeRangeY;
     
-    // ai https://share.gemini.google/eZpLzfcrjY4M
-    // I want a slight variation in tint colour so all the card backgrounds don't look exactly the same.
-    [Header("Tint Randomisation")]
-    [Tooltip("Min and Max variation for Hue. Small values like -0.05 to 0.05 are best.")]
-    [SerializeField] private Vector2 hueVariationRange = new Vector2(-0.02f, 0.02f);
-    [SerializeField] private Vector2 saturationVariationRange = new Vector2(-0f, 0f);
-    [SerializeField] private Vector2 valueVariationRange = new Vector2(-0f, 0f);
-    
     public void Bind(CardDataSO cardData)
     {
         if (cardData == null)
@@ -59,20 +53,38 @@ public class CardVisualPresenter : MonoBehaviour
             return;
         }
 
+        Color rarityColor = cardData.rarity == CardRarity.Common ? Color.black : Color.white;
+
         if (titleText != null)
         {
             titleText.text = string.IsNullOrWhiteSpace(cardData.displayName)
                 ? cardData.cardID
                 : cardData.displayName;
+            titleText.color = rarityColor;
         }
 
         if (descriptionText != null)
         {
             descriptionText.text = cardData.description ?? string.Empty;
+            descriptionText.color = rarityColor;
         }
 
-        SetArtwork(cardData.cardArtwork);
-        ApplyTint(cardData.cardTintCardRarity);
+        if (borderBackgroundImage != null)
+        {
+            borderBackgroundImage.color = rarityColor;
+        }
+
+        int rarityIndex = 0;
+        switch (cardData.rarity)
+        {
+            case CardRarity.Common: rarityIndex = 0; break;
+            case CardRarity.Rare: rarityIndex = 1; break;
+            case CardRarity.Legendary: rarityIndex = 2; break;
+        }
+
+        backgroundImage.sprite = backgroundSprites[rarityIndex];
+
+        SetAccentColour(artworkHexColors[rarityIndex]);
         SetPinImages(cardData);
 
         if (placementPatternDisplay != null)
@@ -80,28 +92,6 @@ public class CardVisualPresenter : MonoBehaviour
             placementPatternDisplay.Bind(cardData);
         }
     }
-
-    public void ApplyTint(Color tint)
-    {
-        if (tintTarget != null)
-        {
-            Color.RGBToHSV(tint, out float h, out float s, out float v);
-
-            h += Random.Range(hueVariationRange.x, hueVariationRange.y);
-            s += Random.Range(saturationVariationRange.x, saturationVariationRange.y);
-            v += Random.Range(valueVariationRange.x, valueVariationRange.y);
-
-            h = Mathf.Repeat(h, 1f);
-            s = Mathf.Clamp01(s);
-            v = Mathf.Clamp01(v);
-
-            Color variedColor = Color.HSVToRGB(h, s, v);
-            variedColor.a = tint.a;
-
-            tintTarget.color = variedColor;
-        }
-    }
-
     private void SetPinImages(CardDataSO cardData)
     {
         List<Sprite> pins = cardData?.pinImages ?? new List<Sprite>();
@@ -190,15 +180,10 @@ public class CardVisualPresenter : MonoBehaviour
         }
     }
     
-    private void SetArtwork(Sprite artwork)
+    private void SetAccentColour(Color hexColor)
     {
-        if (artworkImage == null)
-        {
-            return;
-        }
-
-        artworkImage.sprite = artwork;
-        artworkImage.enabled = artwork != null;
+        smallRectangleImage.color = hexColor;
+        borderBackgroundImage.color = hexColor;
     }
 
     private void Clear()
@@ -214,8 +199,7 @@ public class CardVisualPresenter : MonoBehaviour
         }
 
         SetPinImages(null);
-        SetArtwork(null);
-        ApplyTint(Color.white);
+        SetAccentColour(Color.white);
 
         if (placementPatternDisplay != null)
         {

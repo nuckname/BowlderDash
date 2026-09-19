@@ -94,10 +94,6 @@ public class CardAnimator : MonoBehaviour
         {
             visualPresenter.Bind(target.cardData);
         }
-        else
-        {
-            ApplyCardTint(target.cardData != null ? target.cardData.cardTintCardRarity : Color.white);
-        }
 
         //Event Listening
         parentCardMovement.PointerEnterEvent.AddListener(PointerEnter);
@@ -128,10 +124,6 @@ public class CardAnimator : MonoBehaviour
         {
             visualPresenter.Bind(cardData);
         }
-        else
-        {
-            ApplyCardTint(cardData != null ? cardData.cardTintCardRarity : Color.white);
-        }
 
         isShopMode = true;
         initalize = true;
@@ -139,24 +131,6 @@ public class CardAnimator : MonoBehaviour
         randomTimeOffset = UnityEngine.Random.Range(0f, 1000f);
     }
     
-    /// <summary>
-    /// Applies the CardDataSO presentation colour to this visual's card-art image.
-    /// Kept public so non-interactive views (shop/deck viewer) can use the same binding.
-    /// </summary>
-    public void ApplyCardTint(Color tint)
-    {
-        if (visualPresenter != null)
-        {
-            visualPresenter.ApplyTint(tint);
-            return;
-        }
-
-        if (cardImage != null)
-        {
-            cardImage.color = tint;
-        }
-    }
-
     public void UpdateLength(int length)
     {
         _currentHandLength = length;
