@@ -50,9 +50,6 @@ public class BallRampFollower : MonoBehaviour
         }
     }
 
-    [Header("Debug Settings")]
-    [SerializeField] private bool showDebugVisuals = true;
-
 private void FixedUpdate()
     {
         if (!_isFollowing || _path == null || _currentWaypointIndex >= _path.Count) return;
@@ -72,13 +69,10 @@ private void FixedUpdate()
         
         if (distance <= distanceToWaypoint)
         {
-            if (showDebugVisuals) Debug.Log($"{gameObject.name} reached waypoint {_currentWaypointIndex}.");
-            
             _currentWaypointIndex++;
             
             if (_currentWaypointIndex >= _path.Count)
             {
-                if (showDebugVisuals) Debug.Log($"{gameObject.name} reached end of path.");
                 _isFollowing = false;
             }
             return;
@@ -100,25 +94,5 @@ private void FixedUpdate()
             _rb.linearVelocity = new Vector3(horizontalVelocity.x, currentVelocity.y, horizontalVelocity.z);
         }
 
-        if (showDebugVisuals)
-        {
-            // Red line shows where the ball is trying to go
-            Debug.DrawLine(transform.position, targetWaypoint.position, Color.red);
-            // Blue line shows the ball's actual current momentum/velocity
-            Debug.DrawRay(transform.position, _rb.linearVelocity, Color.blue);
-        }
-    }
-    
-    private void OnDrawGizmos()
-    {
-        if (!showDebugVisuals || _path == null || _currentWaypointIndex >= _path.Count) return;
-
-        Transform targetWaypoint = _path[_currentWaypointIndex];
-        
-        if (targetWaypoint == null) return;
-
-        // Draws a yellow sphere around the target waypoint showing the exact size of 'distanceToWaypoint'
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(targetWaypoint.position, distanceToWaypoint);
     }
 }
