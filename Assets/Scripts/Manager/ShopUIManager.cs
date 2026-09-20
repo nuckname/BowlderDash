@@ -10,6 +10,8 @@ using DG.Tweening;
 // Shop buttons wiggle
 //https://share.gemini.google/d4vXsXZzI4Dg
 
+// buttons / dotweens https://share.gemini.google/qaanLhiA9KYZ
+
 [RequireComponent(typeof(CanvasGroup))]
 public class ShopUIManager : MonoBehaviour
 {
@@ -523,8 +525,7 @@ public class ShopUIManager : MonoBehaviour
             cardGroup.blocksRaycasts = false;
         }
     }
-
-    // Ai bounce effect stuff dw about it.
+// Ai bounce effect stuff dw about it.
     private void AddCardHoverEvents(GameObject buttonGo, CardAnimator animator)
     {
         EventTrigger trigger = buttonGo.GetComponent<EventTrigger>();
@@ -555,7 +556,7 @@ public class ShopUIManager : MonoBehaviour
             }
 
             buttonGo.transform.DOKill();
-            buttonGo.transform.DOScale(originalScale * 1.1f, 0.15f).SetEase(Ease.OutBack);
+            buttonGo.transform.DOScale(originalScale * 1.05f, 0.15f).SetEase(Ease.OutBack);
         });
         trigger.triggers.Add(enterEntry);
 
@@ -598,23 +599,33 @@ public class ShopUIManager : MonoBehaviour
             }
 
             Button btn = buttonGo.GetComponent<Button>();
-            if (btn != null && btn.interactable)
+            if (btn != null)
             {
                 buttonGo.transform.DOKill();
-                // If the mouse is still over it, pop back to hover scale, otherwise pop to original
-                bool isHovering = RectTransformUtility.RectangleContainsScreenPoint(
-                    buttonGo.GetComponent<RectTransform>(), 
-                    ((PointerEventData)data).position, 
-                    ((PointerEventData)data).pressEventCamera
-                );
                 
-                float targetScale = isHovering ? 1.1f : 1f;
-                buttonGo.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack);
+                if (btn.interactable)
+                {
+                    bool isHovering = RectTransformUtility.RectangleContainsScreenPoint(
+                        buttonGo.GetComponent<RectTransform>(), 
+                        ((PointerEventData)data).position, 
+                        ((PointerEventData)data).pressEventCamera
+                    );
+                    
+                    DG.Tweening.Sequence clickSeq = DOTween.Sequence();
+                    clickSeq.Append(buttonGo.transform.DOScale(originalScale * 1.15f, 0.1f).SetEase(Ease.OutQuad));
+                    
+                    float targetScale = isHovering ? 1.05f : 1f;
+                    clickSeq.Append(buttonGo.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack));
+                }
+                else
+                {
+                    buttonGo.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
+                }
             }
         });
         trigger.triggers.Add(upEntry);
     }
-    
+    // ai stuff dw about it
     private void AddBounceEffectToButton(Button btn)
     {
         if (btn == null) return;
@@ -633,7 +644,7 @@ public class ShopUIManager : MonoBehaviour
             if (btn.interactable)
             {
                 btn.transform.DOKill();
-                btn.transform.DOScale(originalScale * 1.1f, 0.15f).SetEase(Ease.OutBack);
+                btn.transform.DOScale(originalScale * 1.05f, 0.15f).SetEase(Ease.OutBack);
             }
         });
         trigger.triggers.Add(enterEntry);
@@ -660,18 +671,25 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry upEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
         upEntry.callback.AddListener((data) => 
         { 
+            btn.transform.DOKill();
+            
             if (btn.interactable)
             {
-                btn.transform.DOKill();
-                // If the mouse is still over it, pop back to hover scale, otherwise pop to original
                 bool isHovering = RectTransformUtility.RectangleContainsScreenPoint(
                     btn.GetComponent<RectTransform>(), 
                     ((PointerEventData)data).position, 
                     ((PointerEventData)data).pressEventCamera
                 );
                 
-                float targetScale = isHovering ? 1.1f : 1f;
-                btn.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack);
+                DG.Tweening.Sequence clickSeq = DOTween.Sequence();
+                clickSeq.Append(btn.transform.DOScale(originalScale * 1.15f, 0.1f).SetEase(Ease.OutQuad));
+                
+                float targetScale = isHovering ? 1.05f : 1f;
+                clickSeq.Append(btn.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack));
+            }
+            else
+            {
+                btn.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
             }
         });
         trigger.triggers.Add(upEntry);
