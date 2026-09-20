@@ -8,7 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Cards/CardVisual.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Cards/CardVisual.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -335,7 +336,7 @@
       <workItem from="1789708604502" duration="185000" />
       <workItem from="1789774598150" duration="7990000" />
       <workItem from="1789797918040" duration="1235000" />
-      <workItem from="1789865794627" duration="5401000" />
+      <workItem from="1789865794627" duration="6351000" />
     </task>
     <servers />
   </component>

@@ -22974,7 +22974,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1588884242}
   lerpSpeed: 3
-  showDebugMenu: 1
+  showDebugMenu: 0
   cameraMappings:
   - location: 0
     target: {fileID: 1906495015}
