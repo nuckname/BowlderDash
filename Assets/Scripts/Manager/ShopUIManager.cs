@@ -20,6 +20,7 @@ public class ShopUIManager : MonoBehaviour
     
     [Header("Card References")]
     public List<Button> cardButtons = new List<Button>();
+    public List<TextMeshProUGUI> cardTextButtons = new List<TextMeshProUGUI>();
     public List<Image> cardVisuals = new List<Image>();
     
     [Header("Reroll Settings")]
@@ -137,6 +138,14 @@ public class ShopUIManager : MonoBehaviour
 
             UpdateButtonText(i);
             UpdateCardVisual(i, cardVisuals[i], _currentShopCards[i]);
+            
+            // turn of the parent image, as we see jumbo if we dont (a card background image)
+            cardVisuals[i].enabled = false;
+            // turn of alpha of the card we just want the hitbox
+            Color tempColor = cardVisuals[i].color;
+            tempColor.a = 0f;
+            cardVisuals[i].color = tempColor;
+            
             SetCardAlpha(i, cardButtons[i], cardVisuals[i], 1f);
 
             // Hook up our CardAnimator logic instead of WiggleRoutine
@@ -196,7 +205,7 @@ public class ShopUIManager : MonoBehaviour
             cardGroup.blocksRaycasts = false;
         }
 
-        cardImage.enabled = false;
+        cardImage.enabled = true;
     }
     
     private CardDataSO GetRandomCardByRarity()
@@ -352,9 +361,7 @@ public class ShopUIManager : MonoBehaviour
     // Replace your existing UpdateButtonText method
     private void UpdateButtonText(int index)
     {
-        Button targetButton = cardButtons[index];
-
-        TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI buttonText = cardTextButtons[index];
 
         int currentRound = _roundStateManager.sessionData.currentRound;
         int costModifier = 1;
@@ -421,6 +428,13 @@ public class ShopUIManager : MonoBehaviour
                 // Remove from the array so it can't be bought again
                 _currentShopCards[index] = null; 
 
+                // turn of the parent image, as we see jumbo if we dont (a card background image)
+                cardVisuals[index].enabled = false;
+                // turn of alpha of the card we just want the hitbox
+                Color tempColor = cardVisuals[index].color;
+                tempColor.a = 0f;
+                cardVisuals[index].color = tempColor;
+                
                 SetCardAlpha(index, cardButtons[index], cardVisuals[index], 0.15f);
             }
             else
@@ -479,7 +493,7 @@ public class ShopUIManager : MonoBehaviour
         
         // Disable interaction if transparent so it can't be clicked
         button.interactable = alpha >= 0.99f;
-
+        
         // Update visual image alpha
         Color visualColor = visual.color;
         visualColor.a = alpha;
@@ -521,7 +535,12 @@ public class ShopUIManager : MonoBehaviour
         else
         {
             trigger.triggers.Clear();
+            // Reset scale in case the shop was rerolled while a button was actively being hovered
+            buttonGo.transform.DOKill();
+            buttonGo.transform.localScale = Vector3.one;
         }
+
+        Vector3 originalScale = buttonGo.transform.localScale;
 
         EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
         enterEntry.callback.AddListener((data) => 
@@ -534,6 +553,9 @@ public class ShopUIManager : MonoBehaviour
                 animator.shopIsHovering = true;
                 animator.PlayPointerEnter();
             }
+
+            buttonGo.transform.DOKill();
+            buttonGo.transform.DOScale(originalScale * 1.1f, 0.15f).SetEase(Ease.OutBack);
         });
         trigger.triggers.Add(enterEntry);
 
@@ -545,6 +567,9 @@ public class ShopUIManager : MonoBehaviour
                 animator.shopIsHovering = false;
                 animator.PlayPointerExit();
             }
+
+            buttonGo.transform.DOKill();
+            buttonGo.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
         });
         trigger.triggers.Add(exitEntry);
         
@@ -558,6 +583,9 @@ public class ShopUIManager : MonoBehaviour
             {
                 animator.PlayPointerDown();
             }
+
+            buttonGo.transform.DOKill();
+            buttonGo.transform.DOScale(originalScale * 0.9f, 0.1f).SetEase(Ease.OutQuad);
         });
         trigger.triggers.Add(downEntry);
 
@@ -567,6 +595,21 @@ public class ShopUIManager : MonoBehaviour
             if (animator != null)
             {
                 animator.PlayPointerUp(false);
+            }
+
+            Button btn = buttonGo.GetComponent<Button>();
+            if (btn != null && btn.interactable)
+            {
+                buttonGo.transform.DOKill();
+                // If the mouse is still over it, pop back to hover scale, otherwise pop to original
+                bool isHovering = RectTransformUtility.RectangleContainsScreenPoint(
+                    buttonGo.GetComponent<RectTransform>(), 
+                    ((PointerEventData)data).position, 
+                    ((PointerEventData)data).pressEventCamera
+                );
+                
+                float targetScale = isHovering ? 1.1f : 1f;
+                buttonGo.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack);
             }
         });
         trigger.triggers.Add(upEntry);

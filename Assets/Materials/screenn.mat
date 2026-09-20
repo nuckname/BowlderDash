@@ -34,7 +34,7 @@ Material:
     - _bright: 3
     - _linesRes: 300
     - _minIntensity: 0.4
-    - _res: 800
+    - _res: 100
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
