@@ -222,7 +222,7 @@ public class ScoringState : RoundBaseState
             _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound, true, false, currentRoundScore));
         }
         // This works, we are updated the ball throw late so we need the +1, after we check this
-        else if (ballsThrown + 1 >= maxBallsAllowed)
+        else if (ballsThrown >= maxBallsAllowed)
         {
             // Lost the game
             _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, 

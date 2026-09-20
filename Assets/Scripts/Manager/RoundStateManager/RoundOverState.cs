@@ -10,6 +10,8 @@ public class RoundOverState : RoundBaseState
     {
         waitTimer = 0f;
 
+        manager.AddBallThrownToSession();
+        
         manager.TurnOnBallMesh(false);
 
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
