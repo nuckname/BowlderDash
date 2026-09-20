@@ -3737,10 +3737,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7646ccf51f63404b83817305be54464, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  defaultCursor: {fileID: 2800000, guid: 0c72e1c0c9232ec4fbe6937a766a9d9e, type: 3}
-  clickCursor: {fileID: 2800000, guid: a96d35e7abf0e024d9c81ccafc6e053a, type: 3}
+  defaultCursor: {fileID: 2800000, guid: 4e7f0370ef3f7b54eac694dcbdac79a7, type: 3}
+  clickCursor: {fileID: 2800000, guid: 31bbf7012dfe0a345b69b4a9fcd6f6a4, type: 3}
   hoverCursor: {fileID: 2800000, guid: 31a4643eff20cac40ab7a6448fb06478, type: 3}
-  grabCursor: {fileID: 2800000, guid: a10696283ab2c4c5b9d3c2e48e49d4fe, type: 3}
+  grabCursor: {fileID: 2800000, guid: f87a9a96b1c390a4db55150e1a055526, type: 3}
   hotspot: {x: 0, y: 0}
   pinLayer:
     serializedVersion: 2
