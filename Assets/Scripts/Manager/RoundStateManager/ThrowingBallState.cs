@@ -6,26 +6,34 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 {
     public PathDrawer pathDrawer;
     public ThrowTuningDataSO tuningData;
+    public bool cannotThrowBall = false;
 
     [Header("Throw Completion")]
     [SerializeField, Min(0f)] private float minimumFlightTime = 1f;
     [SerializeField, Min(0f)] private float stallSpeedThreshold = 0.35f;
     [SerializeField, Min(0f)] private float stallGracePeriod = 1.5f;
     [SerializeField, Min(0f)] private float maximumFlightTime = 15f;
+    [SerializeField, Min(0f)] private float maxPinSettleWaitTime;
 
     private RoundStateManager currentManager;
     private bool ballHasBeenReleased;
     private bool throwCompletionRequested;
+    private bool waitingForPinsToSettle;
     private float flightTimer;
     private float stallTimer;
+    private float pinSettleTimer;
+
+    private bool _hasTutorialTextPlayed = false;
 
     public override void EnterState(RoundStateManager manager)
     {
         currentManager = manager;
         ballHasBeenReleased = false;
         throwCompletionRequested = false;
+        waitingForPinsToSettle = false;
         flightTimer = 0f;
         stallTimer = 0f;
+        pinSettleTimer = 0f;
 
         manager.CaptureStrikeTargetsForCurrentThrow();
         
@@ -34,10 +42,13 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         
         manager.TurnOnCardHand(false);
         
-        if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0)
+        if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0 && !_hasTutorialTextPlayed)
         {
+            _hasTutorialTextPlayed = true;
             manager.tutorialManager.PlayThrowTutorial();
         }
+        
+        manager.TurnOnButtonToClickToGetBall(true);
 
         manager.SetPinPlacementPhysics(false);
         manager.AllowPinCollisionEffects(true);
@@ -57,6 +68,11 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
             return;
         }
 
+        if (cannotThrowBall)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(1) && !ballHasBeenReleased)
         {
             OnDrawCancelled();
@@ -65,6 +81,28 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
         if (!ballHasBeenReleased || throwCompletionRequested || !manager.ballController.IsLaunched)
         {
+            return;
+        }
+
+        if (waitingForPinsToSettle)
+        {
+            pinSettleTimer += Time.deltaTime;
+            bool allSettled = true;
+
+            foreach (PinBase pin in manager.allActivePinsInTheFrame)
+            {
+                if (!pin.IsSettled)
+                {
+                    allSettled = false;
+                    break;
+                }
+            }
+
+            if (allSettled || pinSettleTimer >= maxPinSettleWaitTime)
+            {
+                CompleteThrowFinal(manager);
+            }
+
             return;
         }
 
@@ -150,6 +188,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         pathDrawer.Stop();
         
+        manager.TurnOnButtonToClickToGetBall(false);
+        
         manager.cameraFollowScript.StopTracking();
         
         currentManager = null;
@@ -158,6 +198,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     public override void OnCollisionEnter(RoundStateManager manager, Collision collision) { }
     public override void OnCollisionExit(RoundStateManager manager, Collision collision) { }
 
+    // There are trigger in the map like in the gutter, so when the balls enters the gutter we stop the throw
+    // its called BallCollisionTrigger.cs
     public override void OnTriggerEnter(RoundStateManager manager, Collider other)
     {
         if (ballHasBeenReleased && other.gameObject.CompareTag("Ball"))
@@ -168,10 +210,18 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     private void CompleteThrow(RoundStateManager manager, string reason)
     {
+        if (waitingForPinsToSettle || throwCompletionRequested || manager.currentState != this) return;
+
+        Debug.Log($"Throw completed: {reason}. Waiting for pins to settle.");
+        waitingForPinsToSettle = true;
+        pinSettleTimer = 0f;
+    }
+
+    private void CompleteThrowFinal(RoundStateManager manager)
+    {
         if (throwCompletionRequested || manager.currentState != this) return;
 
         throwCompletionRequested = true;
-        Debug.Log($"Throw completed: {reason}.");
         manager.SwitchState(manager.roundOverState);
     }
 

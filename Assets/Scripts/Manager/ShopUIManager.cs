@@ -1,8 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using DG.Tweening;
+
+// Shop buttons wiggle
+//https://share.gemini.google/d4vXsXZzI4Dg
+
+// buttons / dotweens https://share.gemini.google/qaanLhiA9KYZ
 
 [RequireComponent(typeof(CanvasGroup))]
 public class ShopUIManager : MonoBehaviour
@@ -14,6 +22,7 @@ public class ShopUIManager : MonoBehaviour
     
     [Header("Card References")]
     public List<Button> cardButtons = new List<Button>();
+    public List<TextMeshProUGUI> cardTextButtons = new List<TextMeshProUGUI>();
     public List<Image> cardVisuals = new List<Image>();
     
     [Header("Reroll Settings")]
@@ -52,9 +61,9 @@ public class ShopUIManager : MonoBehaviour
     public float rareWeight = 35;
     public float legendaryWeight = 25f;
     
-    public float commonCostMultiplier = 1f;
-    public float rareCostMultiplier = 1.25f;
-    public float legendaryCostMultiplier = 1.5f;
+    public float commonCostMultiplier;
+    public float rareCostMultiplier;
+    public float legendaryCostMultiplier;
     
     [SerializeField] private HexGridExpander hexGridExpander;
     
@@ -62,6 +71,14 @@ public class ShopUIManager : MonoBehaviour
     public Button removePinButton;
     public string singlePinCardID = "SingleNormalPin";
     public int removePinCost = 1;
+
+    private void Start()
+    {
+        AddBounceEffectToButton(rerollButton);
+        AddBounceEffectToButton(continueButton);
+        AddBounceEffectToButton(expandGridButton);
+        AddBounceEffectToButton(removePinButton);
+    }
     
     public void ToggleShop(bool show, RoundStateManager manager = null)
     {
@@ -81,7 +98,6 @@ public class ShopUIManager : MonoBehaviour
             UpdateGridButtonText();
         }
     }
-
     
     private void UpdateRerollUI()
     {
@@ -121,13 +137,26 @@ public class ShopUIManager : MonoBehaviour
         {
             CardDataSO selectedCard = GetRandomCardByRarity();
             _currentShopCards.Add(selectedCard);
-            
+
             UpdateButtonText(i);
             UpdateCardVisual(i, cardVisuals[i], _currentShopCards[i]);
+            
+            // turn of the parent image, as we see jumbo if we dont (a card background image)
+            cardVisuals[i].enabled = false;
+            // turn of alpha of the card we just want the hitbox
+            Color tempColor = cardVisuals[i].color;
+            tempColor.a = 0f;
+            cardVisuals[i].color = tempColor;
+            
             SetCardAlpha(i, cardButtons[i], cardVisuals[i], 1f);
+
+            // Hook up our CardAnimator logic instead of WiggleRoutine
+            GameObject spawnedCard = _spawnedShopCardVisuals[i];
+            CardAnimator animator = spawnedCard != null ? spawnedCard.GetComponent<CardAnimator>() : null;
+            AddCardHoverEvents(cardButtons[i].gameObject, animator);
         }
     }
-
+    
     private void UpdateCardVisual(int index, Image cardImage, CardDataSO cardData)
     {
         ClearCardVisual(index, cardImage);
@@ -151,16 +180,22 @@ public class ShopUIManager : MonoBehaviour
         }
 
         card.transform.localRotation = Quaternion.identity;
-        card.transform.localScale = Vector3.one * shopCardVisualScale;
 
-        CardVisualPresenter presenter = card.GetComponentInChildren<CardVisualPresenter>(true);
-        if (presenter != null)
+        CardAnimator cardAnimator = card.GetComponent<CardAnimator>();
+        if (cardAnimator != null)
         {
-            presenter.Bind(cardData);
+            // Initialize Shop Mode - Pass the target button transform and base scale
+            cardAnimator.InitializeShopMode(cardImage.transform, cardData, shopCardVisualScale);
         }
         else
         {
-            Debug.LogWarning($"Shop card visual '{card.name}' has no CardVisualPresenter.");
+            // Fallback scaling just in case the prefab is missing the animator
+            card.transform.localScale = Vector3.one * shopCardVisualScale;
+            CardVisualPresenter presenter = card.GetComponentInChildren<CardVisualPresenter>(true);
+            if (presenter != null)
+            {
+                presenter.Bind(cardData);
+            }
         }
 
         CanvasGroup cardGroup = card.GetComponent<CanvasGroup>();
@@ -172,7 +207,7 @@ public class ShopUIManager : MonoBehaviour
             cardGroup.blocksRaycasts = false;
         }
 
-        cardImage.enabled = false;
+        cardImage.enabled = true;
     }
     
     private CardDataSO GetRandomCardByRarity()
@@ -246,6 +281,8 @@ public class ShopUIManager : MonoBehaviour
 
             UpdateGridButtonText();
         }
+        
+        _roundStateManager.PinPlacementVisuals(turnOn);
 
         throwBallTv.SetActive(!turnOn);
         goBackToShopTv.SetActive(turnOn);
@@ -326,9 +363,7 @@ public class ShopUIManager : MonoBehaviour
     // Replace your existing UpdateButtonText method
     private void UpdateButtonText(int index)
     {
-        Button targetButton = cardButtons[index];
-
-        TextMeshProUGUI buttonText = targetButton.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI buttonText = cardTextButtons[index];
 
         int currentRound = _roundStateManager.sessionData.currentRound;
         int costModifier = 1;
@@ -346,7 +381,7 @@ public class ShopUIManager : MonoBehaviour
         }
 
         // we first see shop on round 1 ?
-        int calculatedCost = Mathf.RoundToInt((card.baseCost + costModifier) * rarityMultiplier);
+        int calculatedCost = Mathf.RoundToInt(card.baseCost + costModifier + rarityMultiplier);
         
         if (_currentCardCosts.Count <= index)
         {
@@ -357,7 +392,7 @@ public class ShopUIManager : MonoBehaviour
             _currentCardCosts[index] = calculatedCost;
         }
         
-        buttonText.text = $"Buy ({calculatedCost})";
+        buttonText.text = $"${calculatedCost}";
     }
 
     private int GetShopCostModifier(int currentRound, int costModifier)
@@ -395,6 +430,13 @@ public class ShopUIManager : MonoBehaviour
                 // Remove from the array so it can't be bought again
                 _currentShopCards[index] = null; 
 
+                // turn of the parent image, as we see jumbo if we dont (a card background image)
+                cardVisuals[index].enabled = false;
+                // turn of alpha of the card we just want the hitbox
+                Color tempColor = cardVisuals[index].color;
+                tempColor.a = 0f;
+                cardVisuals[index].color = tempColor;
+                
                 SetCardAlpha(index, cardButtons[index], cardVisuals[index], 0.15f);
             }
             else
@@ -453,7 +495,7 @@ public class ShopUIManager : MonoBehaviour
         
         // Disable interaction if transparent so it can't be clicked
         button.interactable = alpha >= 0.99f;
-
+        
         // Update visual image alpha
         Color visualColor = visual.color;
         visualColor.a = alpha;
@@ -482,5 +524,174 @@ public class ShopUIManager : MonoBehaviour
             cardGroup.interactable = false;
             cardGroup.blocksRaycasts = false;
         }
+    }
+// Ai bounce effect stuff dw about it.
+    private void AddCardHoverEvents(GameObject buttonGo, CardAnimator animator)
+    {
+        EventTrigger trigger = buttonGo.GetComponent<EventTrigger>();
+        if (trigger == null) 
+        {
+            trigger = buttonGo.AddComponent<EventTrigger>();
+        }
+        else
+        {
+            trigger.triggers.Clear();
+            // Reset scale in case the shop was rerolled while a button was actively being hovered
+            buttonGo.transform.DOKill();
+            buttonGo.transform.localScale = Vector3.one;
+        }
+
+        Vector3 originalScale = buttonGo.transform.localScale;
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+        enterEntry.callback.AddListener((data) => 
+        { 
+            Button btn = buttonGo.GetComponent<Button>();
+            if (btn != null && !btn.interactable) return;
+
+            if (animator != null)
+            {
+                animator.shopIsHovering = true;
+                animator.PlayPointerEnter();
+            }
+
+            buttonGo.transform.DOKill();
+            buttonGo.transform.DOScale(originalScale * 1.05f, 0.15f).SetEase(Ease.OutBack);
+        });
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+        exitEntry.callback.AddListener((data) => 
+        { 
+            if (animator != null)
+            {
+                animator.shopIsHovering = false;
+                animator.PlayPointerExit();
+            }
+
+            buttonGo.transform.DOKill();
+            buttonGo.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
+        });
+        trigger.triggers.Add(exitEntry);
+        
+        EventTrigger.Entry downEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
+        downEntry.callback.AddListener((data) => 
+        { 
+            Button btn = buttonGo.GetComponent<Button>();
+            if (btn != null && !btn.interactable) return;
+
+            if (animator != null)
+            {
+                animator.PlayPointerDown();
+            }
+
+            buttonGo.transform.DOKill();
+            buttonGo.transform.DOScale(originalScale * 0.9f, 0.1f).SetEase(Ease.OutQuad);
+        });
+        trigger.triggers.Add(downEntry);
+
+        EventTrigger.Entry upEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
+        upEntry.callback.AddListener((data) => 
+        { 
+            if (animator != null)
+            {
+                animator.PlayPointerUp(false);
+            }
+
+            Button btn = buttonGo.GetComponent<Button>();
+            if (btn != null)
+            {
+                buttonGo.transform.DOKill();
+                
+                if (btn.interactable)
+                {
+                    bool isHovering = RectTransformUtility.RectangleContainsScreenPoint(
+                        buttonGo.GetComponent<RectTransform>(), 
+                        ((PointerEventData)data).position, 
+                        ((PointerEventData)data).pressEventCamera
+                    );
+                    
+                    DG.Tweening.Sequence clickSeq = DOTween.Sequence();
+                    clickSeq.Append(buttonGo.transform.DOScale(originalScale * 1.15f, 0.1f).SetEase(Ease.OutQuad));
+                    
+                    float targetScale = isHovering ? 1.05f : 1f;
+                    clickSeq.Append(buttonGo.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack));
+                }
+                else
+                {
+                    buttonGo.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
+                }
+            }
+        });
+        trigger.triggers.Add(upEntry);
+    }
+    // ai stuff dw about it
+    private void AddBounceEffectToButton(Button btn)
+    {
+        if (btn == null) return;
+
+        EventTrigger trigger = btn.GetComponent<EventTrigger>();
+        if (trigger == null) 
+        {
+            trigger = btn.gameObject.AddComponent<EventTrigger>();
+        }
+
+        Vector3 originalScale = btn.transform.localScale;
+
+        EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+        enterEntry.callback.AddListener((data) => 
+        { 
+            if (btn.interactable)
+            {
+                btn.transform.DOKill();
+                btn.transform.DOScale(originalScale * 1.05f, 0.15f).SetEase(Ease.OutBack);
+            }
+        });
+        trigger.triggers.Add(enterEntry);
+
+        EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+        exitEntry.callback.AddListener((data) => 
+        { 
+            btn.transform.DOKill();
+            btn.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
+        });
+        trigger.triggers.Add(exitEntry);
+        
+        EventTrigger.Entry downEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
+        downEntry.callback.AddListener((data) => 
+        { 
+            if (btn.interactable)
+            {
+                btn.transform.DOKill();
+                btn.transform.DOScale(originalScale * 0.9f, 0.1f).SetEase(Ease.OutQuad);
+            }
+        });
+        trigger.triggers.Add(downEntry);
+
+        EventTrigger.Entry upEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
+        upEntry.callback.AddListener((data) => 
+        { 
+            btn.transform.DOKill();
+            
+            if (btn.interactable)
+            {
+                bool isHovering = RectTransformUtility.RectangleContainsScreenPoint(
+                    btn.GetComponent<RectTransform>(), 
+                    ((PointerEventData)data).position, 
+                    ((PointerEventData)data).pressEventCamera
+                );
+                
+                DG.Tweening.Sequence clickSeq = DOTween.Sequence();
+                clickSeq.Append(btn.transform.DOScale(originalScale * 1.15f, 0.1f).SetEase(Ease.OutQuad));
+                
+                float targetScale = isHovering ? 1.05f : 1f;
+                clickSeq.Append(btn.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack));
+            }
+            else
+            {
+                btn.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
+            }
+        });
+        trigger.triggers.Add(upEntry);
     }
 }

@@ -20,24 +20,39 @@ public class RoundStartState : RoundBaseState
 
         HandleGrid(manager);
 
-        EnterNextState(manager);
+        // Boss State Check
+        bool isBossRound = CheckForBossState(manager);
+        
+        if (isBossRound)
+        {
+            manager.SwitchState(manager.spawnBossObjectsState);
+        }
+        else
+        {
+            manager.SwitchState(manager.pinPlacementState);
+            
+        }
     }
 
-    private static void EnterNextState(RoundStateManager manager)
+    private bool CheckForBossState(RoundStateManager manager)
     {
         int currentRoundNumber = manager.sessionData.currentRound;
-        bool isLastRound = manager.roundData != null &&
-                           manager.roundData.IsLastRound(currentRoundNumber);
-        bool bossPhaseHasRun = manager.spawnBossObjectsState.HasRunForRound(currentRoundNumber);
+        bool isLastRound = manager.roundData.IsLastRound(currentRoundNumber);
 
-        manager.SwitchState(isLastRound && !bossPhaseHasRun
-            ? manager.spawnBossObjectsState
-            : manager.pinPlacementState);
+        if (isLastRound || currentRoundNumber == 4 || currentRoundNumber == 1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;            
+        }
+
+        //bool bossPhaseHasRun = manager.spawnBossObjectsState.HasRunForRound(currentRoundNumber);
     }
 
     private void HandleGrid(RoundStateManager manager)
     {
-        manager.gridManager?.ClearAllOccupants();
         manager.gridManager?.SpawnTicketsForFrame();
         
         manager.onLaneSquareGrid.GenerateGridForRound(manager);
@@ -45,10 +60,7 @@ public class RoundStartState : RoundBaseState
 
     private void HandleMap(RoundStateManager manager)
     {
-        //manager.ClearPlacedPinsAndReturnCardsToDeck();
         manager.ResetLaneExploders();
-        //manager.pinHandInventory?.ResetInventoryAndPins();
-        manager.RefreshRuntimePools();
     }
     
     private static void UpdateTicketAmountPerRound(RoundStateManager manager)

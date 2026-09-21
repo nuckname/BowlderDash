@@ -16,6 +16,7 @@ TagManager:
   - ThePit
   - GetTicketOnCollision
   - Gutter
+  - BallReturnWaypoints
   layers:
   - Default
   - TransparentFX

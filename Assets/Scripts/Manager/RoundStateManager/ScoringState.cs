@@ -44,14 +44,16 @@ public class ScoringState : RoundBaseState
     { 
         if (hasScored) return;
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            _skipAnimation = true;
-        }
 
         if (!pinsHaveSettled)
         {
             HandlePinSettlement();
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                _skipAnimation = true;
+            }
+
         }
     }
 
@@ -91,7 +93,7 @@ public class ScoringState : RoundBaseState
             yield return SkippableWait(waitTimeBeforeScoring + 1f);
         }
 
-        TriggerEndOfRoundEffects();
+        ExecutePinScoringEffects();
 
         int pinCount = _manager.pinsToScore.Count;
         
@@ -135,13 +137,32 @@ public class ScoringState : RoundBaseState
         }
     }
 
-    private void TriggerEndOfRoundEffects()
+    private void ExecutePinScoringEffects()
     {
         foreach (PinBase pin in _manager.allActivePinsInTheFrame)
         {
-            if (pin != null && !pin.IsFallen)
+            if (pin != null)
             {
-                pin.TriggerEndOfRound();
+                if (pin.IsFallen)
+                {
+                    if (pin.onFallEffects != null)
+                    {
+                        foreach (PinEffect effect in pin.onFallEffects)
+                        {
+                            effect.Execute(pin);
+                        }
+                    }
+                }
+                else
+                {
+                    if (pin.onEndOfRoundEffects != null)
+                    {
+                        foreach (PinEffect effect in pin.onEndOfRoundEffects)
+                        {
+                            effect.Execute(pin);
+                        }
+                    }
+                }
             }
         }
     }
@@ -184,9 +205,9 @@ public class ScoringState : RoundBaseState
     
     private void GoToNextRound()
     {
-        var currentRoundInfo = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
-        int maxBallsAllowed = currentRoundInfo.maxBallsAllowedToThrow;
-        int scoreNeeded = currentRoundInfo.scoreNeededToBeat;
+        RoundScore currentRoundScore = _manager.roundData.GetRoundInfo(_manager.sessionData.currentRound);
+        int maxBallsAllowed = currentRoundScore.maxBallsAllowedToThrow;
+        int scoreNeeded = currentRoundScore.scoreNeededToBeat;
         
         int ballsThrown = _manager.sessionData.ballsThrown;
         int currentScore = _manager.sessionData.currentScore;
@@ -200,20 +221,30 @@ public class ScoringState : RoundBaseState
             bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound);
             RoundBaseState nextState = isLastRound ? _manager.gameCompleteState : _manager.roundWinState;
             
-            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound, true, false));
+            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound, true, false, currentRoundScore));
         }
         // This works, we are updated the ball throw late so we need the +1, after we check this
-        else if (ballsThrown + 1 >= maxBallsAllowed)
+        else if (ballsThrown >= maxBallsAllowed)
         {
             // Lost the game
-            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, _manager.gameOverState, false, false, true));
+            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, 
+                _manager.gameOverState,
+                false,
+                false,
+                true,
+                currentRoundScore));
         }
         else
         {
             // Else throw the ball again and try to reach the quota.
         
             // I want to show the in game UI before we go to the next round.
-            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, _manager.roundStartState, false, false, false));
+            _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager,
+                _manager.roundStartState,
+                false,
+                false,
+                false,
+                currentRoundScore));
         }
     }
     

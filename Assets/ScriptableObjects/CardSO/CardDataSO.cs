@@ -40,7 +40,8 @@ public class CardDataSO : ScriptableObject
     public GameObject worldGameObjectPrefab; 
     
     [Header("Shop Settings")]
-    public int baseCost = 2;
+    [Tooltip("Base cost of is set in CardDataSO. its based on rarity.")]
+    public int baseCost;
 
     [Header("Spawn Pattern (Hex Axial Coordinates)")]
     [Tooltip("Define the shape and unique prefabs for each piece.")]
@@ -55,13 +56,13 @@ public class CardDataSO : ScriptableObject
         switch (rarity)
         {
             case CardRarity.Common:
-                cardTintCardRarity = Color.grey; 
+                baseCost = 3;
                 break;
             case CardRarity.Rare:
-                cardTintCardRarity = Color.blue; 
+                baseCost = 4;
                 break;
             case CardRarity.Legendary:
-                cardTintCardRarity = new Color(1f, 0.84f, 0f); // Gold
+                baseCost = 6;
                 break;
         }
     }

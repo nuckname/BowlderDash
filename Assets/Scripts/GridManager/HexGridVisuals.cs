@@ -137,4 +137,17 @@ public class HexGridVisuals : MonoBehaviour
     {
         if (previewLine != null) previewLine.enabled = false;
     }
+    
+    public void SetVisualsActive(bool isActive)
+    {
+        showGridInPlay = isActive;
+        
+        foreach (var line in lines)
+        {
+            if (line != null)
+            {
+                line.gameObject.SetActive(isActive);
+            }
+        }
+    }
 }

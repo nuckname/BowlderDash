@@ -716,7 +716,6 @@ GameObject:
   - component: {fileID: 8813403517932692623}
   - component: {fileID: 35909669744063940}
   - component: {fileID: 299493488375739819}
-  - component: {fileID: 8047500748751543689}
   m_Layer: 10
   m_Name: vasecrack.001
   m_TagString: Pin
@@ -806,24 +805,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8047500748751543689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5233888619542058040}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00f7fd9f0cc765344a63a7085ac60480, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HighlightGroupedPins
-  highlightColor: {r: 0, g: 0.3773585, b: 0.20123464, a: 1}
-  highlightLineWidth: 0.12
-  highlightHeightOffset: 0.1
-  pinLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967291
 --- !u!1 &5428178081436859883
 GameObject:
   m_ObjectHideFlags: 0

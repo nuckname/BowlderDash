@@ -219,6 +219,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: VaseMultiNormalPinyPin2D_5
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 238
+        width: 83
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86da882f66455bf4aa75ab0da4cbe5ff
+      internalID: 973620358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -240,6 +262,7 @@ TextureImporter:
       VaseMultiNormalPinyPin2D_2: 1150730212
       VaseMultiNormalPinyPin2D_3: 1175842804
       VaseMultiNormalPinyPin2D_4: 1347982818
+      VaseMultiNormalPinyPin2D_5: 973620358
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections.Generic;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
@@ -68,14 +66,21 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     void Start()
     {
+        // idk where the hotkey text is being set
+        if (hotkeyText != null)
+        {
+            hotkeyText.gameObject.SetActive(false);
+        }
+
         if (!instantiateVisual || cardData == null || cardData.cardVisualPrefab == null)
             return;
 
         cardAnimator = Instantiate(cardData.cardVisualPrefab, _visualHandler.transform).GetComponent<CardAnimator>();
         
+        cardAnimator.transform.SetAsFirstSibling();
+        
         cardAnimator.Initialize(this);
     }
-
     // Forces the card into a drag state programmatically
     public void ForceStartDrag()
     {
@@ -97,6 +102,21 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     void Update()
     {
         ClampPosition();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (isDragging)
+            {
+                CancelDrag();
+            }
+            
+            if (selected)
+            {
+                selected = false;
+                SelectEvent.Invoke(this, selected);
+                transform.localPosition = _preSelectionPosition;
+            }
+        }
 
         if (isDragging)
         {
@@ -180,6 +200,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Fires drop events and resolves placement based on whether the card is in the play area.
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!isDragging) return; // Prevent double-trigger if drag was already canceled by Escape
+
         isDragging = false;
         
         if (isPreviewingInWorld)

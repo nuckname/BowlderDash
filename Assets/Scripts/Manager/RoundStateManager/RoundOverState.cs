@@ -8,10 +8,10 @@ public class RoundOverState : RoundBaseState
 
     public override void EnterState(RoundStateManager manager)
     {
-        manager.UpdateInstructionText("Round Over! Click to continue.");
-        
         waitTimer = 0f;
 
+        manager.AddBallThrownToSession();
+        
         manager.TurnOnBallMesh(false);
 
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
@@ -52,15 +52,6 @@ public class RoundOverState : RoundBaseState
                         manager.pinsToScore.Add(pin);
                         break; 
                     }
-                }
-            }
-
-            foreach (PinEffect effect in pin.onEndOfRoundEffects)
-            {
-                if (effect is ScoreMultiplierEffect)
-                {
-                    manager.pinsToScore.Add(pin);
-                    break; 
                 }
             }
            

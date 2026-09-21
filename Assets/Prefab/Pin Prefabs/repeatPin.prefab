@@ -105,9 +105,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
       addedObject: {fileID: 982110640399100316}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 488459804700197699}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!1 &5919451674846626430 stripped
 GameObject:
@@ -269,7 +266,9 @@ MonoBehaviour:
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 8327561609825615850}
+  allowPinSelection: 0
   _isFallen: 0
+  toScorePinFallOver: 0
   isClone: 0
   references:
     version: 2
@@ -278,22 +277,3 @@ MonoBehaviour:
       type: {class: RepeatRightPinEffect, ns: , asm: Assembly-CSharp}
       data:
         rightOffset: {x: 1, y: 0}
---- !u!114 &488459804700197699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5919451674846626430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00f7fd9f0cc765344a63a7085ac60480, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HighlightGroupedPins
-  highlightColor: {r: 0, g: 0.3773585, b: 0.20123464, a: 1}
-  highlightLineWidth: 0.12
-  highlightHeightOffset: 0.1
-  pinLayerMask:
-    serializedVersion: 2
-    m_Bits: 8179
-  allowHighlighting: 1

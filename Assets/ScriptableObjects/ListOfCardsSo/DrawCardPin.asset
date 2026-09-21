@@ -14,18 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: DrawCardPin
   displayName: Draw Card Pin
-  description: 'On Place: card 2 cards'
-  cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
-  pinImages: []
-  desiredLayout: 0
-  cardTintCardRarity: {r: 1, g: 0.84, b: 0, a: 1}
+  description: 'On Place: Draw 2 cards'
+  cardArtwork: {fileID: 0}
+  pinImages:
+  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  desiredLayout: 3
+  cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 57a94e398b126d2459e8102b3c1c260b, type: 3}
-  baseCost: 3
+  baseCost: 5
   spawnPattern:
   - offset: {x: 0, y: 0}
     prefab: {fileID: 5919451674846626430, guid: 57a94e398b126d2459e8102b3c1c260b, type: 3}
   - offset: {x: 0, y: 1}
     prefab: {fileID: 5919451674846626430, guid: 57a94e398b126d2459e8102b3c1c260b, type: 3}
-  rarity: 2
+  rarity: 1

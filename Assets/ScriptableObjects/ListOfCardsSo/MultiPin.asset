@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MultiPin
   m_EditorClassIdentifier: 
   cardID: MultiPin
-  displayName: Ace Pin
+  displayName: Multi Pin
   description: 'On Fall: Adds 0.25x Multiplier'
   cardArtwork: {fileID: 0}
   pinImages:
@@ -23,6 +23,6 @@ MonoBehaviour:
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 2bd9d418fc5d22941b45278dfa082035, type: 3}
-  baseCost: 2
+  baseCost: 3
   spawnPattern: []
   rarity: 0

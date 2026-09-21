@@ -17,7 +17,7 @@ public class RoundStateManager : MonoBehaviour
     public List<PinBase> pinsToScore = new List<PinBase>();
 
     [Header("Strike")]
-    [SerializeField, Min(0f)] private float strikeMultiplierBonus = 0.5f;
+    private float _strikeMultiplierBonus = 0.25f;
     [SerializeField] private GameObject strikeFloatingTextPrefab;
     [SerializeField] private Transform strikeFloatingTextSpawnPoint;
     private readonly List<PinBase> strikeTargetsForCurrentThrow = new List<PinBase>();
@@ -27,7 +27,8 @@ public class RoundStateManager : MonoBehaviour
     public CameraPanToLocation cameraPanToLocation;
     public CameraFollowBallScript cameraFollowScript;
     public BallController ballController; 
-
+    public BallRampSpawner ballRampSpawner;
+    
     [Header("Core Dependencies")]
     public ScoreCalculator scoreCalculator;
     public GridManager gridManager;
@@ -57,6 +58,8 @@ public class RoundStateManager : MonoBehaviour
 
     public TextMeshProUGUI gameOverText;
 
+    [SerializeField] private GameObject clickButtonToGetBallGameObject;
+    
     [Header("Leaderboard")]
     [SerializeField] private LeaderboardScreen leaderboardScreenPrefab;
     private LeaderboardScreen leaderboardScreen;
@@ -67,6 +70,7 @@ public class RoundStateManager : MonoBehaviour
     public TutorialManager tutorialManager;
 
     public GameObject postProcessingEffects;
+    
     
     // States
     public RoundStartState roundStartState = new RoundStartState();
@@ -88,6 +92,8 @@ public class RoundStateManager : MonoBehaviour
     [SerializeField] private GameObject pinFloatingTextPrefab;
     [SerializeField] private GameObject bossFloatingTextPrefab;
 
+    [Header("In World")] 
+    [SerializeField] private GameObject maxLineGameObject;
     private void Awake()
     {
         // Bind the local reference to the Singleton instance so they share the exact same data
@@ -144,14 +150,25 @@ public class RoundStateManager : MonoBehaviour
         
         gridManager.GenerateGrid();
         
-        RoundScore roundInfo = roundData.GetRoundInfo(sessionData.currentRound);
+        throwingBallState.cannotThrowBall = true;
         
-        inGameScoreUi.UpdateScoreToBeatText(roundInfo.scoreNeededToBeat);
+        TurnOnBallMesh(false);
+        ballRampSpawner.SpawnBallsForRound(SessionData.Instance.currentRound);
+        
+        UpdateInGameScoreUi();
+        TurnOnButtonToClickToGetBall(false);
+
+        SwitchState(roundStartState);
+    }
+
+    private void UpdateInGameScoreUi()
+    {
+        RoundScore roundScore = roundData.GetRoundInfo(sessionData.currentRound);
+        
+        inGameScoreUi.UpdateScoreToBeatText(roundScore.scoreNeededToBeat);
         inGameScoreUi.UpdateScoreText(sessionData.currentScore);
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
         inGameScoreUi.UpdateRoundText(0, roundData.GetMaxRoundNumber());
-        
-        SwitchState(roundStartState);
     }
 
     // The player has completed a frame/round/they meet quota. call This:
@@ -166,10 +183,6 @@ public class RoundStateManager : MonoBehaviour
         inGameScoreUi.UpdateBallsText(sessionData.ballsThrown, GetMaxBallsForCurrentRound());
     }
     
-    public void ResetUiForQuotaNotMeetThisTurn()
-    {
-    }
-    
     public void SwitchState(RoundBaseState newState)
     {
         // Ignore late gameplay callbacks and repeated end-game transitions.
@@ -177,6 +190,12 @@ public class RoundStateManager : MonoBehaviour
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         if (currentState != null) currentState.EnterState(this);
+    }
+    
+    public void PinPlacementVisuals(bool turnOn)
+    {
+        gridManager.hexGridVisuals.SetVisualsActive(turnOn);
+        maxLineGameObject.SetActive(!turnOn);
     }
 
     public void ShowLeaderboardScreen(bool victory)
@@ -312,11 +331,6 @@ public class RoundStateManager : MonoBehaviour
         }
     }
 
-    public void TurnOnLevelPins(bool turnOn)
-    {
-        
-    }
-
     public bool TryApplyStrikeMultiplier()
     {
         if (strikeMultiplierAppliedForCurrentThrow || strikeTargetsForCurrentThrow.Count == 0) return false;
@@ -329,7 +343,7 @@ public class RoundStateManager : MonoBehaviour
             }
         }
 
-        scoreCalculator.AddMultiplier(strikeMultiplierBonus);
+        scoreCalculator.AddMultiplier(_strikeMultiplierBonus);
         strikeMultiplierAppliedForCurrentThrow = true;
         return true;
     }
@@ -351,8 +365,6 @@ public class RoundStateManager : MonoBehaviour
         GUI.Label(new Rect(300, 10, 300, 20), $"Current State: {stateName}");
     }
 
-    public int CalculateFrameScoreTarget(int frame) { return 30; }
-    
     public void AllowPinsToFallOver(bool allow)
     {
         foreach(PinBase pin in allActivePinsInTheFrame)
@@ -487,7 +499,7 @@ public class RoundStateManager : MonoBehaviour
             return;
         }
 
-        string text = $"STRIKE!\n+{strikeMultiplierBonus:0.##}x";
+        string text = $"STRIKE!\n+{_strikeMultiplierBonus:0.##}x";
         SpawnFloatingText(strikeFloatingTextPrefab, text, strikeFloatingTextSpawnPoint.position);
     }
 
@@ -569,8 +581,6 @@ public class RoundStateManager : MonoBehaviour
     }
 
     
-    public void RefreshRuntimePools() { }
-
     // Turns off all children of the gameobjet reference, not the parent itself.
     public void TurnOnCardHand(bool turnOn)
     {
@@ -605,5 +615,31 @@ public class RoundStateManager : MonoBehaviour
     public void TurnOnBallMesh(bool turnOff)
     {
         GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().enabled = turnOff;
+    }
+
+
+    // Called via button
+    public void ClickButtonToGetBall()
+    {
+        TurnOnBallMesh(true);
+
+        Material ballRampColour = ballRampSpawner.ballsInRamp[0].GetComponent<BallRampFollower>().getCurrentBallMaterial;
+        // Really do need to cache the ball gameobject
+        // Set the ball we throw to the colour we just clicked
+        GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().material = ballRampColour;
+        
+        Destroy(ballRampSpawner.ballsInRamp[0]); 
+        
+        ballRampSpawner.ballsInRamp.RemoveAt(0);
+
+        throwingBallState.cannotThrowBall = false;
+        
+        // Turn off button when we click it.
+        TurnOnButtonToClickToGetBall(false);
+    }
+
+    public void TurnOnButtonToClickToGetBall(bool turnOn)
+    {
+        clickButtonToGetBallGameObject.SetActive(turnOn);
     }
 }

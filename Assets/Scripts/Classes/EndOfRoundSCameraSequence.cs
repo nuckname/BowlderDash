@@ -26,7 +26,7 @@ public class EndOfRoundSCameraSequence
 
         while (timer < waitTime)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
             {
                 yield break;
             }
@@ -35,7 +35,7 @@ public class EndOfRoundSCameraSequence
         }
     }
 
-    public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false)
+    public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false, RoundScore roundScore = null)
     {
         TransitionPhase currentPhase = TransitionPhase.InitializeUI;
 
@@ -64,9 +64,7 @@ public class EndOfRoundSCameraSequence
                         manager.inGameScoreUi.TriggerWinRoundText();
                         yield return SkippableWait(2);
                         // Final victory keeps the completed round and score for the end screen.
-                        currentPhase = prepareNextRound
-                            ? TransitionPhase.ShowIncreaseRound
-                            : TransitionPhase.ShowTicketsEarned;
+                        currentPhase = TransitionPhase.ShowTicketsEarned;
                         break;
                     }
                     else if (lostGame)
@@ -82,11 +80,12 @@ public class EndOfRoundSCameraSequence
                     
                     // If we didnt meet quota
                     yield return SkippableWait(scoreDisplayHoldTime);
-                    currentPhase = TransitionPhase.ShowBallsThrown;
+                    currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
                 
 
                 // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
+                /*
                 case TransitionPhase.ShowBallsThrown:
                     manager.inGameScoreUi.StopAllFlashing();
                     
@@ -104,14 +103,14 @@ public class EndOfRoundSCameraSequence
                         
                         // Update the text back to OG.
                         manager.inGameScoreUi.UpdateBallsText(manager.sessionData.ballsThrown, 
-                            manager.roundData.GetMaxRoundNumber());
+                            roundScore.maxBallsAllowedToThrow);
                     }
                     
                     
                     yield return SkippableWait(waitBeforeUiCamera);
                     currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
-                
+                */
                 // We pick one of these TransitionPhase.ShowBallsThrown or TransitionPhase.ShowIncreaseRound
                 case TransitionPhase.ShowIncreaseRound:
                     manager.inGameScoreUi.StopAllFlashing();
@@ -129,9 +128,9 @@ public class EndOfRoundSCameraSequence
                     manager.sessionData.AddRound();
                     manager.inGameScoreUi.UpdateRoundText(manager.sessionData.currentRound, manager.roundData.GetMaxRoundNumber());
                     yield return SkippableWait(waitBeforeUiCamera);
-                    currentPhase = TransitionPhase.ShowTicketsEarned;
+                    currentPhase = TransitionPhase.FinishTransition;
                     break;
-
+                
                 case TransitionPhase.ShowTicketsEarned:
                     manager.inGameScoreUi.StopAllFlashing();
                     
@@ -143,7 +142,14 @@ public class EndOfRoundSCameraSequence
                     if (ticketCountUpRoutine != null) yield return ticketCountUpRoutine;
 
                     yield return SkippableWait(scoreDisplayHoldTime);
-                    currentPhase = TransitionPhase.FinishTransition;
+                    if (wonRound)
+                    {
+                        currentPhase = TransitionPhase.ShowIncreaseRound;
+                    }
+                    else
+                    {
+                        currentPhase = TransitionPhase.FinishTransition;
+                    }
                     break;
             }
         }

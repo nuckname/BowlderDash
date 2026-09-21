@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+// https://share.gemini.google/0ZSCmXAsuGQ7
+
 [RequireComponent(typeof(Collider))]
 public class DraggableSnap : MonoBehaviour
 {
@@ -85,14 +87,45 @@ public class DraggableSnap : MonoBehaviour
             }
         }
     }
-    
-    private void OnMouseDown()
+
+    private void Update()
     {
         if (!CanInteract || _gridOccupancy == null || _hexGrid == null || _gridManager == null || _cam == null)
         {
             return;
         }
 
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
+            Plane gridPlane = new Plane(Vector3.up, _hexGrid.transform.position);
+
+            if (gridPlane.Raycast(ray, out float hitDistance))
+            {
+                Vector3 hitPoint = ray.GetPoint(hitDistance);
+                HexCell nearestCell = _hexGrid.GetNearestCell(hitPoint);
+
+                if (nearestCell != null && Vector3.Distance(hitPoint, nearestCell.center) <= _hexGrid.hexSize)
+                {
+                    if (nearestCell.occupant == transform)
+                    {
+                        BeginDrag(ray);
+                    }
+                }
+            }
+        }
+        else if (Input.GetMouseButton(0) && _dragging)
+        {
+            ContinueDrag();
+        }
+        else if (Input.GetMouseButtonUp(0) && _dragging)
+        {
+            EndDrag();
+        }
+    }
+
+    private void BeginDrag(Ray ray)
+    {
         _peerAxialOffsets.Clear();
         _peerOriginalCells.Clear();
         _peerOriginalPositions.Clear();
@@ -137,7 +170,6 @@ public class DraggableSnap : MonoBehaviour
         // Establish drag plane offset for the specific pin we clicked
         float anchorElevatedY = transform.position.y;
         Plane plane = new Plane(Vector3.up, new Vector3(0f, anchorElevatedY, 0f));
-        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
         
         if (plane.Raycast(ray, out float enter))
         {
@@ -147,7 +179,7 @@ public class DraggableSnap : MonoBehaviour
         _dragging = true;
     }
 
-    private void OnMouseDrag()
+    private void ContinueDrag()
     {
         if (!_dragging) return;
 
@@ -215,7 +247,7 @@ public class DraggableSnap : MonoBehaviour
         }
     }
 
-    private void OnMouseUp()
+    private void EndDrag()
     {
         if (!_dragging) return;
 

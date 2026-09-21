@@ -48,6 +48,8 @@ public class PinBase : MonoBehaviour
     [Header("Disable this box collider on hit")]
     [SerializeField] private BoxCollider boxColliderToDisable;
     
+    public bool allowPinSelection;
+    
     public bool _isFallen = false;
     public bool IsFallen => _isFallen;
 
@@ -93,7 +95,7 @@ public class PinBase : MonoBehaviour
             if (onEndOfRoundEffects != null && onEndOfRoundEffects.Count > 0) return true;
             
             // Failsafe: If the pin is barely moving (jittering), force it to sleep
-            if (!_rb.IsSleeping() && _rb.linearVelocity.sqrMagnitude < 1.5f && _rb.angularVelocity.sqrMagnitude < 1.5f)
+            if (!_rb.IsSleeping() && _rb.linearVelocity.sqrMagnitude < 0.01f && _rb.angularVelocity.sqrMagnitude < 0.01f)
             {
                 _rb.Sleep();
             }
@@ -124,6 +126,8 @@ public class PinBase : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _renderer = GetComponentInChildren<Renderer>();
         _collider = GetComponent<Collider>();
+
+        allowPinSelection = true;
         
         _startPos = transform.position;
         _startRot = transform.rotation;
@@ -262,27 +266,7 @@ public class PinBase : MonoBehaviour
         }
     }
     
-    // Right now for the vase we just have a score multi in End of round triggers
-    public virtual bool TriggerEndOfRound()
-    {
-        if (onEndOfRoundEffects == null || onEndOfRoundEffects.Count == 0) return false;
-
-        bool triggeredAnyEffect = false;
-
-        foreach (PinEffect effect in onEndOfRoundEffects)
-        {
-            if (effect != null)
-            {
-                effect.Execute(this);
-                triggeredAnyEffect = true;
-            }
-        }
-        
-        return triggeredAnyEffect;
-    }
-    
-
-    protected virtual void TriggerFall()
+    public virtual void TriggerFall()
     {
         _isFallen = true;
         
@@ -292,20 +276,11 @@ public class PinBase : MonoBehaviour
             _rb.angularDamping = fallenAngularDrag;
         }
 
-        if (onFallEffects != null && onFallEffects.Count != 0)
-        {
-            foreach (PinEffect effect in onFallEffects)
-            {
-                effect.Execute(this);
-            }
-        }
-
         // I dont like getting the compoent like this but I dont know another way.
         GridManager gridManager = FindObjectOfType<GridManager>();
         if (gridManager != null && gridManager.TryCollectTicketForPin(this, out int ticketValue))
         {
             SessionData.Instance.AddTickets(ticketValue);
-            Debug.Log("+1");
         }
     }
 

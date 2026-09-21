@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// AI
 public class TutorialManager : MonoBehaviour
 {
     [Header("UI Prefabs")]
@@ -18,6 +19,7 @@ public class TutorialManager : MonoBehaviour
     public string throwTutorialMessage = "Click and drag to draw a path";
     public string pinPlacementMessage = "Drag pins to place them";
     public string clickToThrowMessage = "Click Here";
+    public string tryTryThrowMessage = "Too Slow! Try again!";
 
     [Header("Text Positions")]
     public Transform throwTextTransform;
@@ -50,8 +52,10 @@ public class TutorialManager : MonoBehaviour
     private Coroutine currentSequence;
 
     private enum TutorialState { None, Throw, PinPlacement, ShowButtonToThrow }
-    private TutorialState currentState = TutorialState.None;
+    [SerializeField] private TutorialState currentState = TutorialState.None;
 
+    [SerializeField] private RoundStateManager roundStateManager;
+    
     private void Update()
     {
         if (currentState != TutorialState.None && Input.GetMouseButtonDown(0))
@@ -72,9 +76,18 @@ public class TutorialManager : MonoBehaviour
             {
                 if (currentState == TutorialState.PinPlacement)
                 {
-                    Debug.Log("Stop area clicked! Transitioning from PinPlacement to ShowButtonToThrow.");
                     StopTutorial();
-                    StartCoroutine(DelayedShowButtonToThrow());
+                    
+                    if (roundStateManager.currentState == roundStateManager.throwingBallState)
+                    {
+                        // Play the throw tutorial directly and update the state
+                        PlayThrowTutorial(); 
+                    }
+                    else
+                    {
+                        // Assign this to currentSequence so it can be canceled by StopTutorial()
+                        currentSequence = StartCoroutine(DelayedShowButtonToThrow());
+                    }
                 }
                 else if (currentState != TutorialState.Throw) 
                 {
@@ -98,6 +111,27 @@ public class TutorialManager : MonoBehaviour
         currentState = TutorialState.Throw;
         currentSequence = StartCoroutine(ThrowTutorialSequence());
     }
+    
+    public void PlayTryThrowBallAgainTutorial()
+    {
+        if (!enableTutorial) return;
+        
+        StopTutorial();
+        currentState = TutorialState.Throw; // Set to throw state so clicks are handled properly
+        currentSequence = StartCoroutine(ShowPlayTryThrowBallAgainText());
+    }
+
+    private IEnumerator ShowPlayTryThrowBallAgainText()
+    {
+        SpawnText(textBoxPrefab,
+            pinTextTransform.position,
+            tryTryThrowMessage);
+
+        // Wait for the extracted mouse click and flick sequence instead of just 8 seconds
+        yield return StartCoroutine(MouseFlickSequence(throwStartTransform));
+
+        StopTutorial();
+    }
 
     public void PlayPinPlacementTutorial()
     {
@@ -116,6 +150,8 @@ public class TutorialManager : MonoBehaviour
         currentState = TutorialState.ShowButtonToThrow;
         currentSequence = StartCoroutine(ClickToThrowPinTutorial());
     }
+    
+    
 
     public void StopTutorial()
     {
@@ -141,7 +177,7 @@ public class TutorialManager : MonoBehaviour
         return instance;
     }
 
-    private GameObject SpawnText(GameObject prefab, Vector3 position, string message)
+    public GameObject SpawnText(GameObject prefab, Vector3 position, string message)
     {
         GameObject instance = Instantiate(prefab, position, Quaternion.identity, canvasParent);
         
@@ -211,23 +247,23 @@ public class TutorialManager : MonoBehaviour
     private IEnumerator ThrowTutorialSequence()
     {
         SpawnText(textBoxPrefab, throwTextTransform.position, throwTutorialMessage);
-        GameObject mouseInstance = SpawnImage(mouseImagePrefab, throwStartTransform.position);
-        GameObject clickInstance = SpawnImage(clickImagePrefab, throwStartTransform.position);
-        clickInstance.SetActive(false);
         
-        // Move mouse image from start to end transform
-        while (Vector3.Distance(mouseInstance.transform.position, throwEndTransform.position) > 0.1f)
-        {
-            mouseInstance.transform.position = Vector3.MoveTowards(
-                mouseInstance.transform.position, 
-                throwEndTransform.position, 
-                moveSpeed * Time.deltaTime
-            );
-            yield return null;
-        }
+        // Use the extracted sequence
+        yield return StartCoroutine(MouseFlickSequence(throwStartTransform));
         
-        mouseInstance.transform.position = throwEndTransform.position;
+        StopTutorial();
+    }
+    
+    // Extracted the reusable mouse flashing and flick logic into its own Coroutine
+    private IEnumerator MouseFlickSequence(Transform startTransform)
+    {
+        // Spawn both images at the starting position
+        GameObject mouseInstance = SpawnImage(mouseImagePrefab, startTransform.position);
+        GameObject clickInstance = SpawnImage(clickImagePrefab, startTransform.position);
+        
+        // Initial setup
         mouseInstance.SetActive(false);
+        clickInstance.SetActive(true);
         
         // Flash between mouse and click image every second until user clicks
         float flashTimer = 0f;
@@ -237,15 +273,13 @@ public class TutorialManager : MonoBehaviour
         {
             flashTimer += Time.deltaTime;
             
-            if (flashTimer >= 1f)
+            if (flashTimer >= 0.5f) 
             {
                 flashTimer = 0f;
                 isShowingMouse = !isShowingMouse;
                 
                 mouseInstance.SetActive(isShowingMouse);
                 clickInstance.SetActive(!isShowingMouse);
-                
-                clickInstance.transform.position = mouseInstance.transform.position;
             }
             
             yield return null;
@@ -266,10 +300,8 @@ public class TutorialManager : MonoBehaviour
             );
             yield return null;
         }
-        
-        StopTutorial();
     }
-
+    
     private IEnumerator PinPlacementSequence()
     {
         if (pinStartTransform == null || pinEndTransform == null)
