@@ -6949,6 +6949,7 @@ MonoBehaviour:
   pinFloatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
   bossFloatingTextPrefab: {fileID: 2221769346915677457, guid: 30139dc5cd464d5419b72b57dd721caa, type: 3}
   maxLineGameObject: {fileID: 1805183575}
+  nextCameraSpeedOverride: -1
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -20052,7 +20053,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1217990353
 Transform:
   m_ObjectHideFlags: 0
@@ -23469,7 +23470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1588884242}
-  lerpSpeed: 3
+  lerpSpeed: 2
   showDebugMenu: 0
   cameraMappings:
   - location: 0

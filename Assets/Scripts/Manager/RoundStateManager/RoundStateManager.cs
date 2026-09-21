@@ -599,10 +599,14 @@ public class RoundStateManager : MonoBehaviour
         }
     }
     
+    [HideInInspector] public float nextCameraSpeedOverride = -1f;
     public void MoveCamera(CameraLocation location)
     {
         cameraFollowScript.StopTracking();
-        cameraPanToLocation.MoveCameraTo(location);
+        cameraPanToLocation.MoveCameraTo(location, nextCameraSpeedOverride);
+        
+        // Reset the override after using it so other camera pans return to normal speed
+        nextCameraSpeedOverride = -1f;
     }
 
     public void StartBallCameraTracking()
