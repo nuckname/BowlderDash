@@ -35490,6 +35490,7 @@ GameObject:
   - component: {fileID: 1353803850}
   - component: {fileID: 6652253181974710232}
   - component: {fileID: 6652253181974710233}
+  - component: {fileID: 6652253181974710234}
   m_Layer: 11
   m_Name: Ball
   m_TagString: Ball
@@ -35980,6 +35981,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f4fc52d4d7511d4eaed8373b6dc2b64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GetTicketOnHit
+--- !u!114 &6652253181974710234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105671971215449031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4d891ed9bd849719bc72adb8469e784, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BallAudio
+  releaseCue: {fileID: 11400000, guid: d47f936bb97a469c81b88427d33c0af0, type: 2}
+  minimumReleaseVolume: 0.8
 --- !u!23 &6745302439744477546
 MeshRenderer:
   m_ObjectHideFlags: 0

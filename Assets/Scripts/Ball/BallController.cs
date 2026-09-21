@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class BallController : MonoBehaviour
 
     public bool IsLaunched => _isLaunched;
     public float LinearSpeedSquared => _ballRb != null ? _ballRb.linearVelocity.sqrMagnitude : 0f;
+    public event Action<float> Released;
     
     void Awake()
     {
@@ -120,6 +122,7 @@ public class BallController : MonoBehaviour
         _ballRb.linearVelocity = Vector3.forward * speed;
         _isLaunched = true;
         _isFollowingCurve = true;
+        Released?.Invoke(speed);
     }
     
     public void Apply45DegreeDeflection()
