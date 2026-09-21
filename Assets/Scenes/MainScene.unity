@@ -3041,7 +3041,7 @@ MonoBehaviour:
   showGizmos: 1
   showGridInPlay: 1
   freeCellColor: {r: 0, g: 0.6, b: 1, a: 0.6}
-  occupiedCellColor: {r: 0, g: 1, b: 0, a: 0.6}
+  occupiedCellColor: {r: 0, g: 0.6, b: 1, a: 0.6}
   runtimeLineWidth: 0.08
   runtimeLineHeightOffset: 0.05
   previewColor: {r: 1, g: 1, b: 1, a: 0.5}
