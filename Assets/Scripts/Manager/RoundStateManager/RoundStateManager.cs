@@ -137,6 +137,7 @@ public class RoundStateManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        GameAudio.Instance?.RestoreLeaderboardPause(this);
         if (IsLeaderboardActive)
         {
             RestartFromLeaderboard();
@@ -228,6 +229,7 @@ public class RoundStateManager : MonoBehaviour
         DisableLeaderboardGameplayControls<CardMovement>();
 
         timeScaleBeforeLeaderboard = Time.timeScale;
+        GameAudio.Instance?.PauseForLeaderboard(this);
         leaderboardPaused = true;
         Time.timeScale = 0f;
 
@@ -262,6 +264,7 @@ public class RoundStateManager : MonoBehaviour
 
     private void RestoreLeaderboardTimeScale()
     {
+        GameAudio.Instance?.RestoreLeaderboardPause(this);
         if (!leaderboardPaused) return;
         Time.timeScale = timeScaleBeforeLeaderboard;
         leaderboardPaused = false;

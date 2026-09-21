@@ -8,13 +8,9 @@ public class MainMenuController : MonoBehaviour
     [Tooltip("The name of the scene to load when the player clicks Start")]
     public string gameSceneName = "MainScene";
 
-    [Header("Audio")]
-    [SerializeField] private SoundCueSO startClick;
-
 
     public void StartGame()
     {
-        if (GameAudio.Instance != null) GameAudio.Instance.Play(startClick);
         Debug.Log($"Starting Game! Loading scene: {gameSceneName}");
         SceneManager.LoadScene(gameSceneName);
     }

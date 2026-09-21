@@ -22,6 +22,12 @@ public sealed class GameAudio : MonoBehaviour
         public double nextPlay;
     }
     private Voice[] voices;
+    private double nextHoverTime;
+    private bool ownsLeaderboardPause;
+    private bool listenerPauseBeforeLeaderboard;
+    private MonoBehaviour leaderboardPauseOwner;
+    private int leaderboardSceneHandle;
+    public event System.Action WorldAudioStopped;
     // Audio variation must not consume the random sequence used by cards, grids or bosses.
     private readonly System.Random random = new System.Random();
     private readonly Dictionary<SoundCueSO, CueState> cueStates = new Dictionary<SoundCueSO, CueState>();
@@ -57,18 +63,27 @@ public sealed class GameAudio : MonoBehaviour
     public bool Play(SoundCueSO cue, Vector3 position = default, float volumeScale = 1f)
     {
         if (Instance != this || voices == null || cue == null || cue.output == null) return false;
+        if (!cue.isUI && ownsLeaderboardPause) return false;
         if (!cueStates.TryGetValue(cue, out var state)) state = new CueState();
         if (Time.unscaledTimeAsDouble < state.nextPlay) return false;
         float gain = Mathf.Clamp01(cue.gain * Mathf.Clamp01(volumeScale));
         if (gain <= 0f) return false;
 
         int active = 0;
+        int uiActive = 0;
         Voice available = null;
         Voice weakest = null;
+        Voice weakestUI = null;
         foreach (var voice in voices)
         {
             if (voice.cue == cue) active++;
             if (voice.cue == null) { if (available == null) available = voice; continue; }
+            if (voice.cue.isUI)
+            {
+                uiActive++;
+                if (voice.source.priority > Mathf.Clamp(cue.priority, 0, 256) &&
+                    (weakestUI == null || voice.source.priority > weakestUI.source.priority)) weakestUI = voice;
+            }
             // Lower numeric priority is more important. Equal-priority voices finish naturally.
             if (voice.source.priority > Mathf.Clamp(cue.priority, 0, 256) &&
                 (weakest == null || voice.source.priority > weakest.source.priority ||
@@ -76,7 +91,8 @@ public sealed class GameAudio : MonoBehaviour
                 weakest = voice;
         }
         if (active >= Mathf.Max(1, cue.voiceLimit)) return false;
-        var slot = available ?? weakest;
+        // Hover and click share the two-voice UI budget; clicks may replace hover.
+        var slot = cue.isUI && uiActive >= 2 ? weakestUI : available ?? weakest;
         if (slot == null) return false;
         var clip = cue.PickVariant(random, state.previous, out int selected);
         if (clip == null || clip.loadState != AudioDataLoadState.Loaded) return false;
@@ -117,15 +133,52 @@ public sealed class GameAudio : MonoBehaviour
 
     public void StopWorldVoices()
     {
-        if (voices == null) return;
-        foreach (var voice in voices)
-            if (voice.cue != null && !voice.cue.isUI) Release(voice);
+        if (voices != null)
+            foreach (var voice in voices)
+                if (voice.cue != null && !voice.cue.isUI) Release(voice);
+        // Future ball-owned rolling sources subscribe here as they are introduced.
+        WorldAudioStopped?.Invoke();
+    }
+
+    public bool PlayUIHover(SoundCueSO cue)
+    {
+        if (cue == null || !cue.isUI || Time.unscaledTimeAsDouble < nextHoverTime) return false;
+        if (!Play(cue)) return false;
+        nextHoverTime = Time.unscaledTimeAsDouble + 0.08;
+        return true;
+    }
+
+    public void PauseForLeaderboard(MonoBehaviour owner)
+    {
+        if (owner == null || ownsLeaderboardPause) return;
+        listenerPauseBeforeLeaderboard = AudioListener.pause;
+        leaderboardPauseOwner = owner;
+        leaderboardSceneHandle = owner.gameObject.scene.handle;
+        ownsLeaderboardPause = true;
+        StopWorldVoices();
+        AudioListener.pause = true;
+    }
+
+    public void RestoreLeaderboardPause(MonoBehaviour owner)
+    {
+        if (ownsLeaderboardPause && leaderboardPauseOwner == owner) RestoreOwnedPause();
+    }
+
+    private void RestoreOwnedPause()
+    {
+        if (!ownsLeaderboardPause) return;
+        AudioListener.pause = listenerPauseBeforeLeaderboard;
+        ownsLeaderboardPause = false;
+        leaderboardPauseOwner = null;
+        leaderboardSceneHandle = 0;
     }
 
     private void OnSceneUnloaded(Scene scene)
     {
         StopWorldVoices();
+        if (ownsLeaderboardPause && scene.handle == leaderboardSceneHandle) RestoreOwnedPause();
         cueStates.Clear();
+        nextHoverTime = 0;
     }
 
     public bool SetMasterVolume(float linear) => SetVolume("MasterVolume", linear);
@@ -176,6 +229,7 @@ public sealed class GameAudio : MonoBehaviour
     private void OnDestroy()
     {
         if (Instance != this) return;
+        RestoreOwnedPause();
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
         Instance = null;
         cueStates.Clear();
