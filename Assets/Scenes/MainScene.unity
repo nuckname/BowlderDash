@@ -6921,6 +6921,7 @@ MonoBehaviour:
   leaderboardScreenPrefab: {fileID: 4633033163837582929, guid: 462c0d1ae8c88494ab1b316103872450, type: 3}
   tutorialManager: {fileID: 1588757391}
   postProcessingEffects: {fileID: 683764254}
+  howManyRoundsdoWeWantToClickTheBallFor: 2
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
@@ -19131,14 +19132,14 @@ MonoBehaviour:
   ticketCostTvPrefab: {fileID: 7284009533937498436, guid: 053be667222c2744cb45b35d61eab960, type: 3}
   throwBallTv: {fileID: 1519937886}
   goBackToShopTv: {fileID: 51501853}
-  baseGridCost: 3
-  gridCostScaling: 2
+  baseGridCost: 2
+  gridCostScaling: 1.5
   commonWeight: 70
   rareWeight: 25
   legendaryWeight: 5
   commonCostMultiplier: 1
-  rareCostMultiplier: 3
-  legendaryCostMultiplier: 6
+  rareCostMultiplier: 1.75
+  legendaryCostMultiplier: 2.75
   hexGridExpander: {fileID: 120957819}
   removePinButton: {fileID: 1638082805}
   singlePinCardID: SinglePin
@@ -26985,7 +26986,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 810, y: -155}
+  m_AnchoredPosition: {x: 810, y: -135.1}
   m_SizeDelta: {x: 1575.0549, y: 28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1621156156
@@ -27041,7 +27042,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Spend tickets here to add more pins to your stock.
+  m_Text: Spend tickets here to add more pins to your deck
 --- !u!222 &1621156158
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -32686,7 +32687,7 @@ Transform:
   m_GameObject: {fileID: 2015311222}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04107159, y: -0.32709536, z: 0.021851188, w: 0.94384545}
-  m_LocalPosition: {x: -16.08, y: -35.07, z: -6.96}
+  m_LocalPosition: {x: -15.99, y: -36.45, z: -7.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

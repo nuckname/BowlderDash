@@ -70,7 +70,8 @@ public class RoundStateManager : MonoBehaviour
     public TutorialManager tutorialManager;
 
     public GameObject postProcessingEffects;
-    
+
+    [SerializeField] private int howManyRoundsdoWeWantToClickTheBallFor = 2;
     
     // States
     public RoundStartState roundStartState = new RoundStartState();
@@ -151,8 +152,11 @@ public class RoundStateManager : MonoBehaviour
         gridManager.GenerateGrid();
         
         throwingBallState.cannotThrowBall = true;
-        
+
+        // must click on the ball ramp 
+   
         TurnOnBallMesh(false);
+        
         ballRampSpawner.SpawnBallsForRound(SessionData.Instance.currentRound);
         
         UpdateInGameScoreUi();
@@ -612,15 +616,27 @@ public class RoundStateManager : MonoBehaviour
     }
 
     // Not sure how the ball is being turned off, easy way to do this.
-    public void TurnOnBallMesh(bool turnOff)
+    public void TurnOnBallMesh(bool turnOn)
     {
-        GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().enabled = turnOff;
+        GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().enabled = turnOn;
     }
 
+    public bool CheckKeepClickingTheBall()
+    {
+        if (sessionData.currentRound <= howManyRoundsdoWeWantToClickTheBallFor)
+        {
+            return true;   
+        }
+        
+        return false;
+        
+    }
 
     // Called via button
     public void ClickButtonToGetBall()
     {
+        if(!CheckKeepClickingTheBall()) return;
+        
         TurnOnBallMesh(true);
 
         Material ballRampColour = ballRampSpawner.ballsInRamp[0].GetComponent<BallRampFollower>().getCurrentBallMaterial;
