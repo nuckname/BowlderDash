@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Pins\PinEffects\MultiEffect.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ClonePinEffect.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexGrid.cs" />
+    <Compile Include="Assets\Scripts\GridManager\MouseHighlightManager.cs" />
     <Compile Include="Assets\Scripts\GridManager.cs" />
     <Compile Include="Assets\ScriptableObjects\CardSO\CardDataSO.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -129,7 +130,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\Scripts\Ball\BallBooster.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
-    <Compile Include="Assets\Scripts\Pins\HighlightGroupedPins.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\CardToWorldSpawner.cs" />
     <Compile Include="Assets\Scripts\Classes\SessionData.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />

@@ -4,26 +4,19 @@ using UnityEngine;
 // AI https://share.gemini.google/VYVGuzcYhaHV
 // AI 2: https://share.gemini.google/0ZSCmXAsuGQ7\
 
-public class HighlightGroupedPins : MonoBehaviour
+public class MouseHighlightManager : MonoBehaviour
 {
     [Header("Highlight Settings")]
     public Color highlightColor = new Color(1f, 0.8f, 0f, 1f);
     public float highlightLineWidth = 0.12f;
     public float highlightHeightOffset = 0.1f;
-    public LayerMask pinLayerMask = Physics.DefaultRaycastLayers;
 
     private HexGrid grid;
     private Camera mainCamera;
     private WorldObjectToCard currentHoveredPin;
-    private PinBase _pinBase;
     
     private List<LineRenderer> highlightLines = new List<LineRenderer>();
     private Material highlightMaterial;
-
-    private void Awake()
-    {
-        _pinBase = GetComponent<PinBase>();
-    }
 
     private void Start()
     {
@@ -41,8 +34,6 @@ public class HighlightGroupedPins : MonoBehaviour
     {
         if (mainCamera == null || grid == null) return;
         
-        // This might be casuing some performance issues,
-        // but if we have 10 pins are we shooting out 10 raycasts.
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Plane gridPlane = new Plane(Vector3.up, grid.transform.position);
         WorldObjectToCard pin = null;
@@ -89,13 +80,14 @@ public class HighlightGroupedPins : MonoBehaviour
             ClearHighlights();
         }
     }
+
     private void UpdateHighlights()
     {
         ClearHighlights();
 
         if (currentHoveredPin == null || currentHoveredPin.GroupPeers == null) return;
 
-        foreach (var peer in currentHoveredPin.GroupPeers)
+        foreach (WorldObjectToCard peer in currentHoveredPin.GroupPeers)
         {
             if (peer == null) continue;
 

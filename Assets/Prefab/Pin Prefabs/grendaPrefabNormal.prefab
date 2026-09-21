@@ -18,7 +18,6 @@ GameObject:
   - component: {fileID: 5292890100669208921}
   - component: {fileID: 852012921410265539}
   - component: {fileID: 5373738608955730648}
-  - component: {fileID: 3348751637557106499}
   m_Layer: 9
   m_Name: grendaPrefabNormal
   m_TagString: Pin
@@ -5052,6 +5051,7 @@ MonoBehaviour:
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 0}
+  allowPinSelection: 0
   _isFallen: 0
   toScorePinFallOver: 0
   isClone: 0
@@ -5082,22 +5082,3 @@ MonoBehaviour:
   _groupPeers: []
   canBePickedUp: 1
   cannotBeReturnedToDeck: 0
---- !u!114 &3348751637557106499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4548911073050350972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00f7fd9f0cc765344a63a7085ac60480, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HighlightGroupedPins
-  highlightColor: {r: 0, g: 0.3773585, b: 0.20123464, a: 1}
-  highlightLineWidth: 0.12
-  highlightHeightOffset: 0.1
-  pinLayerMask:
-    serializedVersion: 2
-    m_Bits: 8179
-  allowHighlighting: 1

@@ -2986,6 +2986,7 @@ GameObject:
   - component: {fileID: 120957818}
   - component: {fileID: 120957814}
   - component: {fileID: 120957819}
+  - component: {fileID: 120957820}
   m_Layer: 0
   m_Name: HexManagerCells
   m_TagString: HexManager
@@ -3134,6 +3135,21 @@ MonoBehaviour:
   upSideExpandingLimit: -5
   downSideExpandingLimit: 2
   maxInteractionDistance: 6
+--- !u!114 &120957820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120957811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81e8389c208d3504e9c12f4a7f014f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  highlightColor: {r: 0.07320219, g: 0.4433962, b: 0.13281941, a: 1}
+  highlightLineWidth: 0.12
+  highlightHeightOffset: 0.1
 --- !u!1 &121324095
 GameObject:
   m_ObjectHideFlags: 0
