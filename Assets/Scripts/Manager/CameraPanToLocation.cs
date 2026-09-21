@@ -39,7 +39,7 @@ public class CameraPanToLocation : MonoBehaviour
 
     private Coroutine activeLerp;
 
-    public void MoveCameraTo(CameraLocation location)
+    public void MoveCameraTo(CameraLocation location, float speedOverride = -1f)
     {
         CancelActiveMove();
 
@@ -49,7 +49,9 @@ public class CameraPanToLocation : MonoBehaviour
             return;
         }
 
-        activeLerp = StartCoroutine(LerpCamera(target));
+        // Use the override if one was provided, otherwise fallback to the inspector's lerpSpeed
+        float speedToUse = speedOverride > 0f ? speedOverride : lerpSpeed;
+        activeLerp = StartCoroutine(LerpCamera(target, speedToUse));
     }
 
     public bool TryGetCameraTarget(CameraLocation location, out Transform target)
@@ -75,13 +77,13 @@ public class CameraPanToLocation : MonoBehaviour
         activeLerp = null;
     }
 
-    private IEnumerator LerpCamera(Transform target)
+    private IEnumerator LerpCamera(Transform target, float speed)
     {
         while (Vector3.Distance(mainCamera.transform.position, target.position) > 0.01f || 
                Quaternion.Angle(mainCamera.transform.rotation, target.rotation) > 0.01f)
         {
-            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, target.position, Time.deltaTime * lerpSpeed);
-            mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, target.rotation, Time.deltaTime * lerpSpeed);
+            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, target.position, Time.deltaTime * speed);
+            mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, target.rotation, Time.deltaTime * speed);
             yield return null;
         }
 

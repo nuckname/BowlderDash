@@ -31,10 +31,10 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _bright: 3
-    - _linesRes: 300
+    - _bright: 0.2
+    - _linesRes: 296.8
     - _minIntensity: 0.4
-    - _res: 100
+    - _res: 99.22
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

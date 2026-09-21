@@ -257,7 +257,8 @@ MonoBehaviour:
   onPlaceEffects: []
   onHitEffects:
   - rid: 5713391375646982216
-  onFallEffects: []
+  onFallEffects:
+  - rid: 8489537564398321729
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
@@ -276,3 +277,7 @@ MonoBehaviour:
     - rid: 5713391375646982216
       type: {class: RethrowBallEffect, ns: , asm: Assembly-CSharp}
       data: 
+    - rid: 8489537564398321729
+      type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
+      data:
+        scoreValue: 10

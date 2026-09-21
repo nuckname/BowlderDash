@@ -1235,6 +1235,7 @@ MonoBehaviour:
   cellSize: 3
   ticketPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
   ticketHeightOffset: 0.5
+  amountToTicketsSpawnOnLane: {fileID: 11400000, guid: 613eb818f34654f59b7ff1cc85f141dc, type: 2}
 --- !u!1 &51501853
 GameObject:
   m_ObjectHideFlags: 0
@@ -3040,7 +3041,7 @@ MonoBehaviour:
   showGizmos: 1
   showGridInPlay: 1
   freeCellColor: {r: 0, g: 0.6, b: 1, a: 0.6}
-  occupiedCellColor: {r: 0, g: 1, b: 0, a: 0.6}
+  occupiedCellColor: {r: 0, g: 0.6, b: 1, a: 0.6}
   runtimeLineWidth: 0.08
   runtimeLineHeightOffset: 0.05
   previewColor: {r: 1, g: 1, b: 1, a: 0.5}
@@ -6044,7 +6045,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301852092}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000025749207}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6052,7 +6053,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
+  m_AnchoredPosition: {x: -10, y: -0}
   m_SizeDelta: {x: -41.14868, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &301852094
@@ -6418,7 +6419,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6926,6 +6927,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
   - {fileID: 11400000, guid: baa8b01a446067b44a19b9f91ad1c627, type: 2}
   - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  amountOfTicketsToSpawnOnLane: {fileID: 11400000, guid: 613eb818f34654f59b7ff1cc85f141dc, type: 2}
   amountOfCardsToDrawEachTurn: 5
   hasDrawnCardsThisTurn: 0
   isHandDrawReady: 0
@@ -6934,6 +6936,7 @@ MonoBehaviour:
   leaderboardScreenPrefab: {fileID: 4633033163837582929, guid: 462c0d1ae8c88494ab1b316103872450, type: 3}
   tutorialManager: {fileID: 1588757391}
   postProcessingEffects: {fileID: 683764254}
+  howManyRoundsdoWeWantToClickTheBallFor: 2
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
@@ -6959,6 +6962,7 @@ MonoBehaviour:
   pinFloatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
   bossFloatingTextPrefab: {fileID: 2221769346915677457, guid: 30139dc5cd464d5419b72b57dd721caa, type: 3}
   maxLineGameObject: {fileID: 1805183575}
+  nextCameraSpeedOverride: -1
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -7930,7 +7934,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 488811992}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000032424927}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7938,7 +7942,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000045776367, y: 0}
+  m_AnchoredPosition: {x: -15.5, y: 0}
   m_SizeDelta: {x: -41.14868, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &488811994
@@ -9908,7 +9912,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19209,14 +19213,14 @@ MonoBehaviour:
   ticketCostTvPrefab: {fileID: 7284009533937498436, guid: 053be667222c2744cb45b35d61eab960, type: 3}
   throwBallTv: {fileID: 1519937886}
   goBackToShopTv: {fileID: 51501853}
-  baseGridCost: 3
-  gridCostScaling: 2
-  commonWeight: 70
-  rareWeight: 25
-  legendaryWeight: 5
+  baseGridCost: 2
+  gridCostScaling: 1.5
+  commonWeight: 50
+  rareWeight: 30
+  legendaryWeight: 20
   commonCostMultiplier: 1
-  rareCostMultiplier: 3
-  legendaryCostMultiplier: 6
+  rareCostMultiplier: 1.75
+  legendaryCostMultiplier: 2.5
   hexGridExpander: {fileID: 120957819}
   removePinButton: {fileID: 1638082805}
   singlePinCardID: SinglePin
@@ -20127,7 +20131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1217990353
 Transform:
   m_ObjectHideFlags: 0
@@ -23544,7 +23548,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1588884242}
-  lerpSpeed: 3
+  lerpSpeed: 2
   showDebugMenu: 0
   cameraMappings:
   - location: 0
@@ -27098,7 +27102,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 810, y: -155}
+  m_AnchoredPosition: {x: 810, y: -135.1}
   m_SizeDelta: {x: 1575.0549, y: 28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1621156156
@@ -27154,7 +27158,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Spend tickets here to add more pins to your stock.
+  m_Text: Spend tickets here to add more pins to your deck
 --- !u!222 &1621156158
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -27898,7 +27902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -30381,7 +30385,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1841417011}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.00023508072}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30389,7 +30393,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: -0.00001335144}
+  m_AnchoredPosition: {x: -5.2, y: -0}
   m_SizeDelta: {x: -41.148804, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841417013
@@ -31081,7 +31085,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1882351502}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000022649765}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -31089,7 +31093,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -19.6, y: 0}
   m_SizeDelta: {x: -41.148804, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1882351504
@@ -32851,7 +32855,7 @@ Transform:
   m_GameObject: {fileID: 2015311222}
   serializedVersion: 2
   m_LocalRotation: {x: 0.04107159, y: -0.32709536, z: 0.021851188, w: 0.94384545}
-  m_LocalPosition: {x: -16.08, y: -35.07, z: -6.96}
+  m_LocalPosition: {x: -15.99, y: -36.45, z: -7.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33347,7 +33351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -33453,7 +33457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

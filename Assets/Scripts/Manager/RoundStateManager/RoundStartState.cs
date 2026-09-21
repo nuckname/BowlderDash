@@ -20,6 +20,13 @@ public class RoundStartState : RoundBaseState
 
         HandleGrid(manager);
 
+        // At a certain round number lets stop clicking the ball
+        // feels ok to click the ball every time we throw it
+        if (!manager.CheckKeepClickingTheBall())
+        {
+            //manager.TurnOnBallMesh(true);
+        }
+
         // Boss State Check
         bool isBossRound = CheckForBossState(manager);
         
@@ -39,7 +46,7 @@ public class RoundStartState : RoundBaseState
         int currentRoundNumber = manager.sessionData.currentRound;
         bool isLastRound = manager.roundData.IsLastRound(currentRoundNumber);
 
-        if (isLastRound || currentRoundNumber == 4 || currentRoundNumber == 1)
+        if (isLastRound || currentRoundNumber == 4)
         {
             return true;
         }

@@ -24,7 +24,6 @@ public class ScoringState : RoundBaseState
     private float waitBeforePinPlacement = 2.0f;
     
     private float scoreDisplayHoldTime = 1.5f;
-
     public override void EnterState(RoundStateManager manager)
     {
         manager.UpdateInstructionText("Waiting for pins to settle...");
@@ -43,8 +42,7 @@ public class ScoringState : RoundBaseState
     public override void UpdateState(RoundStateManager manager) 
     { 
         if (hasScored) return;
-
-
+        
         if (!pinsHaveSettled)
         {
             HandlePinSettlement();
@@ -211,14 +209,14 @@ public class ScoringState : RoundBaseState
         
         int ballsThrown = _manager.sessionData.ballsThrown;
         int currentScore = _manager.sessionData.currentScore;
+        int currentRound = _manager.sessionData.currentRound;
 
         if (currentScore >= scoreNeeded)
         {
             // if we have ball throws left, give them more tickets plus a bonus for not using all their balls.
-            // I have no idea how to tell the user this. Floating text?
-            GiveBonusTickets(maxBallsAllowed, ballsThrown);
+            GiveBonusTickets(maxBallsAllowed, ballsThrown, currentRound);
 
-            bool isLastRound = _manager.roundData.IsLastRound(_manager.sessionData.currentRound);
+            bool isLastRound = _manager.roundData.IsLastRound(currentRound);
             RoundBaseState nextState = isLastRound ? _manager.gameCompleteState : _manager.roundWinState;
             
             _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager, nextState, !isLastRound, true, false, currentRoundScore));
@@ -237,8 +235,6 @@ public class ScoringState : RoundBaseState
         else
         {
             // Else throw the ball again and try to reach the quota.
-        
-            // I want to show the in game UI before we go to the next round.
             _manager.StartCoroutine(new EndOfRoundSCameraSequence().Execute(_manager,
                 _manager.roundStartState,
                 false,
@@ -250,12 +246,15 @@ public class ScoringState : RoundBaseState
     
     // If we complete the round early, we want to give them extra tickets for not using all their balls.
     // This is a bonus for being efficient.
-    private void GiveBonusTickets(int maxBallsAllowed, int ballsThrown)
+    private void GiveBonusTickets(int maxBallsAllowed, int ballsThrown, int currentRound)
     {
         int ballsLeft = maxBallsAllowed - ballsThrown;
         if (ballsLeft > 0)
         {
-            int bonusTickets = (ballsLeft * _manager.gridManager.gridTicketManager.ticketsPerFrame) + 1;
+            int bonusTickets = (ballsLeft * 
+            (_manager.gridManager.gridTicketManager.ticketsPerFrame + _manager.amountOfTicketsToSpawnOnLane.GetAmountToSpawn(currentRound))) 
+            + 2 /*2 is the bonus for complete it early*/ + currentRound;
+            
             _manager.sessionData.AddTickets(bonusTickets);
         }
     }
@@ -279,7 +278,13 @@ public class ScoringState : RoundBaseState
             {
                 manager.PutRealWorldPinIntoDiscardPile(pin);
             }
-        }
+
+            // Return vase when it has scored
+            if (pin.onEndOfRoundEffects is ScoreMultiplierEffect && !pin._isFallen)
+            {
+                manager.PutRealWorldPinIntoDiscardPile(pin);
+            }
+    }
     }
     
     

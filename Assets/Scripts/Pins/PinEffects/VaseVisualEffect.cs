@@ -14,7 +14,6 @@ public class VaseVisualEffect : PinEffect
     public GameObject flower2;
 
     [Header("Hit Settings")]
-    public int intactBonusScore = 10;
     public float flowerShrinkDuration = 0.4f;
 
     private bool _isShattered = false;

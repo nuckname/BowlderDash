@@ -16,6 +16,8 @@ public class OnLaneSquareGrid : MonoBehaviour
     private List<GameObject> spawnedGridObjects = new List<GameObject>();
     private List<Vector3> ticketOffsets = new List<Vector3>();
 
+    [SerializeField] private AmountOfTicketsToSpawnOnLane amountToTicketsSpawnOnLane;
+    
     public void GenerateGridForRound(RoundStateManager manager)
     {
         ClearGrid();
@@ -25,39 +27,7 @@ public class OnLaneSquareGrid : MonoBehaviour
 
     private void UpdateAmountPerRound(RoundStateManager manager)
     {
-        switch (manager.sessionData.currentRound)
-        {
-            case 0:
-                amountToSpawn = 1;
-                break;
-            case 1:
-                amountToSpawn = 1;
-                break;
-            case 2:
-                amountToSpawn = 2;
-                break;
-            case 3:
-                amountToSpawn = 3;
-                break;
-            case 4:
-                amountToSpawn = 3;
-                break;
-            case 5:
-                amountToSpawn = 3;
-                break;
-            case 6:
-                amountToSpawn = 4;
-                break;
-            case 7:
-                amountToSpawn = 4;
-                break;
-            case 8:
-                amountToSpawn = 4;
-                break;
-            default:
-                amountToSpawn = 1;
-                break;
-        }
+        amountToTicketsSpawnOnLane.GetAmountToSpawn(manager.sessionData.currentRound);
     }
 
     private void SpawnGrid()
