@@ -48,7 +48,7 @@ public class PinBase : MonoBehaviour
     [Header("Disable this box collider on hit")]
     [SerializeField] private BoxCollider boxColliderToDisable;
     
-    public bool allowPinSelection = false;
+    public bool allowPinSelection;
     
     public bool _isFallen = false;
     public bool IsFallen => _isFallen;
@@ -126,6 +126,8 @@ public class PinBase : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _renderer = GetComponentInChildren<Renderer>();
         _collider = GetComponent<Collider>();
+
+        allowPinSelection = true;
         
         _startPos = transform.position;
         _startRot = transform.rotation;

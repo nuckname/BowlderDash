@@ -20,8 +20,6 @@ public class HighlightGroupedPins : MonoBehaviour
     private List<LineRenderer> highlightLines = new List<LineRenderer>();
     private Material highlightMaterial;
 
-    public bool allowHighlighting = true;
-
     private void Awake()
     {
         _pinBase = GetComponent<PinBase>();
@@ -42,10 +40,9 @@ public class HighlightGroupedPins : MonoBehaviour
     private void Update()
     {
         if (mainCamera == null || grid == null) return;
-        if(!_pinBase.allowPinSelection) return;
-
-        if(!allowHighlighting) return;
         
+        // This might be casuing some performance issues,
+        // but if we have 10 pins are we shooting out 10 raycasts.
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Plane gridPlane = new Plane(Vector3.up, grid.transform.position);
         WorldObjectToCard pin = null;
@@ -59,11 +56,20 @@ public class HighlightGroupedPins : MonoBehaviour
             {
                 if (nearestCell.occupant != null)
                 {
-                    pin = nearestCell.occupant.GetComponentInParent<WorldObjectToCard>();
-                    
-                    if (pin == null)
+                    PinBase hoveredPinBase = nearestCell.occupant.GetComponentInParent<PinBase>();
+                    if (hoveredPinBase == null)
                     {
-                        pin = nearestCell.occupant.GetComponent<WorldObjectToCard>();
+                        hoveredPinBase = nearestCell.occupant.GetComponent<PinBase>();
+                    }
+
+                    if (hoveredPinBase != null && hoveredPinBase.allowPinSelection)
+                    {
+                        pin = nearestCell.occupant.GetComponentInParent<WorldObjectToCard>();
+                        
+                        if (pin == null)
+                        {
+                            pin = nearestCell.occupant.GetComponent<WorldObjectToCard>();
+                        }
                     }
                 }
             }
@@ -83,7 +89,6 @@ public class HighlightGroupedPins : MonoBehaviour
             ClearHighlights();
         }
     }
-
     private void UpdateHighlights()
     {
         ClearHighlights();

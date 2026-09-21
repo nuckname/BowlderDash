@@ -278,7 +278,9 @@ MonoBehaviour:
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
   boxColliderToDisable: {fileID: 8327561609825615850}
+  allowPinSelection: 1
   _isFallen: 0
+  toScorePinFallOver: 0
   isClone: 0
   references:
     version: 2
@@ -296,7 +298,6 @@ MonoBehaviour:
       type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
       data:
         scoreValue: 10
-        multValue: 0
 --- !u!114 &129308409257665218
 MonoBehaviour:
   m_ObjectHideFlags: 0
