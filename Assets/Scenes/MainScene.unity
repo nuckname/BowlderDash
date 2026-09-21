@@ -34962,6 +34962,7 @@ GameObject:
   - component: {fileID: 8534081338336480779}
   - component: {fileID: 8443713292220146729}
   - component: {fileID: 344083092}
+  - component: {fileID: 344083091}
   m_Layer: 0
   m_Name: Plane.008
   m_TagString: Untagged
@@ -35204,6 +35205,7 @@ GameObject:
   - component: {fileID: 273124771}
   - component: {fileID: 273124770}
   - component: {fileID: 273124769}
+  - component: {fileID: 273124768}
   m_Layer: 6
   m_Name: Exploder (Plane)
   m_TagString: Exploder
@@ -36009,6 +36011,13 @@ MonoBehaviour:
   releaseCue: {fileID: 11400000, guid: d47f936bb97a469c81b88427d33c0af0, type: 2}
   minimumReleaseVolume: 0.8
   releaseSoundLeadTime: 0.56
+  rollingCue: {fileID: 11400000, guid: bd0e33edc19545c3af854fc8ec8d38f2, type: 2}
+  minimumSupportUpDot: 0.45
+  rollingStartSpeed: 1
+  rollingStopSpeed: 0.4
+  fullRollingVolumeSpeed: 24
+  rollingFadeInTime: 0.1
+  rollingFadeOutTime: 0.12
 --- !u!23 &6745302439744477546
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -36365,6 +36374,7 @@ GameObject:
   - component: {fileID: 763392349860867474}
   - component: {fileID: 8981784598955997413}
   - component: {fileID: 246818631}
+  - component: {fileID: 246818630}
   m_Layer: 0
   m_Name: Plane.005
   m_TagString: Untagged
@@ -36933,6 +36943,48 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &273124768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2193423313461085151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 546f48382fe744ddb91b279b36a07bc8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSurface
+  surfaceType: 0
+  supportsRolling: 1
+--- !u!114 &344083091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069904014532269438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 546f48382fe744ddb91b279b36a07bc8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSurface
+  surfaceType: 1
+  supportsRolling: 1
+--- !u!114 &246818630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8160168807456044281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 546f48382fe744ddb91b279b36a07bc8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::AudioSurface
+  surfaceType: 1
+  supportsRolling: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

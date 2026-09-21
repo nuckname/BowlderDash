@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(BallController))]
@@ -10,13 +12,39 @@ public sealed class BallAudio : MonoBehaviour
     [SerializeField, Range(-0.25f, 0.75f), Tooltip("Positive values start the clip before physics release; negative values delay it.")]
     private float releaseSoundLeadTime = 0.56f;
 
+    [Header("Rolling")]
+    [SerializeField] private SoundCueSO rollingCue;
+    [SerializeField, Range(0f, 1f)] private float minimumSupportUpDot = 0.45f;
+    [SerializeField, Min(0f)] private float rollingStartSpeed = 1f;
+    [SerializeField, Min(0f)] private float rollingStopSpeed = 0.4f;
+    [SerializeField, Min(0.01f)] private float fullRollingVolumeSpeed = 24f;
+    [SerializeField, Min(0.01f)] private float rollingFadeInTime = 0.1f;
+    [SerializeField, Min(0.01f)] private float rollingFadeOutTime = 0.12f;
+
     private BallController ballController;
+    private Rigidbody ballRigidbody;
+    private AudioSource rollingSource;
     private Coroutine scheduledPlayback;
     private bool releasePlayedForCurrentThrow;
+    private bool rollingSessionActive;
+    private int previousRollingVariant = -1;
+    private readonly System.Random rollingRandom = new System.Random();
+    private readonly Dictionary<Collider, SupportContact> supportContacts = new Dictionary<Collider, SupportContact>();
+    private readonly List<Collider> staleSupports = new List<Collider>();
+
+    private sealed class SupportContact
+    {
+        public Rigidbody body;
+        public Vector3 normal;
+        public double lastSeen;
+    }
 
     private void Awake()
     {
         ballController = GetComponent<BallController>();
+        ballRigidbody = GetComponent<Rigidbody>();
+        rollingSource = gameObject.AddComponent<AudioSource>();
+        ResetRollingSource();
     }
 
     private void OnEnable()
@@ -24,7 +52,9 @@ public sealed class BallAudio : MonoBehaviour
         if (ballController == null) ballController = GetComponent<BallController>();
         ballController.ReleaseScheduled += OnReleaseScheduled;
         ballController.ReleaseSchedulingCancelled += CancelScheduledPlayback;
+        ballController.ResetPerformed += InvalidateRollingState;
         ballController.Released += OnReleased;
+        if (GameAudio.Instance != null) GameAudio.Instance.WorldAudioStopped += StopRollingImmediate;
     }
 
     private void OnDisable()
@@ -33,10 +63,50 @@ public sealed class BallAudio : MonoBehaviour
         {
             ballController.ReleaseScheduled -= OnReleaseScheduled;
             ballController.ReleaseSchedulingCancelled -= CancelScheduledPlayback;
+            ballController.ResetPerformed -= InvalidateRollingState;
             ballController.Released -= OnReleased;
         }
 
+        if (GameAudio.Instance != null) GameAudio.Instance.WorldAudioStopped -= StopRollingImmediate;
+
         CancelScheduledPlayback();
+        InvalidateRollingState();
+    }
+
+    private void FixedUpdate()
+    {
+        PruneStaleSupports();
+
+        bool canRoll = ballController.IsLaunched && !ballRigidbody.isKinematic &&
+                       ballRigidbody.constraints != RigidbodyConstraints.FreezeAll &&
+                       !ballRigidbody.IsSleeping() && supportContacts.Count > 0;
+        float tangentialSpeed = canRoll ? GetMaximumTangentialSpeed() : 0f;
+
+        if (!rollingSessionActive && tangentialSpeed >= rollingStartSpeed)
+        {
+            rollingSessionActive = BeginRollingSession();
+        }
+        else if (rollingSessionActive && (!canRoll || tangentialSpeed <= rollingStopSpeed))
+        {
+            rollingSessionActive = false;
+        }
+
+        UpdateRollingSource(tangentialSpeed);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        RefreshSupport(collision);
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        RefreshSupport(collision);
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        supportContacts.Remove(collision.collider);
     }
 
     private void OnReleaseScheduled(float launchSpeed, float timeUntilRelease)
@@ -80,6 +150,152 @@ public sealed class BallAudio : MonoBehaviour
 
         float volumeScale = Mathf.Lerp(minimumReleaseVolume, 1f, speedAmount);
         return GameAudio.Instance != null && GameAudio.Instance.Play(releaseCue, transform.position, volumeScale);
+    }
+
+    private void RefreshSupport(Collision collision)
+    {
+        Collider surfaceCollider = collision.collider;
+        if (surfaceCollider == null) return;
+
+        AudioSurface surface = surfaceCollider.GetComponentInParent<AudioSurface>();
+        if (surface == null || !surface.SupportsRolling) return;
+
+        Vector3 up = Physics.gravity.sqrMagnitude > 0f ? -Physics.gravity.normalized : Vector3.up;
+        float strongestUpDot = -1f;
+        Vector3 supportNormal = up;
+        for (int i = 0; i < collision.contactCount; i++)
+        {
+            Vector3 normal = collision.GetContact(i).normal;
+            float upDot = Vector3.Dot(normal, up);
+            if (upDot >= strongestUpDot)
+            {
+                strongestUpDot = upDot;
+                supportNormal = normal;
+            }
+        }
+
+        if (strongestUpDot < minimumSupportUpDot) return;
+
+        if (!supportContacts.TryGetValue(surfaceCollider, out SupportContact contact))
+        {
+            contact = new SupportContact();
+            supportContacts.Add(surfaceCollider, contact);
+        }
+
+        contact.body = surfaceCollider.attachedRigidbody;
+        contact.normal = supportNormal.normalized;
+        contact.lastSeen = Time.fixedTimeAsDouble;
+    }
+
+    private void PruneStaleSupports()
+    {
+        double oldestAllowed = Time.fixedTimeAsDouble - Time.fixedDeltaTime * 2.5f;
+        staleSupports.Clear();
+        foreach (KeyValuePair<Collider, SupportContact> pair in supportContacts)
+        {
+            if (pair.Key == null || pair.Value.lastSeen < oldestAllowed) staleSupports.Add(pair.Key);
+        }
+
+        foreach (Collider collider in staleSupports) supportContacts.Remove(collider);
+    }
+
+    private float GetMaximumTangentialSpeed()
+    {
+        float maximumSpeed = 0f;
+        Vector3 point = ballRigidbody.worldCenterOfMass;
+        foreach (SupportContact contact in supportContacts.Values)
+        {
+            Vector3 surfaceVelocity = contact.body != null ? contact.body.GetPointVelocity(point) : Vector3.zero;
+            Vector3 relativeVelocity = ballRigidbody.GetPointVelocity(point) - surfaceVelocity;
+            float speed = Vector3.ProjectOnPlane(relativeVelocity, contact.normal).magnitude;
+            maximumSpeed = Mathf.Max(maximumSpeed, speed);
+        }
+
+        return maximumSpeed;
+    }
+
+    private bool BeginRollingSession()
+    {
+        if (rollingCue == null || rollingCue.output == null || rollingCue.isUI) return false;
+
+        AudioClip clip = rollingCue.PickVariant(rollingRandom, previousRollingVariant, out int selected);
+        if (clip == null || clip.loadState != AudioDataLoadState.Loaded) return false;
+
+        ConfigureRollingSource(rollingCue.output, clip);
+        previousRollingVariant = selected;
+        rollingSource.Play();
+        return true;
+    }
+
+    private void UpdateRollingSource(float tangentialSpeed)
+    {
+        float speedAmount = Mathf.SmoothStep(0f, 1f,
+            Mathf.InverseLerp(rollingStopSpeed, fullRollingVolumeSpeed, tangentialSpeed));
+        float targetVolume = rollingSessionActive && rollingCue != null ? rollingCue.gain * speedAmount : 0f;
+        float fadeTime = targetVolume > rollingSource.volume ? rollingFadeInTime : rollingFadeOutTime;
+        rollingSource.volume = Mathf.MoveTowards(rollingSource.volume, targetVolume, Time.fixedDeltaTime / fadeTime);
+
+        if (rollingCue != null)
+        {
+            float lowPitch = Mathf.Clamp(Mathf.Min(rollingCue.pitchRange.x, rollingCue.pitchRange.y), 0.1f, 3f);
+            float highPitch = Mathf.Clamp(Mathf.Max(rollingCue.pitchRange.x, rollingCue.pitchRange.y), 0.1f, 3f);
+            float targetPitch = Mathf.Lerp(lowPitch, highPitch, speedAmount);
+            rollingSource.pitch = Mathf.MoveTowards(rollingSource.pitch, targetPitch, Time.fixedDeltaTime * 2f);
+        }
+
+        if (!rollingSessionActive && rollingSource.isPlaying && rollingSource.volume <= 0f)
+        {
+            rollingSource.Stop();
+            rollingSource.clip = null;
+        }
+    }
+
+    private void ConfigureRollingSource(AudioMixerGroup output, AudioClip clip)
+    {
+        rollingSource.Stop();
+        rollingSource.clip = clip;
+        rollingSource.outputAudioMixerGroup = output;
+        rollingSource.loop = true;
+        rollingSource.playOnAwake = false;
+        rollingSource.volume = 0f;
+        rollingSource.pitch = 1f;
+        rollingSource.priority = Mathf.Clamp(rollingCue.priority, 0, 256);
+        rollingSource.spatialBlend = Mathf.Clamp01(rollingCue.spatialBlend);
+        rollingSource.dopplerLevel = 0f;
+        rollingSource.rolloffMode = AudioRolloffMode.Logarithmic;
+        rollingSource.minDistance = Mathf.Max(0.01f, rollingCue.minDistance);
+        rollingSource.maxDistance = Mathf.Max(rollingSource.minDistance, rollingCue.maxDistance);
+        rollingSource.ignoreListenerPause = false;
+    }
+
+    private void InvalidateRollingState()
+    {
+        supportContacts.Clear();
+        rollingSessionActive = false;
+        StopRollingImmediate();
+    }
+
+    private void StopRollingImmediate()
+    {
+        if (rollingSource == null) return;
+        rollingSource.Stop();
+        ResetRollingSource();
+    }
+
+    private void ResetRollingSource()
+    {
+        rollingSource.clip = null;
+        rollingSource.outputAudioMixerGroup = null;
+        rollingSource.playOnAwake = false;
+        rollingSource.loop = true;
+        rollingSource.volume = 0f;
+        rollingSource.pitch = 1f;
+        rollingSource.priority = 128;
+        rollingSource.spatialBlend = 1f;
+        rollingSource.dopplerLevel = 0f;
+        rollingSource.minDistance = 1f;
+        rollingSource.maxDistance = 500f;
+        rollingSource.ignoreListenerPause = false;
     }
 
     private void CancelScheduledPlayback()

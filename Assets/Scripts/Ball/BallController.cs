@@ -23,6 +23,7 @@ public class BallController : MonoBehaviour
     public float LinearSpeedSquared => _ballRb != null ? _ballRb.linearVelocity.sqrMagnitude : 0f;
     public event Action<float, float> ReleaseScheduled;
     public event Action ReleaseSchedulingCancelled;
+    public event Action ResetPerformed;
     public event Action<float> Released;
     
     void Awake()
@@ -36,6 +37,7 @@ public class BallController : MonoBehaviour
     {
         StopAllCoroutines();
         ReleaseSchedulingCancelled?.Invoke();
+        ResetPerformed?.Invoke();
         _isLaunched = false;
         _isFollowingCurve = false;
         
