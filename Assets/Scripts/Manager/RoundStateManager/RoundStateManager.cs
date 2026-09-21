@@ -48,6 +48,8 @@ public class RoundStateManager : MonoBehaviour
     public List<CardDataSO> masterCardList;
     public List<CardDataSO> shopCardsToPickFrom;
     
+    public AmountOfTicketsToSpawnOnLane amountOfTicketsToSpawnOnLane;
+    
     [Header("Round Vars")]
     public int amountOfCardsToDrawEachTurn;
 

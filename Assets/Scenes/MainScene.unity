@@ -1235,6 +1235,7 @@ MonoBehaviour:
   cellSize: 3
   ticketPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
   ticketHeightOffset: 0.5
+  amountToTicketsSpawnOnLane: {fileID: 11400000, guid: 613eb818f34654f59b7ff1cc85f141dc, type: 2}
 --- !u!1 &51501853
 GameObject:
   m_ObjectHideFlags: 0
@@ -6031,7 +6032,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301852092}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000025749207}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6039,7 +6040,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
+  m_AnchoredPosition: {x: -10, y: -0}
   m_SizeDelta: {x: -41.14868, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &301852094
@@ -6405,7 +6406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6913,6 +6914,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
   - {fileID: 11400000, guid: baa8b01a446067b44a19b9f91ad1c627, type: 2}
   - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  amountOfTicketsToSpawnOnLane: {fileID: 11400000, guid: 613eb818f34654f59b7ff1cc85f141dc, type: 2}
   amountOfCardsToDrawEachTurn: 5
   hasDrawnCardsThisTurn: 0
   isHandDrawReady: 0
@@ -7918,7 +7920,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 488811992}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000032424927}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7926,7 +7928,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000045776367, y: 0}
+  m_AnchoredPosition: {x: -15.5, y: 0}
   m_SizeDelta: {x: -41.14868, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &488811994
@@ -9896,7 +9898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19134,12 +19136,12 @@ MonoBehaviour:
   goBackToShopTv: {fileID: 51501853}
   baseGridCost: 2
   gridCostScaling: 1.5
-  commonWeight: 70
-  rareWeight: 25
-  legendaryWeight: 5
+  commonWeight: 50
+  rareWeight: 30
+  legendaryWeight: 20
   commonCostMultiplier: 1
   rareCostMultiplier: 1.75
-  legendaryCostMultiplier: 2.75
+  legendaryCostMultiplier: 2.5
   hexGridExpander: {fileID: 120957819}
   removePinButton: {fileID: 1638082805}
   singlePinCardID: SinglePin
@@ -27747,7 +27749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -30230,7 +30232,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1841417011}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.00023508072}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30238,7 +30240,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: -0.00001335144}
+  m_AnchoredPosition: {x: -5.2, y: -0}
   m_SizeDelta: {x: -41.148804, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1841417013
@@ -30930,7 +30932,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1882351502}
   m_LocalRotation: {x: -0, y: -0, z: -9.094946e-12, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.000022649765}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1.2571797, y: 1.7941314, z: 1.1816713}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -30938,7 +30940,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -19.6, y: 0}
   m_SizeDelta: {x: -41.148804, y: -23.823914}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1882351504
@@ -33183,7 +33185,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -33289,7 +33291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

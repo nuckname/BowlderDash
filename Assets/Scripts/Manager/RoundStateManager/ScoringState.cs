@@ -24,9 +24,6 @@ public class ScoringState : RoundBaseState
     private float waitBeforePinPlacement = 2.0f;
     
     private float scoreDisplayHoldTime = 1.5f;
-
-    [SerializeField] private AmountOfTicketsToSpawnOnLane _amountOfTicketsToSpawnOnLane;
-
     public override void EnterState(RoundStateManager manager)
     {
         manager.UpdateInstructionText("Waiting for pins to settle...");
@@ -255,7 +252,7 @@ public class ScoringState : RoundBaseState
         if (ballsLeft > 0)
         {
             int bonusTickets = (ballsLeft * 
-            (_manager.gridManager.gridTicketManager.ticketsPerFrame + _amountOfTicketsToSpawnOnLane.GetAmountToSpawn(currentRound))) 
+            (_manager.gridManager.gridTicketManager.ticketsPerFrame + _manager.amountOfTicketsToSpawnOnLane.GetAmountToSpawn(currentRound))) 
             + 2 /*2 is the bonus for complete it early*/ + currentRound;
             
             _manager.sessionData.AddTickets(bonusTickets);
@@ -281,7 +278,13 @@ public class ScoringState : RoundBaseState
             {
                 manager.PutRealWorldPinIntoDiscardPile(pin);
             }
-        }
+
+            // Return vase when it has scored
+            if (pin.onEndOfRoundEffects is ScoreMultiplierEffect && !pin._isFallen)
+            {
+                manager.PutRealWorldPinIntoDiscardPile(pin);
+            }
+    }
     }
     
     

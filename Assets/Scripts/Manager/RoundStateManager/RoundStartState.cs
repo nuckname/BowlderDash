@@ -21,9 +21,10 @@ public class RoundStartState : RoundBaseState
         HandleGrid(manager);
 
         // At a certain round number lets stop clicking the ball
+        // feels ok to click the ball every time we throw it
         if (!manager.CheckKeepClickingTheBall())
         {
-            manager.TurnOnBallMesh(true);
+            //manager.TurnOnBallMesh(true);
         }
 
         // Boss State Check
