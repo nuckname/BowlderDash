@@ -641,7 +641,7 @@ public class RoundStateManager : MonoBehaviour
     // Called via button
     public void ClickButtonToGetBall()
     {
-        if(!CheckKeepClickingTheBall()) return;
+        //if(!CheckKeepClickingTheBall()) return;
         
         TurnOnBallMesh(true);
 
@@ -654,7 +654,10 @@ public class RoundStateManager : MonoBehaviour
         
         ballRampSpawner.ballsInRamp.RemoveAt(0);
 
+        // Enable Rethrow draw line logic
         throwingBallState.cannotThrowBall = false;
+        throwingBallState.cannotThrowBall = false;
+        throwingBallState.pathDrawer.Begin(throwingBallState);
         
         // Turn off button when we click it.
         TurnOnButtonToClickToGetBall(false);

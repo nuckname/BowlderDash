@@ -3134,7 +3134,7 @@ MonoBehaviour:
   leftSideExpandingLimit: -3
   rightSideExpandingLimit: 5
   upSideExpandingLimit: -5
-  downSideExpandingLimit: 2
+  downSideExpandingLimit: 1
   maxInteractionDistance: 6
 --- !u!114 &120957820
 MonoBehaviour:
