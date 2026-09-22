@@ -11,7 +11,7 @@ public class ExplosionEffect : PinEffect
     public float explosionForce = 15f;
     public float explosionRadius = 5f;
     public float upwardModifier = 1.0f;
-    public float detonationDelay = 1.0f;
+    public float detonationDelay;
 
     [Header("FX")]
     [Tooltip("Drag the child ParticleSystem here in the inspector")]

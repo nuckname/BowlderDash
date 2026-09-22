@@ -5064,7 +5064,7 @@ MonoBehaviour:
         explosionForce: 8
         explosionRadius: 3
         upwardModifier: 1
-        detonationDelay: 0.5
+        detonationDelay: 0.2
         explosionParticles: {fileID: 4918979806117386139}
 --- !u!114 &5373738608955730648
 MonoBehaviour:
