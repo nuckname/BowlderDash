@@ -133,6 +133,7 @@ public sealed class GameAudio : MonoBehaviour
 
     public void StopWorldVoices()
     {
+        PhysicsImpactAudio.SetWorldEligible(false);
         if (voices != null)
             foreach (var voice in voices)
                 if (voice.cue != null && !voice.cue.isUI) Release(voice);

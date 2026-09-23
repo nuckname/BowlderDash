@@ -26,6 +26,7 @@ public class ScoringState : RoundBaseState
     private float scoreDisplayHoldTime = 1.5f;
     public override void EnterState(RoundStateManager manager)
     {
+        PhysicsImpactAudio.SetWorldEligible(true);
         manager.UpdateInstructionText("Waiting for pins to settle...");
         
         _manager = manager;
@@ -76,6 +77,7 @@ public class ScoringState : RoundBaseState
                 }
 
                 pinsHaveSettled = true;
+                PhysicsImpactAudio.SetWorldEligible(false);
                 _manager.StartCoroutine(ProcessScoringRoutine());
             }
         }
