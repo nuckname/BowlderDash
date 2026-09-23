@@ -4,7 +4,7 @@ using UnityEngine;
 public class RoundOverState : RoundBaseState
 {
     private float waitTimer = 0f;
-    private float waitTime = 2.5f;
+    private float waitTime = 0.75f;
 
     public override void EnterState(RoundStateManager manager)
     {
