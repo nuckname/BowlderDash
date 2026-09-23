@@ -116,6 +116,13 @@ public class EndOfRoundSCameraSequence
                     manager.inGameScoreUi.StopAllFlashing();
                     
                     manager.MoveCamera(CameraLocation.ShowIncreaseRound);
+                    
+                    if (manager.sessionData.ballsThrown != 0)
+                    {
+                        yield return SkippableWait(waitBeforeUiCamera);
+                        manager.inGameScoreUi.ResetBallsTextAnimated(SessionData.Instance.ballsThrown, manager.GetMaxBallsForCurrentRound());
+                    }
+ 
                     yield return SkippableWait(waitBeforeUiCamera);
                  
                     manager.sessionData.AddRound();

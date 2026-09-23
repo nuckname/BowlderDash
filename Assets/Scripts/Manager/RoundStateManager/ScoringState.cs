@@ -26,6 +26,7 @@ public class ScoringState : RoundBaseState
     private float scoreDisplayHoldTime = 1.5f;
     public override void EnterState(RoundStateManager manager)
     {
+        PhysicsImpactAudio.SetWorldEligible(true);
         manager.UpdateInstructionText("Waiting for pins to settle...");
         
         _manager = manager;
@@ -43,14 +44,15 @@ public class ScoringState : RoundBaseState
     { 
         if (hasScored) return;
         
-        if (Input.GetMouseButtonDown(0))
-        {
-            _skipAnimation = true;
-        }
-        
         if (!pinsHaveSettled)
         {
             HandlePinSettlement();
+            
+            if (Input.GetMouseButtonDown(0))
+            {
+                _skipAnimation = true;
+            }
+
         }
     }
 
@@ -75,6 +77,7 @@ public class ScoringState : RoundBaseState
                 }
 
                 pinsHaveSettled = true;
+                PhysicsImpactAudio.SetWorldEligible(false);
                 _manager.StartCoroutine(ProcessScoringRoutine());
             }
         }
@@ -271,49 +274,11 @@ public class ScoringState : RoundBaseState
     
     private void ClearFallenOverPins(RoundStateManager manager)
     {
-        List<WorldObjectToCard> completedGroups = new List<WorldObjectToCard>();
-        List<PinBase> individualPinsToClear = new List<PinBase>();
-
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
-            if (pin == null) continue;
-
             if (pin.IsFallen)
             {
-                WorldObjectToCard cardObj = pin.GetComponent<WorldObjectToCard>();
-                bool allGroupPinsFallen = true;
-
-                if (cardObj != null && cardObj.GroupPeers != null)
-                {
-                    foreach (var peer in cardObj.GroupPeers)
-                    {
-                        // Because we destroy individual pins later, if 'peer' is null, 
-                        // it means it was previously destroyed (cleared). So we only check surviving peers.
-                        if (peer != null)
-                        {
-                            PinBase peerPin = peer.GetComponent<PinBase>();
-                            // If any peer in the group still exists and hasn't fallen, the group isn't complete
-                            if (peerPin != null && !peerPin.IsFallen)
-                            {
-                                allGroupPinsFallen = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (allGroupPinsFallen)
-                {
-                    if (cardObj != null)
-                    {
-                        completedGroups.Add(cardObj);
-                    }
-                }
-                else
-                {
-                    // Group isn't finished yet, just mark this individual fallen pin to be cleared from the lane
-                    individualPinsToClear.Add(pin);
-                }
+                manager.PutRealWorldPinIntoDiscardPile(pin);
             }
 
             // Return vase when it has scored
@@ -321,25 +286,8 @@ public class ScoringState : RoundBaseState
             {
                 manager.PutRealWorldPinIntoDiscardPile(pin);
             }
-        }
-
-        // Return fully knocked over groups to the discard pile
-        foreach (var groupCard in completedGroups)
-        {
-            if (groupCard != null)
-            {
-                // This handles returning to deck and destroying the remaining objects in the group
-                groupCard.ReturnToDiscardPile(); 
-            }
-        }
-
-        // Clear the individual fallen pins that haven't finished their group yet
-        foreach (var pin in individualPinsToClear)
-        {
-            if (pin != null)
-            {
-                Object.Destroy(pin.gameObject);
-            }
-        }
     }
+    }
+    
+    
 }

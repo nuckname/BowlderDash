@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dragElevation: 3
-  playAreaThresholdY: 250
+  playAreaThresholdY: 290
   canBeReturnedToHand: 0
   invalidPlacementMaterial: {fileID: 2100000, guid: d0559ab28d3e69440898d03adad3e3b3, type: 2}
 --- !u!114 &7218449948874417426
