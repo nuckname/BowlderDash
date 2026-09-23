@@ -27,7 +27,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public override void EnterState(RoundStateManager manager)
     {
-        PhysicsImpactAudio.SetWorldEligible(false);
         currentManager = manager;
         ballHasBeenReleased = false;
         throwCompletionRequested = false;

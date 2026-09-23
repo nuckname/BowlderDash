@@ -90,8 +90,6 @@
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\ViewDeck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\Scripts\Pins\StopGameObjectMovementOnEnter.cs" />
-    <Compile Include="Assets\Scripts\Audio\PhysicsImpactAudio.cs" />
-    <Compile Include="Assets\Scripts\Audio\ImpactAudioProfileSO.cs" />
     <Compile Include="Assets\Scripts\UiScripts\FlashingText.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\ScriptableObjects\ShopCostSO.cs" />

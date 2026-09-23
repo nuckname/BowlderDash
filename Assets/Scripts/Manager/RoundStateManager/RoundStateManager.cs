@@ -101,8 +101,6 @@ public class RoundStateManager : MonoBehaviour
     {
         // Bind the local reference to the Singleton instance so they share the exact same data
         sessionData = SessionData.Instance;
-        if (ballController != null) ballController.Released += OnPrimaryBallReleased;
-        PhysicsImpactAudio.SetWorldEligible(false);
     }
 
 
@@ -142,7 +140,6 @@ public class RoundStateManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        PhysicsImpactAudio.SetWorldEligible(false);
         GameAudio.Instance?.RestoreLeaderboardPause(this);
         if (IsLeaderboardActive)
         {
@@ -197,8 +194,6 @@ public class RoundStateManager : MonoBehaviour
     {
         // Ignore late gameplay callbacks and repeated end-game transitions.
         if (IsLeaderboardActive) return;
-        if (newState != roundOverState && newState != scoringState)
-            PhysicsImpactAudio.SetWorldEligible(false);
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         if (currentState != null) currentState.EnterState(this);
@@ -283,14 +278,7 @@ public class RoundStateManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (ballController != null) ballController.Released -= OnPrimaryBallReleased;
-        PhysicsImpactAudio.SetWorldEligible(false);
         RestoreLeaderboardTimeScale();
-    }
-
-    private void OnPrimaryBallReleased(float launchSpeed)
-    {
-        if (currentState == throwingBallState) PhysicsImpactAudio.SetWorldEligible(true);
     }
 
     public void ResetHandDrawState()

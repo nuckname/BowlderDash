@@ -35510,7 +35510,6 @@ GameObject:
   - component: {fileID: 6652253181974710232}
   - component: {fileID: 6652253181974710233}
   - component: {fileID: 6652253181974710234}
-  - component: {fileID: 6652253181974710235}
   m_Layer: 11
   m_Name: Ball
   m_TagString: Ball
@@ -36962,7 +36961,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioSurface
   surfaceType: 0
   supportsRolling: 1
-  impactProfile: {fileID: 11400000, guid: 561becb4b4e94db1a72f6fb9db9e0852, type: 2}
 --- !u!114 &344083091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36977,7 +36975,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioSurface
   surfaceType: 1
   supportsRolling: 1
-  impactProfile: {fileID: 11400000, guid: 0850b25e7993425997e24c9431980235, type: 2}
 --- !u!114 &246818630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36992,20 +36989,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioSurface
   surfaceType: 1
   supportsRolling: 1
-  impactProfile: {fileID: 11400000, guid: 0850b25e7993425997e24c9431980235, type: 2}
---- !u!114 &6652253181974710235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4105671971215449031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c732762a9da64c4a8c427f627e031c14, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::PhysicsImpactAudio
-  profile: {fileID: 11400000, guid: 4d57b705c8ea42cebf66b2d9cd0f6878, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
