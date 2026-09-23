@@ -37,28 +37,34 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         pinSettleTimer = 0f;
 
         manager.CaptureStrikeTargetsForCurrentThrow();
-        
+    
         manager.ballController.ResetBall();
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
-        
+    
         manager.TurnOnCardHand(false);
-        
+    
         if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0 && !_hasTutorialTextPlayed)
         {
             _hasTutorialTextPlayed = true;
             manager.tutorialManager.PlayThrowTutorial();
         }
-        
+    
         manager.TurnOnButtonToClickToGetBall(true);
 
         manager.SetPinPlacementPhysics(false);
         manager.AllowPinCollisionEffects(true);
-        
+    
         manager.AllowPinsToFallOver(true);
+
+        // We can only throw the ball when we have clicked the button to get a ball
+        // If we have clicked the ball and then go into pin placement we need this if statement. 
+        if (GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().enabled == false)
+        {
+            cannotThrowBall = true;
+            // Stops the path drawer to ensure the line renderer is cleared and drawing is disabled
+            pathDrawer.Stop();
+        }
         
-        manager.UpdateInstructionText("Draw the ball's path! Start from the ball.");
-        
-        pathDrawer.Begin(this);
     }
 
     public override void UpdateState(RoundStateManager manager)
