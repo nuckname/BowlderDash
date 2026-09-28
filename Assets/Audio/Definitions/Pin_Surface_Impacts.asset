@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc0e5b53b7e4d96a43c2f59616fc956, type: 3}
+  m_Name: Pin_Surface_Impacts
+  m_EditorClassIdentifier:
+  variants:
+  - {fileID: 8300000, guid: 31bf2412e2cefed47b76d5da9c16c0f5, type: 3}
+  - {fileID: 8300000, guid: 062de6b7d38a7134d9546a33b3b54ad9, type: 3}
+  - {fileID: 8300000, guid: 39374a1b73fd05d44b4f1674965334e7, type: 3}
+  output: {fileID: 24300003, guid: 007dc4751608482b8c546108d54fc866, type: 2}
+  isUI: 0
+  gain: 0.72
+  pitchRange: {x: 0.82, y: 0.96}
+  priority: 28
+  voiceLimit: 8
+  cooldown: 0
+  spatialBlend: 1
+  minDistance: 5
+  maxDistance: 60

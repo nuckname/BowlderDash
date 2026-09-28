@@ -74,6 +74,9 @@ public class ClonePinEffect : PinEffect
                     PinBase clonePinBase = clone.GetComponent<PinBase>();
                     if (clonePinBase != null)
                     {
+                        // A live pin is the clone source, so explicitly clear copied audio eligibility
+                        // before registering this new instance with the active gameplay world.
+                        clonePinBase.SetImpactAudioEligible(false);
                         // Ensure cloned pins cannot further split balls or clone to prevent exponential crashes
                         clonePinBase.onHitEffects.RemoveAll(effect => effect is ClonePinEffect || effect is SplitBallPinEffect);
                         clonePinBase.isClone = true;

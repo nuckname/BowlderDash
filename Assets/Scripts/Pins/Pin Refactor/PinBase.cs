@@ -60,6 +60,8 @@ public class PinBase : MonoBehaviour
     protected Rigidbody _rb;
     protected Renderer _renderer;
     protected Collider _collider;
+
+    private bool _impactAudioRegistrationBlocked;
     
     protected Vector3 _startPos;
     protected Quaternion _startRot;
@@ -120,6 +122,22 @@ public class PinBase : MonoBehaviour
     {
         FrameScoreCalculator = calculator;
     }
+
+    public void SetImpactAudioEligible(bool eligible)
+    {
+        foreach (PhysicsImpactAudio reporter in GetComponentsInChildren<PhysicsImpactAudio>(true))
+        {
+            reporter.SetInstanceEligible(eligible);
+        }
+    }
+
+    public void SetImpactAudioRegistrationBlocked(bool blocked)
+    {
+        _impactAudioRegistrationBlocked = blocked;
+        if (blocked) SetImpactAudioEligible(false);
+    }
+
+    public bool CanRegisterImpactAudio => !_impactAudioRegistrationBlocked;
 
     protected virtual void Awake()
     {

@@ -21,11 +21,17 @@ MonoBehaviour:
     cue: {fileID: 11400000, guid: 672b03aeddc7429ab9323e4c5f9032e7, type: 2}
     volumeMultiplier: 1
   - otherMaterial: 2
-    cue: {fileID: 11400000, guid: 672b03aeddc7429ab9323e4c5f9032e7, type: 2}
+    cue: {fileID: 11400000, guid: 58f8f7e117c34213aa99114bb5973101, type: 2}
     volumeMultiplier: 0.9
   - otherMaterial: 3
-    cue: {fileID: 11400000, guid: 672b03aeddc7429ab9323e4c5f9032e7, type: 2}
+    cue: {fileID: 11400000, guid: f7069a0f5f214cd4bc745ae8e7882d4f, type: 2}
     volumeMultiplier: 0.7
   - otherMaterial: 4
-    cue: {fileID: 11400000, guid: 672b03aeddc7429ab9323e4c5f9032e7, type: 2}
+    cue: {fileID: 11400000, guid: f7069a0f5f214cd4bc745ae8e7882d4f, type: 2}
+    volumeMultiplier: 0.75
+  - otherMaterial: 5
+    cue: {fileID: 11400000, guid: f7069a0f5f214cd4bc745ae8e7882d4f, type: 2}
+    volumeMultiplier: 0.8
+  - otherMaterial: 6
+    cue: {fileID: 11400000, guid: f7069a0f5f214cd4bc745ae8e7882d4f, type: 2}
     volumeMultiplier: 0.75

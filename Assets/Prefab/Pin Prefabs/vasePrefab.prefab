@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 8812345678901234568}
   - component: {fileID: -2398941729809505991}
   - component: {fileID: 6747926071243505309}
+  - component: {fileID: 9000000000000000001}
   - component: {fileID: 7932745912026453913}
   m_Layer: 9
   m_Name: vasePrefab
@@ -373,6 +374,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.3857975, y: 7.6995964, z: 2.448286}
   m_Center: {x: 0.015305386, y: 4.033825, z: -0.04034042}
+--- !u!114 &9000000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8935457865669160150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c732762a9da64c4a8c427f627e031c14, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  profile: {fileID: 11400000, guid: cbac942f55ba4e1399af3f09a3dfe3b2, type: 2}
+  requireInstanceEligibility: 1
 --- !u!114 &6747926071243505309
 MonoBehaviour:
   m_ObjectHideFlags: 0

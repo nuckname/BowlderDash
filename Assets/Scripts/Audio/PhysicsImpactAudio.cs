@@ -9,6 +9,9 @@ public sealed class PhysicsImpactAudio : MonoBehaviour
     private const double PairStateLifetimeSeconds = 3.0;
 
     [SerializeField] private ImpactAudioProfileSO profile;
+    [SerializeField] private bool requireInstanceEligibility;
+
+    private bool instanceEligible;
 
     private static readonly Dictionary<long, Dictionary<PairKey, ImpactReport>> pendingSteps =
         new Dictionary<long, Dictionary<PairKey, ImpactReport>>();
@@ -22,6 +25,8 @@ public sealed class PhysicsImpactAudio : MonoBehaviour
     private static int lastFlushFrame = -1;
 
     public ImpactAudioProfileSO Profile => profile;
+    public bool RequiresInstanceEligibility => requireInstanceEligibility;
+    public bool IsInstanceEligible => !requireInstanceEligibility || instanceEligible;
 
     private enum ImpactCategory
     {
@@ -95,15 +100,26 @@ public sealed class PhysicsImpactAudio : MonoBehaviour
         }
     }
 
+    public void SetInstanceEligible(bool eligible)
+    {
+        instanceEligible = eligible;
+    }
+
+    private void OnDisable()
+    {
+        if (requireInstanceEligibility) instanceEligible = false;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (!worldEligible || profile == null || collision == null) return;
+        if (!worldEligible || !IsInstanceEligible || profile == null || collision == null) return;
 
         bool hasContact = collision.contactCount > 0;
         ContactPoint firstContact = hasContact ? collision.GetContact(0) : default;
         Collider ownCollider = hasContact ? firstContact.thisCollider : GetComponent<Collider>();
         Collider otherCollider = hasContact ? firstContact.otherCollider : collision.collider;
         if (ownCollider == null || otherCollider == null || ownCollider.isTrigger || otherCollider.isTrigger) return;
+        if (!IsColliderInstanceEligible(otherCollider)) return;
 
         UnityEngine.Object ownIdentity = GetCollisionIdentity(ownCollider);
         UnityEngine.Object otherIdentity = GetCollisionIdentity(otherCollider);
@@ -286,6 +302,12 @@ public sealed class PhysicsImpactAudio : MonoBehaviour
 
         AudioSurface surface = collider.GetComponentInParent<AudioSurface>();
         return surface != null ? surface.ImpactProfile : null;
+    }
+
+    private static bool IsColliderInstanceEligible(Collider collider)
+    {
+        PhysicsImpactAudio reporter = collider.GetComponentInParent<PhysicsImpactAudio>();
+        return reporter == null || reporter.IsInstanceEligible;
     }
 
     private static ImpactAudioMaterial GetMaterial(Collider collider, ImpactAudioProfileSO resolvedProfile)

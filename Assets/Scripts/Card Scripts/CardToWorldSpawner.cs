@@ -113,6 +113,7 @@ public class CardToWorldSpawner : MonoBehaviour
                     GameObject previewObject = Instantiate(prefabToInstantiate);
                     if (previewObject.TryGetComponent(out PinBase previewPin))
                     {
+                        previewPin.SetImpactAudioRegistrationBlocked(true);
                         previewPin.EnterPlacementPhysicsMode();
                     }
 
@@ -191,6 +192,7 @@ public class CardToWorldSpawner : MonoBehaviour
                 PinBase pin = _spawnedWorldObjects[i].GetComponent<PinBase>();
                 if (pin != null)
                 {
+                    pin.SetImpactAudioRegistrationBlocked(false);
                     pin.OnPlaced();
                 }
             }

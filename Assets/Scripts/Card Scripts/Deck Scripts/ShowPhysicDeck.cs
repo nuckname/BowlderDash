@@ -106,6 +106,7 @@ public class ShowPhysicDeck : MonoBehaviour
         // Maybe some pins don't have all the components, so we check if they exist before disabling them
         if (pinObject.TryGetComponent(out PinBase pinBase))
         {
+            pinBase.SetImpactAudioRegistrationBlocked(true);
             pinBase.enabled = false;
         }
 

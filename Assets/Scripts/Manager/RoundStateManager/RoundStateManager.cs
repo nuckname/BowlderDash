@@ -474,9 +474,11 @@ public class RoundStateManager : MonoBehaviour
         // We do this so that we dont also grab the physic pins from the deck on the left and right of our screen.
         foreach (PinBase pin in allPins)
         {
+            pin.SetImpactAudioEligible(false);
             if (pin.enabled)
             {
                 activeGameplayPins.Add(pin);
+                if (pin.CanRegisterImpactAudio) pin.SetImpactAudioEligible(true);
             }
         }
 
@@ -595,6 +597,7 @@ public class RoundStateManager : MonoBehaviour
             allActivePinsInTheFrame = activeGameplayPins.ToArray();
             
             newPin.InjectDependencies(scoreCalculator);
+            newPin.SetImpactAudioEligible(true);
         }
     }
 
