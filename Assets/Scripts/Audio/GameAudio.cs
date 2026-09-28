@@ -9,6 +9,7 @@ public sealed class GameAudio : MonoBehaviour
     public static GameAudio Instance { get; private set; }
     [SerializeField, Range(1, 21)] private int transientCapacity = 21;
     [SerializeField] private AudioMixer mixer;
+    [SerializeField] private GameMusic music;
 
     private sealed class Voice
     {
@@ -47,6 +48,8 @@ public sealed class GameAudio : MonoBehaviour
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        if (music == null) music = GetComponent<GameMusic>();
+        if (music != null) music.Initialize(this, mixer);
         voices = new Voice[Mathf.Clamp(transientCapacity, 1, 21)];
         for (int i = 0; i < voices.Length; i++)
         {
@@ -185,6 +188,17 @@ public sealed class GameAudio : MonoBehaviour
     public bool SetMasterVolume(float linear) => SetVolume("MasterVolume", linear);
     public bool SetGameplayVolume(float linear) => SetVolume("GameplayVolume", linear);
     public bool SetUIVolume(float linear) => SetVolume("UIVolume", linear);
+    public bool SetMusicVolume(float linear) => SetVolume("MusicVolume", linear);
+    public float MusicVolume
+    {
+        get
+        {
+            if (mixer == null || !mixer.GetFloat("MusicVolume", out float decibels)) return 1f;
+            return decibels <= -80f ? 0f : Mathf.Clamp01(Mathf.Pow(10f, decibels / 20f));
+        }
+    }
+    public GameMusic Music => Instance == this ? music : null;
+    internal AudioMixer Mixer => mixer;
     private bool SetVolume(string parameter, float linear)
     {
         return mixer != null && mixer.SetFloat(parameter, linear <= 0.0001f ? -80f : 20f * Mathf.Log10(Mathf.Clamp01(linear)));
@@ -230,6 +244,7 @@ public sealed class GameAudio : MonoBehaviour
     private void OnDestroy()
     {
         if (Instance != this) return;
+        if (music != null) music.Shutdown();
         RestoreOwnedPause();
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
         Instance = null;
