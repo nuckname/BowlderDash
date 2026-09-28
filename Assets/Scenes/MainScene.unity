@@ -26966,7 +26966,7 @@ MonoBehaviour:
   clickToThrowStartTransform: {fileID: 1631484123}
   pickUpBallTextTransform: {fileID: 1612237353}
   pickUpBallStartTransform: {fileID: 1531241981}
-  enableTutorial: 1
+  enableTutorial: 0
   moveSpeed: 500
   flickSpeed: 1000
   flickDistance: 1000
