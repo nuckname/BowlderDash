@@ -25818,14 +25818,12 @@ MonoBehaviour:
   showPhysicalDeck: 1
   drawInterval: 0.08
   startingDeck:
-  - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
-  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
-  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
-  - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
-  - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
+  - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
+  - {fileID: 11400000, guid: 42aeef7c33ffadb408333770abf43cfc, type: 2}
+  - {fileID: 11400000, guid: 36f08b64e7d55104ead70610e2423e18, type: 2}
+  - {fileID: 11400000, guid: f1a82fb27a05cad4cae228cdd033fffe, type: 2}
+  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
+  - {fileID: 11400000, guid: 7863ead928667f9438d4e5039ef3800c, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

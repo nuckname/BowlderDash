@@ -135,10 +135,10 @@ TextureImporter:
       name: BananaGrailHat_1
       rect:
         serializedVersion: 2
-        x: 483
-        y: 56
-        width: 324
-        height: 422
+        x: 454
+        y: 55
+        width: 398
+        height: 434
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,10 +157,10 @@ TextureImporter:
       name: BananaGrailHat_2
       rect:
         serializedVersion: 2
-        x: 881
-        y: 99
-        width: 386
-        height: 352
+        x: 855
+        y: 60
+        width: 439
+        height: 429
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
