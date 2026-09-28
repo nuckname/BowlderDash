@@ -6,7 +6,7 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("Scene Management")]
     [Tooltip("The name of the scene to load when the player clicks Start")]
-    public string gameSceneName = "SampleScene";
+    public string gameSceneName = "MainScene";
 
 
     public void StartGame()

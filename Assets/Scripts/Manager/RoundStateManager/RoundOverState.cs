@@ -8,6 +8,7 @@ public class RoundOverState : RoundBaseState
 
     public override void EnterState(RoundStateManager manager)
     {
+        PhysicsImpactAudio.SetWorldEligible(true);
         waitTimer = 0f;
 
         manager.AddBallThrownToSession();

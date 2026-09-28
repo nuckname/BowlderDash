@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Card Scripts\_CardSciptableObjects\CurveParameters.cs" />
     <Compile Include="Assets\Scripts\Classes\EndOfRoundSCameraSequence.cs" />
     <Compile Include="Assets\Scripts\Enums\CardRarity.cs" />
+    <Compile Include="Assets\Scripts\Audio\AudioSurface.cs" />
     <Compile Include="Assets\Scripts\Manager\CursorHoverTarget.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\MultiEffect.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\ClonePinEffect.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Assets\Scripts\GridManager\MouseHighlightManager.cs" />
     <Compile Include="Assets\Scripts\GridManager.cs" />
     <Compile Include="Assets\ScriptableObjects\CardSO\CardDataSO.cs" />
+    <Compile Include="Assets\Scripts\Audio\UIButtonAudio.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Scripts\GridManager\GridOccupancy.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\DeflectToClosestPinEffect.cs" />
@@ -82,11 +84,14 @@
     <Compile Include="Assets\Scripts\Card Scripts\CardAnimator.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\PinEffect.cs" />
     <Compile Include="Assets\Scripts\Classes\LeaderboardEntry.cs" />
+    <Compile Include="Assets\Scripts\Audio\SoundCueSO.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\ViewDeck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\Scripts\Pins\StopGameObjectMovementOnEnter.cs" />
+    <Compile Include="Assets\Scripts\Audio\PhysicsImpactAudio.cs" />
+    <Compile Include="Assets\Scripts\Audio\ImpactAudioProfileSO.cs" />
     <Compile Include="Assets\Scripts\UiScripts\FlashingText.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\ScriptableObjects\ShopCostSO.cs" />
@@ -102,6 +107,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\Scripts\GridManager\HexCell.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
+    <Compile Include="Assets\Scripts\Audio\BallAudio.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\DeckManager.cs" />
     <Compile Include="Assets\Scripts\Tumbling.cs" />
@@ -155,6 +161,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ShopState.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundStartState.cs" />
+    <Compile Include="Assets\Scripts\Audio\GameAudio.cs" />
     <Compile Include="Assets\ScriptableObjects\AmountOfTicketsToSpawnOnLane.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\RemoveCardEffect.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\DeckModifierManager.cs" />

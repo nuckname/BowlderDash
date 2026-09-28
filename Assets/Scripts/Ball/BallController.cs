@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,10 @@ public class BallController : MonoBehaviour
 
     public bool IsLaunched => _isLaunched;
     public float LinearSpeedSquared => _ballRb != null ? _ballRb.linearVelocity.sqrMagnitude : 0f;
+    public event Action<float, float> ReleaseScheduled;
+    public event Action ReleaseSchedulingCancelled;
+    public event Action ResetPerformed;
+    public event Action<float> Released;
     
     void Awake()
     {
@@ -31,6 +36,8 @@ public class BallController : MonoBehaviour
     public void ResetBall()
     {
         StopAllCoroutines();
+        ReleaseSchedulingCancelled?.Invoke();
+        ResetPerformed?.Invoke();
         _isLaunched = false;
         _isFollowingCurve = false;
         
@@ -93,6 +100,10 @@ public class BallController : MonoBehaviour
         );
 
         float windupDuration = 0.5f;
+        float distanceToStart = Vector3.Distance(pullbackPos, firstLinePosition);
+        float swingForwardDuration = distanceToStart / speed;
+        ReleaseScheduled?.Invoke(speed, windupDuration + swingForwardDuration);
+
         float elapsed = 0f;
         while (elapsed < windupDuration)
         {
@@ -103,8 +114,6 @@ public class BallController : MonoBehaviour
             yield return null;
         }
 
-        float distanceToStart = Vector3.Distance(pullbackPos, firstLinePosition);
-        float swingForwardDuration = distanceToStart / speed;
         elapsed = 0f;
         while (elapsed < swingForwardDuration)
         {
@@ -120,6 +129,7 @@ public class BallController : MonoBehaviour
         _ballRb.linearVelocity = Vector3.forward * speed;
         _isLaunched = true;
         _isFollowingCurve = true;
+        Released?.Invoke(speed);
     }
     
     public void Apply45DegreeDeflection()

@@ -8,12 +8,88 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Audio.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/338229__fachii__button-hover.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/338229__fachii__button-hover.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-001.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-001.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-002.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-002.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-003.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-003.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-004.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-004.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-005.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-005.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-006.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Pin Impact/pin_impact_SAMPLE-006.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Test_UI_Click.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Test_UI_Click.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/ball_release.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/ball_release.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/rolling_loop.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Clips/rolling_loop.wav.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Release.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Release.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Rolling.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Rolling.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Ball.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Ball.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Gutter.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Gutter.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Lane.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Lane.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Pin.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Pin.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Impacts.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Impacts.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_ButtonHover.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_ButtonHover.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_StartClick.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_StartClick.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Mixers.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Mixers/GameAudio.mixer" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Mixers/GameAudio.mixer.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Prefabs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Prefabs/GameAudio.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Audio/Prefabs/GameAudio.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scenes/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scenes/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scenes/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scenes/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/AudioSurface.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/AudioSurface.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/BallAudio.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/BallAudio.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/GameAudio.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/GameAudio.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/ImpactAudioProfileSO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/ImpactAudioProfileSO.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/PhysicsImpactAudio.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/PhysicsImpactAudio.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/SoundCueSO.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/SoundCueSO.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/UIButtonAudio.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/UIButtonAudio.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF MainMenuQuit.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF MainMenuQuit.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Cards/ButtonToThrowBallTv.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Cards/ButtonToThrowBallTv.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Leaderboard/LeaderboardScreen.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Leaderboard/LeaderboardScreen.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainMenuScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainMenuScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Ball/BallController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Ball/BallController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/MainMenuController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/MainMenuController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ThrowingBallState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ThrowingBallState.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/SplitBallPinEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/SplitBallPinEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/TeleportBallPinEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/TeleportBallPinEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +115,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e38a05dc40cb4f9eb7c6234262785c89b000/7e/3a2a78d1/CanvasGroup.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BallCollisionCurvatureStopper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BallCollisionTrigger.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/ScriptableObjects/RoundData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/ScriptableObjects/ShopCostSO.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Ball/BallBooster.cs" root0="FORCE_HIGHLIGHTING" />
@@ -47,8 +123,8 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardAnimator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardMovement.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardToWorldSpawner.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardVisualPresenter.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/Deck Scripts/DeckManager.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/CardVisualPresenter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/Deck Scripts/DeckManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/Deck Scripts/DeckModifierManager.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/Deck Scripts/ViewDeck.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Card Scripts/Hand Scripts/HandInteractionManager.cs" root0="FORCE_HIGHLIGHTING" />
@@ -59,7 +135,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DraggableSnap.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Enums/CardRarity.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Enums/Pin.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Scripts/FloatingTextScript/FloatingText.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GridManager/GridOccupancy.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GridManager/HexGrid.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/GridManager/OnLaneSquareGrid.cs" root0="FORCE_HIGHLIGHTING" />
@@ -78,6 +153,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ThrowingBallState.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Manager/ShopUIManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pins/ForcePinToStandUpForPhysicalDeck.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pins/HighlightGroupedPins.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinEffect.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/ScoreMultiplierEffect.cs" root0="FORCE_HIGHLIGHTING" />
@@ -186,29 +262,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.5529595&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;SamBranch&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.appearance&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Attach to Unity Editor.Attach to Unity Editor.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "XThreadsFramesViewSplitterKey": "0.5529595",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "Merging SamBranch",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "configurable.group.appearance",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="$USER_HOME$/Downloads/HaydenBuild\My project.exe" />
@@ -222,7 +298,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity Install\6000.3.9f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Applications\UnityEditor\6000.3.9f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;D:\unity projects\bowlderdash\physics_test&quot; -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="D:\unity projects\bowlderdash\physics_test" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -233,7 +309,7 @@
       <method v="2" />
     </configuration>
     <configuration name="Unit Tests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity Install\6000.3.9f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Applications\UnityEditor\6000.3.9f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;D:\unity projects\bowlderdash\physics_test&quot; -testResults Logs/results.xml -logFile Logs/Editor.log -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="D:\unity projects\bowlderdash\physics_test" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -339,9 +415,6 @@
       <workItem from="1789774598150" duration="7990000" />
       <workItem from="1789797918040" duration="1235000" />
       <workItem from="1789865794627" duration="7812000" />
-      <workItem from="1790036233697" duration="5925000" />
-      <workItem from="1790553235099" duration="3085000" />
-      <workItem from="1790568900574" duration="1000" />
     </task>
     <servers />
   </component>
@@ -410,19 +483,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs</url>
-          <line>263</line>
-          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Pins\Pin Refactor\PinBase.cs" containingFunctionPresentation="Method 'HandleHit'">
-            <startOffsets>
-              <option value="7799" />
-            </startOffsets>
-            <endOffsets>
-              <option value="7827" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -27,6 +27,7 @@ public class TeleportBallPinEffect : PinEffect
         if (targetPin != null)
         {
             Vector3 newPos = new Vector3(26.1599998f, 0.69299984f, targetPin.transform.position.z);
+            ball.GetComponent<BallAudio>()?.InvalidateForMovement();
             ball.transform.position = newPos;
         }
     }

@@ -29,6 +29,7 @@ public class SplitBallPinEffect : PinEffect
         
         // Spawn left angled ball
         GameObject leftBall = UnityEngine.Object.Instantiate(target.gameObject, originalPos, originalRot);
+        leftBall.GetComponent<BallAudio>()?.InitializeAsSecondaryBall();
         UnityEngine.Object.Destroy(leftBall, 5f);
         Rigidbody leftRb = leftBall.GetComponent<Rigidbody>();
         Collider leftCollider = leftBall.GetComponent<Collider>();
@@ -39,6 +40,7 @@ public class SplitBallPinEffect : PinEffect
 
         // Spawn right angled ball
         GameObject rightBall = UnityEngine.Object.Instantiate(target.gameObject, originalPos, originalRot);
+        rightBall.GetComponent<BallAudio>()?.InitializeAsSecondaryBall();
         UnityEngine.Object.Destroy(rightBall, 5f);
         Rigidbody rightRb = rightBall.GetComponent<Rigidbody>();
         Collider rightCollider = rightBall.GetComponent<Collider>();
