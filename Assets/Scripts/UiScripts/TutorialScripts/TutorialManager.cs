@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,7 @@ public class TutorialManager : MonoBehaviour
     public string pinPlacementMessage = "Drag pins to place them";
     public string clickToThrowMessage = "Click Here";
     public string tryTryThrowMessage = "Too Slow! Try again!";
+    public string pickUpBallMessage = "Pick up ball here";
 
     [Header("Text Positions")]
     public Transform throwTextTransform;
@@ -37,6 +39,10 @@ public class TutorialManager : MonoBehaviour
     public Transform clickToThrowTextTransform;
     public Transform clickToThrowStartTransform;
     
+    [Header("Pick Up Ball Position")]
+    public Transform pickUpBallTextTransform;
+    public Transform pickUpBallStartTransform;
+    
     [Header("Settings")]
     public bool enableTutorial = true;
     public float moveSpeed = 500f;
@@ -51,11 +57,11 @@ public class TutorialManager : MonoBehaviour
     private List<GameObject> activeTutorialImages = new List<GameObject>();
     private Coroutine currentSequence;
 
-    private enum TutorialState { None, Throw, PinPlacement, ShowButtonToThrow }
+    private enum TutorialState { None, Throw, PinPlacement, ShowButtonToThrow, ShowWhereToPickUpBall }
     [SerializeField] private TutorialState currentState = TutorialState.None;
 
     [SerializeField] private RoundStateManager roundStateManager;
-    
+
     private void Update()
     {
         if (currentState != TutorialState.None && Input.GetMouseButtonDown(0))
@@ -150,8 +156,15 @@ public class TutorialManager : MonoBehaviour
         currentState = TutorialState.ShowButtonToThrow;
         currentSequence = StartCoroutine(ClickToThrowPinTutorial());
     }
-    
-    
+
+    public void PlayPickUpBallTutorial()
+    {
+        if (!enableTutorial) return;
+        
+        StopTutorial();
+        currentState = TutorialState.ShowWhereToPickUpBall;
+        currentSequence = StartCoroutine(PickUpBallTutorialSequence());
+    }
 
     public void StopTutorial()
     {
@@ -254,44 +267,48 @@ public class TutorialManager : MonoBehaviour
         StopTutorial();
     }
     
-    // Extracted the reusable mouse flashing and flick logic into its own Coroutine
+// Extracted the reusable mouse flashing and flick logic into its own Coroutine
     private IEnumerator MouseFlickSequence(Transform startTransform)
     {
         // Spawn both images at the starting position
         GameObject mouseInstance = SpawnImage(mouseImagePrefab, startTransform.position);
         GameObject clickInstance = SpawnImage(clickImagePrefab, startTransform.position);
-        
+
         // Initial setup
         mouseInstance.SetActive(false);
         clickInstance.SetActive(true);
-        
+
         // Flash between mouse and click image every second until user clicks
         float flashTimer = 0f;
         bool isShowingMouse = false;
-        
+
         while (!Input.GetMouseButtonDown(0))
         {
+            if (mouseInstance == null || clickInstance == null) yield break;
+
             flashTimer += Time.deltaTime;
-            
+
             if (flashTimer >= 0.5f) 
             {
                 flashTimer = 0f;
                 isShowingMouse = !isShowingMouse;
-                
+
                 mouseInstance.SetActive(isShowingMouse);
                 clickInstance.SetActive(!isShowingMouse);
             }
-            
+
             yield return null;
         }
-        
+
+        if (mouseInstance == null || clickInstance == null) yield break;
+
         // User has clicked, force mouse image on to flick it upwards
         mouseInstance.SetActive(true);
         clickInstance.SetActive(false);
-        
+
         Vector3 flickTarget = mouseInstance.transform.position + (Vector3.up * flickDistance);
-        
-        while (Vector3.Distance(mouseInstance.transform.position, flickTarget) > 0.1f)
+
+        while (mouseInstance != null && Vector3.Distance(mouseInstance.transform.position, flickTarget) > 0.1f)
         {
             mouseInstance.transform.position = Vector3.MoveTowards(
                 mouseInstance.transform.position, 
@@ -336,13 +353,43 @@ public class TutorialManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
     }
-    
+
     private IEnumerator ClickToThrowPinTutorial()
     {
         SpawnText(textBoxPrefab, clickToThrowTextTransform.position, clickToThrowMessage);
         
         GameObject mouseInstance = SpawnImage(mouseImagePrefab, clickToThrowStartTransform.position);
         GameObject clickInstance = SpawnImage(clickImagePrefab, clickToThrowStartTransform.position);
+        
+        mouseInstance.SetActive(false);
+        clickInstance.SetActive(true);
+
+        float flashTimer = 0f;
+        bool isShowingMouse = false;
+
+        while (true)
+        {
+            flashTimer += Time.deltaTime;
+            
+            if (flashTimer >= 0.5f)
+            {
+                flashTimer = 0f;
+                isShowingMouse = !isShowingMouse;
+                
+                mouseInstance.SetActive(isShowingMouse);
+                clickInstance.SetActive(!isShowingMouse);
+            }
+            
+            yield return null;
+        }
+    }
+
+    private IEnumerator PickUpBallTutorialSequence()
+    {
+        SpawnText(textBoxPrefab, pickUpBallTextTransform.position, pickUpBallMessage);
+        
+        GameObject mouseInstance = SpawnImage(mouseImagePrefab, pickUpBallStartTransform.position);
+        GameObject clickInstance = SpawnImage(clickImagePrefab, pickUpBallStartTransform.position);
         
         mouseInstance.SetActive(false);
         clickInstance.SetActive(true);
