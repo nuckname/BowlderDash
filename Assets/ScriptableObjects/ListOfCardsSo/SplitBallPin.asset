@@ -17,12 +17,17 @@ MonoBehaviour:
   description: "<b>On Ball Hit:</b> Spawns 2 extra balls at 45\xB0"
   cardArtwork: {fileID: 0}
   pinImages:
-  - {fileID: 1175842804, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: -1686856144, guid: 4d74fcfac186ad343b8fae466904c7fe, type: 3}
   desiredLayout: 4
   cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
+  useCustomRandomisation: 1
+  zPositionRange: {x: -3, y: -30}
+  zRotationRange: {x: -5, y: -5}
+  sizeRangeX: {x: 1.22, y: 1.22}
+  sizeRangeY: {x: 0.71, y: 0.71}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 9090343e83ba6714b9ef396c69beffe8, type: 3}
-  baseCost: 5
+  baseCost: 3
   spawnPattern: []
   rarity: 1

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'On Ball Hit: Redirects the ball towards the nearest pin'
   cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
   pinImages:
-  - {fileID: 1698575390, guid: 1b425c0ecd98f7c49b4b5f966e476b2c, type: 3}
+  - {fileID: -1110847386, guid: 4d74fcfac186ad343b8fae466904c7fe, type: 3}
   desiredLayout: 4
   cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
   useCustomRandomisation: 1
