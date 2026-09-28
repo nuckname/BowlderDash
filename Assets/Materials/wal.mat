@@ -23,6 +23,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseColor:
+        m_Texture: {fileID: 2800000, guid: 84af334cdae13534c8877475494f479e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Emissive:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Texture2D:
         m_Texture: {fileID: 2800000, guid: 84af334cdae13534c8877475494f479e, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -35,6 +43,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
+    - _HueChange: 0
     - _cellSize: 0.2
     - _exp: 2.3
     - _smoothness: 0
@@ -43,6 +52,7 @@ Material:
     - _minmax: {r: 723.2, g: 95.6, b: 0, a: 0}
     - _origin: {r: -0.32, g: 0, b: 31.54, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &1386998895981510699
 MonoBehaviour:
   m_ObjectHideFlags: 11

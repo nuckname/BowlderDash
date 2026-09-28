@@ -244,10 +244,10 @@ public class HandManager : MonoBehaviour
                 break;
             // 5 Card
             case 7:
-                targetPadding = -240;
+                targetPadding = -355;
                 break;
             default:
-                targetPadding = -240;
+                targetPadding = -355;
                 break;
         }
 

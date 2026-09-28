@@ -33,6 +33,13 @@ public class CardDataSO : ScriptableObject
     [HideInInspector]
     public Color cardTintCardRarity = Color.white;
 
+    [Header("Pin Randomisation Overrides")]
+    public bool useCustomRandomisation;
+    public Vector2 zPositionRange = new Vector2(-3, -30);
+    public Vector2 zRotationRange = new Vector2(-5, -5);
+    public Vector2 sizeRangeX = new Vector2(0.83f, 0.83f);
+    public Vector2 sizeRangeY = new Vector2(0.83f, 0.83f);
+    
     [Header("Prefabs")]
     public GameObject cardUIPrefab; 
     public GameObject cardVisualPrefab; 
@@ -51,6 +58,12 @@ public class CardDataSO : ScriptableObject
     
     private void OnValidate()
     {
+      //  zPositionRange = new Vector2(-3, -30);
+       // zRotationRange = new Vector2(-5, -5);
+       // sizeRangeX = new Vector2(0.83f, 0.83f);
+       // sizeRangeY = new Vector2(0.83f, 0.83f);
+    
+    
         cardID = name;
 
         switch (rarity)

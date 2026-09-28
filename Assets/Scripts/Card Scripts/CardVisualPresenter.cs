@@ -92,6 +92,7 @@ public class CardVisualPresenter : MonoBehaviour
             placementPatternDisplay.Bind(cardData);
         }
     }
+    
     private void SetPinImages(CardDataSO cardData)
     {
         List<Sprite> pins = cardData?.pinImages ?? new List<Sprite>();
@@ -109,19 +110,19 @@ public class CardVisualPresenter : MonoBehaviour
         switch (targetLayout)
         {
             case PinLayoutType.Triangle:
-                SetupLayout(PinLayoutType.Triangle, pins);
+                SetupLayout(PinLayoutType.Triangle, pins, cardData);
                 break;
             
             case PinLayoutType.DoubleVertical:
-                SetupLayout(PinLayoutType.DoubleVertical, pins);
+                SetupLayout(PinLayoutType.DoubleVertical, pins, cardData);
                 break;
             
             case PinLayoutType.DoubleHorizontal:
-                SetupLayout(PinLayoutType.DoubleHorizontal, pins);
+                SetupLayout(PinLayoutType.DoubleHorizontal, pins, cardData);
                 break;
             
             case PinLayoutType.Single:
-                SetupLayout(PinLayoutType.Single, pins);
+                SetupLayout(PinLayoutType.Single, pins, cardData);
                 break;
 
             case PinLayoutType.None:
@@ -131,7 +132,7 @@ public class CardVisualPresenter : MonoBehaviour
         }
     }
     
-    private void SetupLayout(PinLayoutType type, List<Sprite> pins)
+    private void SetupLayout(PinLayoutType type, List<Sprite> pins, CardDataSO cardData)
     {
         PinLayout activeLayout = pinLayouts.Find(l => l != null && l.layoutType == type);
         
@@ -144,6 +145,13 @@ public class CardVisualPresenter : MonoBehaviour
         {
             activeLayout.layoutContainer.SetActive(true);
         }
+
+        // Determine which randomisation values to use (Data override vs Presenter defaults)
+        bool useOverride = cardData != null && cardData.useCustomRandomisation;
+        Vector2 activeZPosRange = useOverride ? cardData.zPositionRange : zPositionRange;
+        Vector2 activeZRotRange = useOverride ? cardData.zRotationRange : zRotationRange;
+        Vector2 activeSizeRangeX = useOverride ? cardData.sizeRangeX : sizeRangeX;
+        Vector2 activeSizeRangeY = useOverride ? cardData.sizeRangeY : sizeRangeY;
 
         for (int i = 0; i < activeLayout.pinImages.Count; i++)
         {
@@ -159,18 +167,21 @@ public class CardVisualPresenter : MonoBehaviour
 
                 RectTransform pinRect = activeLayout.pinImages[i].rectTransform;
 
-                // Rolling new random values individually for each pin in the loop
-                float randomZPos = Random.Range(zPositionRange.x, zPositionRange.y);
-                Vector3 pos = pinRect.localPosition;
-                pos.z = randomZPos;
-                pinRect.localPosition = pos;
+                if (!activeLayout.doNotRandomiseValues)
+                {
+                    // Rolling new random values individually for each pin in the loop
+                    float randomZPos = Random.Range(activeZPosRange.x, activeZPosRange.y);
+                    Vector3 pos = pinRect.localPosition;
+                    pos.z = randomZPos;
+                    pinRect.localPosition = pos;
 
-                float randomZRot = Random.Range(zRotationRange.x, zRotationRange.y);
-                pinRect.localEulerAngles = new Vector3(0f, 0f, randomZRot);
+                    float randomZRot = Random.Range(activeZRotRange.x, activeZRotRange.y);
+                    pinRect.localEulerAngles = new Vector3(0f, 0f, randomZRot);
 
-                float randomScaleX = Random.Range(sizeRangeX.x, sizeRangeX.y);
-                float randomScaleY = Random.Range(sizeRangeY.x, sizeRangeY.y);
-                pinRect.localScale = new Vector3(randomScaleX, randomScaleY, 1f);
+                    float randomScaleX = Random.Range(activeSizeRangeX.x, activeSizeRangeX.y);
+                    float randomScaleY = Random.Range(activeSizeRangeY.x, activeSizeRangeY.y);
+                    pinRect.localScale = new Vector3(randomScaleX, randomScaleY, 1f);
+                }
             }
             else
             {
@@ -179,7 +190,6 @@ public class CardVisualPresenter : MonoBehaviour
             }
         }
     }
-    
     private void SetAccentColour(Color hexColor)
     {
         smallRectangleImage.color = hexColor;

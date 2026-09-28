@@ -43,9 +43,6 @@ public class RoundStateManager : MonoBehaviour
 
     public OnLaneSquareGrid onLaneSquareGrid;
     
-    // Let's put all our SOs here so we only have to refernce / update one list
-    // Maybe not
-    public List<CardDataSO> masterCardList;
     public List<CardDataSO> shopCardsToPickFrom;
     
     public AmountOfTicketsToSpawnOnLane amountOfTicketsToSpawnOnLane;
@@ -657,6 +654,11 @@ public class RoundStateManager : MonoBehaviour
     public void ClickButtonToGetBall()
     {
         //if(!CheckKeepClickingTheBall()) return;
+
+        if (tutorialManager.enableTutorial)
+        {
+            tutorialManager.PlayThrowTutorial();
+        }
         
         TurnOnBallMesh(true);
 

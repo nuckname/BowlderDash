@@ -46,7 +46,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         if (manager.sessionData.currentRound == 0 && manager.sessionData.ballsThrown == 0 && !_hasTutorialTextPlayed)
         {
             _hasTutorialTextPlayed = true;
-            manager.tutorialManager.PlayThrowTutorial();
+            manager.tutorialManager.PlayPickUpBallTutorial();
         }
     
         manager.TurnOnButtonToClickToGetBall(true);

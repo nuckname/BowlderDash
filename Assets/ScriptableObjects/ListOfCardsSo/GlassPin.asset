@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'On hit: +50 Score. can only be played once.'
   cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
   pinImages:
-  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: -532655959, guid: 2fb8e966a55c91c45b10ba98fe80b376, type: 3}
   desiredLayout: 4
   cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
