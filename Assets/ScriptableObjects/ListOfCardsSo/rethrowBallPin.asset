@@ -20,7 +20,7 @@ MonoBehaviour:
   - {fileID: -1788500815, guid: 1b425c0ecd98f7c49b4b5f966e476b2c, type: 3}
   desiredLayout: 4
   cardTintCardRarity: {r: 1, g: 0.84, b: 0, a: 1}
-  useCustomRandomisation: 0
+  useCustomRandomisation: 1
   zPositionRange: {x: -3, y: -30}
   zRotationRange: {x: -5, y: -5}
   sizeRangeX: {x: 0.83, y: 0.83}
