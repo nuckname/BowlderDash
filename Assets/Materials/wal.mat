@@ -43,11 +43,14 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
+    - _Brightness: 1
     - _HueChange: 0
+    - _Saturation: 1
     - _cellSize: 0.2
     - _exp: 2.3
     - _smoothness: 0
     m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _Vector3: {r: 1.85, g: 1, b: 1, a: 0}
     - _minmax: {r: 723.2, g: 95.6, b: 0, a: 0}
     - _origin: {r: -0.32, g: 0, b: 31.54, a: 0}

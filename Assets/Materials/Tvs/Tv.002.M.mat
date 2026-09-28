@@ -56,7 +56,9 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _HueChange: 377.8
+    - _Brightness: 1
+    - _HueChange: 0
+    - _Saturation: 110.7
     - _cellSize: 0.02
     m_Colors:
     - _Color: {r: 0, g: 0, b: 0, a: 1}
