@@ -203,11 +203,27 @@ public class RoundStateManager : MonoBehaviour
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         // Request before EnterState, which can synchronously switch to another state.
-        if (newState == mainMenuState)
-            GameAudio.Instance?.Music?.RequestPhase(MusicPhase.MainMenu);
-        else if (newState == roundStartState)
-            GameAudio.Instance?.Music?.RequestPhase(MusicPhase.Gameplay);
+        MusicPhase? musicPhase = GetMusicPhase(newState);
+        if (musicPhase.HasValue)
+            GameAudio.Instance?.Music?.RequestPhase(musicPhase.Value);
         if (currentState != null) currentState.EnterState(this);
+    }
+
+    private MusicPhase? GetMusicPhase(RoundBaseState state)
+    {
+        if (state == mainMenuState) return MusicPhase.MainMenu;
+
+        if (state == roundStartState || state == pinPlacementState || state == spawnBossObjectsState)
+            return MusicPhase.Gameplay;
+
+        // Settlement, score presentation, and the brief win bridge retain the bowling loop.
+        if (state == throwingBallState || state == roundOverState || state == scoringState || state == roundWinState)
+            return MusicPhase.ActiveBowling;
+
+        if (state == shopState) return MusicPhase.Shop;
+
+        // Terminal states receive their explicit policy in the lifecycle pass.
+        return null;
     }
     
     public void PinPlacementVisuals(bool turnOn)
