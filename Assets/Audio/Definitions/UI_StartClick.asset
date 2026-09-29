@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: UI_StartClick
   m_EditorClassIdentifier: 
   variants:
-  - {fileID: 8300000, guid: 797cf83c0d1341c497c8fb75b3829d7e, type: 3}
+  - {fileID: 8300000, guid: 1ee8dd7a1ef8dcb4cb5a9903f47522c1, type: 3}
   output: {fileID: 24300005, guid: 007dc4751608482b8c546108d54fc866, type: 2}
   isUI: 1
-  gain: 0.741
+  gain: 0.694
   pitchRange: {x: 0.98, y: 1.02}
   priority: 32
   voiceLimit: 2
