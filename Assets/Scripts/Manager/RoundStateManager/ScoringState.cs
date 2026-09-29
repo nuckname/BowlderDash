@@ -89,7 +89,7 @@ public class ScoringState : RoundBaseState
         if (_manager.TryApplyStrikeMultiplier())
         {
             _manager.SpawnStrikeFloatingText();
-            yield return SkippableWait(waitTimeBeforeScoring + 1f);
+            yield return SkippableWait(waitTimeBeforeScoring);
         }
 
         ExecutePinScoringEffects();
