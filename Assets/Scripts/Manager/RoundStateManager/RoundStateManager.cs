@@ -84,6 +84,7 @@ public class RoundStateManager : MonoBehaviour
     public GameCompleteState gameCompleteState = new GameCompleteState();
     public RoundWinState roundWinState = new RoundWinState();
     public MainMenuState mainMenuState = new MainMenuState();
+    private bool startedFromMenu;
     
     public bool IsPinPlacementActive => currentState == pinPlacementState;
     public bool IsLeaderboardActive => currentState is LeaderboardState;
@@ -195,10 +196,17 @@ public class RoundStateManager : MonoBehaviour
     {
         // Ignore late gameplay callbacks and repeated end-game transitions.
         if (IsLeaderboardActive) return;
+        // The scene starts at the menu; gameplay callbacks cannot bypass Start.
+        if (!startedFromMenu && newState != mainMenuState) return;
         if (newState != roundOverState && newState != scoringState)
             PhysicsImpactAudio.SetWorldEligible(false);
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
+        // Request before EnterState, which can synchronously switch to another state.
+        if (newState == mainMenuState)
+            GameAudio.Instance?.Music?.RequestPhase(MusicPhase.MainMenu);
+        else if (newState == roundStartState)
+            GameAudio.Instance?.Music?.RequestPhase(MusicPhase.Gameplay);
         if (currentState != null) currentState.EnterState(this);
     }
     
@@ -690,21 +698,26 @@ public class RoundStateManager : MonoBehaviour
     
     public void ClickSettingsButton()
     {
+        if (currentState != mainMenuState) return;
         MoveCamera(CameraLocation.SettingCameraLocation);
     }
     
     public void ClickShowMainMenu()
     {
+        if (currentState != mainMenuState) return;
         MoveCamera(CameraLocation.MainMenuCameraLocation);
     }
     
     public void ClickPlayButton()
     {
+        if (startedFromMenu || currentState != mainMenuState) return;
+        startedFromMenu = true;
         StartNewGame();
     }
     
     public void ClickLeaderboardsButton()
     {
+        if (currentState != mainMenuState) return;
         MoveCamera(CameraLocation.LeaderboardCameraLocation);
     }
 }
