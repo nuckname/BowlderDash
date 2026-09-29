@@ -106,6 +106,7 @@ public class RoundStateManager : MonoBehaviour
 
     private void Start()
     {
+        GameAudio.Instance?.BeginMusicSession(gameObject.scene);
         SwitchState(mainMenuState);
     }
 
@@ -226,7 +227,10 @@ public class RoundStateManager : MonoBehaviour
 
         if (state == shopState) return MusicPhase.Shop;
 
-        // Terminal states receive their explicit policy in the lifecycle pass.
+        // The Gameplay loop continues across both terminal bridges and the paused leaderboard.
+        if (state == gameOverState || state == gameCompleteState || state is LeaderboardState)
+            return MusicPhase.Gameplay;
+
         return null;
     }
     
@@ -739,5 +743,17 @@ public class RoundStateManager : MonoBehaviour
     {
         if (currentState != mainMenuState) return;
         MoveCamera(CameraLocation.LeaderboardCameraLocation);
+    }
+    public void OnSfxVolumeChanged(float value)
+    {
+        var audio = GameAudio.Instance;
+        if (audio == null) return;
+        audio.SetGameplayVolume(value);
+        audio.SetUIVolume(value);
+    }
+
+    public void OnMusicVolumeChanged(float value)
+    {
+        GameAudio.Instance?.SetMusicVolume(value);
     }
 }

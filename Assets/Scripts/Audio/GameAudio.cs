@@ -28,6 +28,7 @@ public sealed class GameAudio : MonoBehaviour
     private bool listenerPauseBeforeLeaderboard;
     private MonoBehaviour leaderboardPauseOwner;
     private int leaderboardSceneHandle;
+    private int musicSceneHandle;
     public event System.Action WorldAudioStopped;
     // Audio variation must not consume the random sequence used by cards, grids or bosses.
     private readonly System.Random random = new System.Random();
@@ -168,6 +169,14 @@ public sealed class GameAudio : MonoBehaviour
         if (ownsLeaderboardPause && leaderboardPauseOwner == owner) RestoreOwnedPause();
     }
 
+    // The service persists, while each MainScene owns only its own music session.
+    internal void BeginMusicSession(Scene scene)
+    {
+        if (Instance != this || !scene.IsValid() || !scene.isLoaded || musicSceneHandle == scene.handle) return;
+        music?.ResetSession();
+        musicSceneHandle = scene.handle;
+    }
+
     private void RestoreOwnedPause()
     {
         if (!ownsLeaderboardPause) return;
@@ -179,6 +188,11 @@ public sealed class GameAudio : MonoBehaviour
 
     private void OnSceneUnloaded(Scene scene)
     {
+        if (scene.handle == musicSceneHandle)
+        {
+            music?.ResetSession();
+            musicSceneHandle = 0;
+        }
         StopWorldVoices();
         if (ownsLeaderboardPause && scene.handle == leaderboardSceneHandle) RestoreOwnedPause();
         cueStates.Clear();
@@ -248,6 +262,7 @@ public sealed class GameAudio : MonoBehaviour
         RestoreOwnedPause();
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
         Instance = null;
+        musicSceneHandle = 0;
         cueStates.Clear();
     }
 }

@@ -321,9 +321,9 @@ public sealed class GameMusic : MonoBehaviour
     private static bool IsValid(MusicPhase phase) => (int)phase >= 0 && (int)phase < PhaseCount;
     private static bool IsPaired(int index) => index == GameplayIndex || index == ShopIndex;
 
-    internal void Shutdown()
+    // GameAudio survives scene reloads, but a new MainScene needs a new music timeline.
+    internal void ResetSession()
     {
-        initialized = false;
         target = pending = -1;
         pairState = PairState.None;
         pairWarned = false;
@@ -338,9 +338,16 @@ public sealed class GameMusic : MonoBehaviour
             {
                 sources[i].Stop();
                 sources[i].clip = null;
+                sources[i].volume = 0f;
             }
             gains[i] = fadeStarts[i] = 0f;
         }
+    }
+
+    internal void Shutdown()
+    {
+        initialized = false;
+        ResetSession();
     }
 
     private void OnEnable()
