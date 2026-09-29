@@ -60,6 +60,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.45451945
+      objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.54167527
+      objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.54167527
+      objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.45451945
+      objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -260
+      objectReference: {fileID: 0}
+    - target: {fileID: 866431961978295730, guid: d34a952abf3e17c4e817923986884931, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 3269158502851185025, guid: d34a952abf3e17c4e817923986884931, type: 3}
       propertyPath: m_Name
       value: RocketShip

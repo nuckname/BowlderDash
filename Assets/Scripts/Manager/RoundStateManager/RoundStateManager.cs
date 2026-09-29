@@ -83,7 +83,8 @@ public class RoundStateManager : MonoBehaviour
     public GameOverState gameOverState = new GameOverState();
     public GameCompleteState gameCompleteState = new GameCompleteState();
     public RoundWinState roundWinState = new RoundWinState();
-
+    public MainMenuState mainMenuState = new MainMenuState();
+    
     public bool IsPinPlacementActive => currentState == pinPlacementState;
     public bool IsLeaderboardActive => currentState is LeaderboardState;
 
@@ -102,10 +103,9 @@ public class RoundStateManager : MonoBehaviour
         PhysicsImpactAudio.SetWorldEligible(false);
     }
 
-
-    void Start()
+    private void Start()
     {
-        StartNewGame();
+        SwitchState(mainMenuState);
     }
 
     void Update()
@@ -117,7 +117,7 @@ public class RoundStateManager : MonoBehaviour
         
         // Debug testing
         if (IsLeaderboardActive) return;
-
+        /*
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (currentState == roundStartState) SwitchState(pinPlacementState);
@@ -135,9 +135,10 @@ public class RoundStateManager : MonoBehaviour
             gridManager.grid.MoveGridTransform();
             
         }
+        */
     }
 
-    public void StartNewGame()
+    private void StartNewGame()
     {
         PhysicsImpactAudio.SetWorldEligible(false);
         GameAudio.Instance?.RestoreLeaderboardPause(this);
@@ -230,7 +231,6 @@ public class RoundStateManager : MonoBehaviour
 
         // These components read keyboard/mouse input independently of the round state.
         DisableLeaderboardGameplayControls<HandInteractionManager>();
-        DisableLeaderboardGameplayControls<DeckModifierManager>();
         DisableLeaderboardGameplayControls<ViewDeck>();
         DisableLeaderboardGameplayControls<CardToWorldSpawner>();
         DisableLeaderboardGameplayControls<HexGridExpander>();
@@ -686,5 +686,25 @@ public class RoundStateManager : MonoBehaviour
     public void TurnOnButtonToClickToGetBall(bool turnOn)
     {
         clickButtonToGetBallGameObject.SetActive(turnOn);
+    }
+    
+    public void ClickSettingsButton()
+    {
+        MoveCamera(CameraLocation.SettingCameraLocation);
+    }
+    
+    public void ClickShowMainMenu()
+    {
+        MoveCamera(CameraLocation.MainMenuCameraLocation);
+    }
+    
+    public void ClickPlayButton()
+    {
+        StartNewGame();
+    }
+    
+    public void ClickLeaderboardsButton()
+    {
+        MoveCamera(CameraLocation.LeaderboardCameraLocation);
     }
 }
