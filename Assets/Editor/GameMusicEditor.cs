@@ -26,7 +26,10 @@ public sealed class GameMusicEditor : Editor
         {
             if (GUILayout.Button($"Request {phase}")) music.RequestPhase(phase, fadeOverride);
             EditorGUILayout.LabelField($"{phase} Fade Gain", music.GetFadeGain(phase).ToString("F3"));
+            EditorGUILayout.LabelField($"{phase} Playback",
+                $"{(music.IsPlaying(phase) ? "Running" : "Stopped")} at {music.GetPlaybackSeconds(phase):F2}s");
         }
+        EditorGUILayout.LabelField("Gameplay/Shop Pair", music.GameplayShopPlaybackState);
         EditorGUILayout.LabelField("Target", music.TargetPhase?.ToString() ?? "None");
         EditorGUILayout.LabelField("Pending", music.PendingPhase?.ToString() ?? "None");
         Repaint();

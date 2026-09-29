@@ -216,9 +216,13 @@ public class RoundStateManager : MonoBehaviour
         if (state == roundStartState || state == pinPlacementState || state == spawnBossObjectsState)
             return MusicPhase.Gameplay;
 
-        // Settlement, score presentation, and the brief win bridge retain the bowling loop.
-        if (state == throwingBallState || state == roundOverState || state == scoringState || state == roundWinState)
+        // Keep bowling ambience through the throw and round-over handoff.
+        if (state == throwingBallState || state == roundOverState)
             return MusicPhase.ActiveBowling;
+
+        // Entering pin scoring brings back the gameplay loop. The win bridge keeps it
+        // until Shop takes over, rather than briefly restarting the bowling fade.
+        if (state == scoringState || state == roundWinState) return MusicPhase.Gameplay;
 
         if (state == shopState) return MusicPhase.Shop;
 
