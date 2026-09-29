@@ -40,6 +40,9 @@ public class BallController : MonoBehaviour
         ResetPerformed?.Invoke();
         _isLaunched = false;
         _isFollowingCurve = false;
+        _homingTarget = null;
+        _homingSpeed = 0f;
+        _currentPath = null;
         
         _ballRb.linearVelocity = Vector3.zero;
         _ballRb.angularVelocity = Vector3.zero;

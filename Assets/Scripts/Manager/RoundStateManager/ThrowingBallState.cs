@@ -22,11 +22,14 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     private float flightTimer;
     private float stallTimer;
     private float pinSettleTimer;
+    private bool rethrowPending;
 
     private bool _hasTutorialTextPlayed = false;
 
     public override void EnterState(RoundStateManager manager)
     {
+        bool isRethrow = rethrowPending;
+        rethrowPending = false;
         PhysicsImpactAudio.SetWorldEligible(false);
         currentManager = manager;
         ballHasBeenReleased = false;
@@ -36,7 +39,10 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         stallTimer = 0f;
         pinSettleTimer = 0f;
 
-        manager.CaptureStrikeTargetsForCurrentThrow();
+        if (!isRethrow)
+        {
+            manager.CaptureStrikeTargetsForCurrentThrow();
+        }
     
         manager.ballController.ResetBall();
         manager.MoveCamera(CameraLocation.BallThrowingCameraLocation);
@@ -49,22 +55,37 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
             manager.tutorialManager.PlayPickUpBallTutorial();
         }
     
-        manager.TurnOnButtonToClickToGetBall(true);
-
-        manager.SetPinPlacementPhysics(false);
+        if (!isRethrow)
+        {
+            manager.SetPinPlacementPhysics(false);
+        }
         manager.AllowPinCollisionEffects(true);
     
         manager.AllowPinsToFallOver(true);
 
-        // We can only throw the ball when we have clicked the button to get a ball
-        // If we have clicked the ball and then go into pin placement we need this if statement. 
-        if (GameObject.FindGameObjectWithTag("Ball").GetComponent<MeshRenderer>().enabled == false)
+        RefreshBallSelection(manager);
+    }
+
+    public void PrepareForRethrow()
+    {
+        rethrowPending = true;
+    }
+
+    public void RefreshBallSelection(RoundStateManager manager)
+    {
+        bool hasSelectedBall = manager.HasSelectedBallForCurrentAttempt;
+        cannotThrowBall = !hasSelectedBall;
+        manager.TurnOnBallMesh(hasSelectedBall);
+        manager.TurnOnButtonToClickToGetBall(!hasSelectedBall);
+
+        if (hasSelectedBall)
         {
-            cannotThrowBall = true;
-            // Stops the path drawer to ensure the line renderer is cleared and drawing is disabled
+            pathDrawer.Begin(this);
+        }
+        else
+        {
             pathDrawer.Stop();
         }
-        
     }
 
     public override void UpdateState(RoundStateManager manager)

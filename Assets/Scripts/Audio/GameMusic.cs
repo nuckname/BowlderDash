@@ -22,7 +22,6 @@ public sealed class GameMusic : MonoBehaviour
     private int warnedPhases;
     private float elapsed;
     private float duration;
-    private float pendingFadeOverride = -1f;
     private bool initialized;
     private bool pairWarned;
     private PairState pairState;
@@ -30,19 +29,6 @@ public sealed class GameMusic : MonoBehaviour
     private AudioClip gameplayPairClip;
     private AudioClip shopPairClip;
     private AudioMixer mixer;
-
-    public MusicPhase? TargetPhase => target < 0 ? (MusicPhase?)null : (MusicPhase)target;
-    public MusicPhase? PendingPhase => pending < 0 ? (MusicPhase?)null : (MusicPhase)pending;
-    public float GetFadeGain(MusicPhase phase) => IsValid(phase) ? gains[(int)phase] : 0f;
-    public string GameplayShopPlaybackState => pairState.ToString();
-    public bool IsPlaying(MusicPhase phase) => IsValid(phase) && sources[(int)phase] != null && sources[(int)phase].isPlaying;
-    public float GetPlaybackSeconds(MusicPhase phase)
-    {
-        if (!IsValid(phase)) return 0f;
-        var source = sources[(int)phase];
-        return source != null && source.clip != null && source.clip.frequency > 0
-            ? (float)source.timeSamples / source.clip.frequency : 0f;
-    }
 
     internal void Initialize(GameAudio owner, AudioMixer ownerMixer)
     {
@@ -68,10 +54,7 @@ public sealed class GameMusic : MonoBehaviour
         }
     }
 
-    public bool RequestPhase(MusicPhase phase) => RequestPhase(phase, -1f);
-
-    // A nonnegative fade override is useful for previewing instant transitions.
-    public bool RequestPhase(MusicPhase phase, float fadeOverride)
+    public bool RequestPhase(MusicPhase phase)
     {
         if (!initialized || GameAudio.Instance == null || GameAudio.Instance.Music != this || !IsValid(phase)) return false;
         int next = (int)phase;
@@ -84,7 +67,6 @@ public sealed class GameMusic : MonoBehaviour
         if (!TryPrepare(next))
         {
             pending = next;
-            pendingFadeOverride = fadeOverride;
             return false;
         }
 
@@ -92,7 +74,7 @@ public sealed class GameMusic : MonoBehaviour
         warnedPhases &= ~(1 << next);
         target = next;
         elapsed = 0f;
-        duration = fadeOverride >= 0f ? fadeOverride : Mathf.Max(0f, profile.fadeDuration);
+        duration = Mathf.Max(0f, profile.fadeDuration);
         for (int i = 0; i < PhaseCount; i++) fadeStarts[i] = gains[i];
         if (duration <= 0f) ApplyFade(1f);
         return true;
@@ -281,9 +263,8 @@ public sealed class GameMusic : MonoBehaviour
             int next = pending;
             if (TryPrepare(next))
             {
-                float fadeOverride = pendingFadeOverride;
                 pending = -1;
-                RequestPhase((MusicPhase)next, fadeOverride);
+                RequestPhase((MusicPhase)next);
             }
         }
         if (target < 0 || duration <= 0f) return;
@@ -330,7 +311,6 @@ public sealed class GameMusic : MonoBehaviour
         pairStartDspTime = 0d;
         gameplayPairClip = shopPairClip = null;
         warnedPhases = 0;
-        pendingFadeOverride = -1f;
         elapsed = duration = 0f;
         for (int i = 0; i < PhaseCount; i++)
         {

@@ -12,6 +12,7 @@ public class RoundOverState : RoundBaseState
         waitTimer = 0f;
 
         manager.AddBallThrownToSession();
+        manager.ClearSelectedBallForCurrentAttempt();
         
         manager.TurnOnBallMesh(false);
  

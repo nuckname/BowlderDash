@@ -10,8 +10,8 @@ public class RethrowBallEffect : PinEffect
         
         if (stateManager != null)
         {
-            stateManager.nextCameraSpeedOverride = _rethrowCameraSpeed;
-            stateManager.SwitchState(stateManager.throwingBallState);
+            stateManager.TryRethrowCurrentBall(_rethrowCameraSpeed);
+            
         }
 
     }

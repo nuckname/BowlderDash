@@ -88,6 +88,7 @@ public class RoundStateManager : MonoBehaviour
     
     public bool IsPinPlacementActive => currentState == pinPlacementState;
     public bool IsLeaderboardActive => currentState is LeaderboardState;
+    public bool HasSelectedBallForCurrentAttempt { get; private set; }
 
     [Header("Floating Text Prefabs")]
     [FormerlySerializedAs("floatingTextPrefab")]
@@ -117,27 +118,6 @@ public class RoundStateManager : MonoBehaviour
             currentState.UpdateState(this);
         }
         
-        // Debug testing
-        if (IsLeaderboardActive) return;
-        /*
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            if (currentState == roundStartState) SwitchState(pinPlacementState);
-            else if (currentState == pinPlacementState) SwitchState(throwingBallState);
-            else if (currentState == throwingBallState) SwitchState(scoringState);
-            else if (currentState == scoringState) SwitchState(shopState);
-            else if (currentState == shopState) SwitchState(roundStartState);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            AddTicketsToSession(10);
-            Debug.Log("Added 10 tickets!");
-            
-            gridManager.grid.MoveGridTransform();
-            
-        }
-        */
     }
 
     private void StartNewGame()
@@ -157,6 +137,7 @@ public class RoundStateManager : MonoBehaviour
         
         gridManager.GenerateGrid();
         
+        HasSelectedBallForCurrentAttempt = false;
         throwingBallState.cannotThrowBall = true;
 
         // must click on the ball ramp 
@@ -611,6 +592,25 @@ public class RoundStateManager : MonoBehaviour
 
         SwitchState(throwingBallState);
     }
+
+    public bool TryRethrowCurrentBall(float cameraSpeed)
+    {
+        if (currentState != throwingBallState || !HasSelectedBallForCurrentAttempt ||
+            ballController == null || !ballController.IsLaunched)
+        {
+            return false;
+        }
+
+        nextCameraSpeedOverride = cameraSpeed;
+        throwingBallState.PrepareForRethrow();
+        SwitchState(throwingBallState);
+        return true;
+    }
+
+    public void ClearSelectedBallForCurrentAttempt()
+    {
+        HasSelectedBallForCurrentAttempt = false;
+    }
     
     public void OnPinPlacementButtonClicked()
     {
@@ -688,15 +688,14 @@ public class RoundStateManager : MonoBehaviour
     // Called via button
     public void ClickButtonToGetBall()
     {
-        //if(!CheckKeepClickingTheBall()) return;
+        if (currentState != throwingBallState || HasSelectedBallForCurrentAttempt) return;
+        if (ballRampSpawner.ballsInRamp.Count == 0 || ballRampSpawner.ballsInRamp[0] == null) return;
 
         if (tutorialManager.enableTutorial)
         {
             tutorialManager.PlayThrowTutorial();
         }
         
-        TurnOnBallMesh(true);
-
         Material ballRampColour = ballRampSpawner.ballsInRamp[0].GetComponent<BallRampFollower>().getCurrentBallMaterial;
         // Really do need to cache the ball gameobject
         // Set the ball we throw to the colour we just clicked
@@ -706,13 +705,8 @@ public class RoundStateManager : MonoBehaviour
         
         ballRampSpawner.ballsInRamp.RemoveAt(0);
 
-        // Enable Rethrow draw line logic
-        throwingBallState.cannotThrowBall = false;
-        throwingBallState.cannotThrowBall = false;
-        throwingBallState.pathDrawer.Begin(throwingBallState);
-        
-        // Turn off button when we click it.
-        TurnOnButtonToClickToGetBall(false);
+        HasSelectedBallForCurrentAttempt = true;
+        throwingBallState.RefreshBallSelection(this);
     }
 
     public void TurnOnButtonToClickToGetBall(bool turnOn)

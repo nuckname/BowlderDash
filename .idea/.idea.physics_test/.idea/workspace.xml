@@ -8,30 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Release.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Release.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Rolling.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Ball_Rolling.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Ball.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Ball.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Gutter.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Gutter.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Lane.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Lane.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Pin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Impact_Pin.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/MusicProfile.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/MusicProfile.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Impacts.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Impacts.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Pin_Impacts.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Pin_Impacts.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Surface_Impacts.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/Pin_Surface_Impacts.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_ButtonHover.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_ButtonHover.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_StartClick.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Definitions/UI_StartClick.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Mixers/GameAudio.mixer" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Mixers/GameAudio.mixer" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/GameAudio.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/GameAudio.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/ambientLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/ambientLoop.wav.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/gameplayLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/gameplayLoop.wav.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/menuLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/menuLoop.wav.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/shopLofiEditLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/shopLofiEditLoop.wav.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/GameMusicEditor.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/GameMusicEditor.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/GameMusic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/GameMusic.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF MainMenuQuit.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF MainMenuQuit.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/Assembly-CSharp.csproj.AssemblyReference.cache" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
