@@ -7,16 +7,7 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/ambientLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/ambientLoop.wav.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/gameplayLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/gameplayLoop.wav.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/menuLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/menuLoop.wav.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/shopLofiEditLoop.wav.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audio/Clips/Loops/shopLofiEditLoop.wav.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/GameMusicEditor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/GameMusicEditor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Audio/GameMusic.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Audio/GameMusic.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" afterDir="false" />
-    </list>
+    <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,11 +25,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/2dec5742036d4daeadd5b65221e679164e9600/5f/821c742c/ProgressData.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/13/0e92a5d1/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/33/8a91a79f/SetupCoroutine.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/6b/a4d9d419/UnitySynchronizationContext.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e38a05dc40cb4f9eb7c6234262785c89b000/7e/3a2a78d1/CanvasGroup.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/31f3cd5c2a074982a9d5664e7709cac1212400/a4/6f84b2fd/Object.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BallCollisionCurvatureStopper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BallCollisionTrigger.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/ScriptableObjects/CardSO/CardDataSO.cs" root0="SKIP_HIGHLIGHTING" />

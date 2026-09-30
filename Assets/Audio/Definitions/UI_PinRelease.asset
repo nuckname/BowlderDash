@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc0e5b53b7e4d96a43c2f59616fc956, type: 3}
+  m_Name: UI_PinRelease
+  m_EditorClassIdentifier:
+  variants:
+  - {fileID: 8300000, guid: b73a81ad0202ad04cbe7d41366c5c8c8, type: 3}
+  output: {fileID: 24300005, guid: 007dc4751608482b8c546108d54fc866, type: 2}
+  isUI: 1
+  gain: 0.694
+  pitchRange: {x: 0.98, y: 1.02}
+  priority: 16
+  voiceLimit: 2
+  cooldown: 0.04
+  spatialBlend: 0
+  minDistance: 5
+  maxDistance: 60
