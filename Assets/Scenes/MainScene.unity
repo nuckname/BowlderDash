@@ -7096,6 +7096,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1332888233}
+  - {fileID: 1642568384}
   - {fileID: 1215643626}
   - {fileID: 1627406034}
   m_Father: {fileID: 1346736464}
@@ -7183,14 +7184,21 @@ MonoBehaviour:
       prefab: {fileID: 5278486286205888367, guid: b019ee74ba7afdb4099fc790b9e61740, type: 3}
       spawnAreas:
       - {fileID: 1332888234}
+      spawnPattern: 0
+      minimumPivotSpacing: 12
+      placementAttempts: 64
       minimumScale: {x: 3, y: 2, z: 1.5}
       maximumScale: {x: 3.5, y: 2.5, z: 2}
       rotationOffset: {x: 90, y: -90, z: 0}
     - label: Two Hammers
       roundSlot: 1
-      unlocked: 0
-      prefab: {fileID: 0}
-      spawnAreas: []
+      unlocked: 1
+      prefab: {fileID: 6293628005653704301, guid: df060294e8de4b441b5a11a99274da85, type: 3}
+      spawnAreas:
+      - {fileID: 1642568385}
+      spawnPattern: 1
+      minimumPivotSpacing: 12
+      placementAttempts: 64
       minimumScale: {x: 1, y: 1, z: 1}
       maximumScale: {x: 1, y: 1, z: 1}
       rotationOffset: {x: 0, y: 0, z: 0}
@@ -28927,6 +28935,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1641136522}
   m_CullTransparentMesh: 1
+--- !u!1 &1642568383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1642568384}
+  - component: {fileID: 1642568385}
+  m_Layer: 0
+  m_Name: RoofBossSpawnArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1642568384
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642568383}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: -1062.3651, y: -240.9, z: -904.56}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 374269888}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1642568385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642568383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d3cbb0c43df4b5392cf4ed46fcb7152, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::BossSpawnArea
+  center: {x: 0, y: 0, z: 0}
+  size: {x: 11.78, y: 0, z: 13.5}
 --- !u!1 &1642730563
 GameObject:
   m_ObjectHideFlags: 0

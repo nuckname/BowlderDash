@@ -9,6 +9,12 @@ public enum BossRoundSlot
     FinalRound
 }
 
+public enum BossSpawnPattern
+{
+    Single,
+    PairedHammers
+}
+
 [Serializable]
 public class BossEncounterOption
 {
@@ -17,6 +23,9 @@ public class BossEncounterOption
     public bool unlocked = true;
     public GameObject prefab;
     public List<BossSpawnArea> spawnAreas = new List<BossSpawnArea>();
+    public BossSpawnPattern spawnPattern;
+    [Min(0f)] public float minimumPivotSpacing = 12f;
+    [Min(1)] public int placementAttempts = 64;
     public Vector3 minimumScale = Vector3.one;
     public Vector3 maximumScale = Vector3.one;
     public Vector3 rotationOffset = Vector3.zero;
@@ -75,8 +84,13 @@ public class SpawnBossObjectsState : RoundBaseState
                 return;
             }
 
+            if (!SpawnBossObject(manager, selectedOption, selectedArea))
+            {
+                manager.SwitchState(manager.pinPlacementState);
+                return;
+            }
+
             manager.MoveCamera(CameraLocation.SpawnBossObjectsCameraPosition);
-            SpawnBossObject(manager, selectedOption, selectedArea);
         }
         else if (!HasSpawnedBoss)
         {
@@ -91,17 +105,53 @@ public class SpawnBossObjectsState : RoundBaseState
         transitionRoutine = manager.StartCoroutine(TransitionToPinPlacement(manager));
     }
 
-    private void SpawnBossObject(RoundStateManager manager, BossEncounterOption option, BossSpawnArea area)
+    private bool SpawnBossObject(RoundStateManager manager, BossEncounterOption option, BossSpawnArea area)
     {
-        Vector3 spawnPosition = area.GetRandomPoint();
         Quaternion spawnRotation = area.transform.rotation * Quaternion.Euler(option.rotationOffset);
-        spawnedBossObject = UnityEngine.Object.Instantiate(option.prefab, spawnPosition, spawnRotation);
-        spawnedBossObject.transform.localScale = GetRandomScale(option);
+        Vector3 announcementPosition;
+
+        if (option.spawnPattern == BossSpawnPattern.PairedHammers)
+        {
+            if (option.prefab.GetComponentInChildren<BossHammerSwingMotor>(true) == null)
+            {
+                Debug.LogWarning($"Boss choice '{option.label}' needs a HammerUnit prefab with a BossHammerSwingMotor");
+                return false;
+            }
+
+            if (!area.TryGetRandomPair(option.minimumPivotSpacing, option.placementAttempts,
+                    out Vector3 firstPivot, out Vector3 secondPivot))
+            {
+                Debug.LogWarning($"Boss choice '{option.label}' could not fit two pivots in {area.name} at least {option.minimumPivotSpacing} units apart");
+                return false;
+            }
+
+            GameObject pairRoot = new GameObject($"Boss - {option.label}");
+            SpawnHammer(option.prefab, firstPivot, spawnRotation, pairRoot.transform, true);
+            SpawnHammer(option.prefab, secondPivot, spawnRotation, pairRoot.transform, false);
+            spawnedBossObject = pairRoot;
+            announcementPosition = (firstPivot + secondPivot) * 0.5f;
+        }
+        else
+        {
+            announcementPosition = area.GetRandomPoint();
+            spawnedBossObject = UnityEngine.Object.Instantiate(option.prefab, announcementPosition, spawnRotation);
+            spawnedBossObject.transform.localScale = GetRandomScale(option);
+        }
 
         if (!string.IsNullOrWhiteSpace(announcementText))
         {
-            manager.SpawnBossFloatingText(announcementText, spawnPosition + floatingTextOffset);
+            manager.SpawnBossFloatingText(announcementText, announcementPosition + floatingTextOffset);
         }
+
+        return true;
+    }
+
+    private static void SpawnHammer(GameObject prefab, Vector3 pivotPosition, Quaternion rotation,
+        Transform pairRoot, bool swingTowardPositiveLimit)
+    {
+        GameObject hammer = UnityEngine.Object.Instantiate(prefab, pivotPosition, rotation, pairRoot);
+        hammer.GetComponentInChildren<BossHammerSwingMotor>(true)
+            .SetSwingDirection(swingTowardPositiveLimit);
     }
 
     private BossEncounterOption GetOptionForRound(RoundStateManager manager)

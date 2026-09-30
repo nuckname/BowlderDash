@@ -102,7 +102,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4476542897157233538}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 100
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -172,9 +172,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 349c2e1f69cf4f6da04ce181a1ccd8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossHammerSwingMotor
-  targetSpeed: 90
-  maximumForce: 1000
-  reversalMargin: 5
+  targetSpeed: 60
+  maximumForce: 100000
+  reversalMargin: 3
+  stallReversalDelay: 0.4
+  minimumProgressPerStep: 0.1
   startTowardPositiveLimit: 1
 --- !u!1 &6293628005653704301
 GameObject:

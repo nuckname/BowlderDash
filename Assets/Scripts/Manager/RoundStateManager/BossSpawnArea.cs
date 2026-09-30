@@ -17,6 +17,34 @@ public class BossSpawnArea : MonoBehaviour
         return transform.TransformPoint(localPoint);
     }
 
+    public bool TryGetRandomPair(float minimumHorizontalSpacing, int maxAttempts,
+        out Vector3 firstPoint, out Vector3 secondPoint)
+    {
+        firstPoint = default;
+        secondPoint = default;
+
+        float minimumSpacingSquared = Mathf.Max(0f, minimumHorizontalSpacing);
+        minimumSpacingSquared *= minimumSpacingSquared;
+
+        for (int attempt = 0; attempt < Mathf.Max(1, maxAttempts); attempt++)
+        {
+            Vector3 firstCandidate = GetRandomPoint();
+            Vector3 secondCandidate = GetRandomPoint();
+            Vector2 horizontalOffset = new Vector2(
+                firstCandidate.x - secondCandidate.x,
+                firstCandidate.z - secondCandidate.z);
+
+            if (horizontalOffset.sqrMagnitude < minimumSpacingSquared)
+                continue;
+
+            firstPoint = firstCandidate;
+            secondPoint = secondCandidate;
+            return true;
+        }
+
+        return false;
+    }
+
     private Vector3 GetPositiveSize()
     {
         return new Vector3(

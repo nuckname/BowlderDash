@@ -8,11 +8,16 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
     [SerializeField, Min(0f)] private float targetSpeed = 90f;
     [SerializeField, Min(0f)] private float maximumForce = 1000f;
     [SerializeField, Min(0f)] private float reversalMargin = 5f;
+    [SerializeField, Min(0f)] private float stallReversalDelay = 0.4f;
+    [SerializeField, Min(0f)] private float minimumProgressPerStep = 0.05f;
     [SerializeField] private bool startTowardPositiveLimit = true;
 
     private HingeJoint hinge;
     private int direction;
     private bool warnedAboutLimits;
+    private float previousAngle;
+    private float stalledFor;
+    private bool hasPreviousAngle;
 
     private void Awake()
     {
@@ -25,6 +30,8 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
         hinge.useSpring = false;
         direction = startTowardPositiveLimit ? 1 : -1;
         warnedAboutLimits = false;
+        stalledFor = 0f;
+        hasPreviousAngle = false;
     }
 
     private void FixedUpdate()
@@ -50,10 +57,28 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
         }
 
         float margin = Mathf.Min(reversalMargin, (limits.max - limits.min) * 0.49f);
-        if (direction > 0 && hinge.angle >= limits.max - margin)
-            direction = -1;
-        else if (direction < 0 && hinge.angle <= limits.min + margin)
-            direction = 1;
+        float angle = hinge.angle;
+        bool reachedLimit = direction > 0
+            ? angle >= limits.max - margin
+            : angle <= limits.min + margin;
+
+        if (reachedLimit)
+        {
+            ReverseDirection();
+        }
+        else if (stallReversalDelay > 0f && hasPreviousAngle)
+        {
+            float progress = (angle - previousAngle) * direction;
+            stalledFor = progress < minimumProgressPerStep
+                ? stalledFor + Time.fixedDeltaTime
+                : 0f;
+
+            if (stalledFor >= stallReversalDelay)
+                ReverseDirection();
+        }
+
+        previousAngle = angle;
+        hasPreviousAngle = true;
 
         JointMotor motor = hinge.motor;
         motor.targetVelocity = direction * targetSpeed;
@@ -66,6 +91,15 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
     public void SetSwingDirection(bool towardPositiveLimit)
     {
         direction = towardPositiveLimit ? 1 : -1;
+        stalledFor = 0f;
+        hasPreviousAngle = false;
+    }
+
+    private void ReverseDirection()
+    {
+        direction = -direction;
+        stalledFor = 0f;
+        hasPreviousAngle = false;
     }
 
     private void OnDisable()
