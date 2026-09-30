@@ -102,7 +102,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4476542897157233538}
   serializedVersion: 5
-  m_Mass: 100
+  m_Mass: 20
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -135,10 +135,10 @@ HingeJoint:
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 0
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
-  m_UseSpring: 0
+  m_UseSpring: 1
   m_Spring:
-    spring: 0
-    damper: 0
+    spring: 1
+    damper: 1
     targetPosition: 0
   m_UseMotor: 0
   m_Motor:
@@ -149,8 +149,8 @@ HingeJoint:
   m_ExtendedLimits: 0
   m_UseAcceleration: 0
   m_Limits:
-    min: -55
-    max: 55
+    min: -80
+    max: 80
     bounciness: 0
     bounceMinVelocity: 0.2
     contactDistance: 0
@@ -172,11 +172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 349c2e1f69cf4f6da04ce181a1ccd8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossHammerSwingMotor
-  targetSpeed: 60
-  maximumForce: 100000
+  targetSpeed: 200
+  speedAtTopFraction: 0.1
+  maximumForce: 50000
   reversalMargin: 3
-  stallReversalDelay: 0.4
-  minimumProgressPerStep: 0.1
   startTowardPositiveLimit: 1
 --- !u!1 &6293628005653704301
 GameObject:

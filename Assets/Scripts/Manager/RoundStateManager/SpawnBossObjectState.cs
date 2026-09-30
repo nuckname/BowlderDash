@@ -51,7 +51,7 @@ public class SpawnBossObjectsState : RoundBaseState
 
     [Header("Reveal Settings")]
     public string announcementText = "Boss obstacle incoming!";
-    public Vector3 floatingTextOffset = new Vector3(0f, 2f, 0f);
+    public Transform bossFloatingTextSpawnPoint;
     [Min(0f)] public float revealDuration = 2f;
 
     private GameObject spawnedBossObject;
@@ -108,7 +108,6 @@ public class SpawnBossObjectsState : RoundBaseState
     private bool SpawnBossObject(RoundStateManager manager, BossEncounterOption option, BossSpawnArea area)
     {
         Quaternion spawnRotation = area.transform.rotation * Quaternion.Euler(option.rotationOffset);
-        Vector3 announcementPosition;
 
         if (option.spawnPattern == BossSpawnPattern.PairedHammers)
         {
@@ -129,18 +128,20 @@ public class SpawnBossObjectsState : RoundBaseState
             SpawnHammer(option.prefab, firstPivot, spawnRotation, pairRoot.transform, true);
             SpawnHammer(option.prefab, secondPivot, spawnRotation, pairRoot.transform, false);
             spawnedBossObject = pairRoot;
-            announcementPosition = (firstPivot + secondPivot) * 0.5f;
         }
         else
         {
-            announcementPosition = area.GetRandomPoint();
-            spawnedBossObject = UnityEngine.Object.Instantiate(option.prefab, announcementPosition, spawnRotation);
+            Vector3 spawnPosition = area.GetRandomPoint();
+            spawnedBossObject = UnityEngine.Object.Instantiate(option.prefab, spawnPosition, spawnRotation);
             spawnedBossObject.transform.localScale = GetRandomScale(option);
         }
 
         if (!string.IsNullOrWhiteSpace(announcementText))
         {
-            manager.SpawnBossFloatingText(announcementText, announcementPosition + floatingTextOffset);
+            if (bossFloatingTextSpawnPoint != null)
+                manager.SpawnBossFloatingText(announcementText, bossFloatingTextSpawnPoint.position);
+            else
+                Debug.LogWarning("Boss floating text spawn point is not assigned");
         }
 
         return true;
