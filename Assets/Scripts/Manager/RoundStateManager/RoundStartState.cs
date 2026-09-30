@@ -36,8 +36,8 @@ public class RoundStartState : RoundBaseState
         }
         else
         {
+            manager.spawnBossObjectsState.DespawnActiveBoss();
             manager.SwitchState(manager.pinPlacementState);
-            
         }
     }
 
@@ -55,7 +55,6 @@ public class RoundStartState : RoundBaseState
             return false;            
         }
 
-        //bool bossPhaseHasRun = manager.spawnBossObjectsState.HasRunForRound(currentRoundNumber);
     }
 
     private void HandleGrid(RoundStateManager manager)

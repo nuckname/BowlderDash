@@ -5,6 +5,7 @@ public class GameCompleteState : RoundBaseState
 {
     public override void EnterState(RoundStateManager manager)
     {
+        manager.spawnBossObjectsState.DespawnActiveBoss();
         manager.SwitchState(new LeaderboardState(true));
     }
 
