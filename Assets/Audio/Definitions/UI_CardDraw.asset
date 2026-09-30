@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fcc0e5b53b7e4d96a43c2f59616fc956, type: 3}
   m_Name: UI_CardDraw
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   variants:
   - {fileID: 8300000, guid: cfed435d6d1c6f1438c6c3a957c08d29, type: 3}
   output: {fileID: 24300005, guid: 007dc4751608482b8c546108d54fc866, type: 2}
@@ -19,7 +19,7 @@ MonoBehaviour:
   gain: 0.569
   pitchRange: {x: 0.98, y: 1.02}
   priority: 64
-  voiceLimit: 2
+  voiceLimit: 10
   cooldown: 0
   spatialBlend: 0
   minDistance: 5
