@@ -201,7 +201,7 @@ public class RoundStateManager : MonoBehaviour
             return MusicPhase.ActiveBowling;
 
         // Scoring brings in the gameplay loop and keeps it through the win bridge to Shop.
-        if (state == scoringState || state == roundWinState) return MusicPhase.Gameplay;
+        //if (state == scoringState || state == roundWinState) return MusicPhase.Gameplay;
 
         if (state == shopState) return MusicPhase.Shop;
 

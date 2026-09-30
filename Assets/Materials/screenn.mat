@@ -31,7 +31,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
-    - _bright: 54.7
+    - _bright: 0
     - _linesRes: 299.23
     - _minIntensity: 26
     - _res: 84.12
