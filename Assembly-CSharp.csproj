@@ -168,6 +168,7 @@
     <Compile Include="Assets\Scripts\Audio\GameAudio.cs" />
     <Compile Include="Assets\ScriptableObjects\AmountOfTicketsToSpawnOnLane.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\RemoveCardEffect.cs" />
+    <Compile Include="Assets\Scripts\Manager\RoundStateManager\BossHammerSwingMotor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\BallCollisionTrigger.cs" />

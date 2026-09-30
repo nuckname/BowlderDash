@@ -5766,7 +5766,7 @@ MeshCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -16603,7 +16603,7 @@ GameObject:
   - component: {fileID: 965295835}
   - component: {fileID: 965295834}
   - component: {fileID: 965295833}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Invisable Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33528,7 +33528,7 @@ GameObject:
   - component: {fileID: 1975603412}
   - component: {fileID: 1975603411}
   - component: {fileID: 1975603410}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Invisable Walls (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

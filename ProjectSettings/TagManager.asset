@@ -21,7 +21,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Invis walls
   - Water
   - UI
   - floor
@@ -31,7 +31,7 @@ TagManager:
   - IgnoreBallCollision
   - Ball
   - Ignore This Pin
-  - 
+  - HAMMAR
   - 
   - 
   - 
