@@ -34,10 +34,11 @@ Material:
     - _exp: 2.3
     - _smoothness: 0
     m_Colors:
-    - _Vector3: {r: 1.85, g: 1, b: 1, a: 0}
-    - _minmax: {r: 723.2, g: 95.6, b: 0, a: 0}
+    - _Vector3: {r: 0, g: 1, b: 1, a: 0}
+    - _minmax: {r: 720.75, g: 95.6, b: 0, a: 0}
     - _origin: {r: -0.32, g: 0, b: 31.54, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &1386998895981510699
 MonoBehaviour:
   m_ObjectHideFlags: 11

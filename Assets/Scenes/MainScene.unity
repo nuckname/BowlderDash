@@ -7128,7 +7128,7 @@ MonoBehaviour:
   cardHand: {fileID: 292756688}
   instructionText: {fileID: 0}
   inGameScoreUi: {fileID: 1168153564}
-  roundData: {fileID: 11400000, guid: b381180ba301739408bad257a533f347, type: 2}
+  roundData: {fileID: 11400000, guid: 9b97d23778ffc45478280cb2b71a7499, type: 2}
   sessionData:
     currentScore: 0
     currentRound: 0
@@ -24505,63 +24505,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1451123260}
   m_Mesh: {fileID: 1129465468817783128, guid: 9192c901fa35744439d718b5d0ecc4c2, type: 3}
---- !u!1001 &1451984237
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 19.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 37.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1833448931726485845, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6293628005653704301, guid: df060294e8de4b441b5a11a99274da85, type: 3}
-      propertyPath: m_Name
-      value: HammerUnit
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: df060294e8de4b441b5a11a99274da85, type: 3}
 --- !u!1 &1465932040
 GameObject:
   m_ObjectHideFlags: 0
@@ -27308,7 +27251,7 @@ MonoBehaviour:
   clickToThrowStartTransform: {fileID: 1631484123}
   pickUpBallTextTransform: {fileID: 1612237353}
   pickUpBallStartTransform: {fileID: 1531241981}
-  enableTutorial: 0
+  enableTutorial: 1
   moveSpeed: 500
   flickSpeed: 1000
   flickDistance: 1000
@@ -29047,7 +28990,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5d3cbb0c43df4b5392cf4ed46fcb7152, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossSpawnArea
   center: {x: 0, y: 0, z: 0}
   size: {x: 11.49, y: 0, z: 16.6}
@@ -37296,7 +37239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BallAudio
   releaseCue: {fileID: 11400000, guid: d47f936bb97a469c81b88427d33c0af0, type: 2}
   minimumReleaseVolume: 0.8
-  releaseSoundLeadTime: 0.56
+  releaseSoundLeadTime: 0.75
   rollingCue: {fileID: 11400000, guid: bd0e33edc19545c3af854fc8ec8d38f2, type: 2}
   minimumSupportUpDot: 0.45
   rollingStartSpeed: 1
@@ -38351,4 +38294,3 @@ SceneRoots:
   - {fileID: 570738659}
   - {fileID: 975023670}
   - {fileID: 1950891005}
-  - {fileID: 1451984237}
