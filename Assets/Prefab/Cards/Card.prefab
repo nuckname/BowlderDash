@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: -3148967189081000219}
   - component: {fileID: 4549560269222271486}
   - component: {fileID: 8251351676385688934}
+  - component: {fileID: 8639172954762065123}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -345,3 +346,17 @@ MonoBehaviour:
     m_Bits: 64
   invalidPlacementMaterial: {fileID: 2100000, guid: d0559ab28d3e69440898d03adad3e3b3, type: 2}
   previewHeightOffset: 1.5
+--- !u!114 &8639172954762065123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8994356602663114153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d447795ef78b4f909c59883710657922, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  hover: {fileID: 11400000, guid: 72b2341392644a99ba5e90e6efb5dbdb, type: 2}
+  click: {fileID: 11400000, guid: e3be1ed3ab424075a8667e17363f8d06, type: 2}

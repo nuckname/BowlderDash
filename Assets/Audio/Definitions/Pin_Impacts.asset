@@ -21,7 +21,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 39374a1b73fd05d44b4f1674965334e7, type: 3}
   output: {fileID: 24300003, guid: 007dc4751608482b8c546108d54fc866, type: 2}
   isUI: 0
-  gain: 0.39
+  gain: 0.6
   pitchRange: {x: 0.9, y: 1.1}
   priority: 24
   voiceLimit: 8

@@ -92,12 +92,14 @@ public class HandInteractionManager : MonoBehaviour
             {
                 if (i < handManager.cardsInHand.Count)
                 {
-                    if (selectedCardMovement != null && selectedCardMovement != handManager.cardsInHand[i])
+                    CardMovement targetCard = handManager.cardsInHand[i];
+                    if (selectedCardMovement != null && selectedCardMovement != targetCard)
                     {
                         selectedCardMovement.CancelDrag();
                     }
 
-                    handManager.cardsInHand[i].ForceStartDrag();
+                    targetCard.GetComponent<CardUIAudio>()?.PlayKeyboardActivation();
+                    targetCard.ForceStartDrag();
                 }
             }
         }
