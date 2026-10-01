@@ -7206,6 +7206,8 @@ MonoBehaviour:
     announcementText: Boss obstacle incoming!
     bossFloatingTextSpawnPoint: {fileID: 1642568387}
     revealDuration: 5
+  mainMenuState:
+    mainMenuTvs: {fileID: 1421863128}
   pinFloatingTextPrefab: {fileID: 2221769346915677457, guid: 22a3307074f48954094d5c3ec3288b29, type: 3}
   bossFloatingTextPrefab: {fileID: 2221769346915677457, guid: 30139dc5cd464d5419b72b57dd721caa, type: 3}
   maxLineGameObject: {fileID: 1805183575}
