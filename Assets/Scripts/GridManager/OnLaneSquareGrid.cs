@@ -12,7 +12,7 @@ public class OnLaneSquareGrid : MonoBehaviour
     [Header("Animation Settings")]
     public float ticketHeightOffset = 0.5f;
     
-    private int amountToSpawn = 0;
+    private int _amountToSpawn;
     private List<GameObject> spawnedGridObjects = new List<GameObject>();
     private List<Vector3> ticketOffsets = new List<Vector3>();
 
@@ -27,12 +27,12 @@ public class OnLaneSquareGrid : MonoBehaviour
 
     private void UpdateAmountPerRound(RoundStateManager manager)
     {
-        amountToTicketsSpawnOnLane.GetAmountToSpawn(manager.sessionData.currentRound);
+        _amountToSpawn = amountToTicketsSpawnOnLane.GetAmountToSpawn(manager.sessionData.currentRound);
     }
 
     private void SpawnGrid()
     {
-        int maxAllowedToSpawn = Mathf.Min(amountToSpawn, columns * rows);
+        int maxAllowedToSpawn = Mathf.Min(_amountToSpawn, columns * rows);
 
         for (int i = 0; i < maxAllowedToSpawn; i++)
         {
