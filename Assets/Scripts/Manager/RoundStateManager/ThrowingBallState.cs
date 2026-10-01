@@ -24,6 +24,17 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     private float pinSettleTimer;
     private bool rethrowPending;
 
+    private float rethrowZOffset;
+    
+    private float lastLaunchSpeed;
+    
+    [Header("Auto Rethrow")]
+    [SerializeField] private float minRethrowZOffset = -1.5f;
+    [SerializeField] private float maxRethrowZOffset = 1.5f;
+    [SerializeField] private float autoRethrowDelay = 2f;
+    
+    private Coroutine autoRethrowRoutine;
+    
     private bool _hasTutorialTextPlayed = false;
 
     public override void EnterState(RoundStateManager manager)
@@ -63,12 +74,20 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     
         manager.AllowPinsToFallOver(true);
 
-        RefreshBallSelection(manager);
+        if (isRethrow)
+        {
+            StartAutoRethrow(manager);
+        }
+        else
+        {
+            RefreshBallSelection(manager);
+        }
     }
-
-    public void PrepareForRethrow()
+    
+    public void PrepareForRethrow(float zOffset = 0f)
     {
         rethrowPending = true;
+        rethrowZOffset = zOffset;
     }
 
     public void RefreshBallSelection(RoundStateManager manager)
@@ -86,6 +105,24 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         {
             pathDrawer.Stop();
         }
+    }
+    
+    private void StartAutoRethrow(RoundStateManager manager)
+    {
+        cannotThrowBall = false;
+        ballHasBeenReleased = true;
+        manager.TurnOnBallMesh(true);
+        manager.TurnOnButtonToClickToGetBall(false);
+        pathDrawer.Stop();
+
+        OnInstructionUpdated("Auto Throw!");
+
+        if (autoRethrowRoutine != null)
+        {
+            manager.StopCoroutine(autoRethrowRoutine);
+        }
+
+        autoRethrowRoutine = manager.StartCoroutine(AutoRethrowRoutine(manager));
     }
 
     public override void UpdateState(RoundStateManager manager)
@@ -163,6 +200,19 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
             CompleteThrow(manager, "primary ball stalled");
         }
     }
+    
+    private System.Collections.IEnumerator AutoRethrowRoutine(RoundStateManager manager)
+    {
+        yield return new WaitForSeconds(autoRethrowDelay);
+
+        float launchSpeed = lastLaunchSpeed > 0f
+            ? lastLaunchSpeed
+            : (tuningData != null ? tuningData.forceMaxSpeed : 15f);
+
+        manager.ballController.ExecuteAutoThrow(launchSpeed, rethrowZOffset);
+        manager.StartBallCameraTracking();
+        autoRethrowRoutine = null;
+    }
 
     public override void FixedUpdateState(RoundStateManager manager) { }
 
@@ -183,6 +233,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         float t = (drawDuration <= taperStartTime) ? 1f : 1f - Mathf.InverseLerp(taperStartTime, taperEndTime, drawDuration);
         
         float launchSpeed = Mathf.Lerp(tuningData.forceMinSpeed, tuningData.forceMaxSpeed, t);
+        lastLaunchSpeed = launchSpeed;
         
         OnInstructionUpdated("Ball Released!");
         
@@ -214,6 +265,12 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     
     public override void ExitState(RoundStateManager manager)
     {
+        if (autoRethrowRoutine != null)
+        {
+            manager.StopCoroutine(autoRethrowRoutine);
+            autoRethrowRoutine = null;
+        }
+
         pathDrawer.Stop();
         
         manager.TurnOnButtonToClickToGetBall(false);

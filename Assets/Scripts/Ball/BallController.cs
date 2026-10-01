@@ -12,6 +12,8 @@ public class BallController : MonoBehaviour
     private Vector3 _startPos;
     private float _ballHeightOffset;
     
+    public Vector3 StartPos => _startPos;
+    
     private bool _isLaunched = false;
     private bool _isFollowingCurve = false;
     private List<CurvePoint> _currentPath;
@@ -135,6 +137,12 @@ public class BallController : MonoBehaviour
         Released?.Invoke(speed);
     }
     
+    public void ExecuteAutoThrow(float launchSpeed, float zOffset)
+    {
+        _currentPath = null;
+        StartCoroutine(AutoThrowSequence(launchSpeed, zOffset));
+    }
+    
     public void Apply45DegreeDeflection()
     {
         _isFollowingCurve = false;
@@ -147,6 +155,56 @@ public class BallController : MonoBehaviour
         _ballRb.linearVelocity = newDirection * currentSpeed;
     }
 
+    // ai https://share.gemini.google/xeTGREPt9NkP
+    private IEnumerator AutoThrowSequence(float speed, float zOffset)
+    {
+        _ballRb.isKinematic = true;
+
+        Vector3 firstLinePosition = new Vector3(_startPos.x + zOffset, _ballHeightOffset, _startPos.z);
+        transform.position = firstLinePosition;
+
+        float pullbackY = speed * tuningData.pullbackYScale;
+        float pullbackZ = speed * tuningData.pullbackZScale;
+
+        Vector3 pullbackPos = new Vector3(
+            firstLinePosition.x,
+            firstLinePosition.y + pullbackY,
+            firstLinePosition.z - pullbackZ
+        );
+
+        float windupDuration = 0.5f;
+        float distanceToStart = Vector3.Distance(pullbackPos, firstLinePosition);
+        float swingForwardDuration = distanceToStart / speed;
+        ReleaseScheduled?.Invoke(speed, windupDuration + swingForwardDuration);
+
+        float elapsed = 0f;
+        while (elapsed < windupDuration)
+        {
+            elapsed += Time.deltaTime;
+            float targetT = elapsed / windupDuration;
+            float curveVal = tuningData.swingCurve != null ? tuningData.swingCurve.Evaluate(targetT) : targetT;
+            transform.position = Vector3.Lerp(firstLinePosition, pullbackPos, curveVal);
+            yield return null;
+        }
+
+        elapsed = 0f;
+        while (elapsed < swingForwardDuration)
+        {
+            elapsed += Time.deltaTime;
+            float targetT = elapsed / swingForwardDuration;
+            float easeIn = targetT * targetT;
+            transform.position = Vector3.Lerp(pullbackPos, firstLinePosition, easeIn);
+            yield return null;
+        }
+
+        transform.position = firstLinePosition;
+        _ballRb.isKinematic = false;
+        _ballRb.linearVelocity = Vector3.forward * speed;
+        _isLaunched = true;
+        _isFollowingCurve = false;
+        Released?.Invoke(speed);
+    }
+    
     void FixedUpdate()
     {
         // Continuously apply velocity towards the target pin until we hit it

@@ -590,7 +590,7 @@ public class RoundStateManager : MonoBehaviour
         SwitchState(throwingBallState);
     }
 
-    public bool TryRethrowCurrentBall(float cameraSpeed)
+    public bool TryRethrowCurrentBall(float cameraSpeed, float zOffset = 0f)
     {
         if (currentState != throwingBallState || !HasSelectedBallForCurrentAttempt ||
             ballController == null || !ballController.IsLaunched)
@@ -599,7 +599,7 @@ public class RoundStateManager : MonoBehaviour
         }
 
         nextCameraSpeedOverride = cameraSpeed;
-        throwingBallState.PrepareForRethrow();
+        throwingBallState.PrepareForRethrow(zOffset);
         SwitchState(throwingBallState);
         return true;
     }
