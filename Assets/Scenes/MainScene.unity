@@ -7180,7 +7180,7 @@ MonoBehaviour:
   spawnBossObjectsState:
     bossOptions:
     - label: Ramp
-      roundSlot: 0
+      roundSlot: 1
       unlocked: 1
       prefab: {fileID: 5278486286205888367, guid: b019ee74ba7afdb4099fc790b9e61740, type: 3}
       spawnAreas:
@@ -7192,7 +7192,7 @@ MonoBehaviour:
       maximumScale: {x: 3.5, y: 2.5, z: 2}
       rotationOffset: {x: 90, y: -90, z: 0}
     - label: Two Hammers
-      roundSlot: 1
+      roundSlot: 0
       unlocked: 1
       prefab: {fileID: 969469908296863064, guid: df060294e8de4b441b5a11a99274da85, type: 3}
       spawnAreas:
@@ -21456,6 +21456,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1269767760}
   m_CullTransparentMesh: 1
+--- !u!1001 &1296643905
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.0771
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.0771
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.0771
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -28.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.6371
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.926742
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.37569827
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 44.135
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298809207691047986, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397101225637606627, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_Name
+      value: Tv.002
+      objectReference: {fileID: 0}
+    - target: {fileID: 6397101225637606627, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 85b8b38a2c556b64c95c64516d62cd1d, type: 3}
 --- !u!1 &1300988547
 GameObject:
   m_ObjectHideFlags: 0
@@ -26103,13 +26176,11 @@ MonoBehaviour:
   startingDeck:
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
-  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
-  - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
   drawPile: []
@@ -38294,3 +38365,4 @@ SceneRoots:
   - {fileID: 570738659}
   - {fileID: 975023670}
   - {fileID: 1950891005}
+  - {fileID: 1296643905}

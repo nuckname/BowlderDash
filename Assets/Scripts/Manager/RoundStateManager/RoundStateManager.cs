@@ -388,9 +388,9 @@ public class RoundStateManager : MonoBehaviour
     
     void OnGUI()
     {
-        GUI.color = Color.green;
-        string stateName = currentState != null ? currentState.GetType().Name : "NULL";
-        GUI.Label(new Rect(300, 10, 300, 20), $"Current State: {stateName}");
+       // GUI.color = Color.green;
+      //  string stateName = currentState != null ? currentState.GetType().Name : "NULL";
+       // GUI.Label(new Rect(300, 10, 300, 20), $"Current State: {stateName}");
     }
 
     public void AllowPinsToFallOver(bool allow)
