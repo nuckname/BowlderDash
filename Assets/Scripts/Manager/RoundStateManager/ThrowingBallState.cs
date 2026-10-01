@@ -31,7 +31,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     [Header("Auto Rethrow")]
     [SerializeField] private float minRethrowZOffset = -1.5f;
     [SerializeField] private float maxRethrowZOffset = 1.5f;
-    [SerializeField] private float autoRethrowDelay = 2f;
+    [SerializeField] private float autoRethrowDelay = 5f;
     
     private Coroutine autoRethrowRoutine;
     
@@ -114,8 +114,6 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         manager.TurnOnBallMesh(true);
         manager.TurnOnButtonToClickToGetBall(false);
         pathDrawer.Stop();
-
-        OnInstructionUpdated("Auto Throw!");
 
         if (autoRethrowRoutine != null)
         {

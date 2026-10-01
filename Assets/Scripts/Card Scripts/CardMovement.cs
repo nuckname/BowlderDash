@@ -62,6 +62,10 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         _imageComponent = GetComponent<Image>();
         _visualHandler = GameObject.FindGameObjectWithTag("VisualCardHandler").GetComponent<VisualCardsHandler>();
+        
+        // this changes the card hit box
+        RectTransform rect = _imageComponent.rectTransform;
+        rect.sizeDelta = new Vector2(210f, 330f);
     }
 
     void Start()

@@ -13,6 +13,8 @@ public class RethrowBallEffect : PinEffect
         float zOffset = GetARandomPinThatHasntFallenOver(stateManager, pinBase);
 
         stateManager.TryRethrowCurrentBall(_rethrowCameraSpeed, zOffset);
+        
+        
     }
 
     private float GetARandomPinThatHasntFallenOver(RoundStateManager stateManager, PinBase pinBase)
