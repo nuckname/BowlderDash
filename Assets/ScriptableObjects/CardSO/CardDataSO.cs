@@ -63,7 +63,6 @@ public class CardDataSO : ScriptableObject
        // sizeRangeX = new Vector2(0.83f, 0.83f);
        // sizeRangeY = new Vector2(0.83f, 0.83f);
     
-    
         cardID = name;
 
         switch (rarity)

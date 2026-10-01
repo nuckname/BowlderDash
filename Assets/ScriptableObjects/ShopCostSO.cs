@@ -9,7 +9,8 @@ public class ShopCostSO : ScriptableObject
         public string roundName;
         public int costModifier;
     }
-
+    
+  // Adds to the base cost of the card
     public RoundCost[] roundCostModifiers = new RoundCost[]
     {
         new RoundCost { roundName = "Round 0", costModifier = 1 },

@@ -27,6 +27,12 @@ public class HexGridExpander : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            shopManager.ToggleHexGridExpander(false);
+            return;
+        }
+
         if (TryGetExpansionData(out Vector2Int newAxial, out Vector3 newCenter))
         {
             if (visuals != null) visuals.ShowPreview(newCenter);

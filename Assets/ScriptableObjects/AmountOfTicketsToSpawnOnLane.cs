@@ -8,7 +8,7 @@ public class AmountOfTicketsToSpawnOnLane : ScriptableObject
         switch (currentRound)
         {
             case 0:
-                return 0;
+                return 1;
             case 1:
                 return 1;
             case 2:
