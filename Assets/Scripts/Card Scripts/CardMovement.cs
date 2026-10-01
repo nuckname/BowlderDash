@@ -33,7 +33,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     
     [Header("Play Area Threshold")]
     [Tooltip("How high up the screen we the spawn the pin, in pixels")]
-    [SerializeField] private float playAreaThresholdY = 500f; 
+    [SerializeField] private float playAreaThresholdY; 
     
     [HideInInspector] public bool isPreviewingInWorld = false;
 
@@ -71,6 +71,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             hotkeyText.gameObject.SetActive(false);
         }
+
+        playAreaThresholdY = 450f;
 
         if (!instantiateVisual || cardData == null || cardData.cardVisualPrefab == null)
             return;

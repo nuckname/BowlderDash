@@ -37,56 +37,67 @@ public class CardToWorldSpawner : MonoBehaviour
     {
         if (_cardMovement.isPreviewingInWorld && _spawnedWorldObjects.Count > 0)
         {
-            // Move the WORLD object using Raycasting
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
+            UpdatePreviewPosition();
+        }
+    }
+
+    private void UpdatePreviewPosition()
+    {
+        // Move the WORLD object using Raycasting
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
+        {
+            HexCell originCell = _grid.GetNearestCell(hit.point);
+            if (originCell != null)
             {
-                HexCell originCell = _grid.GetNearestCell(hit.point);
-                var pattern = GetActivePattern();
+                _currentHoveredCell = originCell;
+            }
+        }
 
-                if (originCell != null)
+        List<PatternPiece> pattern = GetActivePattern();
+
+        if (_currentHoveredCell != null)
+        {
+            _isValidPlacement = true; // Assume true until a specific pin fails
+
+            for (int i = 0; i < pattern.Count; i++)
+            {
+                if (i >= _spawnedWorldObjects.Count) continue;
+
+                HexCell targetCell = _grid.GetCellWithOffset(_currentHoveredCell, pattern[i].offset);
+                
+                // Check if THIS specific pattern piece is off-grid or occupied
+                bool isThisPinValid = targetCell != null && targetCell.occupant == null;
+                
+                if (!isThisPinValid)
                 {
-                    _currentHoveredCell = originCell;
-                    _isValidPlacement = true; // Assume true until a specific pin fails
-
-                    for (int i = 0; i < pattern.Count; i++)
-                    {
-                        if (i >= _spawnedWorldObjects.Count) continue;
-
-                        HexCell targetCell = _grid.GetCellWithOffset(originCell, pattern[i].offset);
-                        
-                        // Check if THIS specific pattern piece is off-grid or occupied
-                        bool isThisPinValid = targetCell != null && targetCell.occupant == null;
-                        
-                        if (!isThisPinValid)
-                        {
-                            _isValidPlacement = false; // Block overall placement if any pin fails
-                        }
-
-                        Vector3 offset = _grid.GetWorldOffsetFromAxial(pattern[i].offset);
-                        
-                        _spawnedWorldObjects[i].SetActive(true);
-                        _spawnedWorldObjects[i].transform.position = new Vector3(
-                            _currentHoveredCell.center.x + offset.x, 
-                            _currentHoveredCell.center.y + previewHeightOffset + offset.y, 
-                            _currentHoveredCell.center.z + offset.z);
-
-                        // Only update visuals if the validity state for this specific pin changed
-                        if (_pinValidityStates.Count > i && _pinValidityStates[i] != isThisPinValid)
-                        {
-                            UpdatePreviewVisuals(_spawnedWorldObjects[i], isThisPinValid);
-                            _pinValidityStates[i] = isThisPinValid;
-                        }
-                    }
+                    _isValidPlacement = false; // Block overall placement if any pin fails
                 }
-                else
+
+                Vector3 offset = _grid.GetWorldOffsetFromAxial(pattern[i].offset);
+                
+                _spawnedWorldObjects[i].SetActive(true);
+                _spawnedWorldObjects[i].transform.position = new Vector3(
+                    _currentHoveredCell.center.x + offset.x, 
+                    _currentHoveredCell.center.y + previewHeightOffset + offset.y, 
+                    _currentHoveredCell.center.z + offset.z);
+
+                // Only update visuals if the validity state for this specific pin changed
+                if (_pinValidityStates.Count > i && _pinValidityStates[i] != isThisPinValid)
                 {
-                    // Hide preview entirely if we haven't hit a valid cell yet this drag
-                    for (int i = 0; i < _spawnedWorldObjects.Count; i++)
-                    {
-                        _spawnedWorldObjects[i].SetActive(false);
-                    }
+                    UpdatePreviewVisuals(_spawnedWorldObjects[i], isThisPinValid);
+                    _pinValidityStates[i] = isThisPinValid;
                 }
+            }
+        }
+        else
+        {
+            _isValidPlacement = false;
+
+            // Hide preview entirely if we haven't hit a valid cell yet this drag
+            for (int i = 0; i < _spawnedWorldObjects.Count; i++)
+            {
+                _spawnedWorldObjects[i].SetActive(false);
             }
         }
     }
@@ -94,6 +105,7 @@ public class CardToWorldSpawner : MonoBehaviour
     private void CreatePreview()
     {
         _currentHoveredCell = null;
+        _isValidPlacement = false;
         _originalMaterials.Clear();
         _pinValidityStates.Clear();
 
@@ -126,6 +138,8 @@ public class CardToWorldSpawner : MonoBehaviour
                     _pinValidityStates.Add(true); // Default to true when spawned
                 }
             }
+
+            UpdatePreviewPosition();
         }
     }
 
@@ -173,6 +187,7 @@ public class CardToWorldSpawner : MonoBehaviour
             bool reserved = _grid.TryReserveCell(targetCells[i], _spawnedWorldObjects[i].transform);
             if (reserved)
             {
+                _spawnedWorldObjects[i].SetActive(true);
                 UpdatePreviewVisuals(_spawnedWorldObjects[i], true);
 
                 // FIX: Force the pin down from the previewHeightOffset so it sits perfectly on the hex floor

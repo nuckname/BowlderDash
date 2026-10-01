@@ -14,8 +14,6 @@ public class RoundOverState : RoundBaseState
         manager.AddBallThrownToSession();
         manager.ClearSelectedBallForCurrentAttempt();
         
-        manager.TurnOnBallMesh(false);
- 
         foreach (PinBase pin in manager.allActivePinsInTheFrame)
         {
             // If pin HAS fallen over: Check its onFallEffects list
@@ -23,7 +21,7 @@ public class RoundOverState : RoundBaseState
             {
                 foreach (PinEffect effect in pin.onFallEffects)
                 {
-                    if (effect is ScoreMultiplierEffect || effect is MultiEffect)
+                    if (effect is ScoreMultiplierEffect || effect is MultiEffect || effect is AdjacentPinEffect)
                     {
                         manager.pinsToScore.Add(pin);
                         break; // Stop searching this pin since we found one and added it

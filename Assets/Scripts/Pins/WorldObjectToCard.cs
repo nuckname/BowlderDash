@@ -25,7 +25,7 @@ public class WorldObjectToCard : MonoBehaviour
             _grid = hexManager.GetComponent<HexGrid>();
         }
     }
-
+    
     public void SetupCardData(CardDataSO data, List<WorldObjectToCard> peers)
     {
         cardData = data;

@@ -268,6 +268,7 @@ public class ScoringState : RoundBaseState
 
     public override void ExitState(RoundStateManager manager)
     {
+        manager.TurnOnBallMesh(false);
         ClearFallenOverPins(manager);
     }
     

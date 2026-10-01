@@ -7151,7 +7151,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b651e3ec529500b428c7ecfbfc79cc93, type: 2}
   - {fileID: 11400000, guid: 6fbb79da6015dc24cab7bbb24d014476, type: 2}
   - {fileID: 11400000, guid: 683ce16cabbc4fe439a85ab6e39a7542, type: 2}
-  - {fileID: 11400000, guid: 22454bef1fd84f24c8c90078e1a743e4, type: 2}
+  - {fileID: 11400000, guid: a26218e724e8b2b40a9e10e190e201a2, type: 2}
   - {fileID: 11400000, guid: ff87caae4b8a5bb4c8cc12bdf4a20d51, type: 2}
   - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
   - {fileID: 11400000, guid: baa8b01a446067b44a19b9f91ad1c627, type: 2}
@@ -26185,6 +26185,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
+  - {fileID: 11400000, guid: a26218e724e8b2b40a9e10e190e201a2, type: 2}
+  - {fileID: 11400000, guid: f95fbd7d54ddc85489949d0f13bfc713, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
