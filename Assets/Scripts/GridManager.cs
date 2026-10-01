@@ -30,6 +30,25 @@ public class GridManager : MonoBehaviour
         hexGridVisuals.RefreshColors();
     }
     
+    public int GetAdjacentPinCount(PinBase pin)
+    {
+        if (pin == null) return 0;
+
+        HexCell originCell = occupancy.GetCellByOccupant(pin.transform);
+        if (originCell == null) return 0;
+
+        int count = 0;
+        foreach (HexCell neighbor in grid.GetNeighborCells(originCell))
+        {
+            if (neighbor.pinOccupant != null && neighbor.pinOccupant != pin)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+    
     public HexCell GetCellWithOffset(HexCell origin, Vector2Int axialOffset) => grid.GetCellWithOffset(origin, axialOffset);
     public Vector2Int GetAxialCoordinate(HexCell cell) => grid.GetAxialCoordinate(cell);
     public bool TryCollectTicketForPin(PinBase pin, out int val) => gridTicketManager.TryCollectTicketForPin(pin, out val);

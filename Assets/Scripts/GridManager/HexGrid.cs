@@ -13,6 +13,16 @@ public class RoundOffset
 // Legacy Code
 public class HexGrid : MonoBehaviour
 {
+    private static readonly Vector2Int[] AxialNeighborOffsets = new Vector2Int[]
+    {
+        new Vector2Int(-1, 0),
+        new Vector2Int(1, 0),
+        new Vector2Int(0, -1),
+        new Vector2Int(0, 1),
+        new Vector2Int(-1, 1),
+        new Vector2Int(1, -1)
+    };
+    
     [Header("Grid Settings")]
     public int columns = 10;
     public int rows = 5;
@@ -88,6 +98,20 @@ public class HexGrid : MonoBehaviour
             {
                 Vector3 worldPos = transform.position + selectedOffset + (localCenters[idx++] - localCenter);
                 cells.Add(new HexCell(c, r, worldPos));
+            }
+        }
+    }
+    
+    public IEnumerable<HexCell> GetNeighborCells(HexCell origin)
+    {
+        if (origin == null) yield break;
+
+        foreach (Vector2Int offset in AxialNeighborOffsets)
+        {
+            HexCell neighbor = GetCellWithOffset(origin, offset);
+            if (neighbor != null)
+            {
+                yield return neighbor;
             }
         }
     }

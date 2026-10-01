@@ -7,6 +7,7 @@ public class HexCell
     public int row;
     public Vector3 center;
     public Transform occupant;
+    public PinBase pinOccupant;
 
     public HexCell(int col, int row, Vector3 center)
     {

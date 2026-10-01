@@ -18,6 +18,7 @@ public class GridOccupancy : MonoBehaviour
 
         ReleaseCell(requester);
         target.occupant = requester;
+        target.pinOccupant = requester.GetComponent<PinBase>();
         return true;
     }
 
@@ -28,6 +29,7 @@ public class GridOccupancy : MonoBehaviour
             if (cell.occupant == requester)
             {
                 cell.occupant = null;
+                cell.pinOccupant = null;
                 return;
             }
         }
@@ -35,7 +37,11 @@ public class GridOccupancy : MonoBehaviour
 
     public void ClearAllOccupants()
     {
-        foreach (var cell in grid.Cells) cell.occupant = null;
+        foreach (var cell in grid.Cells)
+        {
+            cell.occupant = null;
+            cell.pinOccupant = null;
+        }
     }
 
     public HexCell GetCellByOccupant(Transform t)
