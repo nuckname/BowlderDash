@@ -21,6 +21,11 @@ MonoBehaviour:
   - {fileID: 133303568, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
   desiredLayout: 3
   cardTintCardRarity: {r: 1, g: 0.84, b: 0, a: 1}
+  useCustomRandomisation: 1
+  zPositionRange: {x: -3, y: -30}
+  zRotationRange: {x: -5, y: -5}
+  sizeRangeX: {x: 0.83, y: 0.83}
+  sizeRangeY: {x: 0.73, y: 0.73}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 2bd9d418fc5d22941b45278dfa082035, type: 3}

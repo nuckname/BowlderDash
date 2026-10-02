@@ -90,6 +90,10 @@ public class GridTicketManager : MonoBehaviour
         collectedValue = ticket.value;
         Destroy(ticket.visual);
         activeTickets.Remove(ticket);
+        
+        // :)
+        FindObjectOfType<RoundStateManager>().SpawnPinFloatingText("+1 Ticket", new Vector3(pin.transform.position.x, pin.transform.position.y + 3, pin.transform.position.z));
+        
         return true;
     }
 
