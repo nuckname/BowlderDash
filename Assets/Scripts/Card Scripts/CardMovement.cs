@@ -8,7 +8,7 @@ using UnityEngine.UI;
 // https://www.youtube.com/watch?v=I1dAZuWurw4
 // https://github.com/mixandjam/balatro-feel
 
-public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
+public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     private Image _imageComponent;
     [SerializeField] private bool instantiateVisual = true;
@@ -335,11 +335,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         _pointerUpTime = Time.time;
 
-        PointerUpEvent.Invoke(this, _pointerUpTime - _pointerDownTime > .2f);
-
-        if (_pointerUpTime - _pointerDownTime > .2f)
-            return;
-
         if (wasDragged)
             return;
 
@@ -348,8 +343,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
         if (selected)
         {
-            _preSelectionPosition = transform.localPosition;
-            transform.localPosition += (cardAnimator.transform.up * selectionOffset);
+            //_preSelectionPosition = transform.localPosition;
+           // transform.localPosition += (cardAnimator.transform.up * selectionOffset);
         }
         else
         {
