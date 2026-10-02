@@ -713,13 +713,11 @@ public class RoundStateManager : MonoBehaviour
     
     public void ClickSettingsButton()
     {
-        if (currentState != mainMenuState) return;
         MoveCamera(CameraLocation.SettingCameraLocation);
     }
     
     public void ClickShowMainMenu()
     {
-        if (currentState != mainMenuState) return;
         MoveCamera(CameraLocation.MainMenuCameraLocation);
     }
     
