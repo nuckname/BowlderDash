@@ -44,10 +44,12 @@ public class ScoringState : RoundBaseState
     { 
         if (hasScored) return;
         
+        /*
         if (Input.GetMouseButtonDown(0))
         {
             _skipAnimation = true;
         }
+        */
         
         if (!pinsHaveSettled)
         {

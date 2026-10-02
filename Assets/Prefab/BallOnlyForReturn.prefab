@@ -166,4 +166,4 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 98e40c228db4a4972bfe9df5f58bdde5, type: 2}
   ballRenderer: {fileID: 21536282490668571}
   hueChangeRange: {x: 0, y: 217}
-  showDebugVisuals: 1
+  getCurrentBallMaterial: {fileID: 0}
