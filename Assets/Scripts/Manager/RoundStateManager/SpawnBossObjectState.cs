@@ -146,6 +146,26 @@ public class SpawnBossObjectsState : RoundBaseState
 
         return true;
     }
+    
+    public void SetBossObjectActive(bool isActive)
+    {
+        if (spawnedBossObject == null) return;
+
+        foreach (Renderer r in spawnedBossObject.GetComponentsInChildren<Renderer>(true))
+        {
+            r.enabled = isActive;
+        }
+
+        foreach (Collider c in spawnedBossObject.GetComponentsInChildren<Collider>(true))
+        {
+            c.enabled = isActive;
+        }
+
+        foreach (BossHammerSwingMotor motor in spawnedBossObject.GetComponentsInChildren<BossHammerSwingMotor>(true))
+        {
+            motor.SetSuspended(!isActive);
+        }
+    }
 
     private static void SpawnHammer(GameObject prefab, Vector3 pivotPosition, Quaternion rotation,
         Transform pairRoot, bool swingTowardPositiveLimit)

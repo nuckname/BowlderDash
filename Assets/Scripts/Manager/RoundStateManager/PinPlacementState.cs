@@ -22,6 +22,8 @@ public class PinPlacementState : RoundBaseState
 
         manager.PinPlacementVisuals(true);
         
+        manager.spawnBossObjectsState.SetBossObjectActive(false);
+        
         manager.MoveCamera(CameraLocation.PinCameraLocation);
         manager.TurnOnCardHand(true);
         

@@ -124,6 +124,7 @@ public class RoundStateManager : MonoBehaviour
     {
         PhysicsImpactAudio.SetWorldEligible(false);
         GameAudio.Instance?.RestoreLeaderboardPause(this);
+        
         if (IsLeaderboardActive)
         {
             RestartFromLeaderboard();

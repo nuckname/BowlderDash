@@ -22,11 +22,30 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
     private Quaternion restRelativeRotation;
     private Vector3 hingeAxisInAnchorSpace;
     private Vector3 angleReference;
+    
+    private Vector3 initialLocalPosition;
+    private Quaternion initialLocalRotation;
 
     private void Awake()
     {
         hinge = GetComponent<HingeJoint>();
         body = GetComponent<Rigidbody>();
+        initialLocalPosition = transform.localPosition;
+        initialLocalRotation = transform.localRotation;
+
+        if (hinge != null)
+        {
+            hinge.autoConfigureConnectedAnchor = false;
+        }
+        
+        Quaternion anchorRotation = hinge.connectedBody != null
+            ? hinge.connectedBody.rotation
+            : Quaternion.identity;
+        restRelativeRotation = Quaternion.Inverse(anchorRotation) * body.rotation;
+        hingeAxisInAnchorSpace = (restRelativeRotation * hinge.axis).normalized;
+        angleReference = Vector3.ProjectOnPlane(Vector3.up, hingeAxisInAnchorSpace).normalized;
+        if (angleReference.sqrMagnitude < 0.001f)
+            angleReference = Vector3.ProjectOnPlane(Vector3.right, hingeAxisInAnchorSpace).normalized;
     }
 
     private void OnEnable()
@@ -38,6 +57,17 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
         warnedAboutLimits = false;
         warnedAboutInvalidAngle = false;
         warnedAboutInvalidBody = false;
+        
+        transform.localPosition = initialLocalPosition;
+        transform.localRotation = initialLocalRotation;
+        body.position = transform.position;
+        body.rotation = transform.rotation;
+        
+        if (!body.isKinematic)
+        {
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+        }
 
         Quaternion anchorRotation = hinge.connectedBody != null
             ? hinge.connectedBody.rotation
@@ -47,6 +77,54 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
         angleReference = Vector3.ProjectOnPlane(Vector3.up, hingeAxisInAnchorSpace).normalized;
         if (angleReference.sqrMagnitude < 0.001f)
             angleReference = Vector3.ProjectOnPlane(Vector3.right, hingeAxisInAnchorSpace).normalized;
+    }
+    
+    public void SetSuspended(bool suspended)
+    {
+        if (hinge == null) hinge = GetComponent<HingeJoint>();
+        if (body == null) body = GetComponent<Rigidbody>();
+
+        if (suspended)
+        {
+            hinge.useMotor = false;
+            body.isKinematic = true;
+            transform.localPosition = initialLocalPosition;
+            transform.localRotation = initialLocalRotation;
+            body.position = transform.position;
+            body.rotation = transform.rotation;
+        }
+        else
+        {
+            transform.localPosition = initialLocalPosition;
+            transform.localRotation = initialLocalRotation;
+            body.position = transform.position;
+            body.rotation = transform.rotation;
+            body.isKinematic = false;
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+            direction = startTowardPositiveLimit ? 1 : -1;
+            Physics.SyncTransforms();
+        }
+    }
+    
+    private void ResetToInitialPose()
+    {
+        transform.localPosition = initialLocalPosition;
+        transform.localRotation = initialLocalRotation;
+
+        if (body != null)
+        {
+            body.position = transform.position;
+            body.rotation = transform.rotation;
+
+            if (!body.isKinematic)
+            {
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+            }
+        }
+
+        Physics.SyncTransforms();
     }
 
     private void FixedUpdate()
@@ -132,6 +210,7 @@ public sealed class BossHammerSwingMotor : MonoBehaviour
 
     public void SetSwingDirection(bool towardPositiveLimit)
     {
+        startTowardPositiveLimit = towardPositiveLimit;
         direction = towardPositiveLimit ? 1 : -1;
     }
 

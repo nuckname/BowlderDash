@@ -49,6 +49,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         flightTimer = 0f;
         stallTimer = 0f;
         pinSettleTimer = 0f;
+        
+        manager.spawnBossObjectsState.SetBossObjectActive(true);
 
         if (!isRethrow)
         {
