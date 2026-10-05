@@ -6867,7 +6867,7 @@ MonoBehaviour:
   spawnBossObjectsState:
     bossOptions:
     - label: Ramp
-      roundSlot: 1
+      roundSlot: 0
       unlocked: 1
       prefab: {fileID: 5278486286205888367, guid: b019ee74ba7afdb4099fc790b9e61740, type: 3}
       spawnAreas:
@@ -6879,7 +6879,7 @@ MonoBehaviour:
       maximumScale: {x: 3.5, y: 2.5, z: 2}
       rotationOffset: {x: 90, y: -90, z: 0}
     - label: Two Hammers
-      roundSlot: 0
+      roundSlot: 1
       unlocked: 1
       prefab: {fileID: 969469908296863064, guid: df060294e8de4b441b5a11a99274da85, type: 3}
       spawnAreas:
