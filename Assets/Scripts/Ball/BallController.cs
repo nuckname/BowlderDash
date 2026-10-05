@@ -20,6 +20,7 @@ public class BallController : MonoBehaviour
 
     private Transform _homingTarget;
     private float _homingSpeed;
+    private Coroutine _hammerHitRoutine;
 
     public bool IsLaunched => _isLaunched;
     public float LinearSpeedSquared => _ballRb != null ? _ballRb.linearVelocity.sqrMagnitude : 0f;
@@ -38,6 +39,7 @@ public class BallController : MonoBehaviour
     public void ResetBall()
     {
         StopAllCoroutines();
+        _hammerHitRoutine = null;
         ReleaseSchedulingCancelled?.Invoke();
         ResetPerformed?.Invoke();
         _isLaunched = false;
@@ -71,11 +73,38 @@ public class BallController : MonoBehaviour
     
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.GetComponentInParent<BossHammerSwingMotor>() != null)
+        {
+            _isFollowingCurve = false;
+            _homingTarget = null;
+
+            if (_hammerHitRoutine == null)
+            {
+                _hammerHitRoutine = StartCoroutine(SwitchToRoundOverAfterDelay(2f));
+            }
+            return;
+        }
+
         // Stop homing once we actually hit the pin we were tracking, 
         // letting physics take over and go straight/bounce
         if (_homingTarget != null && collision.transform == _homingTarget)
         {
             _homingTarget = null;
+        }
+    }
+
+    private IEnumerator SwitchToRoundOverAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _hammerHitRoutine = null;
+
+        GameObject managerObj = GameObject.FindGameObjectWithTag("RoundManager");
+        if (managerObj != null && managerObj.TryGetComponent(out RoundStateManager manager))
+        {
+            if (manager.currentState == manager.throwingBallState)
+            {
+                manager.SwitchState(manager.roundOverState);
+            }
         }
     }
 

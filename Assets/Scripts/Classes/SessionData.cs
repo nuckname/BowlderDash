@@ -64,7 +64,7 @@ public class SessionData
     public void StartBrandNewSession()
     {
         currentScore = 0;
-        currentRound = 0;
+        currentRound = 4;
         ballsThrown = 0;
         tickets = 0;
         totalScore = 0;
