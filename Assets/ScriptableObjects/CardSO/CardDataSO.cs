@@ -68,13 +68,13 @@ public class CardDataSO : ScriptableObject
         switch (rarity)
         {
             case CardRarity.Common:
-                baseCost = 3;
+                baseCost = 2;
                 break;
             case CardRarity.Rare:
                 baseCost = 3;
                 break;
             case CardRarity.Legendary:
-                baseCost = 4;
+                baseCost = 5;
                 break;
         }
     }

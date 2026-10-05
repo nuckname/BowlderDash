@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RethrowBallEffect : PinEffect
 {
-    private float _rethrowCameraSpeed = 0.75f; 
+    private float _rethrowCameraSpeed = 1f; 
     private float zOffset;
     
     public override void Execute(PinBase pinBase, Collider target = null)
@@ -13,8 +13,6 @@ public class RethrowBallEffect : PinEffect
         float zOffset = GetARandomPinThatHasntFallenOver(stateManager, pinBase);
 
         stateManager.TryRethrowCurrentBall(_rethrowCameraSpeed, zOffset);
-        
-        
     }
 
     private float GetARandomPinThatHasntFallenOver(RoundStateManager stateManager, PinBase pinBase)

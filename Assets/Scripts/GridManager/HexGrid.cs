@@ -44,14 +44,16 @@ public class HexGrid : MonoBehaviour
         cells.Clear();
         float w = Mathf.Sqrt(3f) * hexSize; 
         float h = 2f * hexSize; 
+
         float rowStep = h * 0.75f;
 
         var localCenters = new List<Vector3>();
 
         for (int r = 0; r < rows; r++)
         {
-            int colsThisRow = Mathf.Max(1, columns - (r % 2));
-            for (int c = 0; c < colsThisRow; c++)
+            int colsThisRow = Mathf.Max(1, columns - r);
+            int startCol = r / 2;
+            for (int c = startCol; c < startCol + colsThisRow; c++)
             {
                 float x = (c + 0.5f * (r % 2)) * w;
                 float z = -r * rowStep;
@@ -93,8 +95,9 @@ public class HexGrid : MonoBehaviour
 
         for (int r = 0; r < rows; r++)
         {
-            int colsThisRow = Mathf.Max(1, columns - (r % 2));
-            for (int c = 0; c < colsThisRow; c++)
+            int colsThisRow = Mathf.Max(1, columns - r);
+            int startCol = r / 2;
+            for (int c = startCol; c < startCol + colsThisRow; c++)
             {
                 Vector3 worldPos = transform.position + selectedOffset + (localCenters[idx++] - localCenter);
                 cells.Add(new HexCell(c, r, worldPos));
