@@ -41,6 +41,13 @@ public class ShopUIManager : MonoBehaviour
     public Transform tvSpawnPoint;
     public GameObject ticketCostTvPrefab;
     private GameObject _spawnedTicketCostTv;
+
+    [Header("Second TV Spawn")]
+    public Transform secondTvSpawnPoint;
+    public GameObject secondTvPrefab;
+    public Vector3 secondTvRotationOffset = new Vector3(0, 90, 90);
+    private GameObject _spawnedSecondTv;
+    private bool _hasShownSecondTv = false;
     
     [Header("TV Game Objects")] 
     [SerializeField] private GameObject throwBallTv;
@@ -267,6 +274,13 @@ public class ShopUIManager : MonoBehaviour
                 // Changed this part to use the new helper method
                 UpdateGridTVText();
             }
+
+            if (!_hasShownSecondTv && secondTvPrefab != null && secondTvSpawnPoint != null)
+            {
+                _spawnedSecondTv = Instantiate(secondTvPrefab, secondTvSpawnPoint.position, secondTvSpawnPoint.rotation);
+                _spawnedSecondTv.transform.rotation = Quaternion.Euler(secondTvRotationOffset);
+                _hasShownSecondTv = true;
+            }
         }
         else
         {
@@ -277,6 +291,11 @@ public class ShopUIManager : MonoBehaviour
             if (_spawnedTicketCostTv != null)
             {
                 Destroy(_spawnedTicketCostTv);
+            }
+
+            if (_spawnedSecondTv != null)
+            {
+                Destroy(_spawnedSecondTv);
             }
 
             UpdateGridButtonText();
@@ -354,6 +373,12 @@ public class ShopUIManager : MonoBehaviour
         {
             totalGridUpgrades++;
             UpdateGridTVText();
+
+            if (_spawnedSecondTv != null)
+            {
+                Destroy(_spawnedSecondTv);
+            }
+
             return true;
         }
         
