@@ -78,6 +78,7 @@ public class HandInteractionManager : MonoBehaviour
         }
         
         HandleCardSwapping();
+        
         HandleHotkeyInput();
         //UpdateHotkeyVisuals();
     }

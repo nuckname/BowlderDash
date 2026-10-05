@@ -379,10 +379,11 @@ MonoBehaviour:
       data:
         thrustAcceleration: 50
         initialImpulse: 8
-        launchAngle: 3.6
+        launchAngle: 6
         launchDuration: 1.2
-        randomizeAngleDirection: 1
+        aimAtStandingPin: 1
         holdYDuration: 0.2
+        yFreezeStrength: 0.247
         rotationDuration: 0.15
         launchSpeed: 25
         hitParticleEffect: {fileID: 4114803238593693726}

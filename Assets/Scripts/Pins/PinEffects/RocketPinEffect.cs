@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 // ai https://share.gemini.google/JAjIhzZsHznq
+// https://share.gemini.google/Y5123dc8Qtg0
 
 [Serializable]
 public class RocketPinEffect : PinEffect
@@ -12,9 +13,10 @@ public class RocketPinEffect : PinEffect
     [SerializeField] private float initialImpulse = 8f;
     [SerializeField] [Range(0f, 85f)] private float launchAngle = 15f;
     [SerializeField] private float launchDuration = 1.2f;
-    [SerializeField] private bool randomizeAngleDirection = true;
+    [SerializeField] private bool aimAtStandingPin = true;
 
     [SerializeField] private float holdYDuration = 0.2f;
+    [SerializeField] [Range(0f, 1f)] private float yFreezeStrength = 0.5f;
     [SerializeField] private float rotationDuration = 0.15f;
     [SerializeField] private float launchSpeed = 25f;
     
@@ -38,7 +40,7 @@ public class RocketPinEffect : PinEffect
         // Ensure PinBase doesn't lock rotation upright during flight
         pinBase.AllowPinToFallOver = true;
 
-        Vector3 launchDirection = CalculateLaunchDirection(pinBase.transform, target);
+        Vector3 launchDirection = CalculateLaunchDirection(pinBase, target);
 
         if (_launchCoroutine != null)
         {
@@ -56,15 +58,14 @@ public class RocketPinEffect : PinEffect
         }
     }
 
-    private Vector3 CalculateLaunchDirection(Transform pinTransform, Collider target)
+    private Vector3 CalculateLaunchDirection(PinBase sourcePin, Collider target)
     {
+        Transform pinTransform = sourcePin.transform;
         Vector3 horizontalDir;
 
-        if (randomizeAngleDirection)
+        if (aimAtStandingPin && TryGetStandingPinDirection(sourcePin, out Vector3 standingPinDir))
         {
-            Vector2 randomCircle = UnityEngine.Random.insideUnitCircle.normalized;
-            if (randomCircle == Vector2.zero) randomCircle = Vector2.up;
-            horizontalDir = new Vector3(randomCircle.x, 0f, randomCircle.y);
+            horizontalDir = standingPinDir;
         }
         else if (target != null)
         {
@@ -81,6 +82,35 @@ public class RocketPinEffect : PinEffect
         return Quaternion.AngleAxis(launchAngle, tiltAxis) * Vector3.up;
     }
 
+    private bool TryGetStandingPinDirection(PinBase sourcePin, out Vector3 direction)
+    {
+        direction = Vector3.zero;
+        PinBase[] allPins = UnityEngine.Object.FindObjectsOfType<PinBase>();
+
+        PinBase closestPin = null;
+        float closestSqrDist = float.MaxValue;
+        Vector3 sourcePos = sourcePin.transform.position;
+
+        foreach (PinBase pin in allPins)
+        {
+            if (pin == null || pin == sourcePin || !pin.gameObject.activeInHierarchy) continue;
+            if (pin.IsFallen || pin.hasEnterTheHoleAtTheBack) continue;
+
+            Vector3 offset = pin.transform.position - sourcePos;
+            offset.y = 0f;
+            float sqrDist = offset.sqrMagnitude;
+
+            if (sqrDist > 0.001f && sqrDist < closestSqrDist)
+            {
+                closestSqrDist = sqrDist;
+                closestPin = pin;
+                direction = offset.normalized;
+            }
+        }
+
+        return closestPin != null;
+    }
+
     private IEnumerator RocketThrustRoutine(Transform pinTransform, Rigidbody rb, Vector3 launchDirection)
     {
         rb.isKinematic = false;
@@ -90,10 +120,10 @@ public class RocketPinEffect : PinEffect
         float lockedY = pinTransform.position.y;
 
         // Stop ball impact from knocking or spinning the pin off course
-        rb.linearVelocity = Vector3.zero;
+        rb.linearVelocity *= (1f - yFreezeStrength);
         rb.angularVelocity = Vector3.zero;
         rb.useGravity = false;
-        rb.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         // Hold the Y position briefly on hit
         float holdElapsed = 0f;
@@ -101,10 +131,7 @@ public class RocketPinEffect : PinEffect
 
         while (holdElapsed < holdYDuration && rb != null)
         {
-            Vector3 pos = rb.position;
-            pos.y = lockedY;
-            rb.position = pos;
-            rb.linearVelocity = Vector3.zero;
+            ApplySoftYFreeze(rb, lockedY);
 
             holdElapsed += Time.fixedDeltaTime;
             yield return fixedWait;
@@ -120,10 +147,7 @@ public class RocketPinEffect : PinEffect
             rotElapsed += Time.fixedDeltaTime;
             float t = rotationDuration > 0f ? Mathf.Clamp01(rotElapsed / rotationDuration) : 1f;
 
-            Vector3 pos = rb.position;
-            pos.y = lockedY;
-            rb.position = pos;
-            rb.linearVelocity = Vector3.zero;
+            ApplySoftYFreeze(rb, lockedY);
             rb.MoveRotation(Quaternion.Slerp(startRot, targetRot, t));
 
             yield return fixedWait;
@@ -152,6 +176,27 @@ public class RocketPinEffect : PinEffect
         }
 
         _launchCoroutine = null;
+    }
+
+    private void ApplySoftYFreeze(Rigidbody rb, float minLockedY)
+    {
+        Vector3 velocity = rb.linearVelocity;
+        velocity.x = Mathf.Lerp(velocity.x, 0f, yFreezeStrength);
+        velocity.z = Mathf.Lerp(velocity.z, 0f, yFreezeStrength);
+
+        if (rb.position.y < minLockedY)
+        {
+            // Gently keep the pin from sinking below its starting height
+            float recoveryVelocityY = (minLockedY - rb.position.y) / Time.fixedDeltaTime;
+            velocity.y = Mathf.Lerp(velocity.y, recoveryVelocityY, yFreezeStrength);
+        }
+        else
+        {
+            // Dampen upward velocity without snapping the pin back down onto the ball
+            velocity.y = Mathf.Lerp(velocity.y, 0f, yFreezeStrength);
+        }
+
+        rb.linearVelocity = velocity;
     }
     
     private IEnumerator PlayParticlesRoutine(PinBase pinBase)

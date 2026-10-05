@@ -6826,7 +6826,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
   - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
-  - {fileID: 11400000, guid: 78751fb14b5da394eb7e6148481d0729, type: 2}
   - {fileID: 11400000, guid: 36f08b64e7d55104ead70610e2423e18, type: 2}
   - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
   - {fileID: 11400000, guid: 7863ead928667f9438d4e5039ef3800c, type: 2}
@@ -6839,6 +6838,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: baa8b01a446067b44a19b9f91ad1c627, type: 2}
   - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
   - {fileID: 11400000, guid: f1a82fb27a05cad4cae228cdd033fffe, type: 2}
+  - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
   amountOfTicketsToSpawnOnLane: {fileID: 11400000, guid: 613eb818f34654f59b7ff1cc85f141dc, type: 2}
   amountOfCardsToDrawEachTurn: 5
   hasDrawnCardsThisTurn: 0
@@ -11095,6 +11095,74 @@ Transform:
   - {fileID: 527169671}
   m_Father: {fileID: 1421863129}
   m_LocalEulerAnglesHint: {x: 0, y: -76.86, z: 0}
+--- !u!1 &671979320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 671979321}
+  - component: {fileID: 671979323}
+  - component: {fileID: 671979322}
+  m_Layer: 0
+  m_Name: PinTipOverAlleyEdgeGravity
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &671979321
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671979320}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: -56.7, y: -2.5, z: 10.2}
+  m_LocalScale: {x: 20.90697, y: 52.677654, z: 1.7956126}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1776242839}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -90}
+--- !u!114 &671979322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671979320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0c9ff839e6004958a31121993088e62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  downwardForce: 5
+  pitwardNudge: 1.5
+--- !u!65 &671979323
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671979320}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2937919, y: 0.59217334, z: 1}
+  m_Center: {x: -0.13502637, y: 0.2039135, z: -0.0000027863402}
 --- !u!1 &675716544
 GameObject:
   m_ObjectHideFlags: 0
@@ -25865,7 +25933,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
-  - {fileID: 11400000, guid: f1a82fb27a05cad4cae228cdd033fffe, type: 2}
+  - {fileID: 11400000, guid: a26218e724e8b2b40a9e10e190e201a2, type: 2}
+  - {fileID: 11400000, guid: a26218e724e8b2b40a9e10e190e201a2, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
@@ -30670,6 +30739,7 @@ Transform:
   m_Children:
   - {fileID: 1782973774}
   - {fileID: 1400545773}
+  - {fileID: 671979321}
   - {fileID: 1232149672}
   - {fileID: 1491670235}
   - {fileID: 367063838}
