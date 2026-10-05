@@ -122,7 +122,10 @@ public class ShopUIManager : MonoBehaviour
 
     private void UpdateRerollCostByRound()
     {
-        if (_roundStateManager == null || _roundStateManager.sessionData == null) return;
+        if (_roundStateManager == null || _roundStateManager.sessionData == null)
+        {
+            return;
+        }
 
         int currentRound = _roundStateManager.sessionData.currentRound;
 
@@ -191,7 +194,11 @@ public class ShopUIManager : MonoBehaviour
 
             // Hook up our CardAnimator logic instead of WiggleRoutine
             GameObject spawnedCard = _spawnedShopCardVisuals[i];
-            CardAnimator animator = spawnedCard != null ? spawnedCard.GetComponent<CardAnimator>() : null;
+            CardAnimator animator = null;
+            if (spawnedCard != null)
+            {
+                animator = spawnedCard.GetComponent<CardAnimator>();
+            }
             AddCardHoverEvents(cardButtons[i].gameObject, animator);
         }
     }
@@ -252,21 +259,68 @@ public class ShopUIManager : MonoBehaviour
     private CardDataSO GetRandomCardByRarity()
     {
         List<CardDataSO> pool = _roundStateManager.shopCardsToPickFrom;
-        if (pool == null || pool.Count == 0) return null;
+        if (pool == null || pool.Count == 0)
+        {
+            return null;
+        }
 
-        bool hasCommon = pool.Any(c => c.rarity == CardRarity.Common);
-        bool hasRare = pool.Any(c => c.rarity == CardRarity.Rare);
-        bool hasLegendary = pool.Any(c => c.rarity == CardRarity.Legendary);
+        int currentRound = 0;
+        if (_roundStateManager.sessionData != null)
+        {
+            currentRound = _roundStateManager.sessionData.currentRound;
+        }
 
-        float currentCommonWeight = hasCommon ? commonWeight : 0f;
-        float currentRareWeight = hasRare ? rareWeight : 0f;
-        float currentLegendWeight = hasLegendary ? legendaryWeight : 0f;
+        bool canSpawnLegendary = currentRound >= 3;
+
+        bool hasCommon = DoesPoolHaveRarity(pool, CardRarity.Common);
+        bool hasRare = DoesPoolHaveRarity(pool, CardRarity.Rare);
+        bool hasLegendary = false;
+
+        if (canSpawnLegendary)
+        {
+            hasLegendary = DoesPoolHaveRarity(pool, CardRarity.Legendary);
+        }
+
+        float currentCommonWeight = 0f;
+        if (hasCommon)
+        {
+            currentCommonWeight = commonWeight;
+        }
+
+        float currentRareWeight = 0f;
+        if (hasRare)
+        {
+            currentRareWeight = rareWeight;
+        }
+
+        float currentLegendWeight = 0f;
+        if (hasLegendary)
+        {
+            currentLegendWeight = legendaryWeight;
+        }
 
         float totalWeight = currentCommonWeight + currentRareWeight + currentLegendWeight;
 
         if (totalWeight <= 0f) 
         {
-            return pool[Random.Range(0, pool.Count)];
+            List<CardDataSO> validFallbackPool = new List<CardDataSO>();
+
+            foreach (CardDataSO card in pool)
+            {
+                if (canSpawnLegendary || card.rarity != CardRarity.Legendary)
+                {
+                    validFallbackPool.Add(card);
+                }
+            }
+
+            if (validFallbackPool.Count > 0)
+            {
+                int randomFallbackIndex = Random.Range(0, validFallbackPool.Count);
+                return validFallbackPool[randomFallbackIndex];
+            }
+
+            int randomPoolIndex = Random.Range(0, pool.Count);
+            return pool[randomPoolIndex];
         }
 
         float randomVal = Random.Range(0f, totalWeight);
@@ -285,8 +339,29 @@ public class ShopUIManager : MonoBehaviour
             selectedRarity = CardRarity.Legendary;
         }
 
-        List<CardDataSO> rarityPool = pool.Where(c => c.rarity == selectedRarity).ToList();
-        return rarityPool[Random.Range(0, rarityPool.Count)];
+        List<CardDataSO> rarityPool = new List<CardDataSO>();
+        foreach (CardDataSO card in pool)
+        {
+            if (card.rarity == selectedRarity)
+            {
+                rarityPool.Add(card);
+            }
+        }
+
+        int randomIndex = Random.Range(0, rarityPool.Count);
+        return rarityPool[randomIndex];
+    }
+
+    private bool DoesPoolHaveRarity(List<CardDataSO> pool, CardRarity rarityToFind)
+    {
+        foreach (CardDataSO card in pool)
+        {
+            if (card != null && card.rarity == rarityToFind)
+            {
+                return true;
+            }
+        }
+        return false;
     }
     
     public void ToggleHexGridExpander(bool turnOn)
@@ -430,15 +505,21 @@ public class ShopUIManager : MonoBehaviour
         CardDataSO card = _currentShopCards[index];
         float rarityMultiplier = 1f;
         
-        switch (card.rarity)
+        if (card.rarity == CardRarity.Common)
         {
-            case CardRarity.Common: rarityMultiplier = commonCostMultiplier; break;
-            case CardRarity.Rare: rarityMultiplier = rareCostMultiplier; break;
-            case CardRarity.Legendary: rarityMultiplier = legendaryCostMultiplier; break;
+            rarityMultiplier = commonCostMultiplier;
+        }
+        else if (card.rarity == CardRarity.Rare)
+        {
+            rarityMultiplier = rareCostMultiplier;
+        }
+        else if (card.rarity == CardRarity.Legendary)
+        {
+            rarityMultiplier = legendaryCostMultiplier;
         }
 
         // we first see shop on round 1 ?
-        int calculatedCost = Mathf.RoundToInt(card.baseCost + costModifier + rarityMultiplier);
+        int calculatedCost = Mathf.RoundToInt(card.baseCost + costModifier * rarityMultiplier);
         
         if (_currentCardCosts.Count <= index)
         {
@@ -508,7 +589,7 @@ public class ShopUIManager : MonoBehaviour
         if (removePinButton != null)
         {
             // Checks if there are any cards in the total deck that match the single pin ID
-            bool hasSinglePin = DeckManager.Instance.totalDeck.Any(card => card.cardID == singlePinCardID);
+            bool hasSinglePin = HasSinglePinInDeck();
             
             // Only allow clicking if a pin actually exists in the deck
             removePinButton.interactable = hasSinglePin;
@@ -521,21 +602,16 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
-    // Call from Button click in shop
-    public void BuyRemovePin()
+    private bool HasSinglePinInDeck()
     {
-        // Loops through deck to see if there is a single pin card in the deck
-        bool hasSinglePin = DeckManager.Instance.totalDeck.Any(card => card.cardID == singlePinCardID);
-        
-        if (hasSinglePin && SessionData.Instance.SpendTickets(removePinCost))
+        foreach (CardDataSO card in DeckManager.Instance.totalDeck)
         {
-            DeckManager.Instance.RemoveCardByID(singlePinCardID);
-            UpdateRemovePinUI();
+            if (card != null && card.cardID == singlePinCardID)
+            {
+                return true;
+            }
         }
-        else if (!hasSinglePin)
-        {
-            Debug.LogWarning("No single pins left to remove!");
-        }
+        return false;
     }
 
     private int GetGridUpgradeCost()
@@ -604,7 +680,10 @@ public class ShopUIManager : MonoBehaviour
         enterEntry.callback.AddListener((data) => 
         { 
             Button btn = buttonGo.GetComponent<Button>();
-            if (btn != null && !btn.interactable) return;
+            if (btn != null && !btn.interactable)
+            {
+                return;
+            }
 
             if (animator != null)
             {
@@ -635,7 +714,10 @@ public class ShopUIManager : MonoBehaviour
         downEntry.callback.AddListener((data) => 
         { 
             Button btn = buttonGo.GetComponent<Button>();
-            if (btn != null && !btn.interactable) return;
+            if (btn != null && !btn.interactable)
+            {
+                return;
+            }
 
             if (animator != null)
             {
@@ -671,7 +753,11 @@ public class ShopUIManager : MonoBehaviour
                     DG.Tweening.Sequence clickSeq = DOTween.Sequence();
                     clickSeq.Append(buttonGo.transform.DOScale(originalScale * 1.15f, 0.1f).SetEase(Ease.OutQuad));
                     
-                    float targetScale = isHovering ? 1.05f : 1f;
+                    float targetScale = 1f;
+                    if (isHovering)
+                    {
+                        targetScale = 1.05f;
+                    }
                     clickSeq.Append(buttonGo.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack));
                 }
                 else
@@ -685,7 +771,10 @@ public class ShopUIManager : MonoBehaviour
     // ai stuff dw about it
     private void AddBounceEffectToButton(Button btn)
     {
-        if (btn == null) return;
+        if (btn == null)
+        {
+            return;
+        }
 
         EventTrigger trigger = btn.GetComponent<EventTrigger>();
         if (trigger == null) 
@@ -741,7 +830,11 @@ public class ShopUIManager : MonoBehaviour
                 DG.Tweening.Sequence clickSeq = DOTween.Sequence();
                 clickSeq.Append(btn.transform.DOScale(originalScale * 1.15f, 0.1f).SetEase(Ease.OutQuad));
                 
-                float targetScale = isHovering ? 1.05f : 1f;
+                float targetScale = 1f;
+                if (isHovering)
+                {
+                    targetScale = 1.05f;
+                }
                 clickSeq.Append(btn.transform.DOScale(originalScale * targetScale, 0.15f).SetEase(Ease.OutBack));
             }
             else

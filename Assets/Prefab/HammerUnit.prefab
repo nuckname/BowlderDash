@@ -575,7 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 349c2e1f69cf4f6da04ce181a1ccd8ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossHammerSwingMotor
-  targetSpeed: 200
+  targetSpeed: 120
   speedAtTopFraction: 0.1
   maximumForce: 50000
   reversalMargin: 3

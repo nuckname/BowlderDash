@@ -26,10 +26,10 @@ MonoBehaviour:
     scoreNeededToBeat: 120
     maxBallsAllowedToThrow: 4
   - roundNumber: 4
-    scoreNeededToBeat: 180
+    scoreNeededToBeat: 150
     maxBallsAllowedToThrow: 4
   - roundNumber: 5
-    scoreNeededToBeat: 230
+    scoreNeededToBeat: 240
     maxBallsAllowedToThrow: 5
   - roundNumber: 6
     scoreNeededToBeat: 280

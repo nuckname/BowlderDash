@@ -251,12 +251,13 @@ public class ScoringState : RoundBaseState
     // This is a bonus for being efficient.
     private void GiveBonusTickets(int maxBallsAllowed, int ballsThrown, int currentRound)
     {
-        int ballsLeft = maxBallsAllowed - ballsThrown;
+        int ballsLeft = maxBallsAllowed - (ballsThrown + 1);
         if (ballsLeft > 0)
         {
-            int bonusTickets = (ballsLeft * 
-            (_manager.gridManager.gridTicketManager.ticketsPerFrame + _manager.amountOfTicketsToSpawnOnLane.GetAmountToSpawn(currentRound))) 
-            + 2 /*2 is the bonus for complete it early*/ + currentRound;
+            int bonusTickets = (ballsLeft * _manager.gridManager.gridTicketManager.ticketsPerFrame) 
+                               + 2 /*2 is the bonus for complete it early*/ + currentRound;
+            
+            Debug.Log("bonusTickets: " + bonusTickets);
             
             _manager.sessionData.AddTickets(bonusTickets);
         }
