@@ -131,19 +131,19 @@ public class ShopUIManager : MonoBehaviour
 
         if (currentRound >= 8)
         {
-            rerollCost = 8;
+            rerollCost = 4;
         }
         else if (currentRound >= 7)
         {
-            rerollCost = 6;
+            rerollCost = 3;
         }
         else if (currentRound >= 5)
         {
-            rerollCost = 5;
+            rerollCost = 3;
         }
         else if (currentRound >= 3)
         {
-            rerollCost = 3;
+            rerollCost = 2;
         }
         else
         {
