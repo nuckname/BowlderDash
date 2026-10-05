@@ -108,6 +108,8 @@ public class ShopUIManager : MonoBehaviour
     
     private void UpdateRerollUI()
     {
+        UpdateRerollCostByRound();
+
         if (rerollButton != null)
         {
             TextMeshProUGUI btnText = rerollButton.GetComponentInChildren<TextMeshProUGUI>();
@@ -118,8 +120,38 @@ public class ShopUIManager : MonoBehaviour
         }
     }
 
+    private void UpdateRerollCostByRound()
+    {
+        if (_roundStateManager == null || _roundStateManager.sessionData == null) return;
+
+        int currentRound = _roundStateManager.sessionData.currentRound;
+
+        if (currentRound >= 8)
+        {
+            rerollCost = 8;
+        }
+        else if (currentRound >= 7)
+        {
+            rerollCost = 6;
+        }
+        else if (currentRound >= 5)
+        {
+            rerollCost = 5;
+        }
+        else if (currentRound >= 3)
+        {
+            rerollCost = 3;
+        }
+        else
+        {
+            rerollCost = 1;
+        }
+    }
+
     public void RerollShop()
     {
+        UpdateRerollCostByRound();
+
         if (SessionData.Instance.SpendTickets(rerollCost))
         {
             GenerateShopCards();
