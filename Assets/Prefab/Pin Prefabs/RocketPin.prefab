@@ -353,7 +353,8 @@ MonoBehaviour:
   onPlaceEffects: []
   onHitEffects:
   - rid: 4849038718798397505
-  onFallEffects: []
+  onFallEffects:
+  - rid: 182571825055137857
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
@@ -369,6 +370,10 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: 182571825055137857
+      type: {class: ScoreMultiplierEffect, ns: , asm: Assembly-CSharp}
+      data:
+        scoreValue: 20
     - rid: 4849038718798397505
       type: {class: RocketPinEffect, ns: , asm: Assembly-CSharp}
       data:
@@ -377,6 +382,9 @@ MonoBehaviour:
         launchAngle: 3.6
         launchDuration: 1.2
         randomizeAngleDirection: 1
+        holdYDuration: 0.2
+        rotationDuration: 0.15
+        launchSpeed: 25
         hitParticleEffect: {fileID: 4114803238593693726}
         particlePlayCount: 6
         timeBetweenParticlePlays: 0.1

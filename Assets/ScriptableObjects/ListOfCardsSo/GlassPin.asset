@@ -14,17 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: GlassPin
   displayName: Glass Pin
-  description: 'On hit: +50 Score. can only be played once.'
-  cardArtwork: {fileID: 21300000, guid: 47bfef261009d6f4ea47b8ca7146b9f6, type: 3}
+  description: 'On hit: +40 Score. can only be played once.'
+  cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: -532655959, guid: 2fb8e966a55c91c45b10ba98fe80b376, type: 3}
   desiredLayout: 4
   cardTintCardRarity: {r: 0, g: 0, b: 1, a: 1}
+  useCustomRandomisation: 0
+  zPositionRange: {x: -3, y: -30}
+  zRotationRange: {x: -5, y: -5}
+  sizeRangeX: {x: 0.83, y: 0.83}
+  sizeRangeY: {x: 0.83, y: 0.83}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: f65bb2f98be765b4e8eb07ca05f0e5f4, type: 3}
-  baseCost: 3
+  baseCost: 5
   spawnPattern:
   - offset: {x: 0, y: 0}
     prefab: {fileID: 5919451674846626430, guid: f65bb2f98be765b4e8eb07ca05f0e5f4, type: 3}
-  rarity: 1
+  rarity: 2
