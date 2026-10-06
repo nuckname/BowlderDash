@@ -11443,7 +11443,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &671979321
 Transform:
   m_ObjectHideFlags: 0
@@ -21683,8 +21683,8 @@ Transform:
   m_GameObject: {fileID: 1232149671}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0.000000029802322, z: 0.00000008940697, w: 0.7071068}
-  m_LocalPosition: {x: -31.0253, y: -15.6, z: 4.5719}
-  m_LocalScale: {x: 127.7109, y: 84.13037, z: 0.63159084}
+  m_LocalPosition: {x: -65.1882, y: -15.6, z: 4.5719}
+  m_LocalScale: {x: 59.38557, y: 84.13037, z: 0.63159084}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1776242839}
@@ -26222,7 +26222,7 @@ GameObject:
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1491670235
 Transform:
   m_ObjectHideFlags: 0
@@ -27050,6 +27050,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

@@ -39,7 +39,7 @@ public class PinBase : MonoBehaviour
     
     [Header("Floating Text Offsets")]
     [SerializeField] protected float yOffset = 4.0f;
-    [SerializeField] protected float yOffsetPinInHole = 10.0f;
+    protected float yOffsetPinInHole = 13.0f;
     
     [SerializeField] protected bool allowPinToFallOver = false;
     [SerializeField] protected bool allowPinToBePickedUp = false;
