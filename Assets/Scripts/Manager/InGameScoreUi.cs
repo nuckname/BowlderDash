@@ -197,7 +197,7 @@ public class InGameScoreUi : MonoBehaviour
     
     public void UpdateRoundText(int currentRound, int maxRounds)
     {
-        roundText.text = $"Rounds:\n{currentRound} / {maxRounds}";
+        roundText.text = $"Rounds:\n{currentRound} / {maxRounds + 1}";
     }
     
     public void UpdateBallsText(int ball, int maxBalls)

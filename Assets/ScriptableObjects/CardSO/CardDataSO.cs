@@ -35,7 +35,7 @@ public class CardDataSO : ScriptableObject
 
     [Header("Pin Randomisation Overrides")]
     public bool useCustomRandomisation;
-    public Vector2 zPositionRange = new Vector2(-3, -30);
+    public Vector2 zPositionRange = new Vector2(-3, -15);
     public Vector2 zRotationRange = new Vector2(-5, -5);
     public Vector2 sizeRangeX = new Vector2(0.83f, 0.83f);
     public Vector2 sizeRangeY = new Vector2(0.83f, 0.83f);

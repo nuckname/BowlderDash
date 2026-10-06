@@ -5023,20 +5023,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.339171, y: 5.393979, z: 2.7468233}
   m_Center: {x: 0.1755622, y: 2.638475, z: 0.0062728524}
---- !u!114 &9000000000000000001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4548911073050350972}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c732762a9da64c4a8c427f627e031c14, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  profile: {fileID: 11400000, guid: cbac942f55ba4e1399af3f09a3dfe3b2, type: 2}
-  requireInstanceEligibility: 1
 --- !u!114 &852012921410265539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5061,7 +5047,6 @@ MonoBehaviour:
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
-  yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
@@ -5077,10 +5062,24 @@ MonoBehaviour:
       type: {class: ExplosionEffect, ns: , asm: Assembly-CSharp}
       data:
         explosionForce: 8
-        explosionRadius: 3
+        explosionRadius: 1.5
         upwardModifier: 1
-        detonationDelay: 0.2
+        detonationDelay: 0.5
         explosionParticles: {fileID: 4918979806117386139}
+--- !u!114 &9000000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4548911073050350972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c732762a9da64c4a8c427f627e031c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: cbac942f55ba4e1399af3f09a3dfe3b2, type: 2}
+  requireInstanceEligibility: 1
 --- !u!114 &5373738608955730648
 MonoBehaviour:
   m_ObjectHideFlags: 0
