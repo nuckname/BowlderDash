@@ -10,6 +10,7 @@ public enum PinLayoutType
     DoubleVertical,
     DoubleHorizontal,
     Single,
+    TriangleTinyPin
 }
 
 [System.Serializable]
@@ -123,6 +124,10 @@ public class CardVisualPresenter : MonoBehaviour
             
             case PinLayoutType.Single:
                 SetupLayout(PinLayoutType.Single, pins, cardData);
+                break;
+            
+            case PinLayoutType.TriangleTinyPin:
+                SetupLayout(PinLayoutType.TriangleTinyPin, pins, cardData);
                 break;
 
             case PinLayoutType.None:

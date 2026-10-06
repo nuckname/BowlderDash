@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: triangleTinyPin
   displayName: Tripple Tiny Pins
-  description: 'On Fall: +20 Score'
+  description: 'On Fall: +25 Score'
   cardArtwork: {fileID: 0}
   pinImages:
-  - {fileID: 973620358, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
-  - {fileID: 973620358, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
-  - {fileID: 973620358, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
-  desiredLayout: 1
+  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
+  desiredLayout: 5
   cardTintCardRarity: {r: 1, g: 0.84, b: 0, a: 1}
-  useCustomRandomisation: 0
+  useCustomRandomisation: 1
   zPositionRange: {x: -3, y: -30}
   zRotationRange: {x: -5, y: -5}
-  sizeRangeX: {x: 0.83, y: 0.83}
-  sizeRangeY: {x: 0.83, y: 0.83}
+  sizeRangeX: {x: 0.4, y: 0.4}
+  sizeRangeY: {x: 0.4, y: 0.4}
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: 4eb09489445ecd042a6c0d18d9adb519, type: 3}
