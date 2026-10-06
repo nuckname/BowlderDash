@@ -95,6 +95,12 @@ public class DraggableSnap : MonoBehaviour
             return;
         }
 
+        // Do not allow picking up placed pins while a hand card is currently being dragged
+        if (HandManager.Instance != null && HandManager.Instance.IsAnyCardDragging())
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
@@ -123,7 +129,7 @@ public class DraggableSnap : MonoBehaviour
             EndDrag();
         }
     }
-
+    
     private void BeginDrag(Ray ray)
     {
         _peerAxialOffsets.Clear();

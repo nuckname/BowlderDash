@@ -101,6 +101,18 @@ public class HandManager : MonoBehaviour
         RemoveCardUi(card);
     }
 
+    public bool IsAnyCardDragging()
+    {
+        for (int i = 0; i < cardsInHand.Count; i++)
+        {
+            if (cardsInHand[i] != null && cardsInHand[i].isDragging)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private void RemoveCardUi(CardMovement card)
     {
         Transform slot = card.transform.parent;

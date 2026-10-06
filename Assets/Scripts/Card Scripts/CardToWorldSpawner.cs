@@ -129,6 +129,12 @@ public class CardToWorldSpawner : MonoBehaviour
                         previewPin.EnterPlacementPhysicsMode();
                     }
 
+                    // Disable all colliders during preview so the raycast never hits the preview object itself
+                    foreach (var col in previewObject.GetComponentsInChildren<Collider>())
+                    {
+                        col.enabled = false;
+                    }
+
                     foreach (var renderer in previewObject.GetComponentsInChildren<Renderer>())
                     {
                         _originalMaterials[renderer] = renderer.materials;
@@ -142,7 +148,7 @@ public class CardToWorldSpawner : MonoBehaviour
             UpdatePreviewPosition();
         }
     }
-
+    
     private void DestroyPreview()
     {
         foreach (var obj in _spawnedWorldObjects)
@@ -154,7 +160,7 @@ public class CardToWorldSpawner : MonoBehaviour
         _pinValidityStates.Clear();
     }
 
-    private void TryPlaceObject()
+private void TryPlaceObject()
     {
         if (_spawnedWorldObjects.Count == 0 || _currentHoveredCell == null || !_isValidPlacement)
         {
@@ -190,6 +196,12 @@ public class CardToWorldSpawner : MonoBehaviour
                 _spawnedWorldObjects[i].SetActive(true);
                 UpdatePreviewVisuals(_spawnedWorldObjects[i], true);
 
+                // Re-enable colliders now that the pin is placed in the world
+                foreach (var col in _spawnedWorldObjects[i].GetComponentsInChildren<Collider>())
+                {
+                    col.enabled = true;
+                }
+
                 // FIX: Force the pin down from the previewHeightOffset so it sits perfectly on the hex floor
                 _spawnedWorldObjects[i].transform.position = new Vector3(
                     targetCells[i].center.x, 
@@ -221,12 +233,6 @@ public class CardToWorldSpawner : MonoBehaviour
 
     private void UpdatePreviewVisuals(GameObject previewObject, bool isValid)
     {
-        var colliders = previewObject.GetComponentsInChildren<Collider>();
-        foreach (var col in colliders)
-        {
-            col.enabled = isValid;
-        }
-
         var renderers = previewObject.GetComponentsInChildren<Renderer>();
         foreach (var renderer in renderers)
         {
