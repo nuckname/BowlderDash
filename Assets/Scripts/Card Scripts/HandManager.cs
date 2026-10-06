@@ -25,6 +25,9 @@ public class HandManager : MonoBehaviour
     [SerializeField] private bool tweenCardReturn = true;
     public bool TweenCardReturn => tweenCardReturn;
 
+    [Header("Audio")]
+    [SerializeField] private SoundCueSO drawCue;
+
     private HorizontalLayoutGroup _layoutGroup;
     
     [Header("Discard Settings")]
@@ -54,9 +57,13 @@ public class HandManager : MonoBehaviour
 
     public void AddDrawnCardToHand(CardDataSO drawnCard)
     {
-        // For spawning cards that go to our hand. (Animation)
-        Vector3 startPosition = spawnPointForDrawingCards.position;
-        AddCardToHand(drawnCard, startPosition);
+        Vector3? startPosition = spawnPointForDrawingCards != null
+            ? spawnPointForDrawingCards.position
+            : (Vector3?)null;
+
+        // This path is only for deck draws; recalled pins call AddCardToHand directly.
+        if (AddCardToHand(drawnCard, startPosition) != null)
+            GameAudio.Instance?.PlayUICardDraw(drawCue);
     }
 
     // https://share.gemini.google/usukNofWRGFR
@@ -151,9 +158,11 @@ public class HandManager : MonoBehaviour
     /// Instantiates a new card layout slot and UI prefab based on the provided CardDataSO, 
     /// injecting its data and optionally animating its entry from a specific screen position.
     /// </summary>
-    public void AddCardToHand(CardDataSO cardDataToSpawn, Vector3? startScreenPosition = null)
+    public CardMovement AddCardToHand(CardDataSO cardDataToSpawn, Vector3? startScreenPosition = null)
     {
-        if (cardDataToSpawn == null || cardDataToSpawn.cardUIPrefab == null) return;
+        if (cardDataToSpawn == null || cardDataToSpawn.cardUIPrefab == null ||
+            slotPrefab == null || interactionManager == null ||
+            cardDataToSpawn.cardUIPrefab.GetComponent<CardMovement>() == null) return null;
 
         // Instantiate a new slot so the layout group handles it properly
         GameObject newSlot = Instantiate(slotPrefab, transform);
@@ -178,6 +187,8 @@ public class HandManager : MonoBehaviour
             newCardObj.transform.position = startScreenPosition.Value;
             newCardObj.transform.DOLocalMove(Vector3.zero, tweenCardReturn ? 0.3f : 0f).SetEase(Ease.OutBack);
         }
+
+        return newCardMovement;
     }
 
     /// <summary>

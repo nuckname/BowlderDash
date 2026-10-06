@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-1000)]
 public sealed class GameAudio : MonoBehaviour
 {
+    private const int InteractionUIVoiceLimit = 2;
+    private const int MaximumCardDrawVoices = 5;
+
     public static GameAudio Instance { get; private set; }
     [SerializeField, Range(1, 21)] private int transientCapacity = 21;
     [SerializeField] private AudioMixer mixer;
@@ -16,6 +19,8 @@ public sealed class GameAudio : MonoBehaviour
         public AudioSource source;
         public SoundCueSO cue;
         public float remaining;
+        public bool reservedForCardDraw;
+        public ulong playOrder;
     }
     private sealed class CueState
     {
@@ -23,6 +28,7 @@ public sealed class GameAudio : MonoBehaviour
         public double nextPlay;
     }
     private Voice[] voices;
+    private ulong nextPlayOrder;
     private double nextHoverTime;
     private bool ownsLeaderboardPause;
     private bool listenerPauseBeforeLeaderboard;
@@ -52,13 +58,16 @@ public sealed class GameAudio : MonoBehaviour
         if (music == null) music = GetComponent<GameMusic>();
         if (music != null) music.Initialize(this, mixer);
         voices = new Voice[Mathf.Clamp(transientCapacity, 1, 21)];
+        // Five draw voices cover the current clip/pitch/lifetime at 0.08-second intervals.
+        // Keep at least two ordinary slots when a smaller pool is configured.
+        int drawCapacity = Mathf.Min(MaximumCardDrawVoices, Mathf.Max(0, voices.Length - InteractionUIVoiceLimit));
         for (int i = 0; i < voices.Length; i++)
         {
             var child = new GameObject($"Transient {i + 1:00}");
             child.transform.SetParent(transform, false);
             var source = child.AddComponent<AudioSource>();
             ResetSource(source);
-            voices[i] = new Voice { source = source };
+            voices[i] = new Voice { source = source, reservedForCardDraw = i >= voices.Length - drawCapacity };
         }
         SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
@@ -66,12 +75,7 @@ public sealed class GameAudio : MonoBehaviour
     // One source per transient: never stack unaccounted PlayOneShot voices.
     public bool Play(SoundCueSO cue, Vector3 position = default, float volumeScale = 1f)
     {
-        if (Instance != this || voices == null || cue == null || cue.output == null) return false;
-        if (!cue.isUI && ownsLeaderboardPause) return false;
-        if (!cueStates.TryGetValue(cue, out var state)) state = new CueState();
-        if (Time.unscaledTimeAsDouble < state.nextPlay) return false;
-        float gain = Mathf.Clamp01(cue.gain * Mathf.Clamp01(volumeScale));
-        if (gain <= 0f) return false;
+        if (!TryPrepareCue(cue, volumeScale, out var state, out float gain)) return false;
 
         int active = 0;
         int uiActive = 0;
@@ -80,6 +84,7 @@ public sealed class GameAudio : MonoBehaviour
         Voice weakestUI = null;
         foreach (var voice in voices)
         {
+            if (voice.reservedForCardDraw) continue;
             if (voice.cue == cue) active++;
             if (voice.cue == null) { if (available == null) available = voice; continue; }
             if (voice.cue.isUI)
@@ -96,8 +101,53 @@ public sealed class GameAudio : MonoBehaviour
         }
         if (active >= Mathf.Max(1, cue.voiceLimit)) return false;
         // Hover and click share the two-voice UI budget; clicks may replace hover.
-        var slot = cue.isUI && uiActive >= 2 ? weakestUI : available ?? weakest;
+        var slot = cue.isUI && uiActive >= InteractionUIVoiceLimit ? weakestUI : available ?? weakest;
         if (slot == null) return false;
+        return PlayVoice(slot, cue, state, position, gain);
+    }
+
+    public bool PlayUICardDraw(SoundCueSO cue)
+    {
+        // Draw feedback belongs to gameplay, even though it uses the 2D UI mixer route.
+        if (cue == null || !cue.isUI || ownsLeaderboardPause ||
+            !TryPrepareCue(cue, 1f, out var state, out float gain)) return false;
+
+        int active = 0;
+        Voice available = null;
+        Voice oldest = null;
+        Voice oldestForCue = null;
+        foreach (var voice in voices)
+        {
+            if (!voice.reservedForCardDraw) continue;
+            if (voice.cue == null) { if (available == null) available = voice; continue; }
+            if (oldest == null || voice.playOrder < oldest.playOrder) oldest = voice;
+            if (voice.cue == cue)
+            {
+                active++;
+                if (oldestForCue == null || voice.playOrder < oldestForCue.playOrder) oldestForCue = voice;
+            }
+        }
+
+        // Start every draw immediately; recycle the oldest draw at its cue or pool limit.
+        // Draws neither consume nor replace the ordinary hover/click voices.
+        Voice slot = active >= Mathf.Max(1, cue.voiceLimit) ? oldestForCue : available ?? oldest;
+        return slot != null && PlayVoice(slot, cue, state, default, gain);
+    }
+
+    private bool TryPrepareCue(SoundCueSO cue, float volumeScale, out CueState state, out float gain)
+    {
+        state = null;
+        gain = 0f;
+        if (Instance != this || voices == null || cue == null || cue.output == null) return false;
+        if (!cue.isUI && ownsLeaderboardPause) return false;
+        if (!cueStates.TryGetValue(cue, out state)) state = new CueState();
+        if (Time.unscaledTimeAsDouble < state.nextPlay) return false;
+        gain = Mathf.Clamp01(cue.gain * Mathf.Clamp01(volumeScale));
+        return gain > 0f;
+    }
+
+    private bool PlayVoice(Voice slot, SoundCueSO cue, CueState state, Vector3 position, float gain)
+    {
         var clip = cue.PickVariant(random, state.previous, out int selected);
         if (clip == null || clip.loadState != AudioDataLoadState.Loaded) return false;
 
@@ -117,6 +167,7 @@ public sealed class GameAudio : MonoBehaviour
         source.maxDistance = Mathf.Max(source.minDistance, cue.maxDistance);
         slot.cue = cue;
         slot.remaining = clip.length / source.pitch + 0.1f;
+        slot.playOrder = ++nextPlayOrder;
         source.Play();
         state.previous = selected;
         state.nextPlay = Time.unscaledTimeAsDouble + Mathf.Max(0f, cue.cooldown);
@@ -161,6 +212,7 @@ public sealed class GameAudio : MonoBehaviour
         leaderboardSceneHandle = owner.gameObject.scene.handle;
         ownsLeaderboardPause = true;
         StopWorldVoices();
+        StopCardDrawVoices();
         AudioListener.pause = true;
     }
 
@@ -194,9 +246,17 @@ public sealed class GameAudio : MonoBehaviour
             musicSceneHandle = 0;
         }
         StopWorldVoices();
+        StopCardDrawVoices();
         if (ownsLeaderboardPause && scene.handle == leaderboardSceneHandle) RestoreOwnedPause();
         cueStates.Clear();
         nextHoverTime = 0;
+    }
+
+    private void StopCardDrawVoices()
+    {
+        if (voices == null) return;
+        foreach (var voice in voices)
+            if (voice.reservedForCardDraw && voice.cue != null) Release(voice);
     }
 
     public bool SetMasterVolume(float linear) => SetVolume("MasterVolume", linear);
@@ -253,6 +313,7 @@ public sealed class GameAudio : MonoBehaviour
         voice.source.transform.localPosition = Vector3.zero;
         voice.cue = null;
         voice.remaining = 0f;
+        voice.playOrder = 0;
     }
 
     private void OnDestroy()
