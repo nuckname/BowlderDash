@@ -172,9 +172,9 @@ public class ScoringState : RoundBaseState
     {
         int unsettledCount = 0;
 
-        foreach (PinBase pin in _manager.allActivePinsInTheFrame)
+        foreach (PinBase pin in _manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
         {
-            if (pin != null && !pin.IsSettled) 
+            if (pin != null && pin.IsActiveGameplayPin && !pin.IsSettled)
             {
                 unsettledCount++;
             }

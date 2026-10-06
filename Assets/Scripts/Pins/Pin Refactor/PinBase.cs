@@ -62,6 +62,9 @@ public class PinBase : MonoBehaviour
     protected Collider _collider;
 
     private bool _impactAudioRegistrationBlocked;
+    private bool _missingRigidbodyReported;
+
+    public bool IsActiveGameplayPin => isActiveAndEnabled && !_impactAudioRegistrationBlocked;
     
     protected Vector3 _startPos;
     protected Quaternion _startRot;
@@ -91,10 +94,21 @@ public class PinBase : MonoBehaviour
         }
         get
         {
-            if (_isForcedSettled) return true;
+            if (!IsActiveGameplayPin || _isForcedSettled) return true;
 
             // force End of round effects to settle as we dont need to hit them ?
             if (onEndOfRoundEffects != null && onEndOfRoundEffects.Count > 0) return true;
+
+            if (_rb == null) _rb = GetComponent<Rigidbody>();
+            if (_rb == null)
+            {
+                if (!_missingRigidbodyReported)
+                {
+                    Debug.LogWarning("Pin settlement skipped because its Rigidbody is missing.", this);
+                    _missingRigidbodyReported = true;
+                }
+                return true;
+            }
             
             // Failsafe: If the pin is barely moving (jittering), force it to sleep
             if (!_rb.IsSleeping() && _rb.linearVelocity.sqrMagnitude < 0.01f && _rb.angularVelocity.sqrMagnitude < 0.01f)

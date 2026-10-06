@@ -154,9 +154,9 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
             pinSettleTimer += Time.deltaTime;
             bool allSettled = true;
 
-            foreach (PinBase pin in manager.allActivePinsInTheFrame)
+            foreach (PinBase pin in manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
             {
-                if (!pin.IsSettled)
+                if (pin != null && pin.IsActiveGameplayPin && !pin.IsSettled)
                 {
                     allSettled = false;
                     break;

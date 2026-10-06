@@ -484,14 +484,14 @@ public class RoundStateManager : MonoBehaviour
         PinBase[] allPins = FindObjectsOfType<PinBase>(true);
         List<PinBase> activeGameplayPins = new List<PinBase>();
 
-        // We do this so that we dont also grab the physic pins from the deck on the left and right of our screen.
         foreach (PinBase pin in allPins)
         {
+            if (pin == null) continue;
             pin.SetImpactAudioEligible(false);
-            if (pin.enabled)
+            if (pin.IsActiveGameplayPin)
             {
                 activeGameplayPins.Add(pin);
-                if (pin.CanRegisterImpactAudio) pin.SetImpactAudioEligible(true);
+                pin.SetImpactAudioEligible(true);
             }
         }
 
@@ -619,9 +619,9 @@ public class RoundStateManager : MonoBehaviour
     
     public void AddPinToActiveList(PinBase newPin)
     {
-        if (newPin == null) return;
+        if (newPin == null || !newPin.IsActiveGameplayPin) return;
 
-        List<PinBase> activeGameplayPins = new List<PinBase>(allActivePinsInTheFrame);
+        List<PinBase> activeGameplayPins = new List<PinBase>(allActivePinsInTheFrame ?? System.Array.Empty<PinBase>());
         
         if (!activeGameplayPins.Contains(newPin))
         {

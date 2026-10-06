@@ -14,8 +14,10 @@ public class RoundOverState : RoundBaseState
         manager.AddBallThrownToSession();
         manager.ClearSelectedBallForCurrentAttempt();
         
-        foreach (PinBase pin in manager.allActivePinsInTheFrame)
+        foreach (PinBase pin in manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
         {
+            if (pin == null || !pin.IsActiveGameplayPin) continue;
+
             // If pin HAS fallen over: Check its onFallEffects list
             if (pin.IsFallen)
             {
