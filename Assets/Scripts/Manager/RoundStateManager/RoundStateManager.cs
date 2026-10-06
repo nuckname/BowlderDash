@@ -387,12 +387,14 @@ public class RoundStateManager : MonoBehaviour
         if (instructionText != null) instructionText.text = newText;
     }
     
+    /*
     void OnGUI()
     {
        GUI.color = Color.green;
        string stateName = currentState != null ? currentState.GetType().Name : "NULL";
         GUI.Label(new Rect(300, 10, 300, 20), $"Current State: {stateName}");
     }
+    */
 
     public void AllowPinsToFallOver(bool allow)
     {

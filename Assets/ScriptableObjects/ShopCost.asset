@@ -20,14 +20,14 @@ MonoBehaviour:
   - roundName: Round 2
     costModifier: 0.5
   - roundName: Round 3
-    costModifier: 1.5
+    costModifier: 1
   - roundName: Round 4
-    costModifier: 2
+    costModifier: 1
   - roundName: Round 5
-    costModifier: 3
+    costModifier: 1.5
   - roundName: Round 6
-    costModifier: 4
+    costModifier: 2
   - roundName: Round 7
-    costModifier: 4
+    costModifier: 2
   - roundName: Round 8
-    costModifier: 5
+    costModifier: 3

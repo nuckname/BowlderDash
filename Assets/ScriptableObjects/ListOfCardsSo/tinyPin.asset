@@ -21,7 +21,7 @@ MonoBehaviour:
   desiredLayout: 4
   cardTintCardRarity: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   useCustomRandomisation: 1
-  zPositionRange: {x: -3, y: -30}
+  zPositionRange: {x: -3, y: -15}
   zRotationRange: {x: -5, y: -5}
   sizeRangeX: {x: 0.4, y: 0.4}
   sizeRangeY: {x: 0.4, y: 0.4}
