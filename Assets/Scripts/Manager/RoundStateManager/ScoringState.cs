@@ -323,9 +323,16 @@ public class ScoringState : RoundBaseState
             }
 
             // Return vase when it has scored
-            if (pin.onEndOfRoundEffects is ScoreMultiplierEffect && !pin._isFallen)
+            if (!pin.IsFallen && pin.onEndOfRoundEffects != null)
             {
-                manager.PutRealWorldPinIntoDiscardPile(pin);
+                foreach (PinEffect effect in pin.onEndOfRoundEffects)
+                {
+                    if (effect is ScoreMultiplierEffect)
+                    {
+                        manager.PutRealWorldPinIntoDiscardPile(pin);
+                        break;
+                    }
+                }
             }
         }
 
