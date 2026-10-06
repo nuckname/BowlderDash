@@ -66,16 +66,12 @@ public class HandInteractionManager : MonoBehaviour
 
     private void Update()
     {
-        // E to end turn, temp move to FSM.
-        if (Input.GetKey(KeyCode.E))
-        {
-            handManager.DiscardHand();
-        }
-        
+        /*
         if (Input.GetKeyDown(KeyCode.J))
         {
             DeckManager.Instance.Draw(5);
         }
+        */
         
         HandleCardSwapping();
         

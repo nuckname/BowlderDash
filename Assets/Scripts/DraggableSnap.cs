@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 // https://share.gemini.google/0ZSCmXAsuGQ7
+// https://share.gemini.google/ec5tShTPfLur
 
 [RequireComponent(typeof(Collider))]
 public class DraggableSnap : MonoBehaviour
@@ -225,13 +226,21 @@ public class DraggableSnap : MonoBehaviour
             
             if (anchorNearest != null)
             {
+                bool canPlaceOrSwap = EvaluatePlacementOrSwap(
+                    anchorNearest, 
+                    out HashSet<Transform> swapGroupTransforms, 
+                    out _);
+
                 // Snap visuals to the nearest cell and check validity for each piece
                 foreach (var obj in GetGroupObjects())
                 {
                     var snap = obj.GetComponent<DraggableSnap>();
                     HexCell target = _gridManager.GetCellWithOffset(anchorNearest, _peerAxialOffsets[snap]);
                     
-                    bool isThisPinValid = target != null && target.occupant == null;
+                    bool isThisPinValid = target != null && (
+                        target.occupant == null || 
+                        (canPlaceOrSwap && swapGroupTransforms != null && swapGroupTransforms.Contains(target.occupant))
+                    );
 
                     Vector3 axialWorldOffset = _gridManager.GetWorldOffsetFromAxial(_peerAxialOffsets[snap]);
                     float peerElevatedY = _peerOriginalPositions[snap].y + dragElevation;
@@ -266,29 +275,26 @@ public class DraggableSnap : MonoBehaviour
         _dragging = false;
 
         HexCell finalAnchor = _hexGrid.GetNearestCell(transform.position);
-        bool allFit = true;
+        bool canPlace = false;
+        HashSet<Transform> swapGroupTransforms = null;
+        Dictionary<Transform, HexCell> swapTargetCells = null;
 
         if (finalAnchor != null)
         {
-            foreach (var obj in GetGroupObjects())
-            {
-                var snap = obj.GetComponent<DraggableSnap>();
-                HexCell target = _gridManager.GetCellWithOffset(finalAnchor, _peerAxialOffsets[snap]);
-                
-                if (target == null || target.occupant != null)
-                {
-                    allFit = false;
-                    break;
-                }
-            }
-        }
-        else
-        {
-            allFit = false;
+            canPlace = EvaluatePlacementOrSwap(finalAnchor, out swapGroupTransforms, out swapTargetCells);
         }
 
-        if (allFit)
+        if (canPlace)
         {
+            // Release the other group's cells first if we are swapping
+            if (swapGroupTransforms != null)
+            {
+                foreach (Transform otherTransform in swapGroupTransforms)
+                {
+                    _gridOccupancy.ReleaseCell(otherTransform);
+                }
+            }
+
             // Reserve and drop into new spots
             foreach (var obj in GetGroupObjects())
             {
@@ -306,6 +312,22 @@ public class DraggableSnap : MonoBehaviour
                 // Ensure visuals are restored
                 UpdatePreviewVisuals(obj, true);
             }
+
+            // Reserve and move the swapped group into our original spots
+            if (swapTargetCells != null)
+            {
+                foreach (var kvp in swapTargetCells)
+                {
+                    Transform otherTransform = kvp.Key;
+                    HexCell targetCell = kvp.Value;
+
+                    _gridOccupancy.TryReserveCell(targetCell, otherTransform);
+                    otherTransform.position = new Vector3(
+                        targetCell.center.x,
+                        targetCell.center.y,
+                        targetCell.center.z);
+                }
+            }
         }
         else
         {
@@ -313,6 +335,128 @@ public class DraggableSnap : MonoBehaviour
         }
 
         ClearDragState();
+    }
+
+    private bool EvaluatePlacementOrSwap(
+        HexCell finalAnchor, 
+        out HashSet<Transform> swapGroupTransforms, 
+        out Dictionary<Transform, HexCell> swapTargetCells)
+    {
+        swapGroupTransforms = null;
+        swapTargetCells = null;
+
+        Dictionary<DraggableSnap, HexCell> myTargetCells = new Dictionary<DraggableSnap, HexCell>();
+        HashSet<HexCell> myTargetCellSet = new HashSet<HexCell>();
+        HashSet<Transform> overlappedOccupants = new HashSet<Transform>();
+
+        foreach (var obj in GetGroupObjects())
+        {
+            var snap = obj.GetComponent<DraggableSnap>();
+            HexCell target = _gridManager.GetCellWithOffset(finalAnchor, _peerAxialOffsets[snap]);
+            if (target == null)
+            {
+                return false;
+            }
+
+            myTargetCells[snap] = target;
+            myTargetCellSet.Add(target);
+
+            if (target.occupant != null)
+            {
+                overlappedOccupants.Add(target.occupant);
+            }
+        }
+
+        // Standard empty placement (or shifting onto our own vacated cells)
+        if (overlappedOccupants.Count == 0)
+        {
+            return true;
+        }
+
+        // Collect the full group of the first overlapped occupant
+        Transform firstOccupant = null;
+        foreach (var occ in overlappedOccupants)
+        {
+            firstOccupant = occ;
+            break;
+        }
+
+        DraggableSnap otherSnap = firstOccupant.GetComponent<DraggableSnap>();
+        if (otherSnap == null || !otherSnap.CanInteract)
+        {
+            return false;
+        }
+
+        swapGroupTransforms = new HashSet<Transform>();
+        foreach (var otherObj in otherSnap.GetGroupObjects())
+        {
+            swapGroupTransforms.Add(otherObj.transform);
+        }
+
+        // Only allow swapping with a single group at a time
+        foreach (var occ in overlappedOccupants)
+        {
+            if (!swapGroupTransforms.Contains(occ))
+            {
+                return false;
+            }
+        }
+
+        // Determine which pin in the other group acts as the swap reference anchor
+        Transform otherAnchorTransform = finalAnchor.occupant;
+        if (otherAnchorTransform == null || !swapGroupTransforms.Contains(otherAnchorTransform))
+        {
+            otherAnchorTransform = firstOccupant;
+        }
+
+        HexCell otherAnchorCell = _gridOccupancy.GetCellByOccupant(otherAnchorTransform);
+        if (otherAnchorCell == null)
+        {
+            return false;
+        }
+
+        Vector2Int otherAnchorAxial = _gridManager.GetAxialCoordinate(otherAnchorCell);
+        HexCell myOriginalAnchorCell = _peerOriginalCells[this];
+        if (myOriginalAnchorCell == null)
+        {
+            return false;
+        }
+
+        // Verify every pin in the other group has a valid, unoccupied destination cell
+        swapTargetCells = new Dictionary<Transform, HexCell>();
+        foreach (Transform otherTransform in swapGroupTransforms)
+        {
+            HexCell currentCell = _gridOccupancy.GetCellByOccupant(otherTransform);
+            if (currentCell == null)
+            {
+                return false;
+            }
+
+            Vector2Int axial = _gridManager.GetAxialCoordinate(currentCell);
+            Vector2Int offsetFromOtherAnchor = axial - otherAnchorAxial;
+
+            HexCell destCell = _gridManager.GetCellWithOffset(myOriginalAnchorCell, offsetFromOtherAnchor);
+            if (destCell == null)
+            {
+                return false;
+            }
+
+            // Destination cell cannot be where our dragged group is landing
+            if (myTargetCellSet.Contains(destCell))
+            {
+                return false;
+            }
+
+            // Destination cell must be empty (or currently held by the group being swapped)
+            if (destCell.occupant != null && !swapGroupTransforms.Contains(destCell.occupant))
+            {
+                return false;
+            }
+
+            swapTargetCells[otherTransform] = destCell;
+        }
+
+        return true;
     }
 
     private void RestoreOriginalPlacement()

@@ -60,7 +60,7 @@ public class PinPlacementState : RoundBaseState
 
     public override void UpdateState(RoundStateManager manager)
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Tab))
         {
             if (!manager.isHandDrawReady)
             {

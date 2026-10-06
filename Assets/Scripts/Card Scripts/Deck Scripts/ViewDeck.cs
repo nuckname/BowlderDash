@@ -58,6 +58,7 @@ public class ViewDeck : MonoBehaviour
 
     private void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.A))
         {
             ToggleView(ActiveView.Draw);
@@ -72,6 +73,7 @@ public class ViewDeck : MonoBehaviour
         {
             ToggleView(ActiveView.Discard);
         }
+        */
     }
 
     private void ToggleView(ActiveView viewToToggle)

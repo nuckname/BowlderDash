@@ -127,7 +127,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public override void UpdateState(RoundStateManager manager)
     {
-        if (Input.GetKeyDown(KeyCode.Tab) && !ballHasBeenReleased)
+        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.E) && !ballHasBeenReleased)
         {
             manager.SwitchState(manager.pinPlacementState);
             return;

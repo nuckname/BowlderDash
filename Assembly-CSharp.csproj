@@ -151,7 +151,6 @@
     <Compile Include="Assets/Scripts/Card Scripts/VisualCardsHandler.cs" />
     <Compile Include="Assets/Scripts/Pins/PinEffects/TeleportBallPinEffect.cs" />
     <Compile Include="Assets/Scripts/Classes/LeaderboardStorage.cs" />
-    <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/CameraController.cs" />
     <Compile Include="Assets/Scripts/Card Scripts/Hand Scripts/HandInteractionManager.cs" />
     <Compile Include="Assets/Scripts/Manager/RoundStateManager/GameCompleteState.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/Benchmark03.cs" />
