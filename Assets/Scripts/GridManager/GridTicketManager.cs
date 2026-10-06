@@ -20,6 +20,11 @@ public class GridTicketManager : MonoBehaviour
     public Color ticketCellColor = new Color(1f, 0.82f, 0.18f, 0.92f);
     public GameObject ticketVisualPrefab;
 
+    [Header("Floating Text")]
+    public float floatingTextBaseY = 3f;
+    public float floatingTextStepY = 1f;
+    private float currentFloatingTextOffsetY = 0f;
+
     private List<TicketInstance> activeTickets = new List<TicketInstance>();
     private HexGrid grid;
     private GridOccupancy occupancy;
@@ -92,7 +97,9 @@ public class GridTicketManager : MonoBehaviour
         activeTickets.Remove(ticket);
         
         // :)
-        FindObjectOfType<RoundStateManager>().SpawnPinFloatingText("+1 Ticket", new Vector3(pin.transform.position.x, pin.transform.position.y + 3, pin.transform.position.z));
+        float yPos = pin.transform.position.y + floatingTextBaseY + currentFloatingTextOffsetY;
+        FindObjectOfType<RoundStateManager>().SpawnPinFloatingText("+1 Ticket", new Vector3(pin.transform.position.x, yPos, pin.transform.position.z));
+        currentFloatingTextOffsetY += floatingTextStepY;
         
         return true;
     }
@@ -103,6 +110,12 @@ public class GridTicketManager : MonoBehaviour
     {
         foreach (var t in activeTickets) if (t.visual != null) Destroy(t.visual);
         activeTickets.Clear();
+        ResetFloatingTextYOffset();
+    }
+
+    public void ResetFloatingTextYOffset()
+    {
+        currentFloatingTextOffsetY = 0f;
     }
 
     private GameObject CreateTicketVisual(HexCell cell)

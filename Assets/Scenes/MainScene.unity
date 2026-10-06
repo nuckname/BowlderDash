@@ -3208,6 +3208,8 @@ MonoBehaviour:
   ticketHeightOffset: 1.15
   ticketCellColor: {r: 1, g: 0.82, b: 0.18, a: 0.92}
   ticketVisualPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
+  floatingTextBaseY: 3
+  floatingTextStepY: 1
 --- !u!114 &120957817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6940,22 +6942,21 @@ MonoBehaviour:
   shopCardsToPickFrom:
   - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
   - {fileID: 11400000, guid: 5a2511246ad521147ac54af6c486fc96, type: 2}
-  - {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
+  - {fileID: 11400000, guid: f95fbd7d54ddc85489949d0f13bfc713, type: 2}
+  - {fileID: 11400000, guid: a26218e724e8b2b40a9e10e190e201a2, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
   - {fileID: 11400000, guid: 36f08b64e7d55104ead70610e2423e18, type: 2}
   - {fileID: 11400000, guid: 0a84f8631685edd4e93ee685600f2243, type: 2}
   - {fileID: 11400000, guid: 7863ead928667f9438d4e5039ef3800c, type: 2}
   - {fileID: 11400000, guid: b651e3ec529500b428c7ecfbfc79cc93, type: 2}
   - {fileID: 11400000, guid: 6fbb79da6015dc24cab7bbb24d014476, type: 2}
   - {fileID: 11400000, guid: 683ce16cabbc4fe439a85ab6e39a7542, type: 2}
-  - {fileID: 11400000, guid: a26218e724e8b2b40a9e10e190e201a2, type: 2}
   - {fileID: 11400000, guid: ff87caae4b8a5bb4c8cc12bdf4a20d51, type: 2}
-  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
   - {fileID: 11400000, guid: baa8b01a446067b44a19b9f91ad1c627, type: 2}
   - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
   - {fileID: 11400000, guid: f1a82fb27a05cad4cae228cdd033fffe, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
-  - {fileID: 11400000, guid: f95fbd7d54ddc85489949d0f13bfc713, type: 2}
   - {fileID: 11400000, guid: f249cffaa727b4910b12ed8911c9ffe4, type: 2}
   amountOfTicketsToSpawnOnLane: {fileID: 11400000, guid: 613eb818f34654f59b7ff1cc85f141dc, type: 2}
   amountOfCardsToDrawEachTurn: 5
@@ -27045,15 +27046,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
-  - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: f1b29c7e6d8a4b50a3e9c74f251d8064, type: 2}
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
