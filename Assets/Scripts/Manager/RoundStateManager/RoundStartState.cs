@@ -85,22 +85,22 @@ public class RoundStartState : RoundBaseState
                 manager.gridManager.gridTicketManager.ticketsPerFrame = 2;
                 break;
             case 2:
-                manager.gridManager.gridTicketManager.ticketsPerFrame = 3;
+                manager.gridManager.gridTicketManager.ticketsPerFrame = 2;
                 break;
             case 3:
-                manager.gridManager.gridTicketManager.ticketsPerFrame = 4;
+                manager.gridManager.gridTicketManager.ticketsPerFrame = 2;
                 break;
             case 4:
-                manager.gridManager.gridTicketManager.ticketsPerFrame = 4;
+                manager.gridManager.gridTicketManager.ticketsPerFrame = 2;
                 break;
             case 5:
-                manager.gridManager.gridTicketManager.ticketsPerFrame = 5;
+                manager.gridManager.gridTicketManager.ticketsPerFrame = 3;
                 break;
             case 6:
-                manager.gridManager.gridTicketManager.ticketsPerFrame = 5;
+                manager.gridManager.gridTicketManager.ticketsPerFrame = 3;
                 break;
             case 7:
-                manager.gridManager.gridTicketManager.ticketsPerFrame = 5;
+                manager.gridManager.gridTicketManager.ticketsPerFrame = 3;
                 break;
             case 8:
                 manager.gridManager.gridTicketManager.ticketsPerFrame = 5;

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: ScoreAdjacentPin
   displayName: Floating
-  description: 'On Fall: Score +10 for every adjacent pin'
+  description: 'On Fall: Score +5 for every adjacent pin'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: 1860938214, guid: 2fb8e966a55c91c45b10ba98fe80b376, type: 3}

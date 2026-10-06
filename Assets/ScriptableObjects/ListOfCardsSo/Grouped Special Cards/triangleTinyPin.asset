@@ -23,7 +23,7 @@ MonoBehaviour:
   desiredLayout: 5
   cardTintCardRarity: {r: 1, g: 0.84, b: 0, a: 1}
   useCustomRandomisation: 1
-  zPositionRange: {x: -3, y: -30}
+  zPositionRange: {x: -3, y: -5}
   zRotationRange: {x: -5, y: -5}
   sizeRangeX: {x: 0.4, y: 0.4}
   sizeRangeY: {x: 0.4, y: 0.4}

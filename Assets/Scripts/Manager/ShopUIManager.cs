@@ -498,7 +498,7 @@ public class ShopUIManager : MonoBehaviour
         TextMeshProUGUI buttonText = cardTextButtons[index];
 
         int currentRound = _roundStateManager.sessionData.currentRound;
-        int costModifier = 1;
+        float costModifier = 1;
 
         costModifier = GetShopCostModifier(currentRound, costModifier);
 
@@ -533,7 +533,7 @@ public class ShopUIManager : MonoBehaviour
         buttonText.text = $"${calculatedCost}";
     }
 
-    private int GetShopCostModifier(int currentRound, int costModifier)
+    private float GetShopCostModifier(int currentRound, float costModifier)
     {
         if (shopCost != null && shopCost.roundCostModifiers != null && shopCost.roundCostModifiers.Length > 0)
         {

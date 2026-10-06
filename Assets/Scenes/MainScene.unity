@@ -6788,7 +6788,7 @@ MonoBehaviour:
     minimumFlightTime: 1
     stallSpeedThreshold: 0.35
     stallGracePeriod: 1.5
-    maximumFlightTime: 15
+    maximumFlightTime: 10
     maxPinSettleWaitTime: 4
     minRethrowZOffset: -1.5
     maxRethrowZOffset: 1.5
@@ -25796,6 +25796,7 @@ MonoBehaviour:
   startingDeck:
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
+  - {fileID: 11400000, guid: d19e82443850f7d44b303cef5a1f05a5, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
   - {fileID: 11400000, guid: 3c826c1c3cdad874bad351bdd93f296c, type: 2}
@@ -25803,13 +25804,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
-  - {fileID: 11400000, guid: 6fbb79da6015dc24cab7bbb24d014476, type: 2}
-  - {fileID: 11400000, guid: 6fbb79da6015dc24cab7bbb24d014476, type: 2}
-  - {fileID: 11400000, guid: 6fbb79da6015dc24cab7bbb24d014476, type: 2}
-  - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
-  - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
-  - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
-  - {fileID: 11400000, guid: db9c4a84ecfc05f479f08631af57946c, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

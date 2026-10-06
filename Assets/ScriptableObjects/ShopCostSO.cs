@@ -7,7 +7,7 @@ public class ShopCostSO : ScriptableObject
     public struct RoundCost
     {
         public string roundName;
-        public int costModifier;
+        public float costModifier;
     }
     
   // Adds to the base cost of the card
