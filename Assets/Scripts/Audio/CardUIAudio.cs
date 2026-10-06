@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent, RequireComponent(typeof(CardMovement))]
-public sealed class CardUIAudio : MonoBehaviour
+public sealed class CardUIAudio : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] private SoundCueSO hover;
     [SerializeField] private SoundCueSO click;
@@ -23,7 +24,6 @@ public sealed class CardUIAudio : MonoBehaviour
 
         card.PointerEnterEvent?.AddListener(OnPointerEnter);
         card.PointerExitEvent?.AddListener(OnPointerExit);
-        card.PointerDownEvent?.AddListener(OnPointerDown);
     }
 
     private void OnDisable()
@@ -32,7 +32,6 @@ public sealed class CardUIAudio : MonoBehaviour
         {
             card.PointerEnterEvent?.RemoveListener(OnPointerEnter);
             card.PointerExitEvent?.RemoveListener(OnPointerExit);
-            card.PointerDownEvent?.RemoveListener(OnPointerDown);
         }
 
         pointerInside = false;
@@ -49,10 +48,12 @@ public sealed class CardUIAudio : MonoBehaviour
 
     private void OnPointerExit(CardMovement source) => pointerInside = false;
 
-    private void OnPointerDown(CardMovement source)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        // CardMovement only emits this event for the initial left press.
-        // BeginDrag, PointerUp and Select must not play another click.
+        if (eventData == null || eventData.button != PointerEventData.InputButton.Left) return;
+
+        // Listen directly so audio does not depend on CardMovement's drag-only interfaces.
+        // BeginDrag, pointer-up and selection must not play another click.
         PlayClick();
     }
 
