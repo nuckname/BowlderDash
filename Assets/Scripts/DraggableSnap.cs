@@ -28,6 +28,11 @@ public class DraggableSnap : MonoBehaviour
     private RoundStateManager _roundStateManager;
     private WorldObjectToCard _worldObjectToCard;
     private bool _interactionEnabled = true;
+    private PinInteractionAudio _interactionAudio;
+
+    public static DraggableSnap ActiveDrag { get; private set; }
+    public bool IsDragging => _dragging;
+    public bool IsPlaced => _gridOccupancy != null && _gridOccupancy.GetCellByOccupant(transform) != null;
 
     // Group tracking data
     private Dictionary<DraggableSnap, Vector2Int> _peerAxialOffsets = new Dictionary<DraggableSnap, Vector2Int>();
@@ -47,10 +52,11 @@ public class DraggableSnap : MonoBehaviour
         _roundStateManager = FindFirstObjectByType<RoundStateManager>();
         
         _worldObjectToCard = GetComponent<WorldObjectToCard>();
+        _interactionAudio = GetComponent<PinInteractionAudio>();
     }
 
-    private bool CanInteract =>
-        _interactionEnabled &&
+    public bool CanInteract =>
+        isActiveAndEnabled && _interactionEnabled &&
         _roundStateManager != null &&
         _roundStateManager.IsPinPlacementActive;
 
@@ -91,19 +97,27 @@ public class DraggableSnap : MonoBehaviour
 
     private void Update()
     {
+        if (_dragging && Input.GetKeyDown(KeyCode.Escape))
+        {
+            CancelDrag();
+            return;
+        }
         if (!CanInteract || _gridOccupancy == null || _hexGrid == null || _gridManager == null || _cam == null)
         {
+            CancelDrag();
             return;
         }
 
         // Do not allow picking up placed pins while a hand card is currently being dragged
         if (HandManager.Instance != null && HandManager.Instance.IsAnyCardDragging())
         {
+            CancelDrag();
             return;
         }
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (_dragging || ActiveDrag != null || PinInteractionAudio.IsPointerOverUI()) return;
             Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
             Plane gridPlane = new Plane(Vector3.up, _hexGrid.transform.position);
 
@@ -153,6 +167,11 @@ public class DraggableSnap : MonoBehaviour
             var snap = obj.GetComponent<DraggableSnap>();
             
             HexCell cell = _gridOccupancy.GetCellByOccupant(obj.transform);
+            if (snap == null || !snap.CanInteract || cell == null)
+            {
+                ClearDragState();
+                return;
+            }
             
             _peerOriginalCells[snap] = cell;
             _peerOriginalPositions[snap] = obj.transform.position;
@@ -160,8 +179,12 @@ public class DraggableSnap : MonoBehaviour
             Vector2Int axial = _gridManager.GetAxialCoordinate(cell);
             _peerAxialOffsets[snap] = axial - myAxial;
 
-            if (cell != null)
-                _gridOccupancy.ReleaseCell(obj.transform);
+        }
+
+        foreach (var obj in GetGroupObjects())
+        {
+            var snap = obj.GetComponent<DraggableSnap>();
+            _gridOccupancy.ReleaseCell(obj.transform);
   
             float elevatedY = _peerOriginalPositions[snap].y + dragElevation;
             obj.transform.position = new Vector3(obj.transform.position.x, elevatedY, obj.transform.position.z);
@@ -184,6 +207,8 @@ public class DraggableSnap : MonoBehaviour
         }
         
         _dragging = true;
+        ActiveDrag = this;
+        _interactionAudio?.PlayPickup();
     }
 
     private void ContinueDrag()
@@ -198,6 +223,11 @@ public class DraggableSnap : MonoBehaviour
         
         if (Input.mousePosition.y < playAreaThresholdY && canBeReturnedToHand)
         {
+            if (_worldObjectToCard == null)
+            {
+                CancelDrag();
+                return;
+            }
             _dragging = false;
             
             // Clean up visuals before returning to hand
@@ -206,10 +236,8 @@ public class DraggableSnap : MonoBehaviour
                 UpdatePreviewVisuals(obj, true); 
             }
 
-            if (_worldObjectToCard != null)
-            {
-                _worldObjectToCard.ReturnToHand(); 
-            }
+            ClearDragState();
+            _worldObjectToCard.ReturnToHand();
             return; 
         }
 
@@ -266,75 +294,54 @@ public class DraggableSnap : MonoBehaviour
     {
         if (!_dragging) return;
 
-        if (!CanInteract)
+        if (!CanInteract || PinInteractionAudio.IsPointerOverUI())
         {
             CancelDrag();
             return;
         }
 
-        _dragging = false;
-
         HexCell finalAnchor = _hexGrid.GetNearestCell(transform.position);
         bool canPlace = false;
-        HashSet<Transform> swapGroupTransforms = null;
         Dictionary<Transform, HexCell> swapTargetCells = null;
 
         if (finalAnchor != null)
         {
-            canPlace = EvaluatePlacementOrSwap(finalAnchor, out swapGroupTransforms, out swapTargetCells);
+            canPlace = EvaluatePlacementOrSwap(finalAnchor, out _, out swapTargetCells);
         }
 
+        bool placed = false;
         if (canPlace)
         {
-            // Release the other group's cells first if we are swapping
-            if (swapGroupTransforms != null)
-            {
-                foreach (Transform otherTransform in swapGroupTransforms)
-                {
-                    _gridOccupancy.ReleaseCell(otherTransform);
-                }
-            }
-
-            // Reserve and drop into new spots
+            var destinations = new Dictionary<Transform, HexCell>();
             foreach (var obj in GetGroupObjects())
             {
                 var snap = obj.GetComponent<DraggableSnap>();
                 HexCell target = _gridManager.GetCellWithOffset(finalAnchor, _peerAxialOffsets[snap]);
-                
-                _gridOccupancy.TryReserveCell(target, obj.transform);
-                
-                // Force the object to snap perfectly to the floor height of the hex cell.
-                obj.transform.position = new Vector3(
-                    target.center.x, 
-                    target.center.y, 
-                    target.center.z);
-
-                // Ensure visuals are restored
-                UpdatePreviewVisuals(obj, true);
+                destinations[obj.transform] = target;
             }
-
-            // Reserve and move the swapped group into our original spots
             if (swapTargetCells != null)
             {
                 foreach (var kvp in swapTargetCells)
-                {
-                    Transform otherTransform = kvp.Key;
-                    HexCell targetCell = kvp.Value;
+                    destinations[kvp.Key] = kvp.Value;
+            }
 
-                    _gridOccupancy.TryReserveCell(targetCell, otherTransform);
-                    otherTransform.position = new Vector3(
-                        targetCell.center.x,
-                        targetCell.center.y,
-                        targetCell.center.z);
-                }
+            placed = _gridOccupancy.TryReserveCells(destinations);
+            if (placed)
+            {
+                foreach (var destination in destinations)
+                    destination.Key.position = destination.Value.center;
+                foreach (var obj in GetGroupObjects())
+                    UpdatePreviewVisuals(obj, true);
             }
         }
-        else
+        if (!placed)
         {
             RestoreOriginalPlacement();
         }
 
+        _dragging = false;
         ClearDragState();
+        if (placed) _interactionAudio?.PlayRelease();
     }
 
     private bool EvaluatePlacementOrSwap(
@@ -461,17 +468,20 @@ public class DraggableSnap : MonoBehaviour
 
     private void RestoreOriginalPlacement()
     {
+        var destinations = new Dictionary<Transform, HexCell>();
+        foreach (var original in _peerOriginalCells)
+        {
+            if (original.Key != null && original.Value != null)
+                destinations[original.Key.transform] = original.Value;
+        }
+        if (_gridOccupancy != null) _gridOccupancy.TryReserveCells(destinations);
+
         foreach (var obj in GetGroupObjects())
         {
             var snap = obj.GetComponent<DraggableSnap>();
             if (snap == null || !_peerOriginalPositions.TryGetValue(snap, out Vector3 originalPosition))
             {
                 continue;
-            }
-
-            if (_peerOriginalCells.TryGetValue(snap, out HexCell originalCell) && originalCell != null)
-            {
-                _gridOccupancy.TryReserveCell(originalCell, obj.transform);
             }
 
             obj.transform.position = originalPosition;
@@ -513,10 +523,16 @@ public class DraggableSnap : MonoBehaviour
 
     private void ClearDragState()
     {
+        if (ActiveDrag == this) ActiveDrag = null;
         _peerAxialOffsets.Clear();
         _peerOriginalCells.Clear();
         _peerOriginalPositions.Clear();
         _originalMaterials.Clear();
         _pinValidityStates.Clear();
     }
+
+    private void OnDisable() => CancelDrag();
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetDragOwner() => ActiveDrag = null;
 }

@@ -14,6 +14,7 @@ public class MouseHighlightManager : MonoBehaviour
     private HexGrid grid;
     private Camera mainCamera;
     private WorldObjectToCard currentHoveredPin;
+    private RoundStateManager roundStateManager;
     
     private List<LineRenderer> highlightLines = new List<LineRenderer>();
     private Material highlightMaterial;
@@ -27,12 +28,21 @@ public class MouseHighlightManager : MonoBehaviour
         }
 
         mainCamera = Camera.main;
+        roundStateManager = FindFirstObjectByType<RoundStateManager>();
         highlightMaterial = new Material(Shader.Find("Sprites/Default"));
     }
 
     private void Update()
     {
-        if (mainCamera == null || grid == null) return;
+        if (mainCamera == null || grid == null || roundStateManager == null ||
+            !roundStateManager.IsPinPlacementActive || DraggableSnap.ActiveDrag != null ||
+            (HandManager.Instance != null && HandManager.Instance.IsAnyCardDragging()) ||
+            PinInteractionAudio.IsPointerOverUI())
+        {
+            currentHoveredPin = null;
+            ClearHighlights();
+            return;
+        }
         
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         Plane gridPlane = new Plane(Vector3.up, grid.transform.position);
@@ -53,7 +63,9 @@ public class MouseHighlightManager : MonoBehaviour
                         hoveredPinBase = nearestCell.occupant.GetComponent<PinBase>();
                     }
 
-                    if (hoveredPinBase != null && hoveredPinBase.allowPinSelection)
+                    DraggableSnap snap = nearestCell.occupant.GetComponent<DraggableSnap>();
+                    if (hoveredPinBase != null && hoveredPinBase.isActiveAndEnabled &&
+                        hoveredPinBase.allowPinSelection && snap != null && snap.CanInteract)
                     {
                         pin = nearestCell.occupant.GetComponentInParent<WorldObjectToCard>();
                         
@@ -68,10 +80,11 @@ public class MouseHighlightManager : MonoBehaviour
 
         if (pin != null)
         {
-            if (pin != currentHoveredPin)
+            if (!IsSameGroup(pin, currentHoveredPin))
             {
                 currentHoveredPin = pin;
                 UpdateHighlights();
+                pin.GetComponent<PinInteractionAudio>()?.PlayHover();
             }
         }
         else if (currentHoveredPin != null)
@@ -97,6 +110,19 @@ public class MouseHighlightManager : MonoBehaviour
                 CreateHighlightHex(cell.center);
             }
         }
+    }
+
+    private static bool IsSameGroup(WorldObjectToCard pin, WorldObjectToCard previous)
+    {
+        return pin == previous || (previous != null &&
+            ((pin.GroupPeers != null && pin.GroupPeers.Contains(previous)) ||
+             (previous.GroupPeers != null && previous.GroupPeers.Contains(pin))));
+    }
+
+    private void OnDisable()
+    {
+        currentHoveredPin = null;
+        ClearHighlights();
     }
 
     private void CreateHighlightHex(Vector3 center)

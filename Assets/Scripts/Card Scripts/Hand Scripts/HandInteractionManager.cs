@@ -81,6 +81,7 @@ public class HandInteractionManager : MonoBehaviour
     
     private void HandleHotkeyInput()
     {
+        if (DraggableSnap.ActiveDrag != null) return;
         KeyCode[] numberKeys = { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5 };
 
         for (int i = 0; i < numberKeys.Length; i++)

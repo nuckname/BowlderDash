@@ -56,5 +56,7 @@ public class GridManager : MonoBehaviour
     public HexCell GetNearestCell(Vector3 pos) => grid.GetNearestCell(pos);
 
     public bool TryReserveCell(HexCell cell, Transform requester) => occupancy.TryReserveCell(cell, requester);
+    public bool TryReserveCells(System.Collections.Generic.IReadOnlyDictionary<Transform, HexCell> destinations) =>
+        occupancy.TryReserveCells(destinations);
 
 }

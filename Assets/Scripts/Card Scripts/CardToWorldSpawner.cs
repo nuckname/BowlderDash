@@ -12,6 +12,7 @@ public class CardToWorldSpawner : MonoBehaviour
     private List<GameObject> _spawnedWorldObjects = new List<GameObject>();
     private GridManager _grid;
     private CardMovement _cardMovement;
+    private RoundStateManager _roundStateManager;
     
     private HexCell _currentHoveredCell;
     [SerializeField] private float previewHeightOffset = 1.5f;
@@ -25,6 +26,7 @@ public class CardToWorldSpawner : MonoBehaviour
     private void Awake()
     {
         _cardMovement = GetComponent<CardMovement>();
+        _roundStateManager = FindFirstObjectByType<RoundStateManager>();
         _grid = GameObject.FindGameObjectWithTag("HexManager").GetComponent<GridManager>();
 
         // Subscribe to events from the movement script
@@ -41,8 +43,9 @@ public class CardToWorldSpawner : MonoBehaviour
         }
     }
 
-    private void UpdatePreviewPosition()
+    private void UpdatePreviewPosition(bool requireCurrentHit = false)
     {
+        if (requireCurrentHit) _currentHoveredCell = null;
         // Move the WORLD object using Raycasting
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 1000f, worldPlacementMask))
@@ -160,71 +163,44 @@ public class CardToWorldSpawner : MonoBehaviour
         _pinValidityStates.Clear();
     }
 
-private void TryPlaceObject()
+    private void TryPlaceObject()
     {
-        if (_spawnedWorldObjects.Count == 0 || _currentHoveredCell == null || !_isValidPlacement)
-        {
-            return;
-        }
+        if (!isActiveAndEnabled || _cardMovement == null || _cardMovement.cardData == null || _grid == null ||
+            _roundStateManager == null || !_roundStateManager.IsPinPlacementActive ||
+            Camera.main == null || PinInteractionAudio.IsPointerOverUI()) return;
 
+        UpdatePreviewPosition(true);
         var pattern = GetActivePattern();
-        List<HexCell> targetCells = new List<HexCell>();
+        if (_spawnedWorldObjects.Count == 0 || _spawnedWorldObjects.Count != pattern.Count ||
+            _currentHoveredCell == null || !_isValidPlacement) return;
 
-        for (int i = 0; i < pattern.Count; i++)
-        {
-            HexCell target = _grid.GetCellWithOffset(_currentHoveredCell, pattern[i].offset);
-            targetCells.Add(target);
-        }
-
-        List<WorldObjectToCard> groupedPins = new List<WorldObjectToCard>();
-        
-        // Gather all components to link them together
+        var destinations = new Dictionary<Transform, HexCell>();
+        var groupedPins = new List<WorldObjectToCard>();
         for (int i = 0; i < _spawnedWorldObjects.Count; i++)
         {
-            WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
-            if (returnScript != null)
-            {
-                groupedPins.Add(returnScript);
-            }
+            GameObject obj = _spawnedWorldObjects[i];
+            if (obj == null) return;
+            destinations[obj.transform] = _grid.GetCellWithOffset(_currentHoveredCell, pattern[i].offset);
+            if (obj.TryGetComponent(out WorldObjectToCard card)) groupedPins.Add(card);
         }
+        if (!_grid.TryReserveCells(destinations)) return;
 
-        for (int i = 0; i < _spawnedWorldObjects.Count; i++)
+        foreach (GameObject obj in _spawnedWorldObjects)
         {
-            bool reserved = _grid.TryReserveCell(targetCells[i], _spawnedWorldObjects[i].transform);
-            if (reserved)
-            {
-                _spawnedWorldObjects[i].SetActive(true);
-                UpdatePreviewVisuals(_spawnedWorldObjects[i], true);
-
-                // Re-enable colliders now that the pin is placed in the world
-                foreach (var col in _spawnedWorldObjects[i].GetComponentsInChildren<Collider>())
-                {
-                    col.enabled = true;
-                }
-
-                // FIX: Force the pin down from the previewHeightOffset so it sits perfectly on the hex floor
-                _spawnedWorldObjects[i].transform.position = new Vector3(
-                    targetCells[i].center.x, 
-                    targetCells[i].center.y, 
-                    targetCells[i].center.z
-                );
-
-                WorldObjectToCard returnScript = _spawnedWorldObjects[i].GetComponent<WorldObjectToCard>();
-                if (returnScript != null)
-                {
-                    // Inject the pin with card data and its sibling group.
-                    returnScript.SetupCardData(_cardMovement.cardData, groupedPins);
-                }
-                
-                PinBase pin = _spawnedWorldObjects[i].GetComponent<PinBase>();
-                if (pin != null)
-                {
-                    pin.SetImpactAudioRegistrationBlocked(false);
-                    pin.OnPlaced();
-                }
-            }
+            obj.SetActive(true);
+            obj.transform.position = destinations[obj.transform].center;
+            UpdatePreviewVisuals(obj, true);
+            foreach (var col in obj.GetComponentsInChildren<Collider>()) col.enabled = true;
+            if (obj.TryGetComponent(out WorldObjectToCard card))
+                card.SetupCardData(_cardMovement.cardData, groupedPins);
+            if (obj.TryGetComponent(out PinBase pin)) pin.SetImpactAudioRegistrationBlocked(false);
         }
 
+        _spawnedWorldObjects[0].GetComponent<PinInteractionAudio>()?.PlayRelease();
+        foreach (GameObject obj in _spawnedWorldObjects)
+        {
+            if (obj != null && obj.TryGetComponent(out PinBase pin)) pin.OnPlaced();
+        }
         _spawnedWorldObjects.Clear();
         _originalMaterials.Clear();
         _pinValidityStates.Clear();

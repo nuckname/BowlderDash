@@ -128,6 +128,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9000000000000000001}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8890000000000000001}
   m_SourcePrefab: {fileID: 100100000, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
 --- !u!114 &9000000000000000001
 MonoBehaviour:
@@ -377,3 +380,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5919451674846626430}
   m_Mesh: {fileID: -9030487521548844279, guid: 9192c901fa35744439d718b5d0ecc4c2, type: 3}
+--- !u!114 &8890000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5919451674846626430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e8ec5b4e3b4da2b0526289a4c7b6ae, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  hover: {fileID: 11400000, guid: d3a3efc9eefd4653894d00ef421043f3, type: 2}
+  pickup: {fileID: 11400000, guid: 290d724cb04a4c9397e033da3689cfd8, type: 2}
+  release: {fileID: 11400000, guid: 181334bf16c54df3857637f7aa5ba4b0, type: 2}
