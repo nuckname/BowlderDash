@@ -121,6 +121,7 @@
     <Compile Include="Assets\Scripts\Ball\BallRampFollower.cs" />
     <Compile Include="Assets\Scripts\Manager\ShopUIManager.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\Deck Scripts\DeckDisplayUi.cs" />
+    <Compile Include="Assets\Scripts\Audio\ShopTvLandingAudio.cs" />
     <Compile Include="Assets\Scripts\Pins\Pin Refactor\ScoreMultiplierEffect.cs" />
     <Compile Include="Assets\Scripts\Ball\GetTicketOnHit.cs" />
     <Compile Include="Assets\Scripts\Pins\WorldObjectToCard.cs" />

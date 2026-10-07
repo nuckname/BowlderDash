@@ -47,7 +47,18 @@ public class ShopUIManager : MonoBehaviour
     public GameObject secondTvPrefab;
     public Vector3 secondTvRotationOffset = new Vector3(0, 90, 90);
     private GameObject _spawnedSecondTv;
-    private bool _hasShownSecondTv = false;
+    private bool _hexGridExpansionActive;
+
+    [Header("Hex Mode Landing Audio")]
+    [SerializeField] private SoundCueSO tvLandingCue;
+    [SerializeField] private LayerMask tvLandingSurfaces = (1 << 0) | (1 << 6);
+    [SerializeField, Range(0f, 1f)] private float minimumLandingSupportDot = 0.5f;
+    [SerializeField, Min(0f)] private float minimumTvBounceSpeed = 0.1f;
+    [SerializeField, Min(0f)] private float tvBounceCooldown = 0.12f;
+
+    public bool IsHexGridExpansionActive => isActiveAndEnabled && _hexGridExpansionActive &&
+        shopGameObject != null && shopGameObject.activeInHierarchy && _roundStateManager != null &&
+        _roundStateManager.currentState == _roundStateManager.shopState;
     
     [Header("TV Game Objects")] 
     [SerializeField] private GameObject throwBallTv;
@@ -89,6 +100,7 @@ public class ShopUIManager : MonoBehaviour
     
     public void ToggleShop(bool show, RoundStateManager manager = null)
     {
+        if (!show) CloseHexGridMode(false);
         shopGameObject.SetActive(show);
         
         if (show)
@@ -368,52 +380,78 @@ public class ShopUIManager : MonoBehaviour
     {
         if (turnOn)
         {
+            if (_hexGridExpansionActive || _roundStateManager == null ||
+                _roundStateManager.currentState != _roundStateManager.shopState ||
+                shopGameObject == null || !shopGameObject.activeInHierarchy || !isActiveAndEnabled) return;
+
+            _hexGridExpansionActive = true;
             _roundStateManager.postProcessingEffects.SetActive(true);
             
             _roundStateManager.MoveCamera(CameraLocation.PinCameraLocation);
             
-            if (ticketCostTvPrefab != null && tvSpawnPoint != null)
-            {
-                _spawnedTicketCostTv = Instantiate(ticketCostTvPrefab, tvSpawnPoint.position, tvSpawnPoint.rotation);
+            _spawnedTicketCostTv = SpawnHexModeTv(ticketCostTvPrefab, tvSpawnPoint, new Vector3(0, 90, 90));
+            _spawnedSecondTv = SpawnHexModeTv(secondTvPrefab, secondTvSpawnPoint, secondTvRotationOffset);
+            UpdateGridTVText();
 
-                _spawnedTicketCostTv.transform.rotation = Quaternion.Euler(0, 90, 90);
-                
-                // Changed this part to use the new helper method
-                UpdateGridTVText();
-            }
-
-            if (!_hasShownSecondTv && secondTvPrefab != null && secondTvSpawnPoint != null)
-            {
-                _spawnedSecondTv = Instantiate(secondTvPrefab, secondTvSpawnPoint.position, secondTvSpawnPoint.rotation);
-                _spawnedSecondTv.transform.rotation = Quaternion.Euler(secondTvRotationOffset);
-                _hasShownSecondTv = true;
-            }
+            _roundStateManager.PinPlacementVisuals(true);
+            if (throwBallTv != null) throwBallTv.SetActive(false);
+            if (goBackToShopTv != null) goBackToShopTv.SetActive(true);
+            if (hexGridExpander != null) hexGridExpander.enabled = true;
         }
         else
         {
+            CloseHexGridMode(IsHexGridExpansionActive);
+        }
+    }
+
+    // Shared TV prefabs remain unchanged; only these shop-owned instances are armed.
+    private GameObject SpawnHexModeTv(GameObject prefab, Transform spawnPoint, Vector3 rotation)
+    {
+        if (prefab == null || spawnPoint == null) return null;
+        var tv = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
+        tv.transform.rotation = Quaternion.Euler(rotation);
+        var landingAudio = tv.GetComponent<ShopTvLandingAudio>();
+        if (landingAudio == null) landingAudio = tv.AddComponent<ShopTvLandingAudio>();
+        landingAudio.Arm(tvLandingCue, this, tvLandingSurfaces, minimumLandingSupportDot,
+            minimumTvBounceSpeed, tvBounceCooldown);
+        return tv;
+    }
+
+    // State exit uses the same cleanup without panning back to the shop camera.
+    private void CloseHexGridMode(bool restoreShopView)
+    {
+        bool wasActive = _hexGridExpansionActive;
+        _hexGridExpansionActive = false;
+        DestroyHexModeTv(ref _spawnedTicketCostTv);
+        DestroyHexModeTv(ref _spawnedSecondTv);
+        if (hexGridExpander != null) hexGridExpander.enabled = false;
+        if (!wasActive) return;
+
+        if (throwBallTv != null) throwBallTv.SetActive(true);
+        if (goBackToShopTv != null) goBackToShopTv.SetActive(false);
+        if (_roundStateManager == null) return;
+        _roundStateManager.PinPlacementVisuals(false);
+        if (restoreShopView)
+        {
             _roundStateManager.MoveCamera(CameraLocation.ShopCameraLocation);
-            
             _roundStateManager.postProcessingEffects.SetActive(false);
-            
-            if (_spawnedTicketCostTv != null)
-            {
-                Destroy(_spawnedTicketCostTv);
-            }
-
-            if (_spawnedSecondTv != null)
-            {
-                Destroy(_spawnedSecondTv);
-            }
-
             UpdateGridButtonText();
         }
-        
-        _roundStateManager.PinPlacementVisuals(turnOn);
-
-        throwBallTv.SetActive(!turnOn);
-        goBackToShopTv.SetActive(turnOn);
-        hexGridExpander.enabled = turnOn;
     }
+
+    // Destroy is deferred, so disarm and disable contacts before dropping ownership.
+    private static void DestroyHexModeTv(ref GameObject tv)
+    {
+        if (tv != null)
+        {
+            tv.GetComponent<ShopTvLandingAudio>()?.Disarm();
+            tv.SetActive(false);
+            Destroy(tv);
+        }
+        tv = null;
+    }
+
+    private void OnDisable() => CloseHexGridMode(false);
     
     private void UpdateGridButtonText()
     {
@@ -481,10 +519,7 @@ public class ShopUIManager : MonoBehaviour
             totalGridUpgrades++;
             UpdateGridTVText();
 
-            if (_spawnedSecondTv != null)
-            {
-                Destroy(_spawnedSecondTv);
-            }
+            DestroyHexModeTv(ref _spawnedSecondTv);
 
             return true;
         }

@@ -20428,6 +20428,11 @@ MonoBehaviour:
   secondTvSpawnPoint: {fileID: 675716545}
   secondTvPrefab: {fileID: 7284009533937498436, guid: eabd68a18f58a4f83b5934562d5616e0, type: 3}
   secondTvRotationOffset: {x: 0, y: 90, z: 90}
+  tvLandingCue: {fileID: 11400000, guid: 1afa58dc3ae68cd448ab171073372193, type: 2}
+  tvLandingSurfaces:
+    serializedVersion: 2
+    m_Bits: 65
+  minimumLandingSupportDot: 0.5
   throwBallTv: {fileID: 1519937886}
   goBackToShopTv: {fileID: 51501853}
   baseGridCost: 2
