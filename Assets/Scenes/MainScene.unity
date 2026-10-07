@@ -16466,6 +16466,9 @@ MonoBehaviour:
   lineRenderer: {fileID: 934142803}
   powerSlider: {fileID: 0}
   targetCamera: {fileID: 1588884242}
+  drawingLoopCue: {fileID: 11400000, guid: 74aa1b677ebd69e4c88571be3970b836, type: 2}
+  drawingFadeInTime: 0.05
+  drawingFadeOutTime: 0.05
   drawMaxDistance: 5000
 --- !u!120 &934142803
 LineRenderer:

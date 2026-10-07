@@ -12,6 +12,11 @@ public class PathDrawer : MonoBehaviour
     public Slider powerSlider;
     public Camera targetCamera;
 
+    [Header("Drawing Audio")]
+    [SerializeField] private SoundCueSO drawingLoopCue;
+    [SerializeField, Min(0f)] private float drawingFadeInTime = 0.05f;
+    [SerializeField, Min(0f)] private float drawingFadeOutTime = 0.05f;
+
     private IPathDrawListener _iPathDrawListener;
 
     private List<CurvePoint> _processedCurve = new List<CurvePoint>();
@@ -19,6 +24,8 @@ public class PathDrawer : MonoBehaviour
     private bool _isDrawing = false;
     private bool _isValidDraw = false;
     private float _mouseUpTimer = 0f;
+    private GameAudio.LoopHandle _drawingLoop;
+    private bool _drawingAudioRequested;
 
     [SerializeField] private int drawMaxDistance; 
     
@@ -36,6 +43,7 @@ public class PathDrawer : MonoBehaviour
 
     public void ResetDrawing()
     {
+        StopDrawingAudio();
         CancelInvoke(nameof(EndDrawingAndLaunch));
         _isDrawing = false;
         _isValidDraw = false;
@@ -51,7 +59,11 @@ public class PathDrawer : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            if (_isDrawing) _mouseUpTimer = 0f;
+            if (_isDrawing)
+            {
+                _mouseUpTimer = 0f;
+                StartDrawingAudio();
+            }
             else StartDrawing();
         }
         else if (Input.GetMouseButton(0) && _isDrawing)
@@ -61,6 +73,7 @@ public class PathDrawer : MonoBehaviour
         }
         else if (_isDrawing && !Input.GetMouseButton(0))
         {
+            PauseDrawingAudio();
             _mouseUpTimer += Time.deltaTime;
             if (_mouseUpTimer >= tuningData.drawTimeTolerance) EndDrawingAndLaunch();
         }
@@ -68,6 +81,7 @@ public class PathDrawer : MonoBehaviour
 
     private void StartDrawing()
     {
+        StopDrawingAudio();
         CancelInvoke(nameof(EndDrawingAndLaunch));
         _processedCurve.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
@@ -82,6 +96,7 @@ public class PathDrawer : MonoBehaviour
                 _isDrawing = true;
                 _mouseDownTime = Time.time;
                 AddPoint(hit.point);
+                StartDrawingAudio();
                 _iPathDrawListener.OnInstructionUpdated("Drawing path... Release to bowl!");
             }
             else
@@ -109,6 +124,7 @@ public class PathDrawer : MonoBehaviour
             if (point.z >= tuningData.maxZ)
             {
                 _isDrawing = false;
+                StopDrawingAudio();
                 Invoke(nameof(EndDrawingAndLaunch), 0.3f);
                 return;
             }
@@ -128,7 +144,9 @@ public class PathDrawer : MonoBehaviour
     
     private void EndDrawingAndLaunch()
     {
+        StopDrawingAudio();
         _isDrawing = false;
+        if (_iPathDrawListener == null) return;
         if (!_isValidDraw || _processedCurve.Count < 2) 
         {
             _iPathDrawListener.OnDrawCancelled();
@@ -138,6 +156,39 @@ public class PathDrawer : MonoBehaviour
         float duration = Time.time - _mouseDownTime;
         _iPathDrawListener.OnDrawCompleted(new List<CurvePoint>(_processedCurve), duration);
     }
+
+    // Request once per held segment; unavailable audio must not be retried every frame.
+    private void StartDrawingAudio()
+    {
+        if (_drawingAudioRequested) return;
+        _drawingAudioRequested = true;
+        if (_drawingLoop.IsValid)
+        {
+            _drawingLoop.SetParameters(1f, 1f, drawingFadeInTime);
+        }
+        else if (GameAudio.Instance != null)
+        {
+            _drawingLoop = GameAudio.Instance.BeginLoop(drawingLoopCue, this, fadeInTime: drawingFadeInTime);
+        }
+    }
+
+    // Keep the handle through release tolerance so completion can still stop it immediately.
+    private void PauseDrawingAudio()
+    {
+        if (!_drawingAudioRequested) return;
+        _drawingAudioRequested = false;
+        _drawingLoop.SetParameters(0f, 1f, drawingFadeOutTime);
+    }
+
+    private void StopDrawingAudio()
+    {
+        _drawingAudioRequested = false;
+        _drawingLoop.Stop(0f);
+        _drawingLoop = default;
+    }
+
+    // Disabling the drawer also cancels its delayed maximum-distance launch.
+    private void OnDisable() => ResetDrawing();
 
     private float GetLaunchPowerNormalized(float drawDuration)
     {
