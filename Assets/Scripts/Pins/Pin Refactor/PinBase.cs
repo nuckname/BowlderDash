@@ -13,6 +13,7 @@ public class PinBase : MonoBehaviour
     public float minHitVelocity = 3f;
 
     public bool hasEnterTheHoleAtTheBack = false;
+    public bool hasEnterGutter = false;
     
     // Im doing it like this because not all pin prefabs are the same.
     // Universal pin drag
@@ -254,6 +255,11 @@ public class PinBase : MonoBehaviour
         if (other.CompareTag("ThePit"))
         {
             hasEnterTheHoleAtTheBack = true;
+        }
+        
+        if (other.CompareTag("Gutter"))
+        {
+            hasEnterGutter = true;
         }
         
         HandleHit(other);

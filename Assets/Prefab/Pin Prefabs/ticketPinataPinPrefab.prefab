@@ -6511,20 +6511,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &9000000000000000001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3811477678882886870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c732762a9da64c4a8c427f627e031c14, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  profile: {fileID: 11400000, guid: cbac942f55ba4e1399af3f09a3dfe3b2, type: 2}
-  requireInstanceEligibility: 1
 --- !u!114 &568341343779092702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6549,11 +6535,10 @@ MonoBehaviour:
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
-  yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
-  boxColliderToDisable: {fileID: 0}
+  boxColliderToDisable: {fileID: 4377073858204794061}
   allowPinSelection: 0
   _isFallen: 0
   toScorePinFallOver: 0
@@ -6566,6 +6551,20 @@ MonoBehaviour:
       data:
         ticketValue: 1
         particleSystem: {fileID: 6131355113909808092}
+--- !u!114 &9000000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811477678882886870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c732762a9da64c4a8c427f627e031c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: cbac942f55ba4e1399af3f09a3dfe3b2, type: 2}
+  requireInstanceEligibility: 1
 --- !u!114 &2265266226455491222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6615,7 +6614,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 1.3125803
   m_Height: 3.3905544
@@ -6640,8 +6639,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.9517868, y: 4.5332355, z: 1.7798504}
-  m_Center: {x: 0.030617833, y: 3.1204472, z: -0.11617404}
+  m_Size: {x: 1.2891299, y: 0.14035606, z: 1.2104845}
+  m_Center: {x: -0.010540068, y: 0.4181962, z: -0.05509916}
 --- !u!136 &6083968275749209475
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6659,7 +6658,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.9268016
   m_Height: 1.9527493
@@ -6681,6 +6680,21 @@ MonoBehaviour:
   _groupPeers: []
   canBePickedUp: 1
   cannotBeReturnedToDeck: 0
+--- !u!114 &8890000000000000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3811477678882886870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e8ec5b4e3b4da2b0526289a4c7b6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hover: {fileID: 11400000, guid: d3a3efc9eefd4653894d00ef421043f3, type: 2}
+  pickup: {fileID: 11400000, guid: 290d724cb04a4c9397e033da3689cfd8, type: 2}
+  release: {fileID: 11400000, guid: 181334bf16c54df3857637f7aa5ba4b0, type: 2}
 --- !u!1 &4199497254964305983
 GameObject:
   m_ObjectHideFlags: 0
@@ -8692,18 +8706,3 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8890000000000000001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3811477678882886870}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7e8ec5b4e3b4da2b0526289a4c7b6ae, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  hover: {fileID: 11400000, guid: d3a3efc9eefd4653894d00ef421043f3, type: 2}
-  pickup: {fileID: 11400000, guid: 290d724cb04a4c9397e033da3689cfd8, type: 2}
-  release: {fileID: 11400000, guid: 181334bf16c54df3857637f7aa5ba4b0, type: 2}

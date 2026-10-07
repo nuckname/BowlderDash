@@ -1340,20 +1340,29 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
+      inSlope: 0.96276987
+      outSlope: 0.96276987
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
+      time: 0.6660642
+      value: 0.6412665
+      inSlope: 2.9363997
+      outSlope: 2.9363997
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.12288434
+    - serializedVersion: 3
+      time: 0.973999
+      value: 0.9976196
+      inSlope: 1.1572355
+      outSlope: 1.1572355
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1383,7 +1392,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   curveMultiplier: 5
   ticketHeightOffset: 0.5
-  debugAmountToSpawn: 10
+  debugAmountToSpawn: 3
   amountToTicketsSpawnOnLane: {fileID: 11400000, guid: 613eb818f34654f59b7ff1cc85f141dc, type: 2}
 --- !u!1 &51501853
 GameObject:
@@ -3734,7 +3743,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -35.07949, y: -1.9285583, z: -16.514822}
-  m_LocalScale: {x: 40.51441, y: 3.3553998, z: 0.96414995}
+  m_LocalScale: {x: 40.51441, y: 6.0081215, z: 3.708631}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 981846050}
@@ -8536,7 +8545,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -35.07947, y: -2.3085632, z: 15.755074}
-  m_LocalScale: {x: 40.51441, y: 3.3553998, z: 0.96414995}
+  m_LocalScale: {x: 40.51441, y: 6.0081215, z: 3.708631}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 981846050}
@@ -26925,6 +26934,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
+  - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
+  - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
+  - {fileID: 11400000, guid: dc744158563d03146a340d60627bc268, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
