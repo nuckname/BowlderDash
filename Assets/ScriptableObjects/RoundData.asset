@@ -20,22 +20,22 @@ MonoBehaviour:
     scoreNeededToBeat: 60
     maxBallsAllowedToThrow: 3
   - roundNumber: 2
-    scoreNeededToBeat: 80
+    scoreNeededToBeat: 100
     maxBallsAllowedToThrow: 3
   - roundNumber: 3
-    scoreNeededToBeat: 120
+    scoreNeededToBeat: 140
     maxBallsAllowedToThrow: 4
   - roundNumber: 4
-    scoreNeededToBeat: 150
+    scoreNeededToBeat: 200
     maxBallsAllowedToThrow: 4
   - roundNumber: 5
-    scoreNeededToBeat: 240
+    scoreNeededToBeat: 260
     maxBallsAllowedToThrow: 5
   - roundNumber: 6
-    scoreNeededToBeat: 280
+    scoreNeededToBeat: 300
     maxBallsAllowedToThrow: 6
   - roundNumber: 7
-    scoreNeededToBeat: 320
+    scoreNeededToBeat: 340
     maxBallsAllowedToThrow: 6
   - roundNumber: 8
     scoreNeededToBeat: 500
