@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: gutterPin
   displayName: Gutter Pin
-  description: 'End Of Round: *0.75 multi if this lands in the gutter or pit'
+  description: 'End Of Round: +0.75x multi if this lands in the gutter or pit'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: 21300000, guid: fafed15406efbbc42a4e64fb19a74760, type: 3}

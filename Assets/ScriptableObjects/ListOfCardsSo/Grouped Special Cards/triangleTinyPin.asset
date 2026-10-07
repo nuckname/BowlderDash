@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: triangleTinyPin
   displayName: Tripple Tiny Pins
-  description: 'On Fall: +25 Score'
+  description: 'On Fall: +20 Score'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: 1150730212, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}

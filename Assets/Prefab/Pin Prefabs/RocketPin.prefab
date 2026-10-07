@@ -351,6 +351,7 @@ MonoBehaviour:
   fallAngleThreshold: 45
   minHitVelocity: 3
   hasEnterTheHoleAtTheBack: 0
+  hasEnterGutter: 0
   fallenDrag: 0.5
   fallenAngularDrag: 5
   onPlaceEffects: []
@@ -361,7 +362,6 @@ MonoBehaviour:
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
-  yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
@@ -383,12 +383,16 @@ MonoBehaviour:
         thrustAcceleration: 50
         initialImpulse: 8
         launchAngle: 6
-        launchDuration: 1.2
+        launchDuration: 0.75
         aimAtStandingPin: 1
         holdYDuration: 0.2
-        yFreezeStrength: 0.247
+        yFreezeStrength: 0.327
         rotationDuration: 0.15
-        launchSpeed: 25
+        launchSpeed: 20
+        autoCalculateSpeed: 1
+        landingDistanceMultiplier: 1
+        landingHeightOffset: 0
+        maxSolveSpeed: 150
         hitParticleEffect: {fileID: 4114803238593693726}
         particlePlayCount: 6
         timeBetweenParticlePlays: 0.1
@@ -5267,11 +5271,6 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
---- !u!4 &6444032329800440004 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
-  m_PrefabInstance: {fileID: 6838562370640297775}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &8890000000000000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5282,8 +5281,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7e8ec5b4e3b4da2b0526289a4c7b6ae, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   hover: {fileID: 11400000, guid: d3a3efc9eefd4653894d00ef421043f3, type: 2}
   pickup: {fileID: 11400000, guid: 290d724cb04a4c9397e033da3689cfd8, type: 2}
   release: {fileID: 11400000, guid: 181334bf16c54df3857637f7aa5ba4b0, type: 2}
+--- !u!4 &6444032329800440004 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 60cf0fd861973b640999d96bd4b23624, type: 3}
+  m_PrefabInstance: {fileID: 6838562370640297775}
+  m_PrefabAsset: {fileID: 0}

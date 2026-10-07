@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-// ai https://share.gemini.google/JAjIhzZsHznq
-// https://share.gemini.google/Y5123dc8Qtg0
+// https://claude.ai/share/10512fce-aaac-43e0-a3ba-99b3b9321a45
 
 [Serializable]
 public class RocketPinEffect : PinEffect
@@ -18,8 +17,18 @@ public class RocketPinEffect : PinEffect
     [SerializeField] private float holdYDuration = 0.2f;
     [SerializeField] [Range(0f, 1f)] private float yFreezeStrength = 0.5f;
     [SerializeField] private float rotationDuration = 0.15f;
+    [Tooltip("Fallback speed, used when auto-landing can't be solved or is disabled.")]
     [SerializeField] private float launchSpeed = 25f;
-    
+
+    [Header("Landing Accuracy")]
+    [Tooltip("Solve the launch speed so the pin lands on the target instead of overshooting.")]
+    [SerializeField] private bool autoCalculateSpeed = true;
+    [Tooltip("1 = land on the target. <1 lands short, >1 lands past it.")]
+    [SerializeField] private float landingDistanceMultiplier = 1f;
+    [Tooltip("Height relative to the target's position that counts as 'landed'.")]
+    [SerializeField] private float landingHeightOffset = 0f;
+    [SerializeField] private float maxSolveSpeed = 150f;
+
     [Header("Particle Settings")]
     [Tooltip("Assign either a child ParticleSystem on the pin or a ParticleSystem prefab.")]
     [SerializeField] private ParticleSystem hitParticleEffect;
@@ -40,13 +49,15 @@ public class RocketPinEffect : PinEffect
         // Ensure PinBase doesn't lock rotation upright during flight
         pinBase.AllowPinToFallOver = true;
 
-        Vector3 launchDirection = CalculateLaunchDirection(pinBase, target);
+        Transform aimTransform = ResolveAimTransform(pinBase, target);
+        Vector3 fallbackForward = pinBase.transform.forward;
 
         if (_launchCoroutine != null)
         {
             pinBase.StopCoroutine(_launchCoroutine);
         }
-        _launchCoroutine = pinBase.StartCoroutine(RocketThrustRoutine(pinBase.transform, rb, launchDirection));
+        _launchCoroutine = pinBase.StartCoroutine(
+            RocketThrustRoutine(pinBase.transform, rb, aimTransform, fallbackForward));
 
         if (hitParticleEffect != null && particlePlayCount > 0)
         {
@@ -58,36 +69,28 @@ public class RocketPinEffect : PinEffect
         }
     }
 
-    private Vector3 CalculateLaunchDirection(PinBase sourcePin, Collider target)
+    // ---------------------------------------------------------------- Aiming
+
+    private Transform ResolveAimTransform(PinBase sourcePin, Collider target)
     {
-        Transform pinTransform = sourcePin.transform;
-        Vector3 horizontalDir;
-
-        if (aimAtStandingPin && TryGetStandingPinDirection(sourcePin, out Vector3 standingPinDir))
+        if (aimAtStandingPin && TryGetClosestStandingPin(sourcePin, out PinBase standingPin))
         {
-            horizontalDir = standingPinDir;
-        }
-        else if (target != null)
-        {
-            horizontalDir = (pinTransform.position - target.transform.position);
-            horizontalDir.y = 0f;
-            horizontalDir = horizontalDir.sqrMagnitude > 0.001f ? horizontalDir.normalized : pinTransform.forward;
-        }
-        else
-        {
-            horizontalDir = pinTransform.forward;
+            return standingPin.transform;
         }
 
-        Vector3 tiltAxis = Vector3.Cross(Vector3.up, horizontalDir);
-        return Quaternion.AngleAxis(launchAngle, tiltAxis) * Vector3.up;
+        if (target != null)
+        {
+            return target.transform;
+        }
+
+        return null;
     }
 
-    private bool TryGetStandingPinDirection(PinBase sourcePin, out Vector3 direction)
+    private bool TryGetClosestStandingPin(PinBase sourcePin, out PinBase closestPin)
     {
-        direction = Vector3.zero;
+        closestPin = null;
         PinBase[] allPins = UnityEngine.Object.FindObjectsOfType<PinBase>();
 
-        PinBase closestPin = null;
         float closestSqrDist = float.MaxValue;
         Vector3 sourcePos = sourcePin.transform.position;
 
@@ -104,14 +107,105 @@ public class RocketPinEffect : PinEffect
             {
                 closestSqrDist = sqrDist;
                 closestPin = pin;
-                direction = offset.normalized;
             }
         }
 
         return closestPin != null;
     }
 
-    private IEnumerator RocketThrustRoutine(Transform pinTransform, Rigidbody rb, Vector3 launchDirection)
+    private Vector3 GetHorizontalDirection(Vector3 fromPos, Transform aim, Vector3 fallbackForward)
+    {
+        Vector3 horizontalDir;
+
+        if (aim != null)
+        {
+            horizontalDir = aim.position - fromPos;
+            horizontalDir.y = 0f;
+            if (horizontalDir.sqrMagnitude > 0.001f) return horizontalDir.normalized;
+        }
+
+        horizontalDir = fallbackForward;
+        horizontalDir.y = 0f;
+        return horizontalDir.sqrMagnitude > 0.001f ? horizontalDir.normalized : Vector3.forward;
+    }
+
+    private Vector3 BuildLaunchDirection(Vector3 horizontalDir)
+    {
+        Vector3 tiltAxis = Vector3.Cross(Vector3.up, horizontalDir);
+        return Quaternion.AngleAxis(launchAngle, tiltAxis) * Vector3.up;
+    }
+
+    // ------------------------------------------------------- Landing solver
+
+    /// <summary>
+    /// Finds the thrust speed that makes the pin land on the aim point, accounting for
+    /// the constant-velocity thrust phase, gravity afterwards, and the rigidbody's drag.
+    /// </summary>
+    private float SolveLaunchSpeed(Vector3 startPos, Vector3 launchDir, Transform aim, float drag)
+    {
+        if (!autoCalculateSpeed || aim == null) return launchSpeed;
+
+        Vector3 flat = aim.position - startPos;
+        flat.y = 0f;
+        float targetDist = flat.magnitude * landingDistanceMultiplier;
+        if (targetDist < 0.01f) return launchSpeed;
+
+        Vector3 hDir = flat.normalized;
+        float landY = aim.position.y + landingHeightOffset;
+
+        // Needs both an upward and a forward component to be solvable
+        if (launchDir.y <= 0.01f || Vector3.Dot(launchDir, hDir) <= 0.01f) return launchSpeed;
+
+        float hi = Mathf.Max(maxSolveSpeed, launchSpeed);
+        if (SimulateRange(hi, startPos, launchDir, hDir, landY, drag) < targetDist)
+        {
+            return hi; // can't reach, go as far as allowed
+        }
+
+        float lo = 0f;
+        for (int i = 0; i < 30; i++)
+        {
+            float mid = (lo + hi) * 0.5f;
+            if (SimulateRange(mid, startPos, launchDir, hDir, landY, drag) < targetDist) lo = mid;
+            else hi = mid;
+        }
+
+        return Mathf.Max((lo + hi) * 0.5f, 0.01f);
+    }
+
+    private float SimulateRange(float speed, Vector3 startPos, Vector3 launchDir, Vector3 hDir, float landY, float drag)
+    {
+        float dt = Time.fixedDeltaTime;
+        float damp = 1f / (1f + drag * dt);
+        float gravityY = Physics.gravity.y;
+
+        Vector3 pos = startPos;
+        Vector3 vel = launchDir * speed;
+
+        // Thrust phase: velocity is re-set every fixed step, physics then applies damping + integration
+        int thrustSteps = Mathf.CeilToInt(launchDuration / dt);
+        for (int i = 0; i < thrustSteps; i++)
+        {
+            vel = launchDir * speed * damp;
+            pos += vel * dt;
+        }
+
+        // Ballistic phase: gravity restored
+        for (int i = 0; i < 3000; i++)
+        {
+            vel.y += gravityY * dt;
+            vel *= damp;
+            pos += vel * dt;
+
+            if (vel.y < 0f && pos.y <= landY) break;
+        }
+
+        return Vector3.Dot(pos - startPos, hDir);
+    }
+
+    // --------------------------------------------------------------- Launch
+
+    private IEnumerator RocketThrustRoutine(Transform pinTransform, Rigidbody rb, Transform aim, Vector3 fallbackForward)
     {
         rb.isKinematic = false;
         rb.WakeUp();
@@ -137,6 +231,12 @@ public class RocketPinEffect : PinEffect
             yield return fixedWait;
         }
 
+        if (rb == null) yield break;
+
+        // Re-aim from where the pin actually is now (the hold phase moves it)
+        Vector3 horizontalDir = GetHorizontalDirection(rb.position, aim, fallbackForward);
+        Vector3 launchDirection = BuildLaunchDirection(horizontalDir);
+
         // Rotate smoothly toward the launch angle while keeping Y locked
         Quaternion startRot = pinTransform.rotation;
         Quaternion targetRot = Quaternion.FromToRotation(Vector3.up, launchDirection);
@@ -157,13 +257,18 @@ public class RocketPinEffect : PinEffect
 
         pinTransform.rotation = targetRot;
 
+        // Final aim + speed solve using the position at the moment thrust begins
+        horizontalDir = GetHorizontalDirection(rb.position, aim, fallbackForward);
+        launchDirection = BuildLaunchDirection(horizontalDir);
+        float solvedSpeed = SolveLaunchSpeed(rb.position, launchDirection, aim, rb.linearDamping);
+
         // Release Y position but keep rotation frozen so the pin flies straight
         rb.constraints = RigidbodyConstraints.FreezeRotation;
 
         float launchElapsed = 0f;
         while (launchElapsed < launchDuration && rb != null)
         {
-            rb.linearVelocity = launchDirection * launchSpeed;
+            rb.linearVelocity = launchDirection * solvedSpeed;
             launchElapsed += Time.fixedDeltaTime;
             yield return fixedWait;
         }
@@ -198,7 +303,9 @@ public class RocketPinEffect : PinEffect
 
         rb.linearVelocity = velocity;
     }
-    
+
+    // ------------------------------------------------------------ Particles
+
     private IEnumerator PlayParticlesRoutine(PinBase pinBase)
     {
         ParticleSystem psToPlay = GetOrCreateParticleSystem(pinBase.transform);
@@ -234,9 +341,9 @@ public class RocketPinEffect : PinEffect
         if (_runtimeParticleInstance == null)
         {
             _runtimeParticleInstance = UnityEngine.Object.Instantiate(
-                hitParticleEffect, 
-                pinTransform.position, 
-                pinTransform.rotation, 
+                hitParticleEffect,
+                pinTransform.position,
+                pinTransform.rotation,
                 pinTransform
             );
         }

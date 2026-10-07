@@ -86,7 +86,7 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator ProcessScoringRoutine()
     {
-        yield return SkippableWait(waitTimeBeforeScoring);
+        yield return SkippableWait(waitTimeBeforeScoring - 0.5f);
 
         if (_manager.TryApplyStrikeMultiplier())
         {

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: HorizontalMultiPin
   displayName: Horizontal Multi Pin
-  description: 'On Fall: Adds 0.25x Multiplier'
+  description: 'On Fall: +0.25x Multiplier'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: 133303568, guid: cb9f7f892e327dc45a4789d7aae8c0db, type: 3}
