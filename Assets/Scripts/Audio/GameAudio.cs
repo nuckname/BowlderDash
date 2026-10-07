@@ -8,6 +8,31 @@ public sealed class GameAudio : MonoBehaviour
 {
     private const int InteractionUIVoiceLimit = 2;
     private const int MaximumCardDrawVoices = 5;
+    private const int MaximumGameplayLoops = 2;
+
+    // Each handle controls one session
+    // reused sources cannot revive an old handle
+    public readonly struct LoopHandle
+    {
+        private readonly GameAudio service;
+        private readonly int slot;
+        private readonly ulong generation;
+
+        internal LoopHandle(GameAudio service, int slot, ulong generation)
+        {
+            this.service = service;
+            this.slot = slot;
+            this.generation = generation;
+        }
+
+        public bool IsValid => service != null && service.TryGetLoop(slot, generation, out _);
+
+        public bool SetParameters(float volumeScale, float pitch, float fadeTime = 0.05f) =>
+            service != null && service.SetLoopParameters(slot, generation, volumeScale, pitch, fadeTime);
+
+        public bool Stop(float fadeOutTime = 0.05f) =>
+            service != null && service.StopLoop(slot, generation, fadeOutTime);
+    }
 
     public static GameAudio Instance { get; private set; }
     [SerializeField, Range(1, 21)] private int transientCapacity = 21;
@@ -27,8 +52,24 @@ public sealed class GameAudio : MonoBehaviour
         public int previous = -1;
         public double nextPlay;
     }
+    // Loops keep their own ownership and fade state separate from transient lifetimes
+    private sealed class LoopVoice
+    {
+        public AudioSource source;
+        public SoundCueSO cue;
+        public MonoBehaviour owner;
+        public int sceneHandle;
+        public ulong generation;
+        public bool stopping;
+        public float fadeStartVolume;
+        public float targetVolume;
+        public float fadeDuration;
+        public float fadeElapsed;
+    }
     private Voice[] voices;
+    private LoopVoice[] loops;
     private ulong nextPlayOrder;
+    private ulong nextLoopGeneration;
     private double nextHoverTime;
     private bool ownsLeaderboardPause;
     private bool listenerPauseBeforeLeaderboard;
@@ -36,7 +77,7 @@ public sealed class GameAudio : MonoBehaviour
     private int leaderboardSceneHandle;
     private int musicSceneHandle;
     public event System.Action WorldAudioStopped;
-    // Audio variation must not consume the random sequence used by cards, grids or bosses.
+    // Audio variation must not consume the random sequence used by cards grids or bosses.
     private readonly System.Random random = new System.Random();
     private readonly Dictionary<SoundCueSO, CueState> cueStates = new Dictionary<SoundCueSO, CueState>();
 
@@ -50,6 +91,17 @@ public sealed class GameAudio : MonoBehaviour
         }
     }
 
+    // A source finishing its stop fade still occupies a loop slot.
+    public int ActiveLoopCount
+    {
+        get
+        {
+            int count = 0;
+            if (loops != null) foreach (var loop in loops) if (loop.generation != 0) count++;
+            return count;
+        }
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -58,8 +110,8 @@ public sealed class GameAudio : MonoBehaviour
         if (music == null) music = GetComponent<GameMusic>();
         if (music != null) music.Initialize(this, mixer);
         voices = new Voice[Mathf.Clamp(transientCapacity, 1, 21)];
-        // Five draw voices cover the current clip/pitch/lifetime at 0.08-second intervals.
-        // Keep at least two ordinary slots when a smaller pool is configured.
+        // Five draw voices cover the current clip/pitch/lifetime at 0.08 second intervals
+        // Keep at least two ordinary slots when a smaller pool is configured
         int drawCapacity = Mathf.Min(MaximumCardDrawVoices, Mathf.Max(0, voices.Length - InteractionUIVoiceLimit));
         for (int i = 0; i < voices.Length; i++)
         {
@@ -69,11 +121,29 @@ public sealed class GameAudio : MonoBehaviour
             ResetSource(source);
             voices[i] = new Voice { source = source, reservedForCardDraw = i >= voices.Length - drawCapacity };
         }
+        // Sustained feedback gets its own fixed pool so it cannot starve one-shot cues
+        loops = new LoopVoice[MaximumGameplayLoops];
+        for (int i = 0; i < loops.Length; i++)
+        {
+            var child = new GameObject($"Gameplay Loop {i + 1:00}");
+            child.transform.SetParent(transform, false);
+            var source = child.AddComponent<AudioSource>();
+            ResetSource(source);
+            loops[i] = new LoopVoice { source = source };
+        }
         SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     // One source per transient: never stack unaccounted PlayOneShot voices.
-    public bool Play(SoundCueSO cue, Vector3 position = default, float volumeScale = 1f)
+    public bool Play(SoundCueSO cue, Vector3 position = default, float volumeScale = 1f) =>
+        PlayTransient(cue, position, volumeScale, null);
+
+    // Override pitch for ordered feedback without changing the shared cue's variation
+    public bool PlayPitched(SoundCueSO cue, float pitch, Vector3 position = default, float volumeScale = 1f) =>
+        IsFinite(pitch) && PlayTransient(cue, position, volumeScale, Mathf.Clamp(pitch, 0.1f, 3f));
+
+    // Random and explicit-pitch playback share the same voice limits and priority rules
+    private bool PlayTransient(SoundCueSO cue, Vector3 position, float volumeScale, float? pitch)
     {
         if (!TryPrepareCue(cue, volumeScale, out var state, out float gain)) return false;
 
@@ -93,22 +163,21 @@ public sealed class GameAudio : MonoBehaviour
                 if (voice.source.priority > Mathf.Clamp(cue.priority, 0, 256) &&
                     (weakestUI == null || voice.source.priority > weakestUI.source.priority)) weakestUI = voice;
             }
-            // Lower numeric priority is more important. Equal-priority voices finish naturally.
             if (voice.source.priority > Mathf.Clamp(cue.priority, 0, 256) &&
                 (weakest == null || voice.source.priority > weakest.source.priority ||
                  (voice.source.priority == weakest.source.priority && voice.source.volume < weakest.source.volume)))
                 weakest = voice;
         }
         if (active >= Mathf.Max(1, cue.voiceLimit)) return false;
-        // Hover and click share the two-voice UI budget; clicks may replace hover.
+        // Hover and click share the two-voice UI budget thus clicks may replace hover.
         var slot = cue.isUI && uiActive >= InteractionUIVoiceLimit ? weakestUI : available ?? weakest;
         if (slot == null) return false;
-        return PlayVoice(slot, cue, state, position, gain);
+        return PlayVoice(slot, cue, state, position, gain, pitch);
     }
 
     public bool PlayUICardDraw(SoundCueSO cue)
     {
-        // Draw feedback belongs to gameplay, even though it uses the 2D UI mixer route.
+        // Draw feedback belongs to "gameplay", even though it uses the 2D UI mixer route
         if (cue == null || !cue.isUI || ownsLeaderboardPause ||
             !TryPrepareCue(cue, 1f, out var state, out float gain)) return false;
 
@@ -127,11 +196,168 @@ public sealed class GameAudio : MonoBehaviour
                 if (oldestForCue == null || voice.playOrder < oldestForCue.playOrder) oldestForCue = voice;
             }
         }
-
-        // Start every draw immediately; recycle the oldest draw at its cue or pool limit.
-        // Draws neither consume nor replace the ordinary hover/click voices.
         Voice slot = active >= Mathf.Max(1, cue.voiceLimit) ? oldestForCue : available ?? oldest;
         return slot != null && PlayVoice(slot, cue, state, default, gain);
+    }
+
+    // Keep one loop per owner, repeat requests reuse playback instead of restarting it
+    public LoopHandle BeginLoop(SoundCueSO cue, MonoBehaviour owner, float volumeScale = 1f,
+        float pitch = 1f, float fadeInTime = 0.05f)
+    {
+        if (Instance != this || !isActiveAndEnabled || loops == null || ownsLeaderboardPause ||
+            AudioListener.pause || owner == null || !owner.isActiveAndEnabled ||
+            cue == null || cue.isUI || cue.output == null || !IsFinite(cue.gain) ||
+            !IsFinite(volumeScale) || !IsFinite(pitch) || !IsFinite(fadeInTime)) return default;
+
+        Scene scene = owner.gameObject.scene;
+        if (!scene.IsValid() || !scene.isLoaded) return default;
+        float gain = Mathf.Clamp01(cue.gain * Mathf.Clamp01(volumeScale));
+        if (gain <= 0f) return default;
+
+        int slot = -1;
+        int fadingSlot = -1;
+        int activeForCue = 0;
+        for (int i = 0; i < loops.Length; i++)
+        {
+            var loop = loops[i];
+            if (loop.generation != 0 && !HasLiveLoopOwner(loop)) ReleaseLoop(loop);
+            if (loop.generation == 0)
+            {
+                if (slot < 0) slot = i;
+                continue;
+            }
+            if (loop.owner == owner)
+            {
+                if (!loop.stopping && loop.cue == cue)
+                {
+                    SetLoopParameters(i, loop.generation, volumeScale, pitch, fadeInTime);
+                    return new LoopHandle(this, i, loop.generation);
+                }
+                slot = i;
+            }
+            else if (!loop.stopping && loop.cue == cue) activeForCue++;
+            if (loop.stopping && fadingSlot < 0) fadingSlot = i;
+        }
+
+        if (slot < 0) slot = fadingSlot;
+        if (slot < 0 || activeForCue >= Mathf.Max(1, cue.voiceLimit) ||
+            !TryPrepareCue(cue, volumeScale, out var state, out gain)) return default;
+        var clip = cue.PickVariant(random, state.previous, out int selected);
+        if (clip == null || clip.loadState != AudioDataLoadState.Loaded) return default;
+
+        var voice = loops[slot];
+        ReleaseLoop(voice);
+        ConfigureSource(voice.source, cue, clip, owner.transform.position, 0f, Mathf.Clamp(pitch, 0.1f, 3f));
+        voice.source.loop = true;
+        voice.owner = owner;
+        voice.sceneHandle = scene.handle;
+        voice.cue = cue;
+        if (++nextLoopGeneration == 0) ++nextLoopGeneration;
+        voice.generation = nextLoopGeneration;
+        FadeLoop(voice, gain, fadeInTime);
+        voice.source.Play();
+        state.previous = selected;
+        state.nextPlay = Time.unscaledTimeAsDouble + Mathf.Max(0f, cue.cooldown);
+        cueStates[cue] = state;
+        return new LoopHandle(this, slot, voice.generation);
+    }
+
+    // A caller must still own this exact session before touching its pooled source.
+    private bool TryGetLoop(int slot, ulong generation, out LoopVoice voice)
+    {
+        voice = null;
+        if (Instance != this || !isActiveAndEnabled || loops == null ||
+            slot < 0 || slot >= loops.Length || generation == 0) return false;
+        var candidate = loops[slot];
+        if (candidate.generation != generation || candidate.stopping) return false;
+        if (!HasLiveLoopOwner(candidate))
+        {
+            ReleaseLoop(candidate);
+            return false;
+        }
+        voice = candidate;
+        return true;
+    }
+
+    // Adjust playback in place, preserving an existing fade when its target is unchanged
+    private bool SetLoopParameters(int slot, ulong generation, float volumeScale, float pitch, float fadeTime)
+    {
+        if (!IsFinite(volumeScale) || !IsFinite(pitch) || !IsFinite(fadeTime) ||
+            !TryGetLoop(slot, generation, out var voice) || !IsFinite(voice.cue.gain)) return false;
+        voice.source.pitch = Mathf.Clamp(pitch, 0.1f, 3f);
+        float targetVolume = Mathf.Clamp01(voice.cue.gain * Mathf.Clamp01(volumeScale));
+        if (targetVolume != voice.targetVolume || (fadeTime <= 0f && voice.source.volume != targetVolume))
+            FadeLoop(voice, targetVolume, fadeTime);
+        return true;
+    }
+
+    private bool StopLoop(int slot, ulong generation, float fadeOutTime)
+    {
+        if (!IsFinite(fadeOutTime) || !TryGetLoop(slot, generation, out var voice)) return false;
+        // Invalidate the handle immediately even while the source finishes fading
+        voice.stopping = true;
+        if (fadeOutTime <= 0f || AudioListener.pause) ReleaseLoop(voice);
+        else FadeLoop(voice, 0f, fadeOutTime);
+        return true;
+    }
+
+    // A loop belongs to its owner's original scene and active gameplay lifetime
+    private static bool HasLiveLoopOwner(LoopVoice voice) => voice.owner != null &&
+        voice.owner.isActiveAndEnabled && voice.cue != null && voice.source != null &&
+        voice.owner.gameObject.scene.IsValid() && voice.owner.gameObject.scene.isLoaded &&
+        voice.owner.gameObject.scene.handle == voice.sceneHandle;
+
+    // Start from the current level so an interrupted fade does not jump in volume
+    private static void FadeLoop(LoopVoice voice, float volume, float duration)
+    {
+        voice.fadeStartVolume = voice.source.volume;
+        voice.targetVolume = volume;
+        voice.fadeDuration = Mathf.Max(0f, duration);
+        voice.fadeElapsed = 0f;
+        if (voice.fadeDuration == 0f) voice.source.volume = volume;
+    }
+
+    // Follow owners and advance fades on unscaled time, freezing fades with listener pause
+    private void UpdateLoops()
+    {
+        if (loops == null) return;
+        foreach (var voice in loops)
+        {
+            if (voice.generation == 0) continue;
+            if (!HasLiveLoopOwner(voice)) { ReleaseLoop(voice); continue; }
+            voice.source.transform.position = voice.owner.transform.position;
+            if (AudioListener.pause) continue;
+            voice.fadeElapsed += Time.unscaledDeltaTime;
+            float t = voice.fadeDuration > 0f ? Mathf.Clamp01(voice.fadeElapsed / voice.fadeDuration) : 1f;
+            voice.source.volume = Mathf.Lerp(voice.fadeStartVolume, voice.targetVolume, t);
+            if (voice.stopping && t >= 1f) ReleaseLoop(voice);
+        }
+    }
+
+    // Lifecycle cleanup overrides fades and frees every gameplay loop immediately
+    private void StopGameplayLoops()
+    {
+        if (loops == null) return;
+        foreach (var loop in loops) if (loop.generation != 0) ReleaseLoop(loop);
+    }
+
+    // Clear playback and ownership before this slot can serve another session
+    private static void ReleaseLoop(LoopVoice voice)
+    {
+        if (voice.source != null)
+        {
+            ResetSource(voice.source);
+            voice.source.transform.localPosition = Vector3.zero;
+        }
+        voice.cue = null;
+        voice.owner = null;
+        voice.sceneHandle = 0;
+        voice.generation = 0;
+        voice.stopping = false;
+        voice.fadeStartVolume = 0f;
+        voice.targetVolume = 0f;
+        voice.fadeDuration = 0f;
+        voice.fadeElapsed = 0f;
     }
 
     private bool TryPrepareCue(SoundCueSO cue, float volumeScale, out CueState state, out float gain)
@@ -140,31 +366,27 @@ public sealed class GameAudio : MonoBehaviour
         gain = 0f;
         if (Instance != this || voices == null || cue == null || cue.output == null) return false;
         if (!cue.isUI && ownsLeaderboardPause) return false;
+        if (!IsFinite(cue.gain) || !IsFinite(volumeScale)) return false;
         if (!cueStates.TryGetValue(cue, out state)) state = new CueState();
         if (Time.unscaledTimeAsDouble < state.nextPlay) return false;
         gain = Mathf.Clamp01(cue.gain * Mathf.Clamp01(volumeScale));
         return gain > 0f;
     }
 
-    private bool PlayVoice(Voice slot, SoundCueSO cue, CueState state, Vector3 position, float gain)
+    private bool PlayVoice(Voice slot, SoundCueSO cue, CueState state, Vector3 position, float gain, float? pitch = null)
     {
         var clip = cue.PickVariant(random, state.previous, out int selected);
         if (clip == null || clip.loadState != AudioDataLoadState.Loaded) return false;
 
-        Release(slot);
-        var source = slot.source;
-        source.transform.position = position;
-        source.clip = clip;
-        source.outputAudioMixerGroup = cue.output;
-        source.volume = gain;
-        source.pitch = Mathf.Lerp(Mathf.Clamp(Mathf.Min(cue.pitchRange.x, cue.pitchRange.y), 0.1f, 3f),
+        // Pooled lifetime must use the final pitch, whether requested or randomised
+        float finalPitch = pitch ?? Mathf.Lerp(Mathf.Clamp(Mathf.Min(cue.pitchRange.x, cue.pitchRange.y), 0.1f, 3f),
                                   Mathf.Clamp(Mathf.Max(cue.pitchRange.x, cue.pitchRange.y), 0.1f, 3f),
                                   (float)random.NextDouble());
-        source.priority = Mathf.Clamp(cue.priority, 0, 256);
-        source.spatialBlend = cue.isUI ? 0f : Mathf.Clamp01(cue.spatialBlend);
-        source.ignoreListenerPause = cue.isUI;
-        source.minDistance = Mathf.Max(0.01f, cue.minDistance);
-        source.maxDistance = Mathf.Max(source.minDistance, cue.maxDistance);
+        if (!IsFinite(finalPitch)) return false;
+
+        Release(slot);
+        var source = slot.source;
+        ConfigureSource(source, cue, clip, position, gain, finalPitch);
         slot.cue = cue;
         slot.remaining = clip.length / source.pitch + 0.1f;
         slot.playOrder = ++nextPlayOrder;
@@ -175,8 +397,28 @@ public sealed class GameAudio : MonoBehaviour
         return true;
     }
 
+    // Transients and loops use the same cue routing spatial settings and pause policy
+    private static void ConfigureSource(AudioSource source, SoundCueSO cue, AudioClip clip,
+        Vector3 position, float gain, float pitch)
+    {
+        source.transform.position = position;
+        source.clip = clip;
+        source.outputAudioMixerGroup = cue.output;
+        source.volume = gain;
+        source.pitch = pitch;
+        source.priority = Mathf.Clamp(cue.priority, 0, 256);
+        source.spatialBlend = cue.isUI ? 0f : Mathf.Clamp01(cue.spatialBlend);
+        source.ignoreListenerPause = cue.isUI;
+        source.minDistance = Mathf.Max(0.01f, cue.minDistance);
+        source.maxDistance = Mathf.Max(source.minDistance, cue.maxDistance);
+    }
+
+    // Invalid numbers must not reach source pitch gain or fade timing.
+    private static bool IsFinite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
+
     private void Update()
     {
+        UpdateLoops();
         if (voices == null) return;
         foreach (var voice in voices)
         {
@@ -189,10 +431,10 @@ public sealed class GameAudio : MonoBehaviour
     public void StopWorldVoices()
     {
         PhysicsImpactAudio.SetWorldEligible(false);
+        StopGameplayLoops();
         if (voices != null)
             foreach (var voice in voices)
                 if (voice.cue != null && !voice.cue.isUI) Release(voice);
-        // Future ball-owned rolling sources subscribe here as they are introduced.
         WorldAudioStopped?.Invoke();
     }
 
@@ -221,7 +463,7 @@ public sealed class GameAudio : MonoBehaviour
         if (ownsLeaderboardPause && leaderboardPauseOwner == owner) RestoreOwnedPause();
     }
 
-    // The service persists, while each MainScene owns only its own music session.
+    // The service persists, while each MainScene owns only its own music session
     internal void BeginMusicSession(Scene scene)
     {
         if (Instance != this || !scene.IsValid() || !scene.isLoaded || musicSceneHandle == scene.handle) return;
@@ -319,6 +561,7 @@ public sealed class GameAudio : MonoBehaviour
     private void OnDestroy()
     {
         if (Instance != this) return;
+        StopGameplayLoops();
         if (music != null) music.Shutdown();
         RestoreOwnedPause();
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
@@ -326,4 +569,5 @@ public sealed class GameAudio : MonoBehaviour
         musicSceneHandle = 0;
         cueStates.Clear();
     }
+    private void OnDisable() => StopGameplayLoops();
 }
