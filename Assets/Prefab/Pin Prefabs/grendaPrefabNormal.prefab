@@ -5039,6 +5039,7 @@ MonoBehaviour:
   fallAngleThreshold: 45
   minHitVelocity: 3
   hasEnterTheHoleAtTheBack: 0
+  hasEnterGutter: 0
   fallenDrag: 0.25
   fallenAngularDrag: 2.5
   onPlaceEffects: []
@@ -5048,7 +5049,6 @@ MonoBehaviour:
   onEndOfRoundEffects: []
   excludeFromStrike: 0
   yOffset: 4
-  yOffsetPinInHole: 10
   allowPinToFallOver: 0
   allowPinToBePickedUp: 0
   allowCollisionEffects: 0
@@ -5068,6 +5068,7 @@ MonoBehaviour:
         upwardModifier: 1
         detonationDelay: 0.75
         explosionParticles: {fileID: 4918979806117386139}
+        explosionCue: {fileID: 11400000, guid: e87e5bda8aa0d2349be0e40f6657444d, type: 2}
 --- !u!114 &9000000000000000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5097,7 +5098,7 @@ MonoBehaviour:
   cardData: {fileID: 11400000, guid: 0b7b1182779af8948a358b8803cf5ea0, type: 2}
   _groupPeers: []
   canBePickedUp: 1
-  cannotBeReturnedToDeck: 0
+  cannotBeReturnedToDeck: 1
 --- !u!114 &8890000000000000001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5108,8 +5109,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7e8ec5b4e3b4da2b0526289a4c7b6ae, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   hover: {fileID: 11400000, guid: d3a3efc9eefd4653894d00ef421043f3, type: 2}
   pickup: {fileID: 11400000, guid: 290d724cb04a4c9397e033da3689cfd8, type: 2}
   release: {fileID: 11400000, guid: 181334bf16c54df3857637f7aa5ba4b0, type: 2}
