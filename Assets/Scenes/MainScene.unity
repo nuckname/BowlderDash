@@ -3462,6 +3462,9 @@ MonoBehaviour:
   upSideExpandingLimit: -5
   downSideExpandingLimit: 3
   maxInteractionDistance: 6
+  hoverCue: {fileID: 11400000, guid: eb7e65ac32e9480ab1ca442b1de2352f, type: 2}
+  purchaseCue: {fileID: 11400000, guid: c14ff9bac171c7340a27492257cdea4f, type: 2}
+  deniedCue: {fileID: 11400000, guid: 454011bda68c7234f88ccc06b25124d1, type: 2}
 --- !u!114 &120957820
 MonoBehaviour:
   m_ObjectHideFlags: 0
