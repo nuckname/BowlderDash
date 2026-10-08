@@ -92,4 +92,14 @@ public class FloatingText : MonoBehaviour
                 break;
         }
     }
+
+    void LateUpdate()
+    {
+        // Makes sure the text always perfectly faces the camera. 
+        // If it doesn't face the camera, the flat mesh can visually slice into walls and ruin depth perception.
+        if (Camera.main != null)
+        {
+            transform.rotation = Camera.main.transform.rotation;
+        }
+    }
 }
