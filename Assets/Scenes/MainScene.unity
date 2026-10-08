@@ -3401,6 +3401,7 @@ MonoBehaviour:
   ticketHeightOffset: 1.15
   ticketCellColor: {r: 1, g: 0.82, b: 0.18, a: 0.92}
   ticketVisualPrefab: {fileID: 483179382657493270, guid: 4ee4a8dc958bb3043867fd12319a13dc, type: 3}
+  ticketPickupCue: {fileID: 11400000, guid: d30edad840a8ec1478e34c1b02dabb57, type: 2}
   floatingTextBaseY: 3
   floatingTextStepY: 1
 --- !u!114 &120957817
@@ -3462,6 +3463,9 @@ MonoBehaviour:
   upSideExpandingLimit: -5
   downSideExpandingLimit: 3
   maxInteractionDistance: 6
+  hoverCue: {fileID: 11400000, guid: eb7e65ac32e9480ab1ca442b1de2352f, type: 2}
+  purchaseCue: {fileID: 11400000, guid: c14ff9bac171c7340a27492257cdea4f, type: 2}
+  deniedCue: {fileID: 11400000, guid: 454011bda68c7234f88ccc06b25124d1, type: 2}
 --- !u!114 &120957820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39983,6 +39987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GetTicketOnHit
   justAVisualDontAddTickets: 0
+  ticketPickupCue: {fileID: 11400000, guid: d30edad840a8ec1478e34c1b02dabb57, type: 2}
 --- !u!114 &6652253181974710234
 MonoBehaviour:
   m_ObjectHideFlags: 0

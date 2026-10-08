@@ -18,6 +18,13 @@ public class HexGridExpander : MonoBehaviour
     
     [Header("Interaction Limits")]
     public float maxInteractionDistance = 6f;
+
+    [Header("Hex Expansion Audio")]
+    [SerializeField] private SoundCueSO hoverCue;
+    [SerializeField] private SoundCueSO purchaseCue;
+    [SerializeField] private SoundCueSO deniedCue;
+    private bool hasPreviewTarget;
+    private Vector2Int previewAxial;
     
     private void Awake()
     {
@@ -29,43 +36,83 @@ public class HexGridExpander : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            shopManager.ToggleHexGridExpander(false);
+            ClearPreview();
+            if (shopManager != null) shopManager.ToggleHexGridExpander(false);
             return;
         }
 
-        if (TryGetExpansionData(out Vector2Int newAxial, out Vector3 newCenter))
+        if ((shopManager != null && !shopManager.IsHexGridExpansionActive) ||
+            PinInteractionAudio.IsPointerOverUI())
         {
-            if (visuals != null) visuals.ShowPreview(newCenter);
+            ClearPreview();
+            return;
+        }
 
-            if (Input.GetMouseButtonDown(0))
-            {
-                if (shopManager != null)
-                {
-                    if (shopManager.TryBuyGridExpansion())
-                    {
-                        AddCell(newAxial, newCenter);
-                    }
-                    else
-                    {
-                        Debug.LogWarning("Not enough tickets");
-                    }
-                }
-                else
-                {
-                    AddCell(newAxial, newCenter);
-                }
-            }
-        }
-        else
+        bool hasValidTarget = TryGetExpansionData(out Vector2Int newAxial, out Vector3 newCenter);
+        if (hasValidTarget) ShowPreview(newAxial, newCenter);
+        else ClearPreview();
+
+        if (!Input.GetMouseButtonDown(0)) return;
+        // Reject an invalid or newly occupied target before spending tickets.
+        if (!hasValidTarget || !CanAddCell(newAxial))
         {
-            if (visuals != null) visuals.HidePreview();
+            ClearPreview();
+            PlayOutcome(deniedCue);
+            return;
         }
+
+        if (shopManager != null && !shopManager.TryBuyGridExpansion())
+        {
+            PlayOutcome(deniedCue);
+            Debug.LogWarning("Not enough tickets");
+            return;
+        }
+
+        AddCell(newAxial, newCenter);
+        ClearPreview();
+        PlayOutcome(purchaseCue);
+    }
+
+    // Axial identity stays stable as the pointer moves within one preview target.
+    private void ShowPreview(Vector2Int axial, Vector3 center)
+    {
+        if (visuals != null) visuals.ShowPreview(center);
+        if (hasPreviewTarget && previewAxial == axial) return;
+        hasPreviewTarget = true;
+        previewAxial = axial;
+        if (visuals != null && CanPlayAudio && hoverCue != null && hoverCue.isUI)
+            GameAudio.Instance?.PlayUIHover(hoverCue);
+    }
+
+    private void ClearPreview()
+    {
+        hasPreviewTarget = false;
+        if (visuals != null) visuals.HidePreview();
+    }
+
+    // The no-shop fallback can still add cells, but shop feedback needs an active owner.
+    private bool CanPlayAudio => isActiveAndEnabled && shopManager != null && shopManager.IsHexGridExpansionActive;
+
+    private void PlayOutcome(SoundCueSO cue)
+    {
+        if (CanPlayAudio && cue != null && cue.isUI) GameAudio.Instance?.Play(cue);
+    }
+
+    private bool CanAddCell(Vector2Int axial)
+    {
+        if (grid == null) return false;
+        int col = axial.x + (axial.y - (axial.y & 1)) / 2;
+        int row = axial.y;
+        return col >= leftSideExpandingLimit && col <= rightSideExpandingLimit &&
+            row >= upSideExpandingLimit && row <= downSideExpandingLimit && grid.GetCellAt(col, row) == null;
     }
 
     private bool TryGetExpansionData(out Vector2Int newAxial, out Vector3 newCenter)
     {
         newAxial = Vector2Int.zero;
         newCenter = Vector3.zero;
+
+        if (grid == null || Camera.main == null) return false;
 
         float planeY = grid.transform.position.y;
         if (grid.Cells != null && grid.Cells.Count > 0)
@@ -145,11 +192,5 @@ public class HexGridExpander : MonoBehaviour
         }
     }
     
-    private void OnDisable()
-    {
-        if (visuals != null)
-        {
-            visuals.HidePreview();
-        }
-    }
+    private void OnDisable() => ClearPreview();
 }

@@ -17,30 +17,57 @@ public class ExplosionEffect : PinEffect
     [Tooltip("Drag the child ParticleSystem here in the inspector")]
     public ParticleSystem explosionParticles;
 
+    [Header("Audio")]
+    public SoundCueSO explosionCue;
+
     private bool _hasTriggered = false;
     private Coroutine _detonationCoroutine;
+    private PinBase _detonationOwner;
+    private int _detonationVersion;
 
     public override void Execute(PinBase context, Collider instigator = null)
     {
-        if (_hasTriggered) return;
+        if (_hasTriggered || !CanDetonate(context)) return;
         
         _hasTriggered = true;
 
-        // Ask the PinBase to run our delay timer
-        _detonationCoroutine = context.StartCoroutine(DetonationSequence(context));
+        _detonationOwner = context;
+        int version = ++_detonationVersion;
+        _detonationCoroutine = context.StartCoroutine(DetonationSequence(context, version));
     }
 
-    private IEnumerator DetonationSequence(PinBase context)
+    // Watch the gameplay role during the scaled delay so old throws cannot leave a live timer.
+    private IEnumerator DetonationSequence(PinBase context, int version)
     {
-        yield return new WaitForSeconds(detonationDelay);
+        float detonateAt = Time.time + Mathf.Max(0f, detonationDelay);
+        do
+        {
+            yield return null;
+            if (version != _detonationVersion) yield break;
+            if (!CanDetonate(context))
+            {
+                _detonationCoroutine = null;
+                _detonationOwner = null;
+                _hasTriggered = false;
+                yield break;
+            }
+        } while (Time.time < detonateAt);
 
+        _detonationCoroutine = null;
+        _detonationOwner = null;
         Detonate(context);
     }
+
+    private static bool CanDetonate(PinBase context) => context != null &&
+        context.IsActiveGameplayPin && context.AllowCollisionEffects;
 
     private void Detonate(PinBase context)
     {
         Vector3 pos = context.transform.position;
         Debug.Log($"<color=orange><b>[ExplosionEffect]</b></color> Detonated at {pos}");
+
+        // The pooled voice survives the pin being hidden or cleared after detonation.
+        if (explosionCue != null && !explosionCue.isUI) GameAudio.Instance?.Play(explosionCue, pos);
 
         // Apply visual feedback (Hide the pin, play particles)
         ApplyExplosionFeedback(context);
@@ -108,6 +135,12 @@ public class ExplosionEffect : PinEffect
 
     public override void ResetEffect()
     {
+        // Invalidate the old sequence before a reset pin can schedule its next explosion.
+        ++_detonationVersion;
+        if (_detonationOwner != null && _detonationCoroutine != null)
+            _detonationOwner.StopCoroutine(_detonationCoroutine);
+        _detonationCoroutine = null;
+        _detonationOwner = null;
         _hasTriggered = false;
 
         if (explosionParticles != null)
@@ -115,7 +148,5 @@ public class ExplosionEffect : PinEffect
             explosionParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
-        // Note: The visibility of the Renderer, Collider, and Rigidbody 
-        // are automatically restored by the base.ResetPin() method inside PinBase.cs!
     }
 }

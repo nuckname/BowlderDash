@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2873815806600060618}
   - component: {fileID: 5678694934647780627}
+  - component: {fileID: 7888205879337452326}
   m_Layer: 0
   m_Name: ticket
   m_TagString: Untagged
@@ -55,6 +56,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.6229124, y: 2.355731, z: 2.9119506}
   m_Center: {x: 0.029599788, y: -0.024597645, z: -0.012644768}
+--- !u!114 &7888205879337452326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483179382657493270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21219d6f7e2843a58f4aa4feff396195, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GroundTicketPickup
 --- !u!1 &6670627353524869537
 GameObject:
   m_ObjectHideFlags: 0

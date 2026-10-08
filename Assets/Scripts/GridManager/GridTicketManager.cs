@@ -20,6 +20,9 @@ public class GridTicketManager : MonoBehaviour
     public Color ticketCellColor = new Color(1f, 0.82f, 0.18f, 0.92f);
     public GameObject ticketVisualPrefab;
 
+    [Header("Audio")]
+    public SoundCueSO ticketPickupCue;
+
     [Header("Floating Text")]
     public float floatingTextBaseY = 3f;
     public float floatingTextStepY = 1f;
@@ -93,12 +96,16 @@ public class GridTicketManager : MonoBehaviour
         if (ticket == null) return false;
         
         collectedValue = ticket.value;
-        Destroy(ticket.visual);
+        Vector3 position = ticket.visual != null ? ticket.visual.transform.position : ticket.cell.center;
+        // Remove the claim before feedback; repeated falls cannot collect the same hex ticket.
         activeTickets.Remove(ticket);
+        Destroy(ticket.visual);
+        if (ticketPickupCue != null && !ticketPickupCue.isUI)
+            GameAudio.Instance?.Play(ticketPickupCue, position);
         
         // :)
         float yPos = pin.transform.position.y + floatingTextBaseY + currentFloatingTextOffsetY;
-        FindObjectOfType<RoundStateManager>().SpawnPinFloatingText("+1 Ticket", new Vector3(pin.transform.position.x, yPos, pin.transform.position.z));
+        FindObjectOfType<RoundStateManager>()?.SpawnPinFloatingText("+1 Ticket", new Vector3(pin.transform.position.x, yPos, pin.transform.position.z));
         currentFloatingTextOffsetY += floatingTextStepY;
         
         return true;
