@@ -7350,7 +7350,7 @@ MonoBehaviour:
     minimumFlightTime: 1
     stallSpeedThreshold: 0.35
     stallGracePeriod: 1.5
-    maximumFlightTime: 10
+    maximumFlightTime: 14
     maxPinSettleWaitTime: 4
     minRethrowZOffset: -1.5
     maxRethrowZOffset: 1.5
@@ -18419,13 +18419,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 985815243}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.054018565, y: 0.6798671, z: 0.05964222, w: -0.7289071}
-  m_LocalPosition: {x: -1148.8, y: -265.2, z: -805.6}
+  m_LocalRotation: {x: -0.057346642, y: 0.63699275, z: 0.056449644, w: -0.7666584}
+  m_LocalPosition: {x: -1148.5, y: -263.96, z: -803.85}
   m_LocalScale: {x: 3.9704847, y: 3.9704857, z: 3.9704852}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 956895566}
-  m_LocalEulerAnglesHint: {x: 0, y: 272.58, z: -13.31}
+  m_LocalEulerAnglesHint: {x: 0.918, y: 280.482, z: -9.186}
 --- !u!1 &987117670
 GameObject:
   m_ObjectHideFlags: 0
@@ -29687,8 +29687,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -506.6208, y: -212.79294}
-  m_SizeDelta: {x: 347.7884, y: 325.5959}
+  m_AnchoredPosition: {x: -506.6208, y: -127.50046}
+  m_SizeDelta: {x: 347.7884, y: 496.1808}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1608093105
 MonoBehaviour:
@@ -29771,7 +29771,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8113208, g: 0.73860806, b: 0.73860806, a: 0}
+  m_Color: {r: 0.4339623, g: 0.36231756, b: 0.36231756, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

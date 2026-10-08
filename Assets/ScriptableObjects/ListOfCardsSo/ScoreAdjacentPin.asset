@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ScoreAdjacentPin
   m_EditorClassIdentifier: 
   cardID: ScoreAdjacentPin
-  displayName: Floating
+  displayName: Adjacent Pin
   description: 'On Fall: Score +5 for every adjacent pin'
   cardArtwork: {fileID: 0}
   pinImages:

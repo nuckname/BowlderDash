@@ -35,7 +35,7 @@ public class WorldObjectToCard : MonoBehaviour
     
     public void ReturnToHand()
     {
-        if (_isBeingRemoved || !canBePickedUp) return;
+        if (_isBeingRemoved || !canBePickedUp || cannotBeReturnedToDeck) return;
         
         // Flag all peers so we only add one card to the hand, preventing a loop
         foreach(var peer in _groupPeers)

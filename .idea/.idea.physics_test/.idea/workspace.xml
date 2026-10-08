@@ -8,8 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/New Pin Models and textures/Banana/standardSurface1.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/New Pin Models and textures/Banana/standardSurface1.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/repeatPin.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefab/Pin Prefabs/repeatPin.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/ScoreAdjacentPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/ScoreAdjacentPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/ScoreAdjacentPinUpgraded.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/ScoreAdjacentPinUpgraded.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/rethrowBallPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/rethrowBallPin.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DraggableSnap.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DraggableSnap.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/WorldObjectToCard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/WorldObjectToCard.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,6 +110,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.searcher@d45a78918735/Editor/Searcher/SearcherWindow.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@f80b792d4861/Editor/Drawing/Views/Slots/BooleanSlotControlView.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.testtools.codecoverage@19a841221620/Samples~/Tutorial/Asteroids/Scripts/UI/ScoreCounter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@bb329a87fcdc/Runtime/TMP/TMP_InputField.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@bb329a87fcdc/Runtime/TMP/TextMeshProUGUI.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@bb329a87fcdc/Runtime/UGUI/UI/Core/Image.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@bb329a87fcdc/Runtime/UGUI/UI/Core/Layout/HorizontalOrVerticalLayoutGroup.cs" root0="SKIP_HIGHLIGHTING" />
@@ -257,13 +264,15 @@
       <option name="useMixedMode" value="false" />
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="31772">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="31772" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list />
+        <list>
+          <MonoRuntime />
+        </list>
       </option>
       <option name="selectedOptions">
         <list />
@@ -345,6 +354,7 @@
       <workItem from="1790832265939" duration="413000" />
       <workItem from="1790843254853" duration="4810000" />
       <workItem from="1791373783938" duration="1479000" />
+      <workItem from="1791435072876" duration="2731000" />
     </task>
     <servers />
   </component>
@@ -388,6 +398,19 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/Pins/Pin Refactor/PinBase.cs</url>
+          <line>310</line>
+          <properties documentPath="D:\unity projects\bowlderdash\physics_test\Assets\Scripts\Pins\Pin Refactor\PinBase.cs" containingFunctionPresentation="Method 'DisableReturnToHandForGroup'">
+            <startOffsets>
+              <option value="9211" />
+            </startOffsets>
+            <endOffsets>
+              <option value="9271" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

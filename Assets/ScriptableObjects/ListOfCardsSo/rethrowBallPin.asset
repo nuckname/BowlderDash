@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardID: rethrowBallPin
   displayName: Rethrow ball
-  description: 'On Ball Hit: automatically rethrow the ball'
+  description: 'On Ball Hit: automatically rethrow at a standing pin'
   cardArtwork: {fileID: 0}
   pinImages:
   - {fileID: -1788500815, guid: 1b425c0ecd98f7c49b4b5f966e476b2c, type: 3}

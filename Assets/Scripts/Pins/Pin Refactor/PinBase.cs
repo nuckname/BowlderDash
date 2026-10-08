@@ -292,6 +292,8 @@ public class PinBase : MonoBehaviour
             _hasBeenHit = true;
             isClone = false; // Turn the clone flag off so it can only be hit one extra time
             
+            DisableReturnToHandForGroup();
+            
             if (boxColliderToDisable != null)
             {
                 boxColliderToDisable.enabled = false;
@@ -304,9 +306,37 @@ public class PinBase : MonoBehaviour
         }
     }
     
+    protected void DisableReturnToHandForGroup()
+    {
+        DraggableSnap draggableSnap = GetComponent<DraggableSnap>();
+        WorldObjectToCard worldObjectToCard = GetComponent<WorldObjectToCard>();
+    
+        if (draggableSnap != null)
+        {
+            draggableSnap.canBeReturnedToHand = false;
+        }
+
+        if (worldObjectToCard != null)
+        {
+            foreach (WorldObjectToCard peer in worldObjectToCard.GroupPeers)
+            {
+                if (peer != null)
+                {
+                    DraggableSnap peerDraggable = peer.GetComponent<DraggableSnap>();
+                    if (peerDraggable != null)
+                    {
+                        peerDraggable.canBeReturnedToHand = false;
+                    }
+                }
+            }
+        }
+    }
+    
     public virtual void TriggerFall()
     {
         _isFallen = true;
+        
+        DisableReturnToHandForGroup();
         
         if (_rb != null)
         {

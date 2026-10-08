@@ -13,7 +13,7 @@ public class DraggableSnap : MonoBehaviour
     [Tooltip("Must match the playAreaThresholdY from CardMovement!")]
     public float playAreaThresholdY; 
 
-    [SerializeField] private bool canBeReturnedToHand = true;
+    public bool canBeReturnedToHand = true;
     
     [Header("Invalid Placement Visualization")]
     [SerializeField] private Material invalidPlacementMaterial;
