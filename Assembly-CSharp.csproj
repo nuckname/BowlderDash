@@ -188,6 +188,7 @@
     <Compile Include="Assets\Scripts\GridManager\HexGridExpander.cs" />
     <Compile Include="Assets\Scripts\Pins\AlleyEdgeGravity.cs" />
     <Compile Include="Assets\Scripts\Ball\ForceBallReturnRotation.cs" />
+    <Compile Include="Assets\Scripts\Ball\GroundTicketPickup.cs" />
     <Compile Include="Assets\Scripts\Manager\InGameScoreUi.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\DeflectBallEffect.cs" />
