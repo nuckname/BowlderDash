@@ -83,8 +83,12 @@ public class OnLaneSquareGrid : MonoBehaviour
     // Copy and pasted from GridTicketManager.cs so it acts a similar way.
     private void Update()
     {
-        if (!Application.isPlaying) return;
-
+        /*
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DebugGenerateGrid();
+        }*/
+        
         for (int i = 0; i < spawnedGridObjects.Count; i++)
         {
             GameObject obj = spawnedGridObjects[i];

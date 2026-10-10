@@ -1315,19 +1315,19 @@ MonoBehaviour:
   - serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
+      time: -0.0332222
+      value: 1.1327591
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
+      time: 0.9689331
+      value: -0.003540039
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -1340,29 +1340,20 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.96276987
-      outSlope: 0.96276987
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.33333334
+      outWeight: 0
     - serializedVersion: 3
-      time: 0.6660642
-      value: 0.6412665
-      inSlope: 2.9363997
-      outSlope: 2.9363997
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.12288434
-    - serializedVersion: 3
-      time: 0.973999
-      value: 0.9976196
-      inSlope: 1.1572355
-      outSlope: 1.1572355
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -27686,6 +27677,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []

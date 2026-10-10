@@ -99,7 +99,7 @@ public class SpawnBossObjectsState : RoundBaseState
         }
         else
         {
-            manager.MoveCamera(CameraLocation.SpawnBossObjectsCameraPosition);
+            manager.SwitchState(manager.pinPlacementState);
         }
 
         transitionRoutine = manager.StartCoroutine(TransitionToPinPlacement(manager));

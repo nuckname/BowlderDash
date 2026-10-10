@@ -24,16 +24,16 @@ MonoBehaviour:
     maxBallsAllowedToThrow: 3
   - roundNumber: 3
     scoreNeededToBeat: 150
-    maxBallsAllowedToThrow: 4
+    maxBallsAllowedToThrow: 3
   - roundNumber: 4
     scoreNeededToBeat: 210
     maxBallsAllowedToThrow: 4
   - roundNumber: 5
     scoreNeededToBeat: 260
-    maxBallsAllowedToThrow: 5
+    maxBallsAllowedToThrow: 4
   - roundNumber: 6
     scoreNeededToBeat: 300
-    maxBallsAllowedToThrow: 5
+    maxBallsAllowedToThrow: 4
   - roundNumber: 7
     scoreNeededToBeat: 340
     maxBallsAllowedToThrow: 5

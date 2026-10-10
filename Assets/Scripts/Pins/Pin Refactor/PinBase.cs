@@ -254,6 +254,7 @@ public class PinBase : MonoBehaviour
     {
         if (other.CompareTag("ThePit"))
         {
+            _isFallen = true;
             hasEnterTheHoleAtTheBack = true;
         }
         
