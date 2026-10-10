@@ -10,6 +10,8 @@ public class ShopState : RoundBaseState
 
         manager.shopUI.ToggleShop(true, manager);
         
+        DeckManager.Instance.ShuffleDiscardIntoDeck();
+        
         manager.DeleteAllActivePins();
         
         manager.ResetLaneExploders();

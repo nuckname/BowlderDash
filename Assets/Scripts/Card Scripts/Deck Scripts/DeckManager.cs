@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
 
 public class DeckManager : MonoBehaviour
 {
@@ -132,7 +136,7 @@ public class DeckManager : MonoBehaviour
         }
     }
     
-    private void ShuffleDiscardIntoDeck()
+    public void ShuffleDiscardIntoDeck()
     {
         if (discardPile.Count == 0) return;
 
