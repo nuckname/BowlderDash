@@ -151,11 +151,11 @@ public class ShopUIManager : MonoBehaviour
         }
         else if (currentRound >= 5)
         {
-            rerollCost = 3;
+            rerollCost = 2;
         }
         else if (currentRound >= 3)
         {
-            rerollCost = 2;
+            rerollCost = 1;
         }
         else
         {
