@@ -70,7 +70,7 @@ public class RoundStateManager : MonoBehaviour
 
     public GameObject postProcessingEffects;
 
-    [SerializeField] private int howManyRoundsdoWeWantToClickTheBallFor = 2;
+    private int _howManyRoundsdoWeWantToClickTheBallFor = 1;
     
     // States
     public RoundStartState roundStartState = new RoundStartState();
@@ -697,7 +697,7 @@ public class RoundStateManager : MonoBehaviour
 
     public bool CheckKeepClickingTheBall()
     {
-        if (sessionData.currentRound <= howManyRoundsdoWeWantToClickTheBallFor)
+        if (sessionData.currentRound <= _howManyRoundsdoWeWantToClickTheBallFor)
         {
             return true;   
         }

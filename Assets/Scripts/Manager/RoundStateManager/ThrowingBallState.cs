@@ -94,6 +94,14 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public void RefreshBallSelection(RoundStateManager manager)
     {
+        if (!manager.HasSelectedBallForCurrentAttempt && !manager.CheckKeepClickingTheBall())
+        {
+            manager.ClickButtonToGetBall();
+
+            // so we dont give the player an extra throw.
+            return;
+        }
+        
         bool hasSelectedBall = manager.HasSelectedBallForCurrentAttempt;
         cannotThrowBall = !hasSelectedBall;
         manager.TurnOnBallMesh(hasSelectedBall);

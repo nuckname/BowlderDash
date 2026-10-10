@@ -3857,8 +3857,8 @@ Transform:
   m_GameObject: {fileID: 154031061}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -35.07949, y: -1.9285583, z: -16.514822}
-  m_LocalScale: {x: 40.51441, y: 6.0081215, z: 3.708631}
+  m_LocalPosition: {x: -35.0795, y: -1.9285583, z: -15.9753}
+  m_LocalScale: {x: 40.51441, y: 6.0081215, z: 2.644054}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 981846050}
@@ -7346,7 +7346,6 @@ MonoBehaviour:
   leaderboardScreenPrefab: {fileID: 4633033163837582929, guid: 462c0d1ae8c88494ab1b316103872450, type: 3}
   tutorialManager: {fileID: 1588757391}
   postProcessingEffects: {fileID: 683764254}
-  howManyRoundsdoWeWantToClickTheBallFor: 2
   throwingBallState:
     pathDrawer: {fileID: 934142802}
     tuningData: {fileID: 11400000, guid: c95549d7c4b41ec4699f92164a4ff47d, type: 2}
@@ -8887,8 +8886,8 @@ Transform:
   m_GameObject: {fileID: 498163890}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -35.07947, y: -2.3085632, z: 15.755074}
-  m_LocalScale: {x: 40.51441, y: 6.0081215, z: 3.708631}
+  m_LocalPosition: {x: -35.0795, y: -0.7635, z: 15.5144}
+  m_LocalScale: {x: 40.51441, y: 2.9181447, z: 2.0462747}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 981846050}
@@ -27687,11 +27686,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
-  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
+  - {fileID: 11400000, guid: 94d09eaf14a3d0643b0b61e84715d0e4, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
