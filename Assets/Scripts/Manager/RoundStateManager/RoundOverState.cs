@@ -26,19 +26,16 @@ public class RoundOverState : RoundBaseState
             {
                 foreach (PinEffect effect in pin.onFallEffects)
                 {
-                    if (effect is ScoreMultiplierEffect || effect is MultiEffect || effect is AdjacentPinEffect || effect is GutterMultiEffect)
+                    if (effect is ScoreMultiplierEffect || effect is MultiEffect || effect is AdjacentPinEffect)
                     {
                         manager.pinsToScore.Add(pin);
                         break; // Stop searching this pin since we found one and added it
                     }
-                }
-                
-                // Gutter Multi Effect ? is there a better way to do this so that we dont have to search through ever pin. 
-                foreach (PinEffect effect in pin.onFallEffects)
-                {
+                    
+                    // Gutter Effect
                     if (effect is GutterMultiEffect)
                     {
-                        if (pin.hasEnterTheHoleAtTheBack)
+                        if (pin.hasEnterTheHoleAtTheBack || pin.hasEnterGutter)
                         {
                             manager.pinsToScore.Add(pin);
                             break; 

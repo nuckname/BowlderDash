@@ -7,25 +7,7 @@
     <configurations />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/RepeatPin.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/ScriptableObjects/ListOfCardsSo/RepeatPin.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/FloatingTextScript/FloatingText.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/FloatingTextScript/FloatingText.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundOverState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStartState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStartState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/RoundStateManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ScoringState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ShopState.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Manager/RoundStateManager/ShopState.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/AdjacentPinEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/AdjacentPinEffect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/ExplosionEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pins/PinEffects/ExplosionEffect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign Cards.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign Cards.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Button.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF Draw Tvs.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF MainMenuQuit.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF MainMenuQuit.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Electronic Highway Sign SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/TextMesh Pro/Examples &amp; Extras/Resources/Fonts &amp; Materials/Roboto-Bold SDF.asset" afterDir="false" />
-    </list>
+    <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -363,7 +345,7 @@
       <workItem from="1790843254853" duration="4810000" />
       <workItem from="1791373783938" duration="1479000" />
       <workItem from="1791435072876" duration="2731000" />
-      <workItem from="1791589850047" duration="2711000" />
+      <workItem from="1791589850047" duration="3062000" />
     </task>
     <servers />
   </component>
