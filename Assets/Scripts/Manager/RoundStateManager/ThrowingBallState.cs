@@ -248,7 +248,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
         // Execute throw
         currentManager.ballController.ExecuteThrow(path, launchSpeed);
 
-        //HandManager.Instance.DiscardHand();
+        HandManager.Instance.DiscardHand();
 
         // Camera
         currentManager.StartBallCameraTracking();
