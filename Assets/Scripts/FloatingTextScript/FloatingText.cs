@@ -32,6 +32,11 @@ public class FloatingText : MonoBehaviour
     private void Awake()
     {
         textComponent = GetComponent<TextMeshPro>();
+
+        // Draw on top of world geometry
+        var mat = textComponent.fontMaterial; // instance, so it doesn't change the shared font material
+        mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
+        textComponent.renderer.sortingOrder = 100;
     }
 
     public void Initialize(string newText)

@@ -2749,7 +2749,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -719, y: 566}
+  m_AnchoredPosition: {x: -719, y: 629}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &103563190
@@ -3689,7 +3689,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -719, y: 566}
+  m_AnchoredPosition: {x: -719, y: 629}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &148269882
@@ -27687,6 +27687,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 047661cc8cebe60438a4aac376983714, type: 2}
   - {fileID: 11400000, guid: 147d84a5ebf06f943a42b23a5c77747e, type: 2}
   - {fileID: 11400000, guid: 879c1dc64867ccb429661ac32bbeb59b, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
+  - {fileID: 11400000, guid: 1ea7ce341f9128b42be5c0c3a2248601, type: 2}
   drawPile: []
   totalDeck: []
   discardPile: []
@@ -35054,13 +35059,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1906495012}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.526552, y: -0, z: -0, w: 0.85014296}
-  m_LocalPosition: {x: -1062.6, y: -235.79141, z: -910}
+  m_LocalRotation: {x: 0.6685107, y: -0.00082088914, z: -0.006512695, w: 0.7436736}
+  m_LocalPosition: {x: -1062.6, y: -235.6, z: -892.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1439520102}
-  m_LocalEulerAnglesHint: {x: 63.546, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 83.878, y: -5.342, z: -5.804}
 --- !u!1 &1907220981
 GameObject:
   m_ObjectHideFlags: 0

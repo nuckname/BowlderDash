@@ -16,7 +16,7 @@ public class RoundStartState : RoundBaseState
         
         manager.ResetHandDrawState();
         
-        HandleMap(manager);
+        manager.ResetLaneExploders();
 
         HandleGrid(manager);
 
@@ -67,11 +67,6 @@ public class RoundStartState : RoundBaseState
         manager.gridManager?.SpawnTicketsForFrame();
         
         manager.onLaneSquareGrid.GenerateGridForRound(manager);
-    }
-
-    private void HandleMap(RoundStateManager manager)
-    {
-        manager.ResetLaneExploders();
     }
     
     private static void UpdateTicketAmountPerRound(RoundStateManager manager)

@@ -463,6 +463,27 @@ public class RoundStateManager : MonoBehaviour
         }
     }
     
+    public void ClearAllGrendaTntPins()
+    {
+        if (allActivePinsInTheFrame == null) return;
+
+        foreach (PinBase pin in allActivePinsInTheFrame)
+        {
+            if (pin == null) continue;
+
+            bool hasExplosion = 
+                (pin.onPlaceEffects != null && pin.onPlaceEffects.Any(e => e is ExplosionEffect)) ||
+                (pin.onHitEffects != null && pin.onHitEffects.Any(e => e is ExplosionEffect)) ||
+                (pin.onFallEffects != null && pin.onFallEffects.Any(e => e is ExplosionEffect)) ||
+                (pin.onEndOfRoundEffects != null && pin.onEndOfRoundEffects.Any(e => e is ExplosionEffect));
+
+            if (hasExplosion)
+            {
+                Destroy(pin.gameObject);
+            }
+        }
+    }
+    
     public void DeleteAllActivePins()
     {
         if (allActivePinsInTheFrame != null)

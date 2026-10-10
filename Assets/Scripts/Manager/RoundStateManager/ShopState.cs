@@ -12,6 +12,8 @@ public class ShopState : RoundBaseState
         
         manager.DeleteAllActivePins();
         
+        manager.ResetLaneExploders();
+        
         manager.postProcessingEffects.SetActive(false);
     }
 

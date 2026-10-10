@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RepeatPin
   m_EditorClassIdentifier: 
   cardID: RepeatPin
-  displayName: RepeatPin
+  displayName: Repeat Pin
   description: 'On Fall: repeat the score of the pin to the right'
   cardArtwork: {fileID: 0}
   pinImages:
@@ -28,6 +28,6 @@ MonoBehaviour:
   cardUIPrefab: {fileID: 8994356602663114153, guid: debfb261515b60c4db74e45798c73aa4, type: 3}
   cardVisualPrefab: {fileID: 7310339964073049012, guid: b5837f97d682eb74bb8953b1fda99491, type: 3}
   worldGameObjectPrefab: {fileID: 5919451674846626430, guid: f02b0e8403077874fb34252e0cd5d3df, type: 3}
-  baseCost: 2
+  baseCost: 3
   spawnPattern: []
-  rarity: 0
+  rarity: 1

@@ -33,10 +33,10 @@ MonoBehaviour:
     maxBallsAllowedToThrow: 5
   - roundNumber: 6
     scoreNeededToBeat: 300
-    maxBallsAllowedToThrow: 6
+    maxBallsAllowedToThrow: 5
   - roundNumber: 7
     scoreNeededToBeat: 340
-    maxBallsAllowedToThrow: 6
+    maxBallsAllowedToThrow: 5
   - roundNumber: 8
     scoreNeededToBeat: 500
     maxBallsAllowedToThrow: 6

@@ -86,12 +86,14 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator ProcessScoringRoutine()
     {
-        yield return SkippableWait(waitTimeBeforeScoring - 0.5f);
+        yield return SkippableWait(waitTimeBeforeScoring);
+        
+        bool isStrike = _manager.TryApplyStrikeMultiplier();
 
-        if (_manager.TryApplyStrikeMultiplier())
+        if (isStrike)
         {
             _manager.SpawnStrikeFloatingText();
-            yield return SkippableWait(waitTimeBeforeScoring);
+            yield return SkippableWait(waitTimeBeforeScoring - 0.25f);
         }
 
         ExecutePinScoringEffects();
@@ -102,7 +104,7 @@ public class ScoringState : RoundBaseState
         {
             _textSpawnDelay = 0.6f;
         }
-        else if (pinCount > 5 && pinCount <= 8)
+        else if (pinCount <= 8)
         {
             _textSpawnDelay = 0.4f;
         }
@@ -121,7 +123,10 @@ public class ScoringState : RoundBaseState
         }
 
         // Once pins have settled, we start the wait timer before scoring
-        yield return SkippableWait(waitTimeBeforeScoring);
+        if (!isStrike)
+        {
+            yield return SkippableWait(waitTimeBeforeScoring);
+        }
 
         CalculateScore();
         hasScored = true;

@@ -14,6 +14,9 @@ public class RoundOverState : RoundBaseState
         manager.AddBallThrownToSession();
         manager.ClearSelectedBallForCurrentAttempt();
         
+        // there is a bug where the meshes turn off for some reason so im going to detroy them.
+        manager.ClearAllGrendaTntPins();
+        
         foreach (PinBase pin in manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
         {
             if (pin == null || !pin.IsActiveGameplayPin) continue;

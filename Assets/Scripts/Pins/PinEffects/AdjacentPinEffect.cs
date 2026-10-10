@@ -39,6 +39,6 @@ public class AdjacentPinEffect : PinEffect
 
     public override string GetEffectText()
     {
-        return _lastEarnedScore > 0 ? $"+{_lastEarnedScore}" : string.Empty;
+        return _lastEarnedScore > 0 ? $"{_lastEarnedScore}" : string.Empty;
     }
 }
