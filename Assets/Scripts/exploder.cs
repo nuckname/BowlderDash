@@ -12,6 +12,9 @@ public class exploder : MonoBehaviour
     public float sinkRadiusExt = 0.5f;
     public float yOffset = 1.0f;
     public AnimationCurve sinkCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    
+    [Range(0f, 1f)]
+    public float jaggedDepth = 0.3f;
 
     [SerializeField, HideInInspector] private Mesh sourceMesh;
     private Mesh runtimeMesh;
@@ -169,9 +172,9 @@ public class exploder : MonoBehaviour
                 if (d < minDist) { minDist = d; nearestP = p; }
             }
 
-            // progress 30% towards center to create a jagged star vertex
+            // progress jaggedDepth towards center to create a jagged star vertex
             Vector3 dir = nearestP - midpoint;
-            Vector3 starWorld = midpoint + dir * 0.3f;
+            Vector3 starWorld = midpoint + dir * jaggedDepth;
             Vector3 starLocal = transform.InverseTransformPoint(starWorld);
             
             // do NOT apply yOffset here because the sink logic will handle it based on distance
@@ -204,8 +207,8 @@ public class exploder : MonoBehaviour
             {
                 float dist = Vector3.Distance(worldP, p);
                 
-                // Map the sink from the outer extension all the way to the 30% inner star line
-                float innerTargetDist = radius * 0.7f; 
+                // Map the sink from the outer extension all the way to the inner star line
+                float innerTargetDist = radius * (1f - jaggedDepth); 
                 float outerLimitDist = radius + sinkRadiusExt;
 
                 if (dist <= outerLimitDist)
@@ -223,7 +226,7 @@ public class exploder : MonoBehaviour
 
             if (maxEffect > 0)
             {
-                // Applying yOffset fully here. This ensures the 30% jagged points (at innerTargetDist)
+                // Applying yOffset fully here. This ensures the jagged points (at innerTargetDist)
                 // sit exactly at the floor, and the sink is applied only once.
                 finalVerts[i].z -= yOffset * maxEffect;
             }

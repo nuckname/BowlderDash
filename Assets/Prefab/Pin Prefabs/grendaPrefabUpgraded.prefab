@@ -5064,7 +5064,7 @@ MonoBehaviour:
       type: {class: ExplosionEffect, ns: , asm: Assembly-CSharp}
       data:
         explosionForce: 8
-        explosionRadius: 1.5
+        explosionRadius: 6
         upwardModifier: 1
         detonationDelay: 0.5
         explosionParticles: {fileID: 4918979806117386139}

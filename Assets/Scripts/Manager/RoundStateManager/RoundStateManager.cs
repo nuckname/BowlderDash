@@ -366,7 +366,7 @@ public class RoundStateManager : MonoBehaviour
 
         foreach (PinBase pin in strikeTargetsForCurrentThrow)
         {
-            if (pin == null || !pin.IsFallen)
+            if (pin != null && !pin.IsFallen)
             {
                 return false;
             }

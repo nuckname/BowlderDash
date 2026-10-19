@@ -58,11 +58,6 @@ public class CardDataSO : ScriptableObject
     
     private void OnValidate()
     {
-      //  zPositionRange = new Vector2(-3, -30);
-       // zRotationRange = new Vector2(-5, -5);
-       // sizeRangeX = new Vector2(0.83f, 0.83f);
-       // sizeRangeY = new Vector2(0.83f, 0.83f);
-    
         cardID = name;
 
         switch (rarity)
