@@ -216,7 +216,9 @@ public class RoundStateManager : MonoBehaviour
     public void PinPlacementVisuals(bool turnOn)
     {
         gridManager.hexGridVisuals.SetVisualsActive(turnOn);
-        maxLineGameObject.SetActive(!turnOn);
+        
+        // Replaced with Sean's white line
+        // maxLineGameObject.SetActive(!turnOn);
     }
 
     public void ShowLeaderboardScreen(bool victory)
