@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System;
 
 public enum CameraLocation 
 { 
@@ -18,6 +18,10 @@ public enum CameraLocation
     MainMenuCameraLocation,
     LeaderboardCameraLocation,
     SettingCameraLocation,
+    RouletteOverview,
+    RouletteRed,
+    RouletteBlack,
+    RouletteGreen,
 }
 
 [System.Serializable]
@@ -38,20 +42,44 @@ public class CameraPanToLocation : MonoBehaviour
     public List<CameraLocationMapping> cameraMappings = new List<CameraLocationMapping>();
 
     private Coroutine activeLerp;
+    private MoveRequest activeRequest;
+
+    public sealed class MoveRequest
+    {
+        public bool IsActive { get; internal set; } = true;
+        internal Action<bool> onFinished;
+    }
 
     public void MoveCameraTo(CameraLocation location, float speedOverride = -1f)
     {
-        CancelActiveMove();
+        TryMoveCameraTo(location, null, out _, speedOverride);
+    }
 
-        if (!TryGetCameraTarget(location, out Transform target))
+    public bool CanMoveTo(CameraLocation location, float speedOverride = -1f)
+    {
+        float speed = speedOverride > 0f ? speedOverride : lerpSpeed;
+        return isActiveAndEnabled && mainCamera != null && speed > 0f &&
+            !float.IsInfinity(speed) && TryGetCameraTarget(location, out _);
+    }
+
+    public bool TryMoveCameraTo(CameraLocation location, Action<bool> onFinished,
+        out MoveRequest request, float speedOverride = -1f)
+    {
+        request = null;
+        if (!CanMoveTo(location, speedOverride))
         {
-            Debug.LogWarning($"No camera target is assigned for {location}.");
-            return;
+            Debug.LogWarning($"Cannot move camera to {location}: check camera, target and pan speed.", this);
+            return false;
         }
 
-        // Use the override if one was provided, otherwise fallback to the inspector's lerpSpeed
+        TryGetCameraTarget(location, out Transform target);
+        CancelActiveMove();
+        if (activeRequest != null || !CanMoveTo(location, speedOverride)) return false;
+        request = new MoveRequest { onFinished = onFinished };
+        activeRequest = request;
         float speedToUse = speedOverride > 0f ? speedOverride : lerpSpeed;
-        activeLerp = StartCoroutine(LerpCamera(target, speedToUse));
+        activeLerp = StartCoroutine(LerpCamera(target, speedToUse, request));
+        return true;
     }
 
     public bool TryGetCameraTarget(CameraLocation location, out Transform target)
@@ -71,25 +99,49 @@ public class CameraPanToLocation : MonoBehaviour
 
     public void CancelActiveMove()
     {
-        if (activeLerp == null) return;
-
-        StopCoroutine(activeLerp);
+        if (activeLerp != null) StopCoroutine(activeLerp);
         activeLerp = null;
+        FinishMove(activeRequest, false);
     }
 
-    private IEnumerator LerpCamera(Transform target, float speed)
+    public void CancelMove(MoveRequest request)
     {
-        while (Vector3.Distance(mainCamera.transform.position, target.position) > 0.01f || 
-               Quaternion.Angle(mainCamera.transform.rotation, target.rotation) > 0.01f)
+        if (request != null && request == activeRequest) CancelActiveMove();
+    }
+
+    private void FinishMove(MoveRequest request, bool arrived)
+    {
+        if (request == null || !request.IsActive) return;
+        request.IsActive = false;
+        if (activeRequest == request) activeRequest = null;
+        Action<bool> callback = request.onFinished;
+        request.onFinished = null;
+        callback?.Invoke(arrived);
+    }
+
+    private IEnumerator LerpCamera(Transform target, float speed, MoveRequest request)
+    {
+        // Defer even an already-arrived move so its caller can retain the request first.
+        yield return null;
+        while (mainCamera != null && target != null)
         {
+            if (Vector3.Distance(mainCamera.transform.position, target.position) <= 0.01f &&
+                Quaternion.Angle(mainCamera.transform.rotation, target.rotation) <= 0.01f)
+            {
+                mainCamera.transform.SetPositionAndRotation(target.position, target.rotation);
+                activeLerp = null;
+                FinishMove(request, true);
+                yield break;
+            }
             mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, target.position, Time.deltaTime * speed);
             mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, target.rotation, Time.deltaTime * speed);
             yield return null;
         }
-
-        mainCamera.transform.SetPositionAndRotation(target.position, target.rotation);
         activeLerp = null;
+        FinishMove(request, false);
     }
+
+    private void OnDisable() => CancelActiveMove();
     
     // Debug GUI for testing camera locations, turn on showDebugMenu and look top right, just ai slop
     private void OnGUI()

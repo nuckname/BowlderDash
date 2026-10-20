@@ -28,6 +28,7 @@ public class ShopState : RoundBaseState
     
     public override void ExitState(RoundStateManager manager)
     {
+        manager.shopUI.CloseRouletteForShopExit();
         manager.shopUI.ToggleShop(false);
         manager.postProcessingEffects.SetActive(true);
         

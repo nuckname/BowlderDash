@@ -37,6 +37,29 @@ public class ShopUIManager : MonoBehaviour
     
     public Button expandGridButton;
 
+    [Header("Roulette Excursion")]
+    [SerializeField] private RouletteController rouletteController;
+    [SerializeField] private CanvasGroup[] rouletteSuspendedCanvasGroups = new CanvasGroup[0];
+    [SerializeField] private GameObject[] rouletteHiddenPresentationRoots = new GameObject[0];
+    private bool _shopOpen;
+    private bool _rouletteSuspended;
+    private readonly List<CanvasState> _rouletteCanvasStates = new List<CanvasState>();
+    private readonly Dictionary<GameObject, bool> _rouletteRootStates = new Dictionary<GameObject, bool>();
+
+    private struct CanvasState
+    {
+        public CanvasGroup group;
+        public float alpha;
+        public bool interactable;
+        public bool blocksRaycasts;
+    }
+
+    public RoundStateManager RoundManager => _roundStateManager;
+    public bool IsShopOpen => _shopOpen && isActiveAndEnabled && shopGameObject != null &&
+        shopGameObject.activeInHierarchy && _roundStateManager != null &&
+        _roundStateManager.currentState == _roundStateManager.shopState;
+    public bool CanUseShopControls => IsShopOpen && !_rouletteSuspended && !_hexGridExpansionActive;
+
     [Header("Grid Expansion TV Spawn")]
     public Transform tvSpawnPoint;
     public GameObject ticketCostTvPrefab;
@@ -56,9 +79,7 @@ public class ShopUIManager : MonoBehaviour
     [SerializeField, Min(0f)] private float minimumTvBounceSpeed = 0.1f;
     [SerializeField, Min(0f)] private float tvBounceCooldown = 0.12f;
 
-    public bool IsHexGridExpansionActive => isActiveAndEnabled && _hexGridExpansionActive &&
-        shopGameObject != null && shopGameObject.activeInHierarchy && _roundStateManager != null &&
-        _roundStateManager.currentState == _roundStateManager.shopState;
+    public bool IsHexGridExpansionActive => IsShopOpen && !_rouletteSuspended && _hexGridExpansionActive;
     
     [Header("TV Game Objects")] 
     [SerializeField] private GameObject throwBallTv;
@@ -100,7 +121,12 @@ public class ShopUIManager : MonoBehaviour
     
     public void ToggleShop(bool show, RoundStateManager manager = null)
     {
-        if (!show) CloseHexGridMode(false);
+        _shopOpen = show;
+        if (!show)
+        {
+            CloseRouletteForShopExit();
+            CloseHexGridMode(false);
+        }
         shopGameObject.SetActive(show);
         
         if (show)
@@ -165,6 +191,7 @@ public class ShopUIManager : MonoBehaviour
 
     public void RerollShop()
     {
+        if (!CanUseShopControls) return;
         UpdateRerollCostByRound();
 
         if (SessionData.Instance.SpendTickets(rerollCost))
@@ -378,11 +405,10 @@ public class ShopUIManager : MonoBehaviour
     
     public void ToggleHexGridExpander(bool turnOn)
     {
+        if (_rouletteSuspended) return;
         if (turnOn)
         {
-            if (_hexGridExpansionActive || _roundStateManager == null ||
-                _roundStateManager.currentState != _roundStateManager.shopState ||
-                shopGameObject == null || !shopGameObject.activeInHierarchy || !isActiveAndEnabled) return;
+            if (!CanUseShopControls) return;
 
             _hexGridExpansionActive = true;
             _roundStateManager.postProcessingEffects.SetActive(true);
@@ -451,7 +477,91 @@ public class ShopUIManager : MonoBehaviour
         tv = null;
     }
 
-    private void OnDisable() => CloseHexGridMode(false);
+    public void OpenRoulette()
+    {
+        if (CanUseShopControls && rouletteController != null) rouletteController.OpenFromShop();
+    }
+
+    public bool TrySuspendForRoulette(RouletteController owner)
+    {
+        if (!CanUseShopControls || owner == null || owner != rouletteController ||
+            rouletteSuspendedCanvasGroups == null || rouletteSuspendedCanvasGroups.Length == 0 ||
+            _roundStateManager.cameraPanToLocation == null ||
+            _roundStateManager.cameraPanToLocation.mainCamera == null) return false;
+
+        foreach (CanvasGroup group in rouletteSuspendedCanvasGroups)
+        {
+            if (group == null || !group.isActiveAndEnabled || owner.transform.IsChildOf(group.transform) ||
+                owner.HasControlsUnder(group.transform)) return false;
+        }
+        if (rouletteHiddenPresentationRoots != null)
+        {
+            foreach (GameObject root in rouletteHiddenPresentationRoots)
+            {
+                if (root == null || transform.IsChildOf(root.transform) ||
+                    owner.transform.IsChildOf(root.transform) ||
+                    owner.HasControlsUnder(root.transform) || shopGameObject.transform.IsChildOf(root.transform) ||
+                    _roundStateManager.transform.IsChildOf(root.transform) ||
+                    _roundStateManager.cameraPanToLocation.transform.IsChildOf(root.transform) ||
+                    _roundStateManager.cameraPanToLocation.mainCamera.transform.IsChildOf(root.transform)) return false;
+            }
+        }
+
+        _rouletteSuspended = true;
+        _rouletteCanvasStates.Clear();
+        foreach (CanvasGroup group in rouletteSuspendedCanvasGroups)
+        {
+            if (_rouletteCanvasStates.Exists(state => state.group == group)) continue;
+            _rouletteCanvasStates.Add(new CanvasState { group = group, alpha = group.alpha,
+                interactable = group.interactable, blocksRaycasts = group.blocksRaycasts });
+            group.alpha = 0f;
+            group.interactable = false;
+            group.blocksRaycasts = false;
+        }
+        _rouletteRootStates.Clear();
+        if (rouletteHiddenPresentationRoots != null)
+        {
+            foreach (GameObject root in rouletteHiddenPresentationRoots)
+            {
+                if (_rouletteRootStates.ContainsKey(root)) continue;
+                _rouletteRootStates.Add(root, root.activeSelf);
+                root.SetActive(false);
+            }
+        }
+        if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+        return true;
+    }
+
+    public void ResumeFromRoulette(RouletteController owner)
+    {
+        if (!_rouletteSuspended || owner != rouletteController) return;
+        _rouletteSuspended = false;
+        foreach (CanvasState state in _rouletteCanvasStates)
+        {
+            if (state.group == null) continue;
+            state.group.alpha = state.alpha;
+            state.group.interactable = state.interactable;
+            state.group.blocksRaycasts = state.blocksRaycasts;
+        }
+        _rouletteCanvasStates.Clear();
+        foreach (var state in _rouletteRootStates)
+        {
+            if (state.Key != null) state.Key.SetActive(state.Value);
+        }
+        _rouletteRootStates.Clear();
+    }
+
+    public void CloseRouletteForShopExit()
+    {
+        if (rouletteController != null) rouletteController.CloseForShopExit();
+    }
+
+    private void OnDisable()
+    {
+        _shopOpen = false;
+        CloseRouletteForShopExit();
+        CloseHexGridMode(false);
+    }
     
     private void UpdateGridButtonText()
     {
@@ -512,6 +622,7 @@ public class ShopUIManager : MonoBehaviour
     
     public bool TryBuyGridExpansion()
     {
+        if (!IsHexGridExpansionActive) return false;
         int cost = GetGridUpgradeCost();
         
         if (SessionData.Instance.SpendTickets(cost))
@@ -587,12 +698,14 @@ public class ShopUIManager : MonoBehaviour
 
     public void OnContinueClicked()
     {
+        if (!CanUseShopControls) return;
         _roundStateManager.SwitchState(_roundStateManager.roundStartState);
     }
 
     public void BuyCard(int index)
     {
-        if (index < _currentShopCards.Count && _currentShopCards[index] != null)
+        if (!CanUseShopControls) return;
+        if (index >= 0 && index < _currentShopCards.Count && _currentShopCards[index] != null)
         {
             int costToSpend = _currentCardCosts[index];
             
