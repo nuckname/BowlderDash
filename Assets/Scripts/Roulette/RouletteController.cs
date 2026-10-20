@@ -27,6 +27,9 @@ public class RouletteController : MonoBehaviour
     [SerializeField] private RouletteTVView greenTV;
     [SerializeField] private SoundCueSO deniedCue;
 
+    [Header("Wager Tickets")]
+    [SerializeField] private RouletteTicketPresenter ticketPresenter;
+
     public NavigationPhase Phase { get; private set; }
     public bool IsOpen => Phase != NavigationPhase.Closed;
     public int DraftStake => draft.Stake;
@@ -53,7 +56,7 @@ public class RouletteController : MonoBehaviour
         cameraPan = manager.cameraPanToLocation;
         if (!IsNavigationReady() || !shopUI.TrySuspendForRoulette(this))
         {
-            Debug.LogWarning("Roulette is unavailable. Check TV editor bindings, control groups, camera mappings and shop suspension assignments.", this);
+            Debug.LogWarning("Roulette is unavailable. Check ticket presenter, TV bindings, camera mappings and shop suspension assignments.", this);
             return;
         }
 
@@ -72,7 +75,8 @@ public class RouletteController : MonoBehaviour
 
     public void SelectColour(RouletteTVView source)
     {
-        if (!CanNavigate(NavigationPhase.Overview) || !IsRegisteredView(source)) return;
+        if (!CanNavigate(NavigationPhase.Overview) || !IsRegisteredView(source) ||
+            ticketPresenter == null || !ticketPresenter.IsReady) return;
         selectedColour = source.Colour;
         hasDraftColour = true;
         draft = default;
@@ -110,14 +114,19 @@ public class RouletteController : MonoBehaviour
         {
             if (deniedCue != null && deniedCue.isUI) GameAudio.Instance?.Play(deniedCue);
         }
-        else draft = edited;
+        else
+        {
+            draft = edited;
+            ticketPresenter.SyncDraft(this);
+        }
         RefreshControls();
     }
 
     private bool CanEditDraft(RouletteTVView source)
     {
         return CanNavigate(NavigationPhase.ColourView) && hasDraftColour &&
-            IsRegisteredView(source) && source.Colour == selectedColour;
+            IsRegisteredView(source) && source.Colour == selectedColour && ticketPresenter != null &&
+            ticketPresenter.IsPresentingFor(this);
     }
 
     private RouletteTVView GetView(RouletteColour colour)
@@ -144,12 +153,14 @@ public class RouletteController : MonoBehaviour
         int maximum = RouletteWager.GetMaximumStake(selectedColour, observedWallet);
         int stake = maximum > 0 ? Mathf.Clamp(draft.Stake, 1, maximum) : 0;
         RouletteWager.TryCreate(selectedColour, stake, observedWallet, out draft);
+        if (ticketPresenter != null) ticketPresenter.SyncDraft(this);
     }
 
     private void ClearDraft()
     {
         draft = default;
         hasDraftColour = false;
+        if (ticketPresenter != null) ticketPresenter.CancelDraft(this);
     }
 
     public void BackToShop()
@@ -162,7 +173,11 @@ public class RouletteController : MonoBehaviour
 
     private bool CanNavigate(NavigationPhase expected)
     {
-        return isActiveAndEnabled && Phase == expected && shopUI != null && shopUI.IsShopOpen;
+        bool acceptsInput = Phase == expected ||
+            (expected == NavigationPhase.Overview &&
+                (Phase == NavigationPhase.MovingToTable || Phase == NavigationPhase.MovingToOverview)) ||
+            (expected == NavigationPhase.ColourView && Phase == NavigationPhase.MovingToColour);
+        return isActiveAndEnabled && acceptsInput && shopUI != null && shopUI.IsShopOpen;
     }
 
     private bool IsNavigationReady()
@@ -171,7 +186,8 @@ public class RouletteController : MonoBehaviour
             blackCloseControls == null || greenCloseControls == null || manager.sessionData == null ||
             redTV == null || !redTV.IsConfiguredFor(this, RouletteColour.Red) ||
             blackTV == null || !blackTV.IsConfiguredFor(this, RouletteColour.Black) ||
-            greenTV == null || !greenTV.IsConfiguredFor(this, RouletteColour.Green)) return false;
+            greenTV == null || !greenTV.IsConfiguredFor(this, RouletteColour.Green) ||
+            ticketPresenter == null || !ticketPresenter.IsReady) return false;
         CanvasGroup[] groups = { overviewControls, redCloseControls, blackCloseControls, greenCloseControls };
         for (int i = 0; i < groups.Length; i++)
         {
@@ -192,7 +208,6 @@ public class RouletteController : MonoBehaviour
     private bool Navigate(CameraLocation destination, NavigationPhase moving, NavigationPhase arrived)
     {
         if (cameraPan == null || !cameraPan.CanMoveTo(destination)) return false;
-        NavigationPhase previous = Phase;
         int version = ++navigationVersion;
         Phase = moving;
         RefreshControls();
@@ -213,23 +228,20 @@ public class RouletteController : MonoBehaviour
                 if (arrived == NavigationPhase.ColourView) RevalidateDraft();
                 RefreshControls();
             }
-        }, out cameraMove);
-        if (!started)
-        {
-            Phase = previous;
-            RefreshControls();
-        }
+        }, out cameraMove, moving == NavigationPhase.MovingToTable ||
+            moving == NavigationPhase.ReturningToShop ? 0.65f : 0.4f);
+        if (!started) Close(true);
         return started;
     }
 
     private void RefreshControls()
     {
-        // Show the destination immediately; unlock its controls only on arrival.
+        // Destination controls can edit or redirect the camera during its move.
         bool showOverview = Phase == NavigationPhase.MovingToTable ||
             Phase == NavigationPhase.MovingToOverview || Phase == NavigationPhase.Overview;
         bool showColour = Phase == NavigationPhase.MovingToColour || Phase == NavigationPhase.ColourView;
-        bool overviewInput = Phase == NavigationPhase.Overview;
-        bool colourInput = Phase == NavigationPhase.ColourView;
+        bool overviewInput = showOverview;
+        bool colourInput = showColour;
         SetControls(overviewControls, showOverview, overviewInput);
         SetControls(redCloseControls, showColour && colourView == CameraLocation.RouletteRed,
             colourInput && colourView == CameraLocation.RouletteRed);
@@ -259,6 +271,8 @@ public class RouletteController : MonoBehaviour
     }
 
     public void CloseForShopExit() => Close(false);
+
+    public bool UsesTicketPresenter(RouletteTicketPresenter presenter) => ticketPresenter == presenter;
 
     public bool HasControlsUnder(Transform root)
     {
@@ -296,7 +310,8 @@ public class RouletteController : MonoBehaviour
         if (IsOpen && (shopUI == null || !shopUI.IsShopOpen)) Close(false);
         else if (Phase == NavigationPhase.MovingToColour || Phase == NavigationPhase.ColourView)
         {
-            if (!IsRegisteredView(GetView(selectedColour))) Close(true);
+            if (!IsRegisteredView(GetView(selectedColour)) || ticketPresenter == null ||
+                !ticketPresenter.IsPresentingFor(this)) Close(true);
             else if (observedWallet != Wallet)
             {
                 RevalidateDraft();

@@ -63,10 +63,10 @@ public class CameraPanToLocation : MonoBehaviour
     }
 
     public bool TryMoveCameraTo(CameraLocation location, Action<bool> onFinished,
-        out MoveRequest request, float speedOverride = -1f)
+        out MoveRequest request, float speedOverride = -1f, float durationSeconds = 0f)
     {
         request = null;
-        if (!CanMoveTo(location, speedOverride))
+        if (!CanMoveTo(location, speedOverride) || float.IsNaN(durationSeconds) || float.IsInfinity(durationSeconds))
         {
             Debug.LogWarning($"Cannot move camera to {location}: check camera, target and pan speed.", this);
             return false;
@@ -78,7 +78,9 @@ public class CameraPanToLocation : MonoBehaviour
         request = new MoveRequest { onFinished = onFinished };
         activeRequest = request;
         float speedToUse = speedOverride > 0f ? speedOverride : lerpSpeed;
-        activeLerp = StartCoroutine(LerpCamera(target, speedToUse, request));
+        activeLerp = StartCoroutine(durationSeconds > 0f
+            ? MoveCameraForDuration(target, durationSeconds, request)
+            : LerpCamera(target, speedToUse, request));
         return true;
     }
 
@@ -117,6 +119,41 @@ public class CameraPanToLocation : MonoBehaviour
         Action<bool> callback = request.onFinished;
         request.onFinished = null;
         callback?.Invoke(arrived);
+    }
+
+    private IEnumerator MoveCameraForDuration(Transform target, float duration, MoveRequest request)
+    {
+        // Let the caller retain the request before any arrival callback.
+        yield return null;
+        if (mainCamera == null || target == null)
+        {
+            activeLerp = null;
+            FinishMove(request, false);
+            yield break;
+        }
+        Vector3 startPosition = mainCamera.transform.position;
+        Quaternion startRotation = mainCamera.transform.rotation;
+        float elapsed = 0f;
+        while (mainCamera != null && target != null)
+        {
+            elapsed += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            float remaining = 1f - progress;
+            float eased = 1f - remaining * remaining * remaining;
+            mainCamera.transform.SetPositionAndRotation(
+                Vector3.Lerp(startPosition, target.position, eased),
+                Quaternion.Slerp(startRotation, target.rotation, eased));
+            if (progress >= 1f)
+            {
+                mainCamera.transform.SetPositionAndRotation(target.position, target.rotation);
+                activeLerp = null;
+                FinishMove(request, true);
+                yield break;
+            }
+            yield return null;
+        }
+        activeLerp = null;
+        FinishMove(request, false);
     }
 
     private IEnumerator LerpCamera(Transform target, float speed, MoveRequest request)

@@ -680,14 +680,14 @@ public class RoundStateManager : MonoBehaviour
     }
 
     public bool TryMoveCamera(CameraLocation location, Action<bool> onFinished,
-        out CameraPanToLocation.MoveRequest request)
+        out CameraPanToLocation.MoveRequest request, float durationSeconds = 0f)
     {
         request = null;
         float speed = nextCameraSpeedOverride;
         nextCameraSpeedOverride = -1f;
         if (cameraPanToLocation == null || !cameraPanToLocation.CanMoveTo(location, speed)) return false;
         cameraFollowScript?.StopTracking();
-        return cameraPanToLocation.TryMoveCameraTo(location, onFinished, out request, speed);
+        return cameraPanToLocation.TryMoveCameraTo(location, onFinished, out request, speed, durationSeconds);
     }
 
     public void StartBallCameraTracking()
