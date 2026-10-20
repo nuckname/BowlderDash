@@ -532,23 +532,38 @@ public class ShopUIManager : MonoBehaviour
         return true;
     }
 
+    public void ShowShopForRouletteReturn(RouletteController owner)
+    {
+        if (!_rouletteSuspended || owner != rouletteController) return;
+        // Reveal the shop during the return pan; spending stays locked until arrival.
+        RestoreRouletteShopPresentation(false);
+    }
+
     public void ResumeFromRoulette(RouletteController owner)
     {
         if (!_rouletteSuspended || owner != rouletteController) return;
+        RestoreRouletteShopPresentation(true);
         _rouletteSuspended = false;
+        _rouletteCanvasStates.Clear();
+        _rouletteRootStates.Clear();
+    }
+
+    private void RestoreRouletteShopPresentation(bool restoreInput)
+    {
         foreach (CanvasState state in _rouletteCanvasStates)
         {
             if (state.group == null) continue;
             state.group.alpha = state.alpha;
-            state.group.interactable = state.interactable;
-            state.group.blocksRaycasts = state.blocksRaycasts;
+            if (restoreInput)
+            {
+                state.group.interactable = state.interactable;
+                state.group.blocksRaycasts = state.blocksRaycasts;
+            }
         }
-        _rouletteCanvasStates.Clear();
         foreach (var state in _rouletteRootStates)
         {
             if (state.Key != null) state.Key.SetActive(state.Value);
         }
-        _rouletteRootStates.Clear();
     }
 
     public void CloseRouletteForShopExit()

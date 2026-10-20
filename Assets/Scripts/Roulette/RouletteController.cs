@@ -48,7 +48,9 @@ public class RouletteController : MonoBehaviour
         cameraPan.TryGetCameraTarget(CameraLocation.ShopCameraLocation, out Transform shopTarget);
         shopCameraPosition = shopTarget.position;
         shopCameraRotation = shopTarget.rotation;
-        if (!Navigate(CameraLocation.RouletteOverview, NavigationPhase.MovingToTable, NavigationPhase.Overview))
+        if (Navigate(CameraLocation.RouletteOverview, NavigationPhase.MovingToTable, NavigationPhase.Overview))
+            SetPostProcessing(true);
+        else
             Close(false);
     }
 
@@ -72,7 +74,9 @@ public class RouletteController : MonoBehaviour
     public void BackToShop()
     {
         if (!CanNavigate(NavigationPhase.Overview)) return;
-        Navigate(CameraLocation.ShopCameraLocation, NavigationPhase.ReturningToShop, NavigationPhase.Closed);
+        if (!Navigate(CameraLocation.ShopCameraLocation, NavigationPhase.ReturningToShop, NavigationPhase.Closed)) return;
+        SetPostProcessing(false);
+        shopUI.ShowShopForRouletteReturn(this);
     }
 
     private bool CanNavigate(NavigationPhase expected)
@@ -136,7 +140,8 @@ public class RouletteController : MonoBehaviour
     private void RefreshControls()
     {
         bool overview = Phase == NavigationPhase.Overview;
-        SetControls(overviewControls, IsOpen && Phase != NavigationPhase.ColourView, overview);
+        SetControls(overviewControls, IsOpen && Phase != NavigationPhase.ColourView &&
+            Phase != NavigationPhase.ReturningToShop, overview);
         bool close = Phase == NavigationPhase.ColourView;
         SetControls(redCloseControls, close && colourView == CameraLocation.RouletteRed,
             close && colourView == CameraLocation.RouletteRed);
@@ -175,7 +180,15 @@ public class RouletteController : MonoBehaviour
         if (wasOpen && restoreShopCamera && shopUI != null && shopUI.IsShopOpen &&
             cameraPan != null && cameraPan.mainCamera != null)
             cameraPan.mainCamera.transform.SetPositionAndRotation(shopCameraPosition, shopCameraRotation);
+        if (wasOpen && manager != null && manager.currentState == manager.shopState)
+            SetPostProcessing(false);
         if (shopUI != null) shopUI.ResumeFromRoulette(this);
+    }
+
+    private void SetPostProcessing(bool enabled)
+    {
+        if (manager != null && manager.postProcessingEffects != null)
+            manager.postProcessingEffects.SetActive(enabled);
     }
 
     private void LateUpdate()
