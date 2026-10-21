@@ -30,6 +30,42 @@ public class RouletteController : MonoBehaviour
     [Header("Wager Tickets")]
     [SerializeField] private RouletteTicketPresenter ticketPresenter;
 
+    [Header("Wheel Physics")]
+    [SerializeField] private RouletteWheelMotor wheelMotor;
+
+    [Header("Result Tolerances (Used From Pass 6)")]
+    [SerializeField, Min(0.01f), Tooltip("Seconds the ball must stay in a single pocket")]
+    private float pocketDwellSeconds = 1f;
+    [SerializeField, Min(0f), Tooltip("Ball speed limit relative to the pocket in world units per second")]
+    private float maximumRelativeBallSpeed = 0.15f;
+    [SerializeField, Min(0f), Tooltip("Ball spin limit in radians per second")]
+    private float maximumBallAngularSpeed = 2f;
+    [SerializeField, Min(0f), Tooltip("Wheel speed limit in degrees per second with zero for a full stop")]
+    private float maximumResultWheelSpeed = 0f;
+
+    public float PocketDwellSeconds => pocketDwellSeconds;
+    public float MaximumRelativeBallSpeed => maximumRelativeBallSpeed;
+    public float MaximumBallAngularSpeed => maximumBallAngularSpeed;
+    public float MaximumResultWheelSpeed => maximumResultWheelSpeed;
+
+    public bool TryValidateWheelSetup(out string reason)
+    {
+        if (wheelMotor == null)
+        {
+            reason = "Assign the roulette wheel motor.";
+            return false;
+        }
+        if (!RouletteWheelMotor.IsFinite(pocketDwellSeconds) || pocketDwellSeconds <= 0f ||
+            !RouletteWheelMotor.IsFinite(maximumRelativeBallSpeed) || maximumRelativeBallSpeed < 0f ||
+            !RouletteWheelMotor.IsFinite(maximumBallAngularSpeed) || maximumBallAngularSpeed < 0f ||
+            !RouletteWheelMotor.IsFinite(maximumResultWheelSpeed) || maximumResultWheelSpeed < 0f)
+        {
+            reason = "Result tolerances must be finite and non-negative, with a positive pocket dwell.";
+            return false;
+        }
+        return wheelMotor.TryValidateSetup(out reason);
+    }
+
     public NavigationPhase Phase { get; private set; }
     public bool IsOpen => Phase != NavigationPhase.Closed;
     public int DraftStake => draft.Stake;
@@ -236,7 +272,7 @@ public class RouletteController : MonoBehaviour
 
     private void RefreshControls()
     {
-        // Destination controls can edit or redirect the camera during its move.
+        // Keep controls usable while the camera moves
         bool showOverview = Phase == NavigationPhase.MovingToTable ||
             Phase == NavigationPhase.MovingToOverview || Phase == NavigationPhase.Overview;
         bool showColour = Phase == NavigationPhase.MovingToColour || Phase == NavigationPhase.ColourView;
@@ -288,6 +324,7 @@ public class RouletteController : MonoBehaviour
         ++navigationVersion;
         Phase = NavigationPhase.Closed;
         ClearDraft();
+        if (wheelMotor != null) wheelMotor.StopAndClear();
         if (cameraPan != null) cameraPan.CancelMove(cameraMove);
         cameraMove = null;
         RefreshControls();

@@ -20,7 +20,7 @@ public sealed class RouletteTicketVisual : MonoBehaviour
             GetComponentsInChildren<Rigidbody>(true).Length != 1) return false;
         foreach (Transform child in GetComponentsInChildren<Transform>(true))
             if (child.gameObject.layer != layer || !child.CompareTag("Untagged")) return false;
-        // Prefab assets have no physics attachment; the sole root body owns all child colliders.
+        // The root body owns the child colliders before the prefab is spawned
         foreach (Collider collider in GetComponentsInChildren<Collider>(true))
             if (!collider.enabled || collider.isTrigger) return false;
         foreach (MonoBehaviour component in GetComponentsInChildren<MonoBehaviour>(true))

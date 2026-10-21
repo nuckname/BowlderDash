@@ -130,7 +130,7 @@ public sealed class RouletteTicketPresenter : MonoBehaviour
 
     private bool MakeRoom()
     {
-        // Reserve one slot for a counted bundle before it is needed.
+        // Leave room for one counted bundle
         while (LiveBodyCount >= liveBodyBudget - (bundle == null ? 1 : 0))
             if (!ConsolidateOne()) return false;
         return true;

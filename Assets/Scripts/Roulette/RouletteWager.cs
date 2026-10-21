@@ -28,7 +28,7 @@ public readonly struct RouletteWager
     {
         int multiplier = GetMultiplier(colour);
         if (wallet <= 0 || multiplier == 0) return 0;
-        // Both the total return and the resulting wallet must fit in an int.
+        // Keep the payout and final balance within the integer limit
         int payoutLimit = int.MaxValue / multiplier;
         int balanceLimit = (int.MaxValue - wallet) / (multiplier - 1);
         return Math.Min(wallet, Math.Min(payoutLimit, balanceLimit));
