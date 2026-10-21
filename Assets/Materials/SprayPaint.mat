@@ -43,7 +43,7 @@ Material:
     - _BUILTIN_QueueOffset: 0
     - _COLORBANDING: 1
     - _Speed: 0.05
-    - _StepCount: 10
+    - _StepCount: 7
     - _TileSize: 1
     - _VertexSpeed: 1
     - _VertexStrength: 0.42
