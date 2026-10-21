@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 1409709224635566619}
   - component: {fileID: 7852003982484006202}
   - component: {fileID: 2859909108160043153}
+  - component: {fileID: 8070012602838718319}
   m_Layer: 18
   m_Name: RouletteBall
   m_TagString: Untagged
@@ -172,3 +173,24 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8070012602838718319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3345054551962536033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65972fa0810e46be87d4fa52e43c195b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RouletteBallLauncher
+  minimumSpeed: 1.5
+  maximumSpeed: 4.5
+  directionSampleDistance: 0.3
+  minimumInwardAmount: 0.05
+  maximumInwardAmount: 0.65
+  windupSeconds: 0.18
+  pullbackDistance: 0.12
+  liftHeight: 0.04
+  releaseCue: {fileID: 11400000, guid: d47f936bb97a469c81b88427d33c0af0, type: 2}

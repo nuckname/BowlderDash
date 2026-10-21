@@ -33,6 +33,36 @@ public class RouletteController : MonoBehaviour
     [Header("Wheel Physics")]
     [SerializeField] private RouletteWheelMotor wheelMotor;
 
+    [Header("Ball Throwing")]
+    [SerializeField] private RoulettePathDrawer pathDrawer;
+    [SerializeField] private RouletteBallLauncher ballPrefab;
+    [SerializeField] private Transform ballStart;
+    [SerializeField] private Transform ballRuntimeRoot;
+
+    public bool TryValidateThrowSetup(out string reason)
+    {
+        if (!TryValidateWheelSetup(out reason)) return false;
+        if (pathDrawer == null || ballPrefab == null || ballStart == null || ballRuntimeRoot == null ||
+            !ballRuntimeRoot.gameObject.activeInHierarchy || wheelMotor == null ||
+            ballRuntimeRoot.IsChildOf(wheelMotor.transform) ||
+            ballRuntimeRoot.GetComponentInParent<Rigidbody>() != null || HasControlsUnder(ballRuntimeRoot) ||
+            pathDrawer.transform.IsChildOf(wheelMotor.transform) ||
+            !RouletteWheelMotor.IsFinite(ballRuntimeRoot.lossyScale) ||
+            (ballRuntimeRoot.lossyScale - Vector3.one).sqrMagnitude > 0.0001f ||
+            !ballPrefab.HasAuthoredSetup(LayerMask.NameToLayer("RouletteBall")))
+        {
+            reason = "Assign the dedicated ball prefab drawer start and stationary unit scale runtime root";
+            return false;
+        }
+        if (!pathDrawer.TryValidateSetup(ballStart, out reason)) return false;
+        if (Mathf.Abs(Vector3.Dot(pathDrawer.DrawFrame.up, wheelMotor.WorldAxis)) < 0.99f)
+        {
+            reason = "Align the draw frame up axis with the wheel axis";
+            return false;
+        }
+        return true;
+    }
+
     [Header("Result Tolerances (Used From Pass 6)")]
     [SerializeField, Min(0.01f), Tooltip("Seconds the ball must stay in a single pocket")]
     private float pocketDwellSeconds = 1f;
@@ -324,6 +354,7 @@ public class RouletteController : MonoBehaviour
         ++navigationVersion;
         Phase = NavigationPhase.Closed;
         ClearDraft();
+        if (pathDrawer != null) pathDrawer.Stop();
         if (wheelMotor != null) wheelMotor.StopAndClear();
         if (cameraPan != null) cameraPan.CancelMove(cameraMove);
         cameraMove = null;
