@@ -22,6 +22,8 @@ public enum CameraLocation
     RouletteRed,
     RouletteBlack,
     RouletteGreen,
+    RouletteDraw,
+    RouletteSpin,
 }
 
 [System.Serializable]

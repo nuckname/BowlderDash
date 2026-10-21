@@ -8,6 +8,9 @@ public class SessionData
     // Just rider shorthand, it just returns a singleton or creates a new one if its null.
     public static SessionData Instance => _instance ?? (_instance = new SessionData());
 
+    public ulong RunVersion { get; private set; }
+    public event System.Action SessionResetting;
+
     public int currentScore;
     public int currentRound = 0;
     public int ballsThrown;
@@ -63,6 +66,8 @@ public class SessionData
     
     public void StartBrandNewSession()
     {
+        unchecked { RunVersion++; }
+        SessionResetting?.Invoke();
         currentScore = 0;
         currentRound = 0;
         ballsThrown = 0;

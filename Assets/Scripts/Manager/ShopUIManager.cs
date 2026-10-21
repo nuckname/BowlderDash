@@ -59,6 +59,8 @@ public class ShopUIManager : MonoBehaviour
         shopGameObject.activeInHierarchy && _roundStateManager != null &&
         _roundStateManager.currentState == _roundStateManager.shopState;
     public bool CanUseShopControls => IsShopOpen && !_rouletteSuspended && !_hexGridExpansionActive;
+    public bool IsSuspendedForRoulette(RouletteController owner) =>
+        IsShopOpen && _rouletteSuspended && rouletteController == owner;
 
     [Header("Grid Expansion TV Spawn")]
     public Transform tvSpawnPoint;

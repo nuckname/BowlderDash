@@ -165,10 +165,16 @@ public class InGameScoreUi : MonoBehaviour
     
     public void UpdateTicketText(int newTickets)
     {
+        if (_ticketAnimateRoutine != null)
+        {
+            StopCoroutine(_ticketAnimateRoutine);
+            _ticketAnimateRoutine = null;
+        }
         _currentDisplayedTickets = newTickets;
         
         // In Game
-        inGameUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
+        if (inGameUiTicketsText != null)
+            inGameUiTicketsText.text = $"Tickets: {_currentDisplayedTickets}";
         
         // In Shop
         if (shopUiTicketsText != null)

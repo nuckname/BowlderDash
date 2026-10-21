@@ -69,7 +69,13 @@ public sealed class RouletteTVView : MonoBehaviour
         if (isActiveAndEnabled && controller != null) controller.CancelDraft(this);
     }
 
-    public void Render(bool selecting, bool editing, int stake, int wallet, int maximumStake, bool interactive = true)
+    public void Go()
+    {
+        if (isActiveAndEnabled && controller != null) controller.CommitWager(this);
+    }
+
+    public void Render(bool selecting, bool editing, int stake, int wallet, int maximumStake,
+        bool interactive = true, bool canGo = false, string unavailableReason = null)
     {
         if (selectionPanel != null) selectionPanel.SetActive(selecting);
         if (wagerPanel != null) wagerPanel.SetActive(editing);
@@ -77,7 +83,7 @@ public sealed class RouletteTVView : MonoBehaviour
         if (increaseButton != null) increaseButton.interactable = editing && interactive && stake < maximumStake;
         if (decreaseButton != null) decreaseButton.interactable = editing && interactive && stake > 1;
         if (backButton != null) backButton.interactable = editing && interactive;
-        if (goButton != null) goButton.interactable = false;
+        if (goButton != null) goButton.interactable = editing && interactive && canGo;
 
         if (selectionText != null) selectionText.text = $"Bet on {colour}";
         if (colourText != null) colourText.text = colour.ToString();
@@ -87,9 +93,9 @@ public sealed class RouletteTVView : MonoBehaviour
         if (payoutRuleText != null)
             payoutRuleText.text = $"{RouletteWager.GetMultiplier(colour)}x total return on a win (stake included)";
         if (statusText != null)
-            statusText.text = wallet <= 0 ? "No tickets available. Spins unavailable." :
-                maximumStake == 0 ? "No safe wager available. Spins unavailable." :
-                "Spins unavailable while roulette is being prepared.";
+            statusText.text = wallet <= 0 ? "No tickets available" :
+                maximumStake == 0 ? "No safe wager available" :
+                canGo ? "Ready to spin" : unavailableReason ?? "Waiting for the camera";
     }
 
     private void OnEnable()

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,7 +12,14 @@ public class RouletteController : MonoBehaviour
         MovingToColour,
         ColourView,
         MovingToOverview,
-        ReturningToShop
+        ReturningToShop,
+        Committing,
+        MovingToWheel,
+        SpinningUp,
+        AwaitingDraw,
+        BallInPlay,
+        PresentingResult,
+        MovingToDraw
     }
 
     [SerializeField] private ShopUIManager shopUI;
@@ -44,6 +52,7 @@ public class RouletteController : MonoBehaviour
         if (!TryValidateWheelSetup(out reason)) return false;
         if (pathDrawer == null || ballPrefab == null || ballStart == null || ballRuntimeRoot == null ||
             !ballRuntimeRoot.gameObject.activeInHierarchy || wheelMotor == null ||
+            ballPrefab.gameObject.scene.IsValid() || IsInsideControls(ballRuntimeRoot) ||
             ballRuntimeRoot.IsChildOf(wheelMotor.transform) ||
             ballRuntimeRoot.GetComponentInParent<Rigidbody>() != null || HasControlsUnder(ballRuntimeRoot) ||
             pathDrawer.transform.IsChildOf(wheelMotor.transform) ||
@@ -63,7 +72,19 @@ public class RouletteController : MonoBehaviour
         return true;
     }
 
-    [Header("Result Tolerances (Used From Pass 6)")]
+    [Header("Paid Spin")]
+    [SerializeField, Tooltip("Stationary trigger enclosing the rim wheel and ball travel")]
+    private BoxCollider ballBounds;
+    [SerializeField] private TMP_Text instructionText;
+    [SerializeField] private SoundCueSO winCue;
+    [SerializeField] private SoundCueSO lossCue;
+    [SerializeField, Min(0.1f), Tooltip("Maximum seconds from payment until drawing is ready")]
+    private float preparationTimeoutSeconds = 15f;
+    [SerializeField, Min(0.1f), Tooltip("Maximum seconds from physical release until a result")]
+    private float inPlayTimeoutSeconds = 45f;
+    [SerializeField, Min(0.1f)] private float resultDisplaySeconds = 3f;
+
+    [Header("Result Tolerances")]
     [SerializeField, Min(0.01f), Tooltip("Seconds the ball must stay in a single pocket")]
     private float pocketDwellSeconds = 1f;
     [SerializeField, Min(0f), Tooltip("Ball speed limit relative to the pocket in world units per second")]
@@ -112,6 +133,29 @@ public class RouletteController : MonoBehaviour
     private bool hasDraftColour;
     private RouletteWager draft;
     private int observedWallet;
+    private SessionData runSession;
+    private ulong runVersion;
+    private RouletteWager acceptedWager;
+    private RouletteBallLauncher currentBall;
+    private GameObject ownedBallObject;
+    private RoulettePocket candidatePocket;
+    private int nextSpinId;
+    private int activeSpinId;
+    private bool stakePaid;
+    private bool resultSettled;
+    private bool stakeRefunded;
+    private float preparationAge;
+    private float inPlayAge;
+    private float candidateAge;
+    private float resultAge;
+    private float setupCheckAge;
+    private string goUnavailableReason;
+    private GameAudio audioService;
+
+    private bool IsSameRun => runSession != null && manager != null &&
+        ReferenceEquals(manager.sessionData, runSession) && runSession.RunVersion == runVersion;
+    private bool HasUnresolvedStake => stakePaid && !resultSettled && !stakeRefunded;
+    private bool IsSpinActive => activeSpinId > 0 && HasUnresolvedStake;
 
     private void OnEnable() => RefreshControls();
 
@@ -122,9 +166,22 @@ public class RouletteController : MonoBehaviour
         cameraPan = manager.cameraPanToLocation;
         if (!IsNavigationReady() || !shopUI.TrySuspendForRoulette(this))
         {
-            Debug.LogWarning("Roulette is unavailable. Check ticket presenter, TV bindings, camera mappings and shop suspension assignments.", this);
+            Debug.LogWarning("Roulette is unavailable Check navigation ticket presenter and shop suspension assignments", this);
             return;
         }
+        if (!TryValidateSpinSetup(out string reason))
+        {
+            shopUI.ResumeFromRoulette(this);
+            Debug.LogWarning($"Roulette is unavailable {reason}", this);
+            return;
+        }
+
+        runSession = manager.sessionData;
+        runVersion = runSession.RunVersion;
+        runSession.SessionResetting += OnSessionResetting;
+        audioService = GameAudio.Instance;
+        if (audioService != null) audioService.WorldAudioStopped += OnWorldAudioStopped;
+        SetInstruction("");
 
         cameraPan.TryGetCameraTarget(CameraLocation.ShopCameraLocation, out Transform shopTarget);
         shopCameraPosition = shopTarget.position;
@@ -144,6 +201,7 @@ public class RouletteController : MonoBehaviour
         if (!CanNavigate(NavigationPhase.Overview) || !IsRegisteredView(source) ||
             ticketPresenter == null || !ticketPresenter.IsReady) return;
         selectedColour = source.Colour;
+        SetInstruction("");
         hasDraftColour = true;
         draft = default;
         RevalidateDraft();
@@ -243,7 +301,8 @@ public class RouletteController : MonoBehaviour
             (expected == NavigationPhase.Overview &&
                 (Phase == NavigationPhase.MovingToTable || Phase == NavigationPhase.MovingToOverview)) ||
             (expected == NavigationPhase.ColourView && Phase == NavigationPhase.MovingToColour);
-        return isActiveAndEnabled && acceptsInput && shopUI != null && shopUI.IsShopOpen;
+        return isActiveAndEnabled && acceptsInput && IsSameRun && shopUI != null &&
+            shopUI.IsSuspendedForRoulette(this);
     }
 
     private bool IsNavigationReady()
@@ -268,7 +327,9 @@ public class RouletteController : MonoBehaviour
             cameraPan.CanMoveTo(CameraLocation.RouletteOverview) &&
             cameraPan.CanMoveTo(CameraLocation.RouletteRed) &&
             cameraPan.CanMoveTo(CameraLocation.RouletteBlack) &&
-            cameraPan.CanMoveTo(CameraLocation.RouletteGreen);
+            cameraPan.CanMoveTo(CameraLocation.RouletteGreen) &&
+            cameraPan.CanMoveTo(CameraLocation.RouletteDraw) &&
+            cameraPan.CanMoveTo(CameraLocation.RouletteSpin);
     }
 
     private bool Navigate(CameraLocation destination, NavigationPhase moving, NavigationPhase arrived)
@@ -282,7 +343,7 @@ public class RouletteController : MonoBehaviour
         {
             if (version != navigationVersion || !IsOpen) return;
             cameraMove = null;
-            if (!success || !isActiveAndEnabled || shopUI == null || !shopUI.IsShopOpen)
+            if (!success || !isActiveAndEnabled || !IsSameRun || shopUI == null || !shopUI.IsShopOpen)
             {
                 Close(true);
                 return;
@@ -292,6 +353,7 @@ public class RouletteController : MonoBehaviour
             {
                 Phase = arrived;
                 if (arrived == NavigationPhase.ColourView) RevalidateDraft();
+                if (arrived == NavigationPhase.AwaitingDraw) PrepareBall();
                 RefreshControls();
             }
         }, out cameraMove, moving == NavigationPhase.MovingToTable ||
@@ -302,6 +364,7 @@ public class RouletteController : MonoBehaviour
 
     private void RefreshControls()
     {
+        bool canGo = CanCommitWager(GetView(selectedColour), out goUnavailableReason);
         // Keep controls usable while the camera moves
         bool showOverview = Phase == NavigationPhase.MovingToTable ||
             Phase == NavigationPhase.MovingToOverview || Phase == NavigationPhase.Overview;
@@ -315,17 +378,17 @@ public class RouletteController : MonoBehaviour
             colourInput && colourView == CameraLocation.RouletteBlack);
         SetControls(greenCloseControls, showColour && colourView == CameraLocation.RouletteGreen,
             colourInput && colourView == CameraLocation.RouletteGreen);
-        RenderTV(redTV, showOverview, showColour, overviewInput || colourInput);
-        RenderTV(blackTV, showOverview, showColour, overviewInput || colourInput);
-        RenderTV(greenTV, showOverview, showColour, overviewInput || colourInput);
+        RenderTV(redTV, showOverview, showColour, overviewInput || colourInput, canGo);
+        RenderTV(blackTV, showOverview, showColour, overviewInput || colourInput, canGo);
+        RenderTV(greenTV, showOverview, showColour, overviewInput || colourInput, canGo);
     }
 
-    private void RenderTV(RouletteTVView view, bool selecting, bool close, bool interactive)
+    private void RenderTV(RouletteTVView view, bool selecting, bool close, bool interactive, bool canGo)
     {
         if (view == null) return;
         bool editing = close && hasDraftColour && view == GetView(selectedColour);
         view.Render(selecting, editing, draft.Stake, Wallet,
-            RouletteWager.GetMaximumStake(view.Colour, Wallet), interactive);
+            RouletteWager.GetMaximumStake(view.Colour, Wallet), interactive, editing && canGo, goUnavailableReason);
     }
 
     private static void SetControls(CanvasGroup group, bool visible, bool interactive)
@@ -353,9 +416,17 @@ public class RouletteController : MonoBehaviour
         bool wasOpen = IsOpen;
         ++navigationVersion;
         Phase = NavigationPhase.Closed;
+        activeSpinId = 0;
+        RefundUnresolvedStake();
+        CleanupSpin();
+        ResetTransaction();
+        if (runSession != null) runSession.SessionResetting -= OnSessionResetting;
+        if (audioService != null) audioService.StopOwnedTransients(this);
+        if (audioService != null) audioService.WorldAudioStopped -= OnWorldAudioStopped;
+        runSession = null;
+        audioService = null;
+        SetInstruction("");
         ClearDraft();
-        if (pathDrawer != null) pathDrawer.Stop();
-        if (wheelMotor != null) wheelMotor.StopAndClear();
         if (cameraPan != null) cameraPan.CancelMove(cameraMove);
         cameraMove = null;
         RefreshControls();
@@ -375,7 +446,21 @@ public class RouletteController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (IsOpen && (shopUI == null || !shopUI.IsShopOpen)) Close(false);
+        if (IsOpen && (!IsSameRun || shopUI == null || !shopUI.IsSuspendedForRoulette(this))) Close(false);
+        else if (IsSpinActive) UpdateSpinPreparation();
+        else if (Phase == NavigationPhase.PresentingResult)
+        {
+            if (cameraMove == null || !cameraMove.IsActive) resultAge += Time.deltaTime;
+            if (resultAge >= resultDisplaySeconds)
+            {
+                if (audioService != null) audioService.StopOwnedTransients(this);
+                CleanupSpin();
+                ClearDraft();
+                ResetTransaction();
+                Phase = NavigationPhase.Overview;
+                RefreshControls();
+            }
+        }
         else if (Phase == NavigationPhase.MovingToColour || Phase == NavigationPhase.ColourView)
         {
             if (!IsRegisteredView(GetView(selectedColour)) || ticketPresenter == null ||
@@ -385,8 +470,397 @@ public class RouletteController : MonoBehaviour
                 RevalidateDraft();
                 RefreshControls();
             }
+            else
+            {
+                setupCheckAge += Time.deltaTime;
+                if (setupCheckAge >= 0.25f) { setupCheckAge = 0f; RefreshControls(); }
+            }
         }
     }
 
+    public bool TryValidateSpinSetup(out string reason)
+    {
+        if (!TryValidateThrowSetup(out reason)) return false;
+        int boundsLayer = LayerMask.NameToLayer("RouletteBounds");
+        int ballLayer = LayerMask.NameToLayer("RouletteBall");
+        int ticketLayer = LayerMask.NameToLayer("RouletteTicket");
+        if (ballBounds == null || !ballBounds.enabled || !ballBounds.gameObject.activeInHierarchy ||
+            !ballBounds.isTrigger || ballBounds.attachedRigidbody != null ||
+            ballBounds.GetComponentInParent<RouletteWheelMotor>() != null ||
+            ballBounds.transform.IsChildOf(ballRuntimeRoot) || IsInsideControls(ballBounds.transform) ||
+            boundsLayer < 0 || ballLayer < 0 || ticketLayer < 0 || ballBounds.gameObject.layer != boundsLayer ||
+            ballBounds.includeLayers.value != 0 || ballBounds.excludeLayers.value != 0 ||
+            Physics.GetIgnoreLayerCollision(boundsLayer, ballLayer) ||
+            !Physics.GetIgnoreLayerCollision(boundsLayer, ticketLayer) ||
+            !RouletteWheelMotor.IsFinite(ballBounds.transform.lossyScale) ||
+            (ballBounds.transform.lossyScale - Vector3.one).sqrMagnitude > 0.0001f ||
+            !RouletteWheelMotor.IsFinite(ballBounds.size) || ballBounds.size.x <= 0f ||
+            ballBounds.size.y <= 0f || ballBounds.size.z <= 0f || !ContainsInBounds(ballStart.position))
+        {
+            reason = "Assign a stationary unit scale RouletteBounds trigger containing BallStart with ball collisions on and ticket collisions off";
+            return false;
+        }
+        if (instructionText == null || !instructionText.isActiveAndEnabled ||
+            IsInsideControls(instructionText.transform) || instructionText.transform.IsChildOf(ballRuntimeRoot) ||
+            instructionText.GetComponentInParent<RouletteWheelMotor>() != null)
+        {
+            reason = "Assign active instruction text outside the TV control groups wheel and runtime ball root";
+            return false;
+        }
+        if (!Positive(preparationTimeoutSeconds) || !Positive(inPlayTimeoutSeconds) || !Positive(resultDisplaySeconds))
+        {
+            reason = "Preparation timeout in play timeout and result duration must be finite and positive";
+            return false;
+        }
+        return true;
+    }
+
+    private bool IsInsideControls(Transform item)
+    {
+        return (overviewControls != null && item.IsChildOf(overviewControls.transform)) ||
+            (redCloseControls != null && item.IsChildOf(redCloseControls.transform)) ||
+            (blackCloseControls != null && item.IsChildOf(blackCloseControls.transform)) ||
+            (greenCloseControls != null && item.IsChildOf(greenCloseControls.transform));
+    }
+
+    private bool CanCommitWager(RouletteTVView source, out string reason)
+    {
+        reason = "Waiting for the camera";
+        if (Phase != NavigationPhase.ColourView || !CanEditDraft(source) || !IsSameRun ||
+            manager.currentState != manager.shopState || !ReferenceEquals(runSession, SessionData.Instance) ||
+            IsSpinActive || currentBall != null) return false;
+        if (!IsNavigationReady() || InGameScoreUi.Instance == null ||
+            InGameScoreUi.Instance.inGameUiTicketsText == null)
+        {
+            reason = "Check roulette navigation and shared ticket display";
+            return false;
+        }
+        if (!RouletteWager.TryCreate(selectedColour, draft.Stake, Wallet, out _))
+        {
+            reason = "Choose an affordable safe wager";
+            return false;
+        }
+        if (!TryValidateSpinSetup(out reason)) return false;
+        if (!wheelMotor.IsStopped)
+        {
+            reason = "Wait for the wheel to stop";
+            return false;
+        }
+        return true;
+    }
+
+    public void CommitWager(RouletteTVView source)
+    {
+        if (!CanEditDraft(source)) return;
+        RevalidateDraft();
+        if (!CanCommitWager(source, out string reason))
+        {
+            if (deniedCue != null && deniedCue.isUI) GameAudio.Instance?.Play(deniedCue);
+            SetInstruction(reason);
+            RefreshControls();
+            return;
+        }
+        ResetTransaction();
+        RouletteWager.TryCreate(selectedColour, draft.Stake, Wallet, out acceptedWager);
+        unchecked { nextSpinId++; }
+        if (nextSpinId <= 0) nextSpinId = 1;
+        activeSpinId = nextSpinId;
+        Phase = NavigationPhase.Committing;
+        RefreshControls();
+        if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+
+        // Lock the accepted wager before the wallet refresh can call back
+        stakePaid = true;
+        if (!runSession.SpendTickets(acceptedWager.Stake))
+        {
+            stakePaid = false;
+            activeSpinId = 0;
+            Phase = NavigationPhase.ColourView;
+            RevalidateDraft();
+            RefreshControls();
+            return;
+        }
+        if (!IsSameRun || Phase != NavigationPhase.Committing || !IsSpinActive) { Close(true); return; }
+        SetInstruction("Spinning up the wheel");
+        if (!wheelMotor.BeginSpin()) { VoidSpin("Wheel unavailable Try again"); return; }
+        Navigate(CameraLocation.RouletteOverview, NavigationPhase.MovingToWheel, NavigationPhase.SpinningUp);
+    }
+
+    private bool MatchesBall(RouletteBallLauncher ball, int spinId)
+    {
+        return isActiveAndEnabled && IsSameRun && IsSpinActive && spinId == activeSpinId &&
+            ReferenceEquals(ball, currentBall) && ball != null && IsOpen &&
+            shopUI != null && shopUI.IsSuspendedForRoulette(this);
+    }
+
+    private void UpdateSpinPreparation()
+    {
+        setupCheckAge += Time.deltaTime;
+        if (setupCheckAge >= 0.25f)
+        {
+            setupCheckAge = 0f;
+            if (!TryValidateSpinSetup(out _) || ticketPresenter == null || !ticketPresenter.IsPresentingFor(this))
+            {
+                VoidSpin("Roulette setup changed Try again");
+                return;
+            }
+        }
+        if (Phase == NavigationPhase.MovingToWheel || Phase == NavigationPhase.SpinningUp ||
+            Phase == NavigationPhase.MovingToDraw)
+        {
+            preparationAge += Time.deltaTime;
+            if (preparationAge >= preparationTimeoutSeconds || wheelMotor == null || !wheelMotor.isActiveAndEnabled)
+            {
+                VoidSpin("Wheel preparation timed out Try again");
+                return;
+            }
+            if (Phase == NavigationPhase.SpinningUp && wheelMotor.IsAtFullSpeed)
+            {
+                SetInstruction("Moving closer to draw");
+                if (!Navigate(CameraLocation.RouletteDraw, NavigationPhase.MovingToDraw, NavigationPhase.AwaitingDraw))
+                    Close(true);
+            }
+        }
+        else if (Phase == NavigationPhase.AwaitingDraw || Phase == NavigationPhase.BallInPlay)
+        {
+            if (currentBall == null || !currentBall.isActiveAndEnabled || currentBall.Body == null ||
+                !RouletteWheelMotor.IsFinite(currentBall.Body.position) ||
+                !FiniteRotation(currentBall.Body.rotation) ||
+                !RouletteWheelMotor.IsFinite(currentBall.Body.linearVelocity) ||
+                !RouletteWheelMotor.IsFinite(currentBall.Body.angularVelocity) ||
+                wheelMotor == null || !wheelMotor.isActiveAndEnabled ||
+                (Phase == NavigationPhase.AwaitingDraw && !wheelMotor.IsAtFullSpeed))
+                VoidSpin("Ball or wheel unavailable Try again");
+        }
+    }
+
+    private void PrepareBall()
+    {
+        if (!IsSpinActive || Phase != NavigationPhase.AwaitingDraw || !TryValidateSpinSetup(out _) ||
+            !wheelMotor.IsAtFullSpeed)
+        {
+            VoidSpin("Throw setup unavailable Try again");
+            return;
+        }
+        Phase = NavigationPhase.AwaitingDraw;
+        currentBall = Instantiate(ballPrefab, ballStart.position, ballStart.rotation, ballRuntimeRoot);
+        ownedBallObject = currentBall.gameObject;
+        RouletteBallLauncher ball = currentBall;
+        int spinId = activeSpinId;
+        ball.Released += OnBallReleased;
+        ball.Invalidated += OnBallInvalidated;
+        ball.InstructionChanged += OnBallInstruction;
+        SetInstruction("Draw from the ball and release to throw");
+        if (!ball.Prepare(this, spinId, ballStart, pathDrawer, wheelMotor, () => MatchesBall(ball, spinId)))
+            VoidSpin("Ball preparation failed Try again");
+    }
+
+    private void OnBallReleased(RouletteBallLauncher ball, int spinId)
+    {
+        if (!MatchesBall(ball, spinId) || Phase != NavigationPhase.AwaitingDraw ||
+            ball.Phase != RouletteBallLauncher.LaunchPhase.Released) return;
+        Phase = NavigationPhase.BallInPlay;
+        inPlayAge = 0f;
+        candidateAge = 0f;
+        candidatePocket = null;
+        wheelMotor.RequestSlowdown();
+        SetInstruction("Waiting for the ball to settle");
+        if (!Navigate(CameraLocation.RouletteSpin, NavigationPhase.BallInPlay, NavigationPhase.BallInPlay))
+            Close(true);
+    }
+
+    private void OnBallInvalidated(RouletteBallLauncher ball, int spinId)
+    {
+        if (MatchesBall(ball, spinId)) VoidSpin("Throw interrupted Try again");
+    }
+
+    private void OnBallInstruction(RouletteBallLauncher ball, int spinId, string message)
+    {
+        if (MatchesBall(ball, spinId) && Phase == NavigationPhase.AwaitingDraw) SetInstruction(message);
+    }
+
+    private void FixedUpdate()
+    {
+        if (Phase != NavigationPhase.BallInPlay || !IsSpinActive) return;
+        if (!IsSameRun || shopUI == null || !shopUI.IsSuspendedForRoulette(this)) { Close(false); return; }
+        if (currentBall == null || !currentBall.isActiveAndEnabled || currentBall.Body == null ||
+            currentBall.Phase != RouletteBallLauncher.LaunchPhase.Released || wheelMotor == null ||
+            !wheelMotor.isActiveAndEnabled || ballBounds == null || !ballBounds.enabled ||
+            !ballBounds.gameObject.activeInHierarchy)
+        {
+            VoidSpin("Ball or bounds unavailable Try again");
+            return;
+        }
+        Rigidbody ball = currentBall.Body;
+        if (ball.isKinematic || !ball.detectCollisions || !RouletteWheelMotor.IsFinite(ball.position) ||
+            !FiniteRotation(ball.rotation) ||
+            !RouletteWheelMotor.IsFinite(ball.linearVelocity) || !RouletteWheelMotor.IsFinite(ball.angularVelocity) ||
+            !ContainsInBounds(ball.worldCenterOfMass))
+        {
+            VoidSpin("Ball left the table Try again");
+            return;
+        }
+        inPlayAge += Time.fixedDeltaTime;
+        if (inPlayAge >= inPlayTimeoutSeconds)
+        {
+            VoidSpin("Ball did not settle Try again");
+            return;
+        }
+        Vector3 relativeVelocity = ball.linearVelocity - wheelMotor.GetPointVelocity(ball.worldCenterOfMass);
+        bool stable = RouletteWheelMotor.IsFinite(relativeVelocity) &&
+            RouletteWheelMotor.IsFinite(wheelMotor.SpeedDegreesPerSecond) &&
+            wheelMotor.SpeedDegreesPerSecond <= maximumResultWheelSpeed &&
+            relativeVelocity.magnitude <= maximumRelativeBallSpeed &&
+            ball.angularVelocity.magnitude <= maximumBallAngularSpeed;
+        if (!stable || !wheelMotor.TryGetPocketCandidate(ball, out RoulettePocket pocket))
+        {
+            candidatePocket = null;
+            candidateAge = 0f;
+            return;
+        }
+        if (candidatePocket != pocket)
+        {
+            candidatePocket = pocket;
+            candidateAge = 0f;
+            return;
+        }
+        candidateAge += Time.fixedDeltaTime;
+        if (candidateAge >= pocketDwellSeconds) SettleSpin(pocket);
+    }
+
+    private void SettleSpin(RoulettePocket pocket)
+    {
+        if (!IsSpinActive || !IsSameRun || Phase != NavigationPhase.BallInPlay || pocket == null) return;
+        if (!TryValidateSpinSetup(out _) || ticketPresenter == null || !ticketPresenter.IsPresentingFor(this))
+        {
+            VoidSpin("Result setup unavailable Try again");
+            return;
+        }
+        bool won = pocket.Colour == acceptedWager.Colour;
+        int award = won ? acceptedWager.TotalReturn : 0;
+        if (!CanCredit(award)) { VoidSpin("Ticket balance changed Try again"); return; }
+
+        // Final results survive all later cleanup
+        resultSettled = true;
+        activeSpinId = 0;
+        if (award > 0) runSession.AddTickets(award);
+        RefreshWallet();
+        CleanupSpin(true);
+        if (!won) ClearDraft();
+        SetInstruction(won ? $"{pocket.Colour} Win {award} tickets total" : $"{pocket.Colour} No return");
+        Phase = NavigationPhase.PresentingResult;
+        resultAge = 0f;
+        if (!Navigate(CameraLocation.RouletteOverview, NavigationPhase.PresentingResult, NavigationPhase.PresentingResult))
+        {
+            Close(true);
+            return;
+        }
+        SoundCueSO cue = won ? winCue : lossCue;
+        if (cue != null) audioService?.PlayOwned(cue, this, transform.position);
+    }
+
+    private bool CanCredit(int amount) => IsSameRun && amount >= 0 && runSession.tickets >= 0 &&
+        (long)runSession.tickets + amount <= int.MaxValue;
+
+    private bool RefundUnresolvedStake()
+    {
+        if (!HasUnresolvedStake) return stakeRefunded;
+        if (!IsSameRun) return false;
+        if (!CanCredit(acceptedWager.Stake))
+        {
+            Debug.LogError("Roulette refund exceeds the wallet capacity Check external ticket writes", this);
+            return false;
+        }
+        stakeRefunded = true;
+        runSession.AddTickets(acceptedWager.Stake);
+        RefreshWallet();
+        return true;
+    }
+
+    private void VoidSpin(string reason)
+    {
+        if (!IsSpinActive) return;
+        if (!IsSameRun) { Close(false); return; }
+        // Invalidate callbacks before refunding or retiring owned objects
+        activeSpinId = 0;
+        ++navigationVersion;
+        Phase = NavigationPhase.PresentingResult;
+        if (cameraPan != null) cameraPan.CancelMove(cameraMove);
+        cameraMove = null;
+        bool refunded = RefundUnresolvedStake();
+        CleanupSpin();
+        ClearDraft();
+        resultAge = 0f;
+        SetInstruction($"{reason}\n" + (refunded ? "Stake refunded" : "Refund unavailable Check ticket balance"));
+        RefreshControls();
+        if (cameraPan != null && cameraPan.CanMoveTo(CameraLocation.RouletteOverview))
+            Navigate(CameraLocation.RouletteOverview, NavigationPhase.PresentingResult, NavigationPhase.PresentingResult);
+        else Close(true);
+    }
+
+    private void CleanupSpin(bool keepResultBall = false)
+    {
+        RouletteBallLauncher ball = currentBall;
+        candidatePocket = null;
+        candidateAge = 0f;
+        if (ball != null)
+        {
+            ball.Released -= OnBallReleased;
+            ball.Invalidated -= OnBallInvalidated;
+            ball.InstructionChanged -= OnBallInstruction;
+            ball.ResetForCleanup();
+        }
+        if (!keepResultBall)
+        {
+            currentBall = null;
+            if (ownedBallObject != null)
+            {
+                ownedBallObject.SetActive(false);
+                Destroy(ownedBallObject);
+            }
+            ownedBallObject = null;
+        }
+        if (pathDrawer != null) pathDrawer.Stop();
+        if (wheelMotor != null) wheelMotor.StopAndClear();
+    }
+
+    private void ResetTransaction()
+    {
+        acceptedWager = default;
+        stakePaid = resultSettled = stakeRefunded = false;
+        activeSpinId = 0;
+        preparationAge = inPlayAge = resultAge = setupCheckAge = 0f;
+    }
+
+    private void RefreshWallet()
+    {
+        if (IsSameRun && InGameScoreUi.Instance != null) InGameScoreUi.Instance.UpdateTicketText(runSession.tickets);
+    }
+
+    private void SetInstruction(string message)
+    {
+        if (instructionText == null) return;
+        instructionText.raycastTarget = false;
+        instructionText.text = message;
+    }
+
+    private bool ContainsInBounds(Vector3 point)
+    {
+        if (ballBounds == null || !RouletteWheelMotor.IsFinite(point)) return false;
+        Vector3 local = ballBounds.transform.InverseTransformPoint(point) - ballBounds.center;
+        Vector3 half = ballBounds.size * 0.5f;
+        return RouletteWheelMotor.IsFinite(local) && Mathf.Abs(local.x) <= half.x &&
+            Mathf.Abs(local.y) <= half.y && Mathf.Abs(local.z) <= half.z;
+    }
+
+    private void OnSessionResetting() => Close(false);
+    private void OnWorldAudioStopped()
+    {
+        if (audioService != null) audioService.StopOwnedTransients(this);
+        if (IsSpinActive) VoidSpin("Spin interrupted Try again");
+    }
+    private static bool Positive(float value) => RouletteWheelMotor.IsFinite(value) && value > 0f;
+    private static bool FiniteRotation(Quaternion value) => RouletteWheelMotor.IsFinite(value.x) &&
+        RouletteWheelMotor.IsFinite(value.y) && RouletteWheelMotor.IsFinite(value.z) && RouletteWheelMotor.IsFinite(value.w);
     private void OnDisable() => Close(true);
 }

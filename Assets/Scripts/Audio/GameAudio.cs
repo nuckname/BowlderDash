@@ -46,6 +46,8 @@ public sealed class GameAudio : MonoBehaviour
         public float remaining;
         public bool reservedForCardDraw;
         public ulong playOrder;
+        public MonoBehaviour owner;
+        public bool hasOwner;
     }
     private sealed class CueState
     {
@@ -138,12 +140,23 @@ public sealed class GameAudio : MonoBehaviour
     public bool Play(SoundCueSO cue, Vector3 position = default, float volumeScale = 1f) =>
         PlayTransient(cue, position, volumeScale, null);
 
+    public bool PlayOwned(SoundCueSO cue, MonoBehaviour owner, Vector3 position = default) =>
+        owner != null && owner.isActiveAndEnabled && PlayTransient(cue, position, 1f, null, owner);
+
+    public void StopOwnedTransients(MonoBehaviour owner)
+    {
+        if (voices == null) return;
+        foreach (var voice in voices)
+            if (voice.hasOwner && ReferenceEquals(voice.owner, owner)) Release(voice);
+    }
+
     // Override pitch for ordered feedback without changing the shared cue's variation
     public bool PlayPitched(SoundCueSO cue, float pitch, Vector3 position = default, float volumeScale = 1f) =>
         IsFinite(pitch) && PlayTransient(cue, position, volumeScale, Mathf.Clamp(pitch, 0.1f, 3f));
 
     // Random and explicit-pitch playback share the same voice limits and priority rules
-    private bool PlayTransient(SoundCueSO cue, Vector3 position, float volumeScale, float? pitch)
+    private bool PlayTransient(SoundCueSO cue, Vector3 position, float volumeScale, float? pitch,
+        MonoBehaviour owner = null)
     {
         if (!TryPrepareCue(cue, volumeScale, out var state, out float gain)) return false;
 
@@ -172,7 +185,10 @@ public sealed class GameAudio : MonoBehaviour
         // Hover and click share the two-voice UI budget thus clicks may replace hover.
         var slot = cue.isUI && uiActive >= InteractionUIVoiceLimit ? weakestUI : available ?? weakest;
         if (slot == null) return false;
-        return PlayVoice(slot, cue, state, position, gain, pitch);
+        if (!PlayVoice(slot, cue, state, position, gain, pitch)) return false;
+        slot.owner = owner;
+        slot.hasOwner = owner != null;
+        return true;
     }
 
     public bool PlayUICardDraw(SoundCueSO cue)
@@ -422,6 +438,11 @@ public sealed class GameAudio : MonoBehaviour
         if (voices == null) return;
         foreach (var voice in voices)
         {
+            if (voice.hasOwner && (voice.owner == null || !voice.owner.isActiveAndEnabled))
+            {
+                Release(voice);
+                continue;
+            }
             if (voice.cue == null || (AudioListener.pause && !voice.source.ignoreListenerPause)) continue;
             voice.remaining -= Time.unscaledDeltaTime;
             if (voice.remaining <= 0f) Release(voice);
@@ -551,6 +572,8 @@ public sealed class GameAudio : MonoBehaviour
 
     private static void Release(Voice voice)
     {
+        voice.owner = null;
+        voice.hasOwner = false;
         ResetSource(voice.source);
         voice.source.transform.localPosition = Vector3.zero;
         voice.cue = null;

@@ -186,7 +186,7 @@ public sealed class RouletteBallLauncher : MonoBehaviour, IPathDrawListener
             Body.linearVelocity = launchVelocity;
             Body.angularVelocity = Vector3.zero;
             Phase = LaunchPhase.Released;
-            if (releaseCue != null && !releaseCue.isUI) GameAudio.Instance?.Play(releaseCue, Body.position);
+            if (releaseCue != null && !releaseCue.isUI) audioService?.PlayOwned(releaseCue, this, Body.position);
             Released?.Invoke(this, SpinId);
             return;
         }
@@ -235,6 +235,7 @@ public sealed class RouletteBallLauncher : MonoBehaviour, IPathDrawListener
         }
         owner = null;
         isCurrentSpin = null;
+        if (audioService != null) audioService.StopOwnedTransients(this);
         if (audioService != null) audioService.WorldAudioStopped -= Invalidate;
         audioService = null;
     }
