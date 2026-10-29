@@ -152,7 +152,12 @@ public sealed class RoulettePathDrawer : MonoBehaviour
             if (Input.GetMouseButtonDown(0)) StartGesture();
             return;
         }
-        if (!ReadPointer(out Vector3 local)) { CancelGesture(); return; }
+        bool reachedBoundary = false;
+        if (!ReadPointer(out Vector3 local))
+        {
+            if (!ReadBoundary(out local)) { CancelGesture(); return; }
+            reachedBoundary = true;
+        }
         if (Input.GetMouseButton(0))
         {
             if (releaseAge > 0f && Vector3.Distance(local, lastLocal) > startRadius)
@@ -168,6 +173,7 @@ public sealed class RoulettePathDrawer : MonoBehaviour
                 if (points.Count >= maximumPoints) { CompleteGesture(Time.time - drawStarted); return; }
                 AddPoint(local);
             }
+            if (reachedBoundary) { CompleteGesture(Time.time - drawStarted); return; }
             SetPower(GetPower(Time.time - drawStarted));
         }
         else
@@ -175,7 +181,7 @@ public sealed class RoulettePathDrawer : MonoBehaviour
             if (releaseAge == 0f) releasedDuration = Time.time - drawStarted;
             drawingLoop.SetParameters(0f, 1f, audioFadeSeconds);
             releaseAge += Time.deltaTime;
-            if (releaseAge >= releaseGraceSeconds) CompleteGesture(releasedDuration);
+            if (reachedBoundary || releaseAge >= releaseGraceSeconds) CompleteGesture(releasedDuration);
         }
     }
 
@@ -188,6 +194,37 @@ public sealed class RoulettePathDrawer : MonoBehaviour
             hit.collider != drawSurface || !Contains(hit.point)) return false;
         local = drawFrame.InverseTransformPoint(hit.point);
         local.y = 0f;
+        return true;
+    }
+
+    private bool ReadBoundary(out Vector3 local)
+    {
+        local = default;
+        if (PinInteractionAudio.IsPointerOverUI()) return false;
+        Ray ray = targetCamera.ScreenPointToRay(Input.mousePosition);
+        var plane = new Plane(drawFrame.up, drawFrame.position);
+        if (!plane.Raycast(ray, out float distance) || distance > rayDistance) return false;
+        local = drawFrame.InverseTransformPoint(ray.GetPoint(distance));
+        local.y = 0f;
+        if (!RouletteWheelMotor.IsFinite(local) ||
+            (local.x >= areaMinimum.x && local.x <= areaMaximum.x &&
+             local.z >= areaMinimum.y && local.z <= areaMaximum.y)) return false;
+
+        // Finish at the first edge crossed by the current segment
+        Vector3 delta = local - lastLocal;
+        if (!RouletteWheelMotor.IsFinite(delta)) return false;
+        float fraction = 1f;
+        if (local.x < areaMinimum.x) fraction = Mathf.Min(fraction, (areaMinimum.x - lastLocal.x) / delta.x);
+        if (local.x > areaMaximum.x) fraction = Mathf.Min(fraction, (areaMaximum.x - lastLocal.x) / delta.x);
+        if (local.z < areaMinimum.y) fraction = Mathf.Min(fraction, (areaMinimum.y - lastLocal.z) / delta.z);
+        if (local.z > areaMaximum.y) fraction = Mathf.Min(fraction, (areaMaximum.y - lastLocal.z) / delta.z);
+        local = lastLocal + delta * Mathf.Clamp01(fraction);
+
+        // Leave room for rounding when the launcher reads world positions
+        float insetX = Mathf.Min(0.0001f, (areaMaximum.x - areaMinimum.x) * 0.25f);
+        float insetZ = Mathf.Min(0.0001f, (areaMaximum.y - areaMinimum.y) * 0.25f);
+        local.x = Mathf.Clamp(local.x, areaMinimum.x + insetX, areaMaximum.x - insetX);
+        local.z = Mathf.Clamp(local.z, areaMinimum.y + insetZ, areaMaximum.y - insetZ);
         return true;
     }
 
@@ -213,7 +250,7 @@ public sealed class RoulettePathDrawer : MonoBehaviour
             if (audioService != null && drawingLoopCue != null && !drawingLoopCue.isUI && drawingLoopCue.spatialBlend == 0f)
                 drawingLoop = audioService.BeginLoop(drawingLoopCue, this, fadeInTime: audioFadeSeconds);
         }
-        listener.OnInstructionUpdated("Draw forward and release to throw");
+        listener.OnInstructionUpdated("Draw forward and release or cross the edge to throw");
     }
 
     private void AddPoint(Vector3 local)

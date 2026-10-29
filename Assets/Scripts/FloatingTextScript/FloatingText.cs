@@ -32,11 +32,20 @@ public class FloatingText : MonoBehaviour
     private void Awake()
     {
         textComponent = GetComponent<TextMeshPro>();
+        if (textComponent == null) return;
 
         // Draw on top of world geometry
         var mat = textComponent.fontMaterial; // instance, so it doesn't change the shared font material
         mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
         textComponent.renderer.sortingOrder = 100;
+    }
+
+    // Report initialization failure so scoring cannot sound for a label that was never created.
+    public bool TryInitialize(string newText)
+    {
+        if (textComponent == null) return false;
+        Initialize(newText);
+        return true;
     }
 
     public void Initialize(string newText)

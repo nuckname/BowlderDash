@@ -18,6 +18,7 @@ public class ScoringState : RoundBaseState
     private RoundStateManager _manager;
     private float _textSpawnDelay = 1f;
     private bool _skipAnimation = false;
+    private int _scoringLabelOrdinal;
     
     // Camera settings
     private float waitBeforeUiCamera = 2f;
@@ -34,6 +35,7 @@ public class ScoringState : RoundBaseState
         hasScored = false;
         pinsHaveSettled = false;
         _skipAnimation = false;
+        _scoringLabelOrdinal = 0;
         timeSinceLastCheck = 0f;
         totalWaitTime = 0f;
 
@@ -195,12 +197,22 @@ public class ScoringState : RoundBaseState
 
     private void SpawnTextForSinglePin(PinBase pin)
     {
+        if (pin == null) return;
+
         List<PinEffect> combinedEffects = new List<PinEffect>();
         
         if (pin.onFallEffects != null) combinedEffects.AddRange(pin.onFallEffects);
         if (pin.onEndOfRoundEffects != null) combinedEffects.AddRange(pin.onEndOfRoundEffects);
         
-        pin.TriggerTextForEffects(combinedEffects, _manager.SpawnPinFloatingText);
+        // Count presented fallen-pin labels even when the sound is muted or cannot get a voice.
+        pin.TriggerTextForEffects(combinedEffects, (text, position) =>
+        {
+            if (!_manager.TrySpawnScoringPinFloatingText(text, position)) return;
+            if (!pin.IsActiveGameplayPin || !pin.IsFallen) return;
+
+            _manager.PlayScoringPinTextHit(_scoringLabelOrdinal);
+            if (_scoringLabelOrdinal < int.MaxValue) _scoringLabelOrdinal++;
+        });
     }
 
     private void CalculateScore()

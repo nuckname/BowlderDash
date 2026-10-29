@@ -95,6 +95,12 @@ public class RoundStateManager : MonoBehaviour
     [SerializeField] private GameObject pinFloatingTextPrefab;
     [SerializeField] private GameObject bossFloatingTextPrefab;
 
+    [Header("Scoring Label Audio")]
+    [SerializeField] private SoundCueSO scoringPinTextHitCue;
+    [SerializeField, Range(0.1f, 3f)] private float scoringLabelBasePitch = 1f;
+    [SerializeField, Min(0f)] private float scoringLabelSemitoneStep = 1f;
+    [SerializeField, Range(0.1f, 3f)] private float scoringLabelMaxPitch = 2f;
+
     [Header("In World")] 
     [SerializeField] private GameObject maxLineGameObject;
     private void Awake()
@@ -542,6 +548,27 @@ public class RoundStateManager : MonoBehaviour
         SpawnFloatingText(pinFloatingTextPrefab, text, position);
     }
 
+    // Only confirmed scoring labels use this path; generic ticket, strike and boss text stays silent.
+    public bool TrySpawnScoringPinFloatingText(string text, Vector3 position)
+    {
+        return !string.IsNullOrWhiteSpace(text) && SpawnFloatingText(pinFloatingTextPrefab, text, position);
+    }
+
+    public void PlayScoringPinTextHit(int labelOrdinal)
+    {
+        if (scoringPinTextHitCue == null || scoringPinTextHitCue.isUI) return;
+
+        // Keep the authored semitone ramp finite, increasing and within GameAudio's pitch range.
+        float basePitch = Mathf.Clamp(FiniteScoringPitch(scoringLabelBasePitch, 1f), 0.1f, 3f);
+        float maxPitch = Mathf.Clamp(FiniteScoringPitch(scoringLabelMaxPitch, 2f), basePitch, 3f);
+        float step = Mathf.Max(0f, FiniteScoringPitch(scoringLabelSemitoneStep, 1f));
+        float pitch = Mathf.Min(maxPitch, basePitch * Mathf.Pow(2f, Mathf.Max(0, labelOrdinal) * step / 12f));
+        GameAudio.Instance?.PlayPitched(scoringPinTextHitCue, pitch);
+    }
+
+    private static float FiniteScoringPitch(float value, float fallback) =>
+        float.IsNaN(value) || float.IsInfinity(value) ? fallback : value;
+
     public void SpawnBossFloatingText(string text, Vector3 position)
     {
         SpawnFloatingText(bossFloatingTextPrefab, text, position);
@@ -559,23 +586,27 @@ public class RoundStateManager : MonoBehaviour
         SpawnFloatingText(strikeFloatingTextPrefab, text, strikeFloatingTextSpawnPoint.position);
     }
 
-    private static void SpawnFloatingText(GameObject prefab, string text, Vector3 position)
+    private static bool SpawnFloatingText(GameObject prefab, string text, Vector3 position)
     {
         if (prefab == null)
         {
             Debug.LogWarning("Cannot spawn floating text because its prefab is not assigned");
-            return;
+            return false;
         }
 
         GameObject floatingTextObject = Instantiate(prefab, position, Quaternion.identity);
         if (floatingTextObject.TryGetComponent(out FloatingText floatingText))
         {
-            floatingText.Initialize(text);
-            return;
+            if (floatingText.TryInitialize(text)) return true;
+            Debug.LogWarning($"Floating text prefab '{prefab.name}' is missing a TextMeshPro component");
+        }
+        else
+        {
+            Debug.LogWarning($"Floating text prefab '{prefab.name}' is missing a FloatingText component");
         }
 
-        Debug.LogWarning($"Floating text prefab '{prefab.name}' is missing a FloatingText component");
         Destroy(floatingTextObject);
+        return false;
     }
 
     /// <summary>

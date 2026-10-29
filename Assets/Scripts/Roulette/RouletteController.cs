@@ -141,6 +141,9 @@ public class RouletteController : MonoBehaviour
     private RoulettePocket candidatePocket;
     private int nextSpinId;
     private int activeSpinId;
+    private int settledSpinId;
+    private int settledReturn;
+    private bool resultPresentationStarted;
     private bool stakePaid;
     private bool resultSettled;
     private bool stakeRefunded;
@@ -402,6 +405,9 @@ public class RouletteController : MonoBehaviour
     public void CloseForShopExit() => Close(false);
 
     public bool UsesTicketPresenter(RouletteTicketPresenter presenter) => ticketPresenter == presenter;
+    public bool IsPresentingResultFor(RouletteTicketPresenter presenter, int spinId) =>
+        isActiveAndEnabled && IsSameRun && Phase == NavigationPhase.PresentingResult && resultSettled &&
+        spinId > 0 && spinId == settledSpinId && ticketPresenter == presenter;
 
     public bool HasControlsUnder(Transform root)
     {
@@ -450,7 +456,18 @@ public class RouletteController : MonoBehaviour
         else if (IsSpinActive) UpdateSpinPreparation();
         else if (Phase == NavigationPhase.PresentingResult)
         {
-            if (cameraMove == null || !cameraMove.IsActive) resultAge += Time.deltaTime;
+            if (cameraMove != null && cameraMove.IsActive) return;
+            if (resultSettled)
+            {
+                if (!resultPresentationStarted)
+                {
+                    resultPresentationStarted = true;
+                    if (ticketPresenter != null)
+                        ticketPresenter.BeginResult(this, settledSpinId, acceptedWager.Stake, settledReturn);
+                }
+                if (ticketPresenter != null && ticketPresenter.IsResultPlayingFor(this, settledSpinId)) return;
+            }
+            resultAge += Time.deltaTime;
             if (resultAge >= resultDisplaySeconds)
             {
                 if (audioService != null) audioService.StopOwnedTransients(this);
@@ -650,7 +667,7 @@ public class RouletteController : MonoBehaviour
         ball.Released += OnBallReleased;
         ball.Invalidated += OnBallInvalidated;
         ball.InstructionChanged += OnBallInstruction;
-        SetInstruction("Draw from the ball and release to throw");
+        SetInstruction("Draw from the ball then release or cross the edge to throw");
         if (!ball.Prepare(this, spinId, ballStart, pathDrawer, wheelMotor, () => MatchesBall(ball, spinId)))
             VoidSpin("Ball preparation failed Try again");
     }
@@ -741,12 +758,14 @@ public class RouletteController : MonoBehaviour
         if (!CanCredit(award)) { VoidSpin("Ticket balance changed Try again"); return; }
 
         // Final results survive all later cleanup
+        settledSpinId = activeSpinId;
+        settledReturn = award;
         resultSettled = true;
         activeSpinId = 0;
         if (award > 0) runSession.AddTickets(award);
         RefreshWallet();
         CleanupSpin(true);
-        if (!won) ClearDraft();
+
         SetInstruction(won ? $"{pocket.Colour} Win {award} tickets total" : $"{pocket.Colour} No return");
         Phase = NavigationPhase.PresentingResult;
         resultAge = 0f;
@@ -826,6 +845,8 @@ public class RouletteController : MonoBehaviour
 
     private void ResetTransaction()
     {
+        settledSpinId = settledReturn = 0;
+        resultPresentationStarted = false;
         acceptedWager = default;
         stakePaid = resultSettled = stakeRefunded = false;
         activeSpinId = 0;
