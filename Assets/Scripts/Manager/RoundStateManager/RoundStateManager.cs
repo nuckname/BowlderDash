@@ -85,6 +85,15 @@ public class RoundStateManager : MonoBehaviour
     public RoundWinState roundWinState = new RoundWinState();
     public MainMenuState mainMenuState = new MainMenuState();
     private bool startedFromMenu;
+
+    private enum OptionsReturnDestination
+    {
+        None,
+        MainMenu,
+        Pause
+    }
+
+    private OptionsReturnDestination optionsReturnDestination = OptionsReturnDestination.MainMenu;
     
     public bool IsPinPlacementActive => currentState == pinPlacementState;
     public bool IsLeaderboardActive => currentState is LeaderboardState;
@@ -781,11 +790,31 @@ public class RoundStateManager : MonoBehaviour
     
     public void ClickSettingsButton()
     {
+        if (currentState != mainMenuState) return;
+
+        optionsReturnDestination = OptionsReturnDestination.MainMenu;
         MoveCamera(CameraLocation.SettingCameraLocation);
+    }
+
+    public void ClickOptionsBack()
+    {
+        switch (optionsReturnDestination)
+        {
+            case OptionsReturnDestination.MainMenu:
+                ClickShowMainMenu();
+                break;
+            case OptionsReturnDestination.Pause:
+                // Pause owns camera restoration and resume when that route is connected
+                Debug.LogWarning("Paused options return is not connected yet", this);
+                break;
+        }
     }
     
     public void ClickShowMainMenu()
     {
+        if (currentState != mainMenuState) return;
+
+        optionsReturnDestination = OptionsReturnDestination.None;
         MoveCamera(CameraLocation.MainMenuCameraLocation);
     }
     
@@ -793,12 +822,14 @@ public class RoundStateManager : MonoBehaviour
     {
         if (startedFromMenu || currentState != mainMenuState) return;
         startedFromMenu = true;
+        optionsReturnDestination = OptionsReturnDestination.None;
         StartNewGame();
     }
     
     public void ClickLeaderboardsButton()
     {
         if (currentState != mainMenuState) return;
+        optionsReturnDestination = OptionsReturnDestination.None;
         MoveCamera(CameraLocation.LeaderboardCameraLocation);
     }
     public void OnSfxVolumeChanged(float value)
