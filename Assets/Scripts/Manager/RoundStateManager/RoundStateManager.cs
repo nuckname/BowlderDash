@@ -98,6 +98,28 @@ public class RoundStateManager : MonoBehaviour
     public bool IsPinPlacementActive => currentState == pinPlacementState;
     public bool IsLeaderboardActive => currentState is LeaderboardState;
     public bool HasSelectedBallForCurrentAttempt { get; private set; }
+    public GamePauseController PauseController { get; private set; }
+    public bool IsGameplayPaused => PauseController != null && PauseController.IsPaused;
+    public bool IsGameplayInputBlocked => IsGameplayPaused || leaderboardPaused;
+    internal bool OwnsLeaderboardPause => leaderboardPaused;
+    public bool CanPauseGameplay => isActiveAndEnabled && startedFromMenu && !leaderboardPaused &&
+        (currentState == roundStartState || currentState == spawnBossObjectsState ||
+         currentState == pinPlacementState || currentState == throwingBallState ||
+         currentState == roundOverState || currentState == scoringState ||
+         currentState == roundWinState || currentState == shopState);
+
+    internal bool TryRegisterPauseController(GamePauseController controller)
+    {
+        if (controller == null || controller.gameObject.scene != gameObject.scene ||
+            (PauseController != null && PauseController != controller)) return false;
+        PauseController = controller;
+        return true;
+    }
+
+    internal void UnregisterPauseController(GamePauseController controller)
+    {
+        if (PauseController == controller) PauseController = null;
+    }
 
     [Header("Floating Text Prefabs")]
     [FormerlySerializedAs("floatingTextPrefab")]
@@ -267,10 +289,7 @@ public class RoundStateManager : MonoBehaviour
         DisableLeaderboardGameplayControls<HexGridExpander>();
         DisableLeaderboardGameplayControls<CardMovement>();
 
-        timeScaleBeforeLeaderboard = Time.timeScale;
-        GameAudio.Instance?.PauseForLeaderboard(this);
-        leaderboardPaused = true;
-        Time.timeScale = 0f;
+        BeginLeaderboardPause();
 
         if (leaderboardScreenPrefab == null)
         {
@@ -281,6 +300,15 @@ public class RoundStateManager : MonoBehaviour
         leaderboardScreen = Instantiate(leaderboardScreenPrefab);
         SceneManager.MoveGameObjectToScene(leaderboardScreen.gameObject, gameObject.scene);
         leaderboardScreen.Show(result, victory, RestartFromLeaderboard, RestartFromLeaderboard);
+    }
+
+    private void BeginLeaderboardPause()
+    {
+        timeScaleBeforeLeaderboard = IsGameplayPaused ? PauseController.TimeScaleBeforePause : Time.timeScale;
+        leaderboardPaused = true;
+        Time.timeScale = 0f;
+        GameAudio.Instance?.PauseForLeaderboard(this);
+        PauseController?.HandoffToLeaderboard();
     }
 
     private void DisableLeaderboardGameplayControls<T>() where T : MonoBehaviour
@@ -310,10 +338,15 @@ public class RoundStateManager : MonoBehaviour
     }
 
     // UI counts run on another component and need explicit cleanup when their owner stops.
-    private void OnDisable() => inGameScoreUi?.CancelCountAnimations();
+    private void OnDisable()
+    {
+        PauseController?.Resume();
+        inGameScoreUi?.CancelCountAnimations();
+    }
 
     private void OnDestroy()
     {
+        PauseController?.Resume();
         inGameScoreUi?.CancelCountAnimations();
         if (ballController != null) ballController.Released -= OnPrimaryBallReleased;
         PhysicsImpactAudio.SetWorldEligible(false);

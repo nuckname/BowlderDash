@@ -45,6 +45,8 @@ public sealed class GameAudio : MonoBehaviour
         public SoundCueSO cue;
         public float remaining;
         public bool reservedForCardDraw;
+        public bool reservedForPauseMenu;
+        public bool pausedForGameplay;
         public ulong playOrder;
         public MonoBehaviour owner;
         public bool hasOwner;
@@ -74,11 +76,15 @@ public sealed class GameAudio : MonoBehaviour
     private ulong nextLoopGeneration;
     private double nextHoverTime;
     private bool ownsLeaderboardPause;
-    private bool listenerPauseBeforeLeaderboard;
+    private bool listenerPauseBeforeOwnedPause;
+    private bool ownsGameplayPause;
+    private MonoBehaviour gameplayPauseOwner;
+    private int gameplayPauseSceneHandle;
     private MonoBehaviour leaderboardPauseOwner;
     private int leaderboardSceneHandle;
     private int musicSceneHandle;
     public event System.Action WorldAudioStopped;
+    public bool IsGameplaySuspended => ownsGameplayPause;
     // Audio variation must not consume the random sequence used by cards grids or bosses.
     private readonly System.Random random = new System.Random();
     private readonly Dictionary<SoundCueSO, CueState> cueStates = new Dictionary<SoundCueSO, CueState>();
@@ -111,17 +117,27 @@ public sealed class GameAudio : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         if (music == null) music = GetComponent<GameMusic>();
         if (music != null) music.Initialize(this, mixer);
-        voices = new Voice[Mathf.Clamp(transientCapacity, 1, 21)];
+        int gameplayCapacity = Mathf.Clamp(transientCapacity, 1, 21);
+        voices = new Voice[gameplayCapacity + InteractionUIVoiceLimit];
         // Five draw voices cover the current clip/pitch/lifetime at 0.08 second intervals
         // Keep at least two ordinary slots when a smaller pool is configured
-        int drawCapacity = Mathf.Min(MaximumCardDrawVoices, Mathf.Max(0, voices.Length - InteractionUIVoiceLimit));
-        for (int i = 0; i < voices.Length; i++)
+        int drawCapacity = Mathf.Min(MaximumCardDrawVoices, Mathf.Max(0, gameplayCapacity - InteractionUIVoiceLimit));
+        for (int i = 0; i < gameplayCapacity; i++)
         {
             var child = new GameObject($"Transient {i + 1:00}");
             child.transform.SetParent(transform, false);
             var source = child.AddComponent<AudioSource>();
             ResetSource(source);
-            voices[i] = new Voice { source = source, reservedForCardDraw = i >= voices.Length - drawCapacity };
+            voices[i] = new Voice { source = source, reservedForCardDraw = i >= gameplayCapacity - drawCapacity };
+        }
+        // Menu feedback cannot steal suspended gameplay voices from a full pool
+        for (int i = 0; i < InteractionUIVoiceLimit; i++)
+        {
+            var child = new GameObject($"Pause Menu {i + 1:00}");
+            child.transform.SetParent(transform, false);
+            var source = child.AddComponent<AudioSource>();
+            ResetSource(source);
+            voices[gameplayCapacity + i] = new Voice { source = source, reservedForPauseMenu = true };
         }
         // Sustained feedback gets its own fixed pool so it cannot starve one-shot cues
         loops = new LoopVoice[MaximumGameplayLoops];
@@ -141,7 +157,8 @@ public sealed class GameAudio : MonoBehaviour
         PlayTransient(cue, position, volumeScale, null);
 
     public bool PlayOwned(SoundCueSO cue, MonoBehaviour owner, Vector3 position = default) =>
-        owner != null && owner.isActiveAndEnabled && PlayTransient(cue, position, 1f, null, owner);
+        !ownsGameplayPause && !ownsLeaderboardPause && owner != null && owner.isActiveAndEnabled &&
+        PlayTransient(cue, position, 1f, null, owner);
 
     public void StopOwnedTransients(MonoBehaviour owner)
     {
@@ -168,11 +185,18 @@ public sealed class GameAudio : MonoBehaviour
         foreach (var voice in voices)
         {
             if (voice.reservedForCardDraw) continue;
-            if (voice.cue == cue) active++;
-            if (voice.cue == null) { if (available == null) available = voice; continue; }
+            bool suspendedGameplay = ownsGameplayPause && IsGameplayVoice(voice);
+            if (voice.cue == cue && !suspendedGameplay) active++;
+            bool canUseSlot = !voice.reservedForPauseMenu || (cue.isUI && ownsGameplayPause);
+            if (voice.cue == null)
+            {
+                if (canUseSlot && available == null) available = voice;
+                continue;
+            }
+            if (voice.cue.isUI && !suspendedGameplay) uiActive++;
+            if (!canUseSlot || suspendedGameplay) continue;
             if (voice.cue.isUI)
             {
-                uiActive++;
                 if (voice.source.priority > Mathf.Clamp(cue.priority, 0, 256) &&
                     (weakestUI == null || voice.source.priority > weakestUI.source.priority)) weakestUI = voice;
             }
@@ -194,7 +218,7 @@ public sealed class GameAudio : MonoBehaviour
     public bool PlayUICardDraw(SoundCueSO cue)
     {
         // Draw feedback belongs to "gameplay", even though it uses the 2D UI mixer route
-        if (cue == null || !cue.isUI || ownsLeaderboardPause ||
+        if (cue == null || !cue.isUI || ownsLeaderboardPause || ownsGameplayPause ||
             !TryPrepareCue(cue, 1f, out var state, out float gain)) return false;
 
         int active = 0;
@@ -220,7 +244,7 @@ public sealed class GameAudio : MonoBehaviour
     public LoopHandle BeginLoop(SoundCueSO cue, MonoBehaviour owner, float volumeScale = 1f,
         float pitch = 1f, float fadeInTime = 0.05f)
     {
-        if (Instance != this || !isActiveAndEnabled || loops == null || ownsLeaderboardPause ||
+        if (Instance != this || !isActiveAndEnabled || loops == null || ownsLeaderboardPause || ownsGameplayPause ||
             AudioListener.pause || owner == null || !owner.isActiveAndEnabled ||
             cue == null || cue.isUI || cue.output == null || !IsFinite(cue.gain) ||
             !IsFinite(volumeScale) || !IsFinite(pitch) || !IsFinite(fadeInTime)) return default;
@@ -342,7 +366,7 @@ public sealed class GameAudio : MonoBehaviour
             if (voice.generation == 0) continue;
             if (!HasLiveLoopOwner(voice)) { ReleaseLoop(voice); continue; }
             voice.source.transform.position = voice.owner.transform.position;
-            if (AudioListener.pause) continue;
+            if (AudioListener.pause || ownsGameplayPause) continue;
             voice.fadeElapsed += Time.unscaledDeltaTime;
             float t = voice.fadeDuration > 0f ? Mathf.Clamp01(voice.fadeElapsed / voice.fadeDuration) : 1f;
             voice.source.volume = Mathf.Lerp(voice.fadeStartVolume, voice.targetVolume, t);
@@ -380,8 +404,8 @@ public sealed class GameAudio : MonoBehaviour
     {
         state = null;
         gain = 0f;
-        if (Instance != this || voices == null || cue == null || cue.output == null) return false;
-        if (!cue.isUI && ownsLeaderboardPause) return false;
+        if (Instance != this || !isActiveAndEnabled || voices == null || cue == null || cue.output == null) return false;
+        if (!cue.isUI && (ownsLeaderboardPause || ownsGameplayPause)) return false;
         if (!IsFinite(cue.gain) || !IsFinite(volumeScale)) return false;
         if (!cueStates.TryGetValue(cue, out state)) state = new CueState();
         if (Time.unscaledTimeAsDouble < state.nextPlay) return false;
@@ -434,6 +458,10 @@ public sealed class GameAudio : MonoBehaviour
 
     private void Update()
     {
+        if (ownsGameplayPause && !IsLivePauseOwner(gameplayPauseOwner, gameplayPauseSceneHandle))
+            ReleaseGameplaySuspension();
+        if (ownsLeaderboardPause && !IsLivePauseOwner(leaderboardPauseOwner, leaderboardSceneHandle))
+            RestoreOwnedPause();
         UpdateLoops();
         if (voices == null) return;
         foreach (var voice in voices)
@@ -443,7 +471,9 @@ public sealed class GameAudio : MonoBehaviour
                 Release(voice);
                 continue;
             }
-            if (voice.cue == null || (AudioListener.pause && !voice.source.ignoreListenerPause)) continue;
+            if (voice.cue == null || voice.pausedForGameplay ||
+                (ownsGameplayPause && IsGameplayVoice(voice)) ||
+                (AudioListener.pause && !voice.source.ignoreListenerPause)) continue;
             voice.remaining -= Time.unscaledDeltaTime;
             if (voice.remaining <= 0f) Release(voice);
         }
@@ -455,7 +485,7 @@ public sealed class GameAudio : MonoBehaviour
         StopGameplayLoops();
         if (voices != null)
             foreach (var voice in voices)
-                if (voice.cue != null && !voice.cue.isUI) Release(voice);
+                if (voice.cue != null && (!voice.cue.isUI || voice.hasOwner)) Release(voice);
         WorldAudioStopped?.Invoke();
     }
 
@@ -470,13 +500,69 @@ public sealed class GameAudio : MonoBehaviour
     public void PauseForLeaderboard(MonoBehaviour owner)
     {
         if (owner == null || ownsLeaderboardPause) return;
-        listenerPauseBeforeLeaderboard = AudioListener.pause;
+        if (!ownsGameplayPause) listenerPauseBeforeOwnedPause = AudioListener.pause;
         leaderboardPauseOwner = owner;
         leaderboardSceneHandle = owner.gameObject.scene.handle;
         ownsLeaderboardPause = true;
         StopWorldVoices();
         StopCardDrawVoices();
         AudioListener.pause = true;
+    }
+
+    public bool TrySuspendGameplay(MonoBehaviour owner)
+    {
+        if (Instance != this || !isActiveAndEnabled || ownsLeaderboardPause || owner == null ||
+            !owner.isActiveAndEnabled || !owner.gameObject.scene.IsValid() ||
+            !owner.gameObject.scene.isLoaded) return false;
+        if (ownsGameplayPause) return ReferenceEquals(gameplayPauseOwner, owner);
+
+        listenerPauseBeforeOwnedPause = AudioListener.pause;
+        gameplayPauseOwner = owner;
+        gameplayPauseSceneHandle = owner.gameObject.scene.handle;
+        ownsGameplayPause = true;
+        if (voices != null)
+            foreach (var voice in voices)
+            {
+                if (!IsGameplayVoice(voice) || !voice.source.ignoreListenerPause) continue;
+                voice.pausedForGameplay = true;
+                voice.source.Pause();
+            }
+        AudioListener.pause = true;
+        return true;
+    }
+
+    public void RestoreGameplaySuspension(MonoBehaviour owner)
+    {
+        if (ownsGameplayPause && ReferenceEquals(gameplayPauseOwner, owner)) ReleaseGameplaySuspension();
+    }
+
+    private void ReleaseGameplaySuspension()
+    {
+        if (!ownsGameplayPause) return;
+        ownsGameplayPause = false;
+        gameplayPauseOwner = null;
+        gameplayPauseSceneHandle = 0;
+        if (voices != null)
+            foreach (var voice in voices)
+            {
+                if (!voice.pausedForGameplay) continue;
+                voice.pausedForGameplay = false;
+                if (!ownsLeaderboardPause && voice.cue != null) voice.source.UnPause();
+            }
+        RestoreListenerPauseIfUnowned();
+    }
+
+    private static bool IsLivePauseOwner(MonoBehaviour owner, int sceneHandle) => owner != null &&
+        owner.isActiveAndEnabled && owner.gameObject.scene.IsValid() && owner.gameObject.scene.isLoaded &&
+        owner.gameObject.scene.handle == sceneHandle;
+
+    private static bool IsGameplayVoice(Voice voice) => voice.cue != null &&
+        (!voice.cue.isUI || voice.reservedForCardDraw || voice.hasOwner);
+
+    private void RestoreListenerPauseIfUnowned()
+    {
+        if (!ownsGameplayPause && !ownsLeaderboardPause && AudioListener.pause)
+            AudioListener.pause = listenerPauseBeforeOwnedPause;
     }
 
     public void RestoreLeaderboardPause(MonoBehaviour owner)
@@ -495,10 +581,10 @@ public sealed class GameAudio : MonoBehaviour
     private void RestoreOwnedPause()
     {
         if (!ownsLeaderboardPause) return;
-        AudioListener.pause = listenerPauseBeforeLeaderboard;
         ownsLeaderboardPause = false;
         leaderboardPauseOwner = null;
         leaderboardSceneHandle = 0;
+        RestoreListenerPauseIfUnowned();
     }
 
     private void OnSceneUnloaded(Scene scene)
@@ -510,6 +596,7 @@ public sealed class GameAudio : MonoBehaviour
         }
         StopWorldVoices();
         StopCardDrawVoices();
+        if (ownsGameplayPause && scene.handle == gameplayPauseSceneHandle) ReleaseGameplaySuspension();
         if (ownsLeaderboardPause && scene.handle == leaderboardSceneHandle) RestoreOwnedPause();
         cueStates.Clear();
         nextHoverTime = 0;
@@ -574,6 +661,7 @@ public sealed class GameAudio : MonoBehaviour
     {
         voice.owner = null;
         voice.hasOwner = false;
+        voice.pausedForGameplay = false;
         ResetSource(voice.source);
         voice.source.transform.localPosition = Vector3.zero;
         voice.cue = null;
@@ -584,13 +672,19 @@ public sealed class GameAudio : MonoBehaviour
     private void OnDestroy()
     {
         if (Instance != this) return;
-        StopGameplayLoops();
+        OnDisable();
         if (music != null) music.Shutdown();
-        RestoreOwnedPause();
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
         Instance = null;
         musicSceneHandle = 0;
         cueStates.Clear();
     }
-    private void OnDisable() => StopGameplayLoops();
+    private void OnDisable()
+    {
+        if (Instance != this) return;
+        StopGameplayLoops();
+        if (voices != null) foreach (var voice in voices) Release(voice);
+        ReleaseGameplaySuspension();
+        RestoreOwnedPause();
+    }
 }

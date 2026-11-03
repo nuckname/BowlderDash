@@ -19,7 +19,7 @@ MonoBehaviour:
   gain: 0.4
   pitchRange: {x: 1, y: 1}
   priority: 24
-  voiceLimit: 1
+  voiceLimit: 4
   cooldown: 0
   spatialBlend: 0
   minDistance: 5
