@@ -29216,6 +29216,13 @@ MonoBehaviour:
   ballsText: {fileID: 761309850}
   inGameUiTicketsText: {fileID: 563444434}
   shopUiTicketsText: {fileID: 1704388473}
+  scoreCountLoopCue: {fileID: 11400000, guid: 6b12e1f1f645b2744bde4a297aa5575e, type: 2}
+  ticketCountLoopCue: {fileID: 11400000, guid: 7b07f298a87827a47bf6d1f4f2b483d5, type: 2}
+  scoreCountBasePitch: 1
+  scoreCountMaxPitch: 2
+  ticketCountBasePitch: 1
+  ticketCountMaxPitch: 2
+  countLoopFadeInTime: 0.01
 --- !u!114 &1168153565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40040,7 +40047,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 0
+  m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
