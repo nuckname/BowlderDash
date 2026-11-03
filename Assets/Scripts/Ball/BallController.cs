@@ -6,6 +6,63 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class BallController : MonoBehaviour
 {
+    private static readonly HashSet<BallController> activeBalls = new HashSet<BallController>();
+    private bool _isSecondaryBall;
+    private bool _flightEnded;
+    private bool _attemptFinalized;
+
+    private void OnEnable() => activeBalls.Add(this);
+    private void OnDisable() => activeBalls.Remove(this);
+
+    public void InitializeAsSecondaryBall()
+    {
+        _isSecondaryBall = true;
+        _flightEnded = false;
+        _attemptFinalized = false;
+    }
+
+    public void MarkFlightEnded() => _flightEnded = true;
+
+    public static bool HasUnfinishedSecondaryBalls(RoundStateManager manager)
+    {
+        foreach (BallController ball in activeBalls)
+            if (ball != null && ball.gameObject.scene == manager.gameObject.scene &&
+                ball._isSecondaryBall && !ball._flightEnded) return true;
+        return false;
+    }
+
+    public static void FinishAttemptBalls(RoundStateManager manager)
+    {
+        foreach (BallController ball in new List<BallController>(activeBalls))
+        {
+            if (ball == null || ball.gameObject.scene != manager.gameObject.scene ||
+                (ball != manager.ballController && !ball._isSecondaryBall)) continue;
+            if (ball._attemptFinalized) continue;
+            ball._attemptFinalized = true;
+            ball.StopAllCoroutines();
+            ball._hammerHitRoutine = null;
+            ball._isLaunched = false;
+            ball._isFollowingCurve = false;
+            ball._homingTarget = null;
+            ball._flightEnded = true;
+            ball.ReleaseSchedulingCancelled?.Invoke();
+            ball.ResetPerformed?.Invoke();
+            if (ball._ballRb != null)
+            {
+                if (!ball._ballRb.isKinematic)
+                {
+                    ball._ballRb.linearVelocity = Vector3.zero;
+                    ball._ballRb.angularVelocity = Vector3.zero;
+                }
+                ball._ballRb.isKinematic = true;
+            }
+            if (ball._isSecondaryBall)
+            {
+                ball.gameObject.SetActive(false);
+                Destroy(ball.gameObject);
+            }
+        }
+    }
     public ThrowTuningDataSO tuningData;
     
     private Rigidbody _ballRb;
@@ -38,6 +95,8 @@ public class BallController : MonoBehaviour
 
     public void ResetBall()
     {
+        _flightEnded = false;
+        _attemptFinalized = false;
         StopAllCoroutines();
         _hammerHitRoutine = null;
         ReleaseSchedulingCancelled?.Invoke();
@@ -96,18 +155,20 @@ public class BallController : MonoBehaviour
 
     private IEnumerator SwitchToRoundOverAfterDelay(float delay)
     {
+        GameObject managerObj = GameObject.FindGameObjectWithTag("RoundManager");
+        RoundStateManager manager = managerObj != null ? managerObj.GetComponent<RoundStateManager>() : null;
+        if (manager == null) yield break;
+        int launchVersion = manager.throwingBallState.LaunchVersion;
         while (GameplayPause.IsPaused(this)) yield return null;
         yield return new WaitForSeconds(delay);
         while (GameplayPause.IsPaused(this)) yield return null;
         _hammerHitRoutine = null;
 
-        GameObject managerObj = GameObject.FindGameObjectWithTag("RoundManager");
-        if (managerObj != null && managerObj.TryGetComponent(out RoundStateManager manager))
+        if (manager != null && manager.currentState == manager.throwingBallState &&
+            manager.throwingBallState.LaunchVersion == launchVersion)
         {
-            if (manager.currentState == manager.throwingBallState)
-            {
-                manager.SwitchState(manager.roundOverState);
-            }
+            MarkFlightEnded();
+            manager.throwingBallState.RequestCompletion(manager, "hammer completion delay elapsed", this);
         }
     }
 

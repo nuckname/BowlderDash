@@ -71,6 +71,80 @@ public class PinBase : MonoBehaviour
     protected Quaternion _startRot;
     
     private bool _isForcedSettled = false;
+    private bool _attemptFinalized;
+
+    public bool HasPendingGameplay
+    {
+        get
+        {
+            return HasPendingEffect(onPlaceEffects) || HasPendingEffect(onHitEffects) ||
+                HasPendingEffect(onFallEffects) || HasPendingEffect(onEndOfRoundEffects);
+        }
+    }
+
+    private static bool HasPendingEffect(List<PinEffect> effects)
+    {
+        if (effects != null)
+            foreach (PinEffect effect in effects)
+                if (effect != null && effect.HasPendingGameplay) return true;
+        return false;
+    }
+
+    public bool CanFinishFallenPinEarly
+    {
+        get
+        {
+            if (!IsFallen || HasPendingGameplay) return false;
+            // Fallen pins can still have an unused collision effect that changes the result.
+            if (onHitEffects != null && onHitEffects.Count > 0 && (!_hasBeenHit || isClone)) return false;
+
+            if (!hasEnterGutter && !hasEnterTheHoleAtTheBack && onFallEffects != null)
+                foreach (PinEffect effect in onFallEffects)
+                    if (effect is GutterMultiEffect && !HasStoppedMoving()) return false;
+            return true;
+        }
+    }
+
+    private bool HasStoppedMoving()
+    {
+        if (_rb == null) _rb = GetComponent<Rigidbody>();
+        return _rb == null || _rb.isKinematic || _rb.IsSleeping() ||
+            (_rb.linearVelocity.sqrMagnitude < 0.01f && _rb.angularVelocity.sqrMagnitude < 0.01f);
+    }
+
+    public void FinalizeAttempt()
+    {
+        if (_attemptFinalized) return;
+        _attemptFinalized = true;
+        allowCollisionEffects = false;
+        ResetPendingEffects(onPlaceEffects);
+        ResetPendingEffects(onHitEffects);
+        ResetPendingEffects(onFallEffects);
+        ResetPendingEffects(onEndOfRoundEffects);
+        if (_rb == null) _rb = GetComponent<Rigidbody>();
+        if (_rb == null) return;
+        if (!_rb.isKinematic)
+        {
+            _rb.linearVelocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+        }
+        _rb.isKinematic = true;
+    }
+
+    private static void ResetPendingEffects(List<PinEffect> effects)
+    {
+        if (effects != null)
+            foreach (PinEffect effect in effects)
+                if (effect != null && effect.HasPendingGameplay) effect.ResetEffect();
+    }
+
+    protected virtual void OnDisable()
+    {
+        ResetPendingEffects(onPlaceEffects);
+        ResetPendingEffects(onHitEffects);
+        ResetPendingEffects(onFallEffects);
+        ResetPendingEffects(onEndOfRoundEffects);
+    }
 
     public bool isClone = false;
     
@@ -178,6 +252,7 @@ public class PinBase : MonoBehaviour
 
     public void EnterPlacementPhysicsMode()
     {
+        _attemptFinalized = false;
         if (_rb == null || !_physicsStateCaptured) return;
 
         if (!_rb.isKinematic)
@@ -194,6 +269,7 @@ public class PinBase : MonoBehaviour
 
     public void EnterThrowPhysicsMode()
     {
+        _attemptFinalized = false;
         if (_rb == null || !_physicsStateCaptured) return;
 
         _rb.constraints = _originalConstraints;
@@ -225,7 +301,7 @@ public class PinBase : MonoBehaviour
     
     protected virtual void Update()
     {
-        if (GameplayPause.IsPaused(this)) return;
+        if (_attemptFinalized || GameplayPause.IsPaused(this)) return;
         if (!allowPinToFallOver)
         {
             // Stand up right
@@ -253,6 +329,7 @@ public class PinBase : MonoBehaviour
     
     protected virtual void OnTriggerEnter(Collider other)
     {
+        if (_attemptFinalized) return;
         if (other.CompareTag("ThePit"))
         {
             _isFallen = true;
@@ -284,6 +361,7 @@ public class PinBase : MonoBehaviour
     }
     protected virtual void HandleHit(Collider other)
     {
+        if (_attemptFinalized) return;
         if ((_hasBeenHit && !isClone) || !allowCollisionEffects) return;
 
         bool isAnotherPin = other.GetComponent<PinBase>() != null;
@@ -336,6 +414,7 @@ public class PinBase : MonoBehaviour
     
     public virtual void TriggerFall()
     {
+        if (_attemptFinalized) return;
         _isFallen = true;
         
         DisableReturnToHandForGroup();

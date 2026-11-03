@@ -7,6 +7,8 @@ using UnityEngine;
 [Serializable]
 public abstract class PinEffect 
 {
+    public virtual bool HasPendingGameplay => false;
+
     public abstract void Execute(PinBase pinBase, Collider target = null);
     
     public virtual void ResetEffect() { }

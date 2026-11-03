@@ -24,6 +24,7 @@ public class ExplosionEffect : PinEffect
     private Coroutine _detonationCoroutine;
     private PinBase _detonationOwner;
     private int _detonationVersion;
+    public override bool HasPendingGameplay => _detonationOwner != null && _detonationCoroutine != null;
 
     public override void Execute(PinBase context, Collider instigator = null)
     {

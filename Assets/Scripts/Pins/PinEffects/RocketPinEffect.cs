@@ -38,6 +38,12 @@ public class RocketPinEffect : PinEffect
     private Coroutine _launchCoroutine;
     private Coroutine _particleCoroutine;
     private ParticleSystem _runtimeParticleInstance;
+    private PinBase _launchOwner;
+    private bool _launchPending;
+    private Rigidbody _launchBody;
+    private RigidbodyConstraints _launchConstraints;
+    private bool _launchUseGravity;
+    public override bool HasPendingGameplay => _launchPending && _launchOwner != null;
 
     public override void Execute(PinBase pinBase, Collider target = null)
     {
@@ -52,10 +58,15 @@ public class RocketPinEffect : PinEffect
         Transform aimTransform = ResolveAimTransform(pinBase, target);
         Vector3 fallbackForward = pinBase.transform.forward;
 
-        if (_launchCoroutine != null)
+        if (_launchPending)
         {
-            pinBase.StopCoroutine(_launchCoroutine);
+            ResetEffect();
         }
+        _launchOwner = pinBase;
+        _launchBody = rb;
+        _launchConstraints = rb.constraints;
+        _launchUseGravity = rb.useGravity;
+        _launchPending = true;
         _launchCoroutine = pinBase.StartCoroutine(
             RocketThrustRoutine(pinBase.transform, rb, aimTransform, fallbackForward));
 
@@ -231,7 +242,7 @@ public class RocketPinEffect : PinEffect
             yield return fixedWait;
         }
 
-        if (rb == null) yield break;
+        if (rb == null) { _launchPending = false; yield break; }
 
         // Re-aim from where the pin actually is now (the hold phase moves it)
         Vector3 horizontalDir = GetHorizontalDirection(rb.position, aim, fallbackForward);
@@ -253,7 +264,7 @@ public class RocketPinEffect : PinEffect
             yield return fixedWait;
         }
 
-        if (rb == null) yield break;
+        if (rb == null) { _launchPending = false; yield break; }
 
         pinTransform.rotation = targetRot;
 
@@ -281,6 +292,7 @@ public class RocketPinEffect : PinEffect
         }
 
         _launchCoroutine = null;
+        _launchPending = false;
     }
 
     private void ApplySoftYFreeze(Rigidbody rb, float minLockedY)
@@ -353,6 +365,16 @@ public class RocketPinEffect : PinEffect
 
     public override void ResetEffect()
     {
+        if (_launchOwner != null && _launchCoroutine != null) _launchOwner.StopCoroutine(_launchCoroutine);
+        if (_launchPending && _launchBody != null)
+        {
+            _launchBody.constraints = _launchConstraints;
+            _launchBody.useGravity = _launchUseGravity;
+        }
+        _launchCoroutine = null;
+        _launchPending = false;
+        _launchOwner = null;
+        _launchBody = null;
         if (_runtimeParticleInstance != null)
         {
             _runtimeParticleInstance.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);

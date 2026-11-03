@@ -26,6 +26,16 @@ public class OnLaneSquareGrid : MonoBehaviour
     private List<Vector3> ticketOffsets = new List<Vector3>();
     private AnimationCurve _currentCurve;
 
+    public bool HasUnclaimedTickets
+    {
+        get
+        {
+            foreach (GameObject ticket in spawnedGridObjects)
+                if (ticket != null && ticket.activeInHierarchy) return true;
+            return false;
+        }
+    }
+
     [SerializeField] private AmountOfTicketsToSpawnOnLane amountToTicketsSpawnOnLane;
     
     public void GenerateGridForRound(RoundStateManager manager)

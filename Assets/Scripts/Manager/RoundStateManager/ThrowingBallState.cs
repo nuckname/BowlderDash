@@ -14,6 +14,16 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     [SerializeField, Min(0f)] private float stallGracePeriod = 1.5f;
     [SerializeField, Min(0f)] private float maximumFlightTime = 15f;
     [SerializeField, Min(0f)] private float maxPinSettleWaitTime;
+    [SerializeField, Min(0f)] private float allPinsDownConfirmationTime = 0.35f;
+    [SerializeField, Min(0f)] private float fastScoringLeadIn = 0.2f;
+
+    public bool CompletedEarly { get; private set; }
+    public float FastScoringLeadIn => fastScoringLeadIn;
+    public int LaunchVersion { get; private set; }
+    private float allPinsDownTimer;
+    private bool primaryFlightEnded;
+    private PinBase[] confirmationPins;
+    private int confirmationMembership;
 
     private RoundStateManager currentManager;
     private bool ballHasBeenReleased;
@@ -39,6 +49,12 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public override void EnterState(RoundStateManager manager)
     {
+        LaunchVersion++;
+        CompletedEarly = false;
+        allPinsDownTimer = 0f;
+        primaryFlightEnded = false;
+        confirmationPins = null;
+        confirmationMembership = 0;
         bool isRethrow = rethrowPending;
         rethrowPending = false;
         PhysicsImpactAudio.SetWorldEligible(false);
@@ -135,7 +151,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public override void UpdateState(RoundStateManager manager)
     {
-        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.E) && !ballHasBeenReleased)
+        if ((Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.E)) && !ballHasBeenReleased)
         {
             manager.SwitchState(manager.pinPlacementState);
             return;
@@ -157,6 +173,8 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
             return;
         }
 
+        if (TryCompleteAllPinsDown(manager)) return;
+
         if (waitingForPinsToSettle)
         {
             pinSettleTimer += Time.deltaTime;
@@ -164,14 +182,14 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
             foreach (PinBase pin in manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
             {
-                if (pin != null && pin.IsActiveGameplayPin && !pin.IsSettled)
+                if (pin != null && pin.IsActiveGameplayPin && (pin.HasPendingGameplay || !pin.IsSettled))
                 {
                     allSettled = false;
                     break;
                 }
             }
 
-            if (allSettled || pinSettleTimer >= maxPinSettleWaitTime)
+            if ((allSettled && allPinsDownTimer <= 0f) || pinSettleTimer >= maxPinSettleWaitTime)
             {
                 CompleteThrowFinal(manager);
             }
@@ -183,7 +201,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
         if (maximumFlightTime > 0f && flightTimer >= maximumFlightTime)
         {
-            CompleteThrow(manager, "maximum flight time reached");
+            RequestCompletion(manager, "maximum flight time reached");
             return;
         }
 
@@ -205,7 +223,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
         if (stallGracePeriod > 0f && stallTimer >= stallGracePeriod)
         {
-            CompleteThrow(manager, "primary ball stalled");
+            RequestCompletion(manager, "primary ball stalled");
         }
     }
     
@@ -300,17 +318,69 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     {
         if (ballHasBeenReleased && other.gameObject.CompareTag("Ball"))
         {
-            CompleteThrow(manager, $"{other.gameObject.name} entered a completion trigger");
+            BallController ball = other.GetComponentInParent<BallController>();
+            if (ball != null) ball.MarkFlightEnded();
+            RequestCompletion(manager, $"{other.gameObject.name} entered a completion trigger", ball);
         }
     }
 
-    private void CompleteThrow(RoundStateManager manager, string reason)
+    public void RequestCompletion(RoundStateManager manager, string reason, BallController source = null)
     {
+        if (manager.IsGameplayPaused || !ballHasBeenReleased || !manager.ballController.IsLaunched ||
+            throwCompletionRequested || manager.currentState != this) return;
+        if (source == null || source == manager.ballController) primaryFlightEnded = true;
         if (waitingForPinsToSettle || throwCompletionRequested || manager.currentState != this) return;
 
         Debug.Log($"Throw completed: {reason}. Waiting for pins to settle.");
         waitingForPinsToSettle = true;
         pinSettleTimer = 0f;
+    }
+
+    private bool TryCompleteAllPinsDown(RoundStateManager manager)
+    {
+        PinBase[] pins = manager.allActivePinsInTheFrame;
+        if (confirmationPins != pins)
+        {
+            confirmationPins = pins;
+            allPinsDownTimer = 0f;
+        }
+
+        bool anyPin = false;
+        bool ready = pins != null;
+        int membership = 0;
+        foreach (PinBase pin in pins ?? System.Array.Empty<PinBase>())
+        {
+            if (pin == null || !pin.IsActiveGameplayPin) continue;
+            anyPin = true;
+            membership = unchecked(membership * 31 + pin.GetInstanceID());
+            if (!pin.CanFinishFallenPinEarly) ready = false;
+        }
+        if (membership != confirmationMembership) allPinsDownTimer = 0f;
+        confirmationMembership = membership;
+
+        if (manager.onLaneSquareGrid != null && manager.onLaneSquareGrid.HasUnclaimedTickets &&
+            (!primaryFlightEnded || BallController.HasUnfinishedSecondaryBalls(manager))) ready = false;
+
+        if (!ready || !anyPin)
+        {
+            allPinsDownTimer = 0f;
+            return false;
+        }
+
+        allPinsDownTimer += Time.deltaTime;
+        if (allPinsDownTimer < allPinsDownConfirmationTime) return false;
+
+        CompletedEarly = true;
+        FinalizePinResults(manager);
+        CompleteThrowFinal(manager);
+        return true;
+    }
+
+    public void FinalizePinResults(RoundStateManager manager)
+    {
+        foreach (PinBase pin in manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
+            if (pin != null && pin.IsActiveGameplayPin) pin.FinalizeAttempt();
+        BallController.FinishAttemptBalls(manager);
     }
 
     private void CompleteThrowFinal(RoundStateManager manager)

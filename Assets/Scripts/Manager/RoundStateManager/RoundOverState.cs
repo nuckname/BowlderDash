@@ -14,15 +14,18 @@ public class RoundOverState : RoundBaseState
         manager.AddBallThrownToSession();
         manager.ClearSelectedBallForCurrentAttempt();
         
-        // there is a bug where the meshes turn off for some reason so im going to detroy them.
-        manager.ClearAllGrendaTntPins();
-        
+        if (manager.throwingBallState.CompletedEarly)
+            manager.SwitchState(manager.scoringState);
+    }
+
+    public void CollectPinsToScore(RoundStateManager manager)
+    {
         foreach (PinBase pin in manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
         {
             if (pin == null || !pin.IsActiveGameplayPin) continue;
 
             // If pin HAS fallen over: Check its onFallEffects list
-            if (pin.IsFallen)
+            if (pin.IsFallen && pin.onFallEffects != null)
             {
                 foreach (PinEffect effect in pin.onFallEffects)
                 {
@@ -45,7 +48,7 @@ public class RoundOverState : RoundBaseState
             }
 
             // Pin is standing
-            if (!pin.toScorePinFallOver && !pin.IsFallen)
+            if (!pin.toScorePinFallOver && !pin.IsFallen && pin.onEndOfRoundEffects != null)
             {
                 foreach (PinEffect effect in pin.onEndOfRoundEffects)
                 {

@@ -19,6 +19,7 @@ public class ScoringState : RoundBaseState
     private float _textSpawnDelay = 1f;
     private bool _skipAnimation = false;
     private int _scoringLabelOrdinal;
+    private bool _fastCompletion;
     
     // Camera settings
     private float waitBeforeUiCamera = 2f;
@@ -28,7 +29,8 @@ public class ScoringState : RoundBaseState
     public override void EnterState(RoundStateManager manager)
     {
         PhysicsImpactAudio.SetWorldEligible(true);
-        manager.UpdateInstructionText("Waiting for pins to settle...");
+        _fastCompletion = manager.throwingBallState.CompletedEarly;
+        manager.UpdateInstructionText(_fastCompletion ? "Scoring..." : "Waiting for pins to settle...");
         
         _manager = manager;
         
@@ -40,6 +42,7 @@ public class ScoringState : RoundBaseState
         totalWaitTime = 0f;
 
         manager.MoveCamera(CameraLocation.ScoringCameraLocation);
+        if (_fastCompletion) BeginScoring();
     }
 
     public override void UpdateState(RoundStateManager manager) 
@@ -79,18 +82,36 @@ public class ScoringState : RoundBaseState
                     Debug.LogWarning($"Pin settlement exceeded {maxWaitTimeForSettling:0.##} seconds; continuing to scoring.");
                 }
 
-                pinsHaveSettled = true;
-                PhysicsImpactAudio.SetWorldEligible(false);
-                _manager.StartCoroutine(ProcessScoringRoutine());
+                BeginScoring();
             }
         }
+    }
+
+    private void BeginScoring()
+    {
+        if (pinsHaveSettled) return;
+        pinsHaveSettled = true;
+        if (_fastCompletion)
+        {
+            _manager.throwingBallState.FinalizePinResults(_manager);
+            _manager.roundOverState.CollectPinsToScore(_manager);
+        }
+        PhysicsImpactAudio.SetWorldEligible(false);
+        _manager.StartCoroutine(ProcessScoringRoutine());
     }
 
     private IEnumerator ProcessScoringRoutine()
     {
         while (GameplayPause.IsPaused(_manager)) yield return null;
-        yield return SkippableWait(waitTimeBeforeScoring);
+        yield return SkippableWait(_fastCompletion ? _manager.throwingBallState.FastScoringLeadIn : waitTimeBeforeScoring);
         while (GameplayPause.IsPaused(_manager)) yield return null;
+
+        if (!_fastCompletion)
+        {
+            // Keep the normal lead-in available for late chain reactions before fixing the result.
+            _manager.throwingBallState.FinalizePinResults(_manager);
+            _manager.roundOverState.CollectPinsToScore(_manager);
+        }
         
         bool isStrike = _manager.TryApplyStrikeMultiplier();
 
@@ -102,6 +123,7 @@ public class ScoringState : RoundBaseState
         }
 
         ExecutePinScoringEffects();
+        _manager.ClearAllGrendaTntPins();
 
         int pinCount = _manager.pinsToScore.Count;
         
@@ -188,7 +210,7 @@ public class ScoringState : RoundBaseState
 
         foreach (PinBase pin in _manager.allActivePinsInTheFrame ?? System.Array.Empty<PinBase>())
         {
-            if (pin != null && pin.IsActiveGameplayPin && !pin.IsSettled)
+            if (pin != null && pin.IsActiveGameplayPin && (pin.HasPendingGameplay || !pin.IsSettled))
             {
                 unsettledCount++;
             }
