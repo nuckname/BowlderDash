@@ -10365,6 +10365,7 @@ GameObject:
   - component: {fileID: 374269888}
   - component: {fileID: 374269889}
   - component: {fileID: 374269890}
+  - component: {fileID: 374269891}
   m_Layer: 0
   m_Name: RoundManager
   m_TagString: RoundManager
@@ -10465,6 +10466,8 @@ MonoBehaviour:
     stallGracePeriod: 1.5
     maximumFlightTime: 14
     maxPinSettleWaitTime: 4
+    allPinsDownConfirmationTime: 0.35
+    fastScoringLeadIn: 0.2
     minRethrowZOffset: -1.5
     maxRethrowZOffset: 1.5
     autoRethrowDelay: 2
@@ -10519,13 +10522,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06a8cddedcda45fb9cc4c229fe695c2e, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GamePauseController
   roundStateManager: {fileID: 374269889}
   pauseMenu: {fileID: 1575869202}
   settingsRoot: {fileID: 240384584}
   settingsBackButton: {fileID: 444626586}
   optionsTransitionSeconds: 0.65
+--- !u!114 &374269891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374269887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d24c39fa210e8ba4fba9b49d66d8e0ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::QuitManager
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -12124,7 +12139,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 470120586}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 374269891}
+        m_TargetAssemblyTypeName: QuitManager, Assembly-CSharp
+        m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &481963620
 GameObject:
   m_ObjectHideFlags: 0
@@ -29240,7 +29267,7 @@ MonoBehaviour:
   scoreCountMaxPitch: 2
   ticketCountBasePitch: 1
   ticketCountMaxPitch: 2
-  countLoopFadeInTime: 0.01
+  scoreCountStepInterval: 0.075
 --- !u!114 &1168153565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39587,7 +39614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1702348065087066681, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
       propertyPath: pauseController
-      value:
+      value: 
       objectReference: {fileID: 374269890}
     - target: {fileID: 1940610068367757328, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
       propertyPath: m_fontColor32.rgba
@@ -39811,7 +39838,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5dabd1ed15448bb822150bfa90ce20e, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenuUI
 --- !u!1 &1581387359
 GameObject:
