@@ -7,12 +7,16 @@ using UnityEngine.EventSystems;
 public sealed class GamePauseController : MonoBehaviour
 {
     [SerializeField] private RoundStateManager roundStateManager;
+    [SerializeField] private PauseMenuUI pauseMenu;
     private GameAudio audioService;
     private float timeScaleBeforePause;
     private bool waitingForFreshInput;
     private int resumeFrame;
     private int releasedFrame = -1;
     private GameObject previousSelection;
+    private CursorLockMode cursorLockBeforePause;
+    private bool cursorVisibleBeforePause;
+    private bool ownsMenuCursor;
     private readonly List<Transform> menuInputRoots = new List<Transform>();
     private readonly Dictionary<UnityEngine.UI.Selectable, bool> selectableStates = new Dictionary<UnityEngine.UI.Selectable, bool>();
     private readonly Dictionary<UnityEngine.UI.GraphicRaycaster, bool> raycasterStates = new Dictionary<UnityEngine.UI.GraphicRaycaster, bool>();
@@ -30,7 +34,30 @@ public sealed class GamePauseController : MonoBehaviour
         {
             Debug.LogError("Assign one local RoundStateManager to GamePauseController", this);
             enabled = false;
+            return;
         }
+        if (pauseMenu != null) pauseMenu.Initialize(this);
+    }
+
+    public bool TryOpenPauseMenu()
+    {
+        if (!CanPause) return false;
+        if (pauseMenu == null || !pauseMenu.Initialize(this))
+        {
+            Debug.LogError("Assign the PauseMenu view, panel and four buttons on GamePauseController", this);
+            return false;
+        }
+        if (!TryPause()) return false;
+        if (!ownsMenuCursor)
+        {
+            cursorLockBeforePause = Cursor.lockState;
+            cursorVisibleBeforePause = Cursor.visible;
+            ownsMenuCursor = true;
+        }
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        pauseMenu.Show();
+        return true;
     }
 
     public bool TryPause()
@@ -54,6 +81,8 @@ public sealed class GamePauseController : MonoBehaviour
     public void Resume()
     {
         if (!IsPaused) return;
+        if (pauseMenu != null) pauseMenu.Hide();
+        RestoreMenuCursor();
         IsPaused = false;
         waitingForFreshInput = true;
         resumeFrame = Time.frameCount;
@@ -71,6 +100,8 @@ public sealed class GamePauseController : MonoBehaviour
     internal void HandoffToLeaderboard()
     {
         if (roundStateManager == null || !roundStateManager.OwnsLeaderboardPause) return;
+        if (pauseMenu != null) pauseMenu.Hide();
+        RestoreMenuCursor();
         IsPaused = false;
         waitingForFreshInput = false;
         RestoreGameplayUI(false);
@@ -81,12 +112,34 @@ public sealed class GamePauseController : MonoBehaviour
     private void OnDisable()
     {
         Resume();
+        if (pauseMenu != null) pauseMenu.Hide();
+        RestoreMenuCursor();
         waitingForFreshInput = false;
         RestoreGameplayUI(true);
         if (roundStateManager != null) roundStateManager.UnregisterPauseController(this);
     }
 
     private void Update()
+    {
+        if (!IsPaused) UpdateFreshInputGuard();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (IsPaused) Resume();
+            else if (!waitingForFreshInput) TryOpenPauseMenu();
+            return;
+        }
+        if (IsPaused)
+        {
+            if (ownsMenuCursor && (pauseMenu == null || !pauseMenu.isActiveAndEnabled || !pauseMenu.IsVisible))
+            {
+                Resume();
+                return;
+            }
+            if (pauseMenu != null && pauseMenu.isActiveAndEnabled) pauseMenu.EnsureSelection();
+        }
+    }
+
+    private void UpdateFreshInputGuard()
     {
         if (!waitingForFreshInput || Time.frameCount <= resumeFrame) return;
         if (releasedFrame >= 0 && Time.frameCount > releasedFrame)
@@ -98,6 +151,14 @@ public sealed class GamePauseController : MonoBehaviour
         if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
         if (Input.anyKey || Input.GetMouseButton(0) || Input.GetMouseButton(1) || Input.GetMouseButton(2)) return;
         releasedFrame = Time.frameCount;
+    }
+
+    private void RestoreMenuCursor()
+    {
+        if (!ownsMenuCursor) return;
+        Cursor.lockState = cursorLockBeforePause;
+        Cursor.visible = cursorVisibleBeforePause;
+        ownsMenuCursor = false;
     }
 
     public void RegisterMenuInputRoot(Transform root)

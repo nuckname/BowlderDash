@@ -111,21 +111,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if (GameplayPause.IsInputBlocked(this)) return;
         ClampPosition();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (isDragging)
-            {
-                CancelDrag();
-            }
-            
-            if (selected)
-            {
-                selected = false;
-                SelectEvent.Invoke(this, selected);
-                transform.localPosition = _preSelectionPosition;
-            }
-        }
-
         if (isDragging)
         {
             // MOVE MOVEMENT LOGIC HERE: Since the EventSystem won't fire OnDrag 
@@ -210,7 +195,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     public void OnEndDrag(PointerEventData eventData)
     {
         if (GameplayPause.IsInputBlocked(this)) return;
-        if (!isDragging) return; // Prevent double-trigger if drag was already canceled by Escape
+        if (!isDragging) return;
 
         isDragging = false;
         

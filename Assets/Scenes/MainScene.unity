@@ -10364,6 +10364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 374269888}
   - component: {fileID: 374269889}
+  - component: {fileID: 374269890}
   m_Layer: 0
   m_Name: RoundManager
   m_TagString: RoundManager
@@ -10508,6 +10509,20 @@ MonoBehaviour:
   scoringLabelMaxPitch: 2
   maxLineGameObject: {fileID: 1805183575}
   nextCameraSpeedOverride: -1
+--- !u!114 &374269890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374269887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06a8cddedcda45fb9cc4c229fe695c2e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::GamePauseController
+  roundStateManager: {fileID: 374269889}
+  pauseMenu: {fileID: 1575869202}
 --- !u!1 &374805130
 GameObject:
   m_ObjectHideFlags: 0
@@ -39523,6 +39538,98 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1439520102}
   m_LocalEulerAnglesHint: {x: 41.82, y: -2.28, z: -1.79}
+--- !u!1001 &1575869201
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1702348065087066681, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: pauseController
+      value:
+      objectReference: {fileID: 374269890}
+    - target: {fileID: 1940610068367757328, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4290097830
+      objectReference: {fileID: 0}
+    - target: {fileID: 1940610068367757328, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504005248697362747, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_Name
+      value: PauseMenu
+      objectReference: {fileID: 0}
+    - target: {fileID: 2806218697563434600, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4311207182484947154, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4285461931
+      objectReference: {fileID: 0}
+    - target: {fileID: 4311207182484947154, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155526617327639316, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4292137412
+      objectReference: {fileID: 0}
+    - target: {fileID: 5155526617327639316, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 6751836741805500367, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4290097830
+      objectReference: {fileID: 0}
+    - target: {fileID: 6751836741805500367, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 6928469980314363431, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4290097830
+      objectReference: {fileID: 0}
+    - target: {fileID: 6928469980314363431, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818281237955895041, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4292137412
+      objectReference: {fileID: 0}
+    - target: {fileID: 7818281237955895041, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672814072472902699, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4279047946
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672814072472902699, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+--- !u!114 &1575869202 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1702348065087066681, guid: 65bb158cc07d5eb49ac816f7a3f6b650, type: 3}
+  m_PrefabInstance: {fileID: 1575869201}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5dabd1ed15448bb822150bfa90ce20e, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PauseMenuUI
 --- !u!1 &1581387359
 GameObject:
   m_ObjectHideFlags: 0
@@ -57018,3 +57125,4 @@ SceneRoots:
   - {fileID: 891734733}
   - {fileID: 1366243510}
   - {fileID: 2072668378}
+  - {fileID: 1575869201}

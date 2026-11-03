@@ -98,11 +98,6 @@ public class DraggableSnap : MonoBehaviour
     private void Update()
     {
         if (GameplayPause.IsInputBlocked(this)) return;
-        if (_dragging && Input.GetKeyDown(KeyCode.Escape))
-        {
-            CancelDrag();
-            return;
-        }
         if (!CanInteract || _gridOccupancy == null || _hexGrid == null || _gridManager == null || _cam == null)
         {
             CancelDrag();

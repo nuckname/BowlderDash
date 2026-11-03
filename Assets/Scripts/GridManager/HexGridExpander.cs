@@ -35,13 +35,6 @@ public class HexGridExpander : MonoBehaviour
     private void Update()
     {
         if (GameplayPause.IsInputBlocked(this)) return;
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ClearPreview();
-            if (shopManager != null) shopManager.ToggleHexGridExpander(false);
-            return;
-        }
-
         if ((shopManager != null && !shopManager.IsHexGridExpansionActive) ||
             PinInteractionAudio.IsPointerOverUI())
         {
