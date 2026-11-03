@@ -34,7 +34,7 @@ public class MouseHighlightManager : MonoBehaviour
 
     private void Update()
     {
-        if (mainCamera == null || grid == null || roundStateManager == null ||
+        if (GameplayPause.IsInputBlocked(this) || mainCamera == null || grid == null || roundStateManager == null ||
             !roundStateManager.IsPinPlacementActive || DraggableSnap.ActiveDrag != null ||
             (HandManager.Instance != null && HandManager.Instance.IsAnyCardDragging()) ||
             PinInteractionAudio.IsPointerOverUI())

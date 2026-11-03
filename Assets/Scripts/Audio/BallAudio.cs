@@ -168,7 +168,9 @@ public sealed class BallAudio : MonoBehaviour
 
     private IEnumerator PlayReleaseAfterDelay(float delay, float launchSpeed)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         if (delay > 0f) yield return new WaitForSeconds(delay);
+        while (GameplayPause.IsPaused(this)) yield return null;
 
         scheduledPlayback = null;
         releasePlayedForCurrentThrow = PlayRelease(launchSpeed);

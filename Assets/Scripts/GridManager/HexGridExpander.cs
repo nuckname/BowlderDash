@@ -34,6 +34,7 @@ public class HexGridExpander : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             ClearPreview();
@@ -89,6 +90,8 @@ public class HexGridExpander : MonoBehaviour
         hasPreviewTarget = false;
         if (visuals != null) visuals.HidePreview();
     }
+
+    public void HidePausePreview() => ClearPreview();
 
     // The no-shop fallback can still add cells, but shop feedback needs an active owner.
     private bool CanPlayAudio => isActiveAndEnabled && shopManager != null && shopManager.IsHexGridExpansionActive;

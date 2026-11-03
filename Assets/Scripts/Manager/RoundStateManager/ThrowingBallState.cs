@@ -211,7 +211,9 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
     
     private System.Collections.IEnumerator AutoRethrowRoutine(RoundStateManager manager)
     {
+        while (GameplayPause.IsPaused(manager)) yield return null;
         yield return new WaitForSeconds(autoRethrowDelay);
+        while (GameplayPause.IsPaused(manager)) yield return null;
 
         float launchSpeed = lastLaunchSpeed > 0f
             ? lastLaunchSpeed
@@ -226,6 +228,7 @@ public class ThrowingBallState : RoundBaseState, IPathDrawListener
 
     public void OnDrawCompleted(List<CurvePoint> path, float drawDuration)
     {
+        if (currentManager == null || currentManager.IsGameplayPaused) return;
         if (!currentManager.isHandDrawReady)
         {
             OnDrawCancelled();

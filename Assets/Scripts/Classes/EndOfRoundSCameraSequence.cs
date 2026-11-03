@@ -17,26 +17,31 @@ public class EndOfRoundSCameraSequence
     private float waitBeforeUiCamera = 2f;
     private float scoreDisplayHoldTime = 1.5f;
 
-    private IEnumerator SkippableWait(float waitTime, System.Func<bool> isCurrent)
+    private IEnumerator SkippableWait(RoundStateManager manager, float waitTime, System.Func<bool> isCurrent)
     {
+        while (GameplayPause.IsPaused(manager)) yield return null;
         float timer = 0f;
         
         // Wait one frame to avoid consuming the same click that skipped the text animation
         yield return null; 
+        while (GameplayPause.IsPaused(manager)) yield return null;
 
         while (timer < waitTime && isCurrent())
         {
-            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+            if (!manager.IsGameplayInputBlocked &&
+                (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)))
             {
                 yield break;
             }
             timer += Time.deltaTime;
             yield return null;
+            while (GameplayPause.IsPaused(manager)) yield return null;
         }
     }
 
     public IEnumerator Execute(RoundStateManager manager, RoundBaseState nextState, bool prepareNextRound, bool wonRound = false, bool lostGame = false, RoundScore roundScore = null)
     {
+        while (GameplayPause.IsPaused(manager)) yield return null;
         if (manager == null || manager.inGameScoreUi == null) yield break;
         InGameScoreUi scoreUi = manager.inGameScoreUi;
         RoundBaseState ownerState = manager.currentState;
@@ -65,19 +70,22 @@ public class EndOfRoundSCameraSequence
                     manager.inGameScoreUi.StopAllFlashing();
                     
                     manager.MoveCamera(CameraLocation.ScoreToBeatUi);
-                    yield return SkippableWait(waitBeforeUiCamera, isCurrent);
+                    yield return SkippableWait(manager, waitBeforeUiCamera, isCurrent);
+                    while (GameplayPause.IsPaused(manager)) yield return null;
                     if (!isCurrent()) yield break;
 
                     // we want to only incremental the UI here and only here.
                     Coroutine scoreCountUpRoutine = manager.inGameScoreUi.UpdateScoreText(manager.sessionData.currentScore);
                     presentationVersion = scoreUi.CountPresentationVersion;
                     if (scoreCountUpRoutine != null) yield return scoreCountUpRoutine;
+                    while (GameplayPause.IsPaused(manager)) yield return null;
                     if (!isCurrent()) yield break;
 
                     if (wonRound)
                     {
                         manager.inGameScoreUi.TriggerWinRoundText();
-                        yield return SkippableWait(2, isCurrent);
+                        yield return SkippableWait(manager, 2, isCurrent);
+                        while (GameplayPause.IsPaused(manager)) yield return null;
                         if (!isCurrent()) yield break;
                         // Final victory keeps the completed round and score for the end screen.
                         currentPhase = TransitionPhase.ShowTicketsEarned;
@@ -89,14 +97,16 @@ public class EndOfRoundSCameraSequence
 
                         // Wait a bit longer to let the player see the game lost text
                         // and then break so we dont show tickets earned
-                        yield return SkippableWait(scoreDisplayHoldTime + 3, isCurrent);
+                        yield return SkippableWait(manager, scoreDisplayHoldTime + 3, isCurrent);
+                        while (GameplayPause.IsPaused(manager)) yield return null;
                         if (!isCurrent()) yield break;
                         currentPhase = TransitionPhase.FinishTransition;
                         break;
                     }
                     
                     // If we didnt meet quota
-                    yield return SkippableWait(scoreDisplayHoldTime, isCurrent);
+                    yield return SkippableWait(manager, scoreDisplayHoldTime, isCurrent);
+                    while (GameplayPause.IsPaused(manager)) yield return null;
                     if (!isCurrent()) yield break;
                     currentPhase = TransitionPhase.ShowTicketsEarned;
                     break;
@@ -134,12 +144,14 @@ public class EndOfRoundSCameraSequence
                     manager.inGameScoreUi.StopAllFlashing();
                     
                     manager.MoveCamera(CameraLocation.ShowIncreaseRound);
-                    yield return SkippableWait(waitBeforeUiCamera, isCurrent);
+                    yield return SkippableWait(manager, waitBeforeUiCamera, isCurrent);
+                    while (GameplayPause.IsPaused(manager)) yield return null;
                     if (!isCurrent()) yield break;
                  
                     manager.sessionData.AddRound();
                     manager.inGameScoreUi.UpdateRoundText(manager.sessionData.currentRound, manager.roundData.GetMaxRoundNumber());
-                    yield return SkippableWait(waitBeforeUiCamera, isCurrent);
+                    yield return SkippableWait(manager, waitBeforeUiCamera, isCurrent);
+                    while (GameplayPause.IsPaused(manager)) yield return null;
                     if (!isCurrent()) yield break;
                     currentPhase = TransitionPhase.FinishTransition;
                     break;
@@ -149,15 +161,18 @@ public class EndOfRoundSCameraSequence
                     
                     // Move to the Ticket Camera and animate tickets
                     manager.MoveCamera(CameraLocation.TicketCameraUi);
-                    yield return SkippableWait(waitBeforeUiCamera, isCurrent);
+                    yield return SkippableWait(manager, waitBeforeUiCamera, isCurrent);
+                    while (GameplayPause.IsPaused(manager)) yield return null;
                     if (!isCurrent()) yield break;
 
                     Coroutine ticketCountUpRoutine = manager.inGameScoreUi.UpdateTicketTextAnimated(manager.sessionData.tickets);
                     presentationVersion = scoreUi.CountPresentationVersion;
                     if (ticketCountUpRoutine != null) yield return ticketCountUpRoutine;
+                    while (GameplayPause.IsPaused(manager)) yield return null;
                     if (!isCurrent()) yield break;
 
-                    yield return SkippableWait(scoreDisplayHoldTime, isCurrent);
+                    yield return SkippableWait(manager, scoreDisplayHoldTime, isCurrent);
+                    while (GameplayPause.IsPaused(manager)) yield return null;
 
                     if (!isCurrent()) yield break;
                     if (wonRound)

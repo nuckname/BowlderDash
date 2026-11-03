@@ -35,6 +35,14 @@ public class CursorManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this))
+        {
+            isGrabbing = false;
+            isHovering = false;
+            isClickFlashing = false;
+            SetCursor(defaultCursor);
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -58,18 +66,21 @@ public class CursorManager : MonoBehaviour
 
     public void SetHoverState(bool state)
     {
+        if (state && GameplayPause.IsInputBlocked(this)) return;
         isHovering = state;
         UpdateCursorVisual();
     }
 
     private IEnumerator FlashClickRoutine()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         if (isGrabbing) yield break;
 
         isClickFlashing = true;
         SetCursor(clickCursor);
         
         yield return new WaitForSeconds(0.1f);
+        while (GameplayPause.IsPaused(this)) yield return null;
         
         isClickFlashing = false;
         UpdateCursorVisual();

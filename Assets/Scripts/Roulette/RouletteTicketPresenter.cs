@@ -117,6 +117,7 @@ public sealed class RouletteTicketPresenter : MonoBehaviour
 
     public bool SyncDraft(RouletteController controller)
     {
+        if (GameplayPause.IsPaused(this)) return false;
         if (controller == null || !controller.UsesTicketPresenter(this) || !controller.IsOpen ||
             !controller.DraftColour.HasValue || resultPhase != ResultPhase.Draft) return false;
         if (!IsReady) { CancelDraft(controller); return false; }
@@ -133,6 +134,7 @@ public sealed class RouletteTicketPresenter : MonoBehaviour
 
     public bool BeginResult(RouletteController controller, int spinId, int stake, int settledReturn)
     {
+        if (GameplayPause.IsPaused(this)) return false;
         if (!IsReady || !IsPresentingFor(controller) || resultPhase != ResultPhase.Draft || stake <= 0 ||
             (settledReturn != 0 && settledReturn <= stake) ||
             !controller.IsPresentingResultFor(this, spinId)) return false;
@@ -173,6 +175,7 @@ public sealed class RouletteTicketPresenter : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (owner == null)
         {
             if (LiveBodyCount > 0 || smoke != null || targetCount > 0) ClearOwnedVisuals();

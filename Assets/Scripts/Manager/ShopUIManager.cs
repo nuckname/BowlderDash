@@ -58,7 +58,8 @@ public class ShopUIManager : MonoBehaviour
     public bool IsShopOpen => _shopOpen && isActiveAndEnabled && shopGameObject != null &&
         shopGameObject.activeInHierarchy && _roundStateManager != null &&
         _roundStateManager.currentState == _roundStateManager.shopState;
-    public bool CanUseShopControls => IsShopOpen && !_rouletteSuspended && !_hexGridExpansionActive;
+    public bool CanUseShopControls => !GameplayPause.IsInputBlocked(this) &&
+        IsShopOpen && !_rouletteSuspended && !_hexGridExpansionActive;
     public bool IsSuspendedForRoulette(RouletteController owner) =>
         IsShopOpen && _rouletteSuspended && rouletteController == owner;
 
@@ -407,6 +408,7 @@ public class ShopUIManager : MonoBehaviour
     
     public void ToggleHexGridExpander(bool turnOn)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (_rouletteSuspended) return;
         if (turnOn)
         {
@@ -639,6 +641,7 @@ public class ShopUIManager : MonoBehaviour
     
     public bool TryBuyGridExpansion()
     {
+        if (GameplayPause.IsInputBlocked(this)) return false;
         if (!IsHexGridExpansionActive) return false;
         int cost = GetGridUpgradeCost();
         
@@ -844,6 +847,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
         enterEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             Button btn = buttonGo.GetComponent<Button>();
             if (btn != null && !btn.interactable)
             {
@@ -864,6 +868,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
         exitEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             if (animator != null)
             {
                 animator.shopIsHovering = false;
@@ -878,6 +883,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry downEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
         downEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             Button btn = buttonGo.GetComponent<Button>();
             if (btn != null && !btn.interactable)
             {
@@ -897,6 +903,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry upEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
         upEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             if (animator != null)
             {
                 animator.PlayPointerUp(false);
@@ -952,6 +959,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry enterEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
         enterEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             if (btn.interactable)
             {
                 btn.transform.DOKill();
@@ -963,6 +971,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry exitEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
         exitEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             btn.transform.DOKill();
             btn.transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
         });
@@ -971,6 +980,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry downEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
         downEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             if (btn.interactable)
             {
                 btn.transform.DOKill();
@@ -982,6 +992,7 @@ public class ShopUIManager : MonoBehaviour
         EventTrigger.Entry upEntry = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
         upEntry.callback.AddListener((data) => 
         { 
+            if (GameplayPause.IsInputBlocked(this)) return;
             btn.transform.DOKill();
             
             if (btn.interactable)

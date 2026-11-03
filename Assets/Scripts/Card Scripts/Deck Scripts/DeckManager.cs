@@ -74,6 +74,7 @@ public class DeckManager : MonoBehaviour
 
     private IEnumerator DrawCardsRoutine(int amount)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         for (int i = 0; i < amount; i++)
         {
             if (drawPile.Count == 0)
@@ -100,6 +101,7 @@ public class DeckManager : MonoBehaviour
             handManager.AddDrawnCardToHand(drawnCard);
 
             yield return new WaitForSeconds(drawInterval);
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
     

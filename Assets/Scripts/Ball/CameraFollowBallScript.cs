@@ -40,6 +40,7 @@ public class CameraFollowBallScript : MonoBehaviour
 
     void LateUpdate()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (!isTrackingBall) return;
 
         // 1. Calculate where the camera normally wants to be to follow the ball

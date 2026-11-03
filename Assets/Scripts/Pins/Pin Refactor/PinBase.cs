@@ -225,6 +225,7 @@ public class PinBase : MonoBehaviour
     
     protected virtual void Update()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (!allowPinToFallOver)
         {
             // Stand up right

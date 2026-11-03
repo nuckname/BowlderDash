@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,6 +27,7 @@ public class PathDrawer : MonoBehaviour
     private float _mouseUpTimer = 0f;
     private GameAudio.LoopHandle _drawingLoop;
     private bool _drawingAudioRequested;
+    private Coroutine _pendingLaunch;
 
     [SerializeField] private int drawMaxDistance; 
     
@@ -44,7 +46,7 @@ public class PathDrawer : MonoBehaviour
     public void ResetDrawing()
     {
         StopDrawingAudio();
-        CancelInvoke(nameof(EndDrawingAndLaunch));
+        CancelPendingLaunch();
         _isDrawing = false;
         _isValidDraw = false;
         _processedCurve.Clear();
@@ -55,7 +57,8 @@ public class PathDrawer : MonoBehaviour
     
     void Update()
     {
-        if (_iPathDrawListener == null) return;
+        if (GameplayPause.IsInputBlocked(this)) return;
+        if (_iPathDrawListener == null || _pendingLaunch != null) return;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -81,8 +84,9 @@ public class PathDrawer : MonoBehaviour
 
     private void StartDrawing()
     {
+        if (PinInteractionAudio.IsPointerOverUI()) return;
         StopDrawingAudio();
-        CancelInvoke(nameof(EndDrawingAndLaunch));
+        CancelPendingLaunch();
         _processedCurve.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
         _mouseUpTimer = 0f;
@@ -125,7 +129,7 @@ public class PathDrawer : MonoBehaviour
             {
                 _isDrawing = false;
                 StopDrawingAudio();
-                Invoke(nameof(EndDrawingAndLaunch), 0.3f);
+                _pendingLaunch = StartCoroutine(CompleteAfterDelay());
                 return;
             }
 
@@ -155,6 +159,27 @@ public class PathDrawer : MonoBehaviour
 
         float duration = Time.time - _mouseDownTime;
         _iPathDrawListener.OnDrawCompleted(new List<CurvePoint>(_processedCurve), duration);
+    }
+
+    public void CancelUnfinishedGesture()
+    {
+        if (!_isDrawing) return;
+        ResetDrawing();
+        _iPathDrawListener?.OnDrawCancelled();
+    }
+
+    private IEnumerator CompleteAfterDelay()
+    {
+        yield return new WaitForSeconds(0.3f);
+        while (GameplayPause.IsPaused(this)) yield return null;
+        _pendingLaunch = null;
+        EndDrawingAndLaunch();
+    }
+
+    private void CancelPendingLaunch()
+    {
+        if (_pendingLaunch != null) StopCoroutine(_pendingLaunch);
+        _pendingLaunch = null;
     }
 
     // Request once per held segment; unavailable audio must not be retried every frame.

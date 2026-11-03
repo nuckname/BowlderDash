@@ -64,6 +64,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (currentState != TutorialState.None && Input.GetMouseButtonDown(0))
         {
             if (currentState == TutorialState.ShowButtonToThrow)
@@ -105,13 +106,15 @@ public class TutorialManager : MonoBehaviour
     
     private IEnumerator DelayedShowButtonToThrow()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         yield return new WaitForSeconds(delayBeforeShowButton);
+        while (GameplayPause.IsPaused(this)) yield return null;
         ShowButtonToBallThrow();
     }
     
     public void PlayThrowTutorial()
     {
-        if (!enableTutorial) return;
+        if (!enableTutorial || GameplayPause.IsPaused(this)) return;
         
         StopTutorial();
         currentState = TutorialState.Throw;
@@ -120,7 +123,7 @@ public class TutorialManager : MonoBehaviour
     
     public void PlayTryThrowBallAgainTutorial()
     {
-        if (!enableTutorial) return;
+        if (!enableTutorial || GameplayPause.IsPaused(this)) return;
         
         StopTutorial();
         currentState = TutorialState.Throw; // Set to throw state so clicks are handled properly
@@ -129,19 +132,21 @@ public class TutorialManager : MonoBehaviour
 
     private IEnumerator ShowPlayTryThrowBallAgainText()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         SpawnText(textBoxPrefab,
             pinTextTransform.position,
             tryTryThrowMessage);
 
         // Wait for the extracted mouse click and flick sequence instead of just 8 seconds
         yield return StartCoroutine(MouseFlickSequence(throwStartTransform));
+        while (GameplayPause.IsPaused(this)) yield return null;
 
         StopTutorial();
     }
 
     public void PlayPinPlacementTutorial()
     {
-        if (!enableTutorial) return;
+        if (!enableTutorial || GameplayPause.IsPaused(this)) return;
         
         StopTutorial();
         currentState = TutorialState.PinPlacement;
@@ -150,7 +155,7 @@ public class TutorialManager : MonoBehaviour
 
     public void ShowButtonToBallThrow()
     {
-        if (!enableTutorial) return;
+        if (!enableTutorial || GameplayPause.IsPaused(this)) return;
         
         StopTutorial();
         currentState = TutorialState.ShowButtonToThrow;
@@ -159,7 +164,7 @@ public class TutorialManager : MonoBehaviour
 
     public void PlayPickUpBallTutorial()
     {
-        if (!enableTutorial) return;
+        if (!enableTutorial || GameplayPause.IsPaused(this)) return;
         
         StopTutorial();
         currentState = TutorialState.ShowWhereToPickUpBall;
@@ -192,6 +197,7 @@ public class TutorialManager : MonoBehaviour
 
     public GameObject SpawnText(GameObject prefab, Vector3 position, string message)
     {
+        if (GameplayPause.IsPaused(this)) return null;
         GameObject instance = Instantiate(prefab, position, Quaternion.identity, canvasParent);
         
         TextMeshProUGUI tmpText = instance.GetComponent<TextMeshProUGUI>() ?? instance.GetComponentInChildren<TextMeshProUGUI>();
@@ -216,6 +222,7 @@ public class TutorialManager : MonoBehaviour
 
     private IEnumerator TypeTextRoutine(TextMeshProUGUI tmpText, Text uiText, string message, RectTransform boxRect)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         for (int i = 0; i <= message.Length; i++)
         {
             string currentText = message.Substring(0, i);
@@ -235,11 +242,13 @@ public class TutorialManager : MonoBehaviour
             }
             
             yield return new WaitForSeconds(textTypeDelay);
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
     
     private IEnumerator TypeTextRoutine(TextMeshProUGUI tmpText, Text uiText, string message)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         for (int i = 0; i <= message.Length; i++)
         {
             string currentText = message.Substring(0, i);
@@ -254,15 +263,18 @@ public class TutorialManager : MonoBehaviour
             }
             
             yield return new WaitForSeconds(textTypeDelay);
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
     
     private IEnumerator ThrowTutorialSequence()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         SpawnText(textBoxPrefab, throwTextTransform.position, throwTutorialMessage);
         
         // Use the extracted sequence
         yield return StartCoroutine(MouseFlickSequence(throwStartTransform));
+        while (GameplayPause.IsPaused(this)) yield return null;
         
         StopTutorial();
     }
@@ -270,6 +282,7 @@ public class TutorialManager : MonoBehaviour
 // Extracted the reusable mouse flashing and flick logic into its own Coroutine
     private IEnumerator MouseFlickSequence(Transform startTransform)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         // Spawn both images at the starting position
         GameObject mouseInstance = SpawnImage(mouseImagePrefab, startTransform.position);
         GameObject clickInstance = SpawnImage(clickImagePrefab, startTransform.position);
@@ -282,7 +295,7 @@ public class TutorialManager : MonoBehaviour
         float flashTimer = 0f;
         bool isShowingMouse = false;
 
-        while (!Input.GetMouseButtonDown(0))
+        while (GameplayPause.IsInputBlocked(this) || !Input.GetMouseButtonDown(0))
         {
             if (mouseInstance == null || clickInstance == null) yield break;
 
@@ -298,6 +311,7 @@ public class TutorialManager : MonoBehaviour
             }
 
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
 
         if (mouseInstance == null || clickInstance == null) yield break;
@@ -316,11 +330,13 @@ public class TutorialManager : MonoBehaviour
                 flickSpeed * Time.deltaTime
             );
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
     
     private IEnumerator PinPlacementSequence()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         if (pinStartTransform == null || pinEndTransform == null)
         {
             Debug.LogError("Pin Start or End Transform is missing in the Inspector!");
@@ -348,14 +364,17 @@ public class TutorialManager : MonoBehaviour
                     moveSpeed * Time.deltaTime
                 );
                 yield return null;
+                while (GameplayPause.IsPaused(this)) yield return null;
             }
             
             yield return new WaitForSeconds(0.5f);
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
 
     private IEnumerator ClickToThrowPinTutorial()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         SpawnText(textBoxPrefab, clickToThrowTextTransform.position, clickToThrowMessage);
         
         GameObject mouseInstance = SpawnImage(mouseImagePrefab, clickToThrowStartTransform.position);
@@ -381,11 +400,13 @@ public class TutorialManager : MonoBehaviour
             }
             
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
 
     private IEnumerator PickUpBallTutorialSequence()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         SpawnText(textBoxPrefab, pickUpBallTextTransform.position, pickUpBallMessage);
         
         GameObject mouseInstance = SpawnImage(mouseImagePrefab, pickUpBallStartTransform.position);
@@ -411,6 +432,7 @@ public class TutorialManager : MonoBehaviour
             }
             
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
 }

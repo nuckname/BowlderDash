@@ -88,7 +88,9 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator ProcessScoringRoutine()
     {
+        while (GameplayPause.IsPaused(_manager)) yield return null;
         yield return SkippableWait(waitTimeBeforeScoring);
+        while (GameplayPause.IsPaused(_manager)) yield return null;
         
         bool isStrike = _manager.TryApplyStrikeMultiplier();
 
@@ -96,6 +98,7 @@ public class ScoringState : RoundBaseState
         {
             _manager.SpawnStrikeFloatingText();
             yield return SkippableWait(waitTimeBeforeScoring - 0.25f);
+            while (GameplayPause.IsPaused(_manager)) yield return null;
         }
 
         ExecutePinScoringEffects();
@@ -121,6 +124,7 @@ public class ScoringState : RoundBaseState
             if (!_skipAnimation)
             {
                 yield return SkippableWait(_textSpawnDelay);
+                while (GameplayPause.IsPaused(_manager)) yield return null;
             }
         }
 
@@ -128,6 +132,7 @@ public class ScoringState : RoundBaseState
         if (!isStrike)
         {
             yield return SkippableWait(waitTimeBeforeScoring);
+            while (GameplayPause.IsPaused(_manager)) yield return null;
         }
 
         CalculateScore();
@@ -137,11 +142,13 @@ public class ScoringState : RoundBaseState
 
     private IEnumerator SkippableWait(float waitTime)
     {
+        while (GameplayPause.IsPaused(_manager)) yield return null;
         float timer = 0f;
         while (timer < waitTime && !_skipAnimation)
         {
             timer += Time.deltaTime;
             yield return null;
+            while (GameplayPause.IsPaused(_manager)) yield return null;
         }
     }
 

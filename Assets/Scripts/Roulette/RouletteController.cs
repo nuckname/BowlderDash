@@ -164,6 +164,7 @@ public class RouletteController : MonoBehaviour
 
     public void OpenFromShop()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (!isActiveAndEnabled || IsOpen || shopUI == null || !shopUI.CanUseShopControls) return;
         manager = shopUI.RoundManager;
         cameraPan = manager.cameraPanToLocation;
@@ -304,7 +305,7 @@ public class RouletteController : MonoBehaviour
             (expected == NavigationPhase.Overview &&
                 (Phase == NavigationPhase.MovingToTable || Phase == NavigationPhase.MovingToOverview)) ||
             (expected == NavigationPhase.ColourView && Phase == NavigationPhase.MovingToColour);
-        return isActiveAndEnabled && acceptsInput && IsSameRun && shopUI != null &&
+        return !GameplayPause.IsInputBlocked(this) && isActiveAndEnabled && acceptsInput && IsSameRun && shopUI != null &&
             shopUI.IsSuspendedForRoulette(this);
     }
 
@@ -452,6 +453,7 @@ public class RouletteController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (IsOpen && (!IsSameRun || shopUI == null || !shopUI.IsSuspendedForRoulette(this))) Close(false);
         else if (IsSpinActive) UpdateSpinPreparation();
         else if (Phase == NavigationPhase.PresentingResult)
@@ -698,6 +700,7 @@ public class RouletteController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (Phase != NavigationPhase.BallInPlay || !IsSpinActive) return;
         if (!IsSameRun || shopUI == null || !shopUI.IsSuspendedForRoulette(this)) { Close(false); return; }
         if (currentBall == null || !currentBall.isActiveAndEnabled || currentBall.Body == null ||

@@ -239,7 +239,9 @@ public class SpawnBossObjectsState : RoundBaseState
 
     private IEnumerator TransitionToPinPlacement(RoundStateManager manager)
     {
+        while (GameplayPause.IsPaused(manager)) yield return null;
         yield return new WaitForSeconds(Mathf.Max(0f, revealDuration));
+        while (GameplayPause.IsPaused(manager)) yield return null;
 
         transitionRoutine = null;
 

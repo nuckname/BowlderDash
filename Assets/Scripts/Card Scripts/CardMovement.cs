@@ -90,6 +90,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Forces the card into a drag state programmatically
     public void ForceStartDrag()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         wasSuccessfullyPlayed = false;
 
         // Tell HorizontalCardHolder to set this as the selected card
@@ -107,6 +108,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     }
     void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         ClampPosition();
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -191,6 +193,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Triggers drag events, calculates the grab offset.
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         wasSuccessfullyPlayed = false;
 
         BeginDragEvent.Invoke(this);
@@ -206,6 +209,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Fires drop events and resolves placement based on whether the card is in the play area.
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (!isDragging) return; // Prevent double-trigger if drag was already canceled by Escape
 
         isDragging = false;
@@ -252,6 +256,20 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         EndDragEvent.Invoke(this);
         ReturnToHand();
     }
+
+    public void PrepareForPause()
+    {
+        if (isDragging || isPreviewingInWorld) CancelDrag();
+        if (isHovering)
+        {
+            isHovering = false;
+            PointerExitEvent?.Invoke(this);
+        }
+        if (!selected) return;
+        selected = false;
+        SelectEvent?.Invoke(this, false);
+        transform.localPosition = _preSelectionPosition;
+    }
     
     // Cancels the play preview and restores the card's UI visuals in the hand.
     public void ReturnToHand()
@@ -285,6 +303,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Cleans up the card and its container slot after being successfully played.
     public void SuccessfulPlay()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         wasSuccessfullyPlayed = true;
 
         // The placed world object now owns this card and returns it to the deck later.
@@ -301,6 +320,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Fires the enter event and marks the card as hovering.
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         PointerEnterEvent.Invoke(this);
         isHovering = true;
     }
@@ -308,6 +328,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Fires the exit event and removes the hovering state.
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         PointerExitEvent.Invoke(this);
         isHovering = false;
     }
@@ -316,6 +337,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Records the start time of a left mouse click for tap vs. drag detection.
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (eventData.button != PointerEventData.InputButton.Left)
         {
             Debug.LogError("returned");
@@ -330,6 +352,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     // Determines if a click was a quick tap to toggle selection and fires relevant events.
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (eventData.button != PointerEventData.InputButton.Left)
             return;
 

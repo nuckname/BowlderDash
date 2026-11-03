@@ -84,6 +84,7 @@ public class FloatingText : MonoBehaviour
 
     void Update()
     {
+        if (GameplayPause.IsPaused(this)) return;
         timer += Time.deltaTime;
 
         switch (style)
@@ -109,6 +110,7 @@ public class FloatingText : MonoBehaviour
 
     void LateUpdate()
     {
+        if (GameplayPause.IsPaused(this)) return;
         // Makes sure the text always perfectly faces the camera. 
         // If it doesn't face the camera, the flat mesh can visually slice into walls and ruin depth perception.
         if (Camera.main != null)

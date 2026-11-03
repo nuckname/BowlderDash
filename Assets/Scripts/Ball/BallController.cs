@@ -59,6 +59,7 @@ public class BallController : MonoBehaviour
 
     public void ExecuteThrow(List<CurvePoint> path, float launchSpeed)
     {
+        if (GameplayPause.IsPaused(this)) return;
         _currentPath = path;
         StartCoroutine(ThrowSequence(launchSpeed));
     }
@@ -95,7 +96,9 @@ public class BallController : MonoBehaviour
 
     private IEnumerator SwitchToRoundOverAfterDelay(float delay)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         yield return new WaitForSeconds(delay);
+        while (GameplayPause.IsPaused(this)) yield return null;
         _hammerHitRoutine = null;
 
         GameObject managerObj = GameObject.FindGameObjectWithTag("RoundManager");
@@ -110,6 +113,7 @@ public class BallController : MonoBehaviour
 
     private IEnumerator ThrowSequence(float speed)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         _ballRb.isKinematic = true;
 
         Vector3 firstPointRaw = _currentPath[0].position;
@@ -146,6 +150,7 @@ public class BallController : MonoBehaviour
             float curveVal = tuningData.swingCurve != null ? tuningData.swingCurve.Evaluate(targetT) : targetT;
             transform.position = Vector3.Lerp(firstLinePosition, pullbackPos, curveVal);
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
 
         elapsed = 0f;
@@ -156,6 +161,7 @@ public class BallController : MonoBehaviour
             float easeIn = targetT * targetT; 
             transform.position = Vector3.Lerp(pullbackPos, firstLinePosition, easeIn);
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
 
         transform.position = firstLinePosition;
@@ -168,6 +174,7 @@ public class BallController : MonoBehaviour
     
     public void ExecuteAutoThrow(float launchSpeed, float zOffset)
     {
+        if (GameplayPause.IsPaused(this)) return;
         _currentPath = null;
         StartCoroutine(AutoThrowSequence(launchSpeed, zOffset));
     }
@@ -187,6 +194,7 @@ public class BallController : MonoBehaviour
     // ai https://share.gemini.google/xeTGREPt9NkP
     private IEnumerator AutoThrowSequence(float speed, float zOffset)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         _ballRb.isKinematic = true;
 
         Vector3 firstLinePosition = new Vector3(_startPos.x + zOffset, _ballHeightOffset, _startPos.z);
@@ -214,6 +222,7 @@ public class BallController : MonoBehaviour
             float curveVal = tuningData.swingCurve != null ? tuningData.swingCurve.Evaluate(targetT) : targetT;
             transform.position = Vector3.Lerp(firstLinePosition, pullbackPos, curveVal);
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
 
         elapsed = 0f;
@@ -224,6 +233,7 @@ public class BallController : MonoBehaviour
             float easeIn = targetT * targetT;
             transform.position = Vector3.Lerp(pullbackPos, firstLinePosition, easeIn);
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
 
         transform.position = firstLinePosition;

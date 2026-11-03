@@ -115,6 +115,7 @@ public sealed class RouletteBallLauncher : MonoBehaviour, IPathDrawListener
 
     public void OnDrawCompleted(List<CurvePoint> path, float drawDuration)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (!IsAwaitingGesture || drawer == null || !drawer.IsCompletingFor(this)) return;
         if (!HasLiveSetup() || !TryGetVelocity(path, drawDuration, out launchVelocity))
         {
@@ -154,6 +155,7 @@ public sealed class RouletteBallLauncher : MonoBehaviour, IPathDrawListener
 
     public void OnDrawCancelled()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (!IsAwaitingGesture) return;
         InstructionChanged?.Invoke(this, SpinId, "Draw from the ball to try again");
         if (IsAwaitingGesture) DrawCancelled?.Invoke(this, SpinId);
@@ -166,6 +168,7 @@ public sealed class RouletteBallLauncher : MonoBehaviour, IPathDrawListener
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (Phase == LaunchPhase.Idle) return;
         if (!HasLiveSetup()) { Invalidate(); return; }
         if (Phase == LaunchPhase.WindingUp && Input.GetMouseButtonDown(1)) RetryWindup();
@@ -173,6 +176,7 @@ public sealed class RouletteBallLauncher : MonoBehaviour, IPathDrawListener
 
     private void FixedUpdate()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (Phase != LaunchPhase.WindingUp) return;
         if (!HasLiveSetup()) { Invalidate(); return; }
         windupAge += Time.fixedDeltaTime;
@@ -199,6 +203,7 @@ public sealed class RouletteBallLauncher : MonoBehaviour, IPathDrawListener
 
     private void RetryWindup()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (Phase != LaunchPhase.WindingUp || !HasLiveSetup()) return;
         HoldAtStart();
         Phase = LaunchPhase.AwaitingGesture;

@@ -102,6 +102,7 @@ public class InGameScoreUi : MonoBehaviour
 
     public void RefreshHUD(int totalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
     {
+        if (GameplayPause.IsPaused(this)) return;
         CancelCountAnimations();
         _currentDisplayedScore = totalScore;
         RenderScoreText(_currentDisplayedScore);
@@ -115,6 +116,7 @@ public class InGameScoreUi : MonoBehaviour
 
     public void UpdateTicketText(int newTickets)
     {
+        if (GameplayPause.IsPaused(this)) return;
         CancelCountAnimations();
         _currentDisplayedTickets = newTickets;
         RenderTicketText();
@@ -122,6 +124,7 @@ public class InGameScoreUi : MonoBehaviour
 
     private Coroutine StartCountAnimation(int target, bool isScore)
     {
+        if (GameplayPause.IsPaused(this)) return null;
         CancelCountAnimations();
         int current = isScore ? _currentDisplayedScore : _currentDisplayedTickets;
         bool hasText = isScore ? totalScoreText != null : inGameUiTicketsText != null || shopUiTicketsText != null;
@@ -144,6 +147,7 @@ public class InGameScoreUi : MonoBehaviour
 
     private IEnumerator AnimateCount(int target, bool isScore, uint version)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         int start = isScore ? _currentDisplayedScore : _currentDisplayedTickets;
         float basePitch = Mathf.Clamp(FiniteCountValue(isScore ? scoreCountBasePitch : ticketCountBasePitch, 1f), 0.1f, 3f);
         float maxPitch = Mathf.Clamp(FiniteCountValue(isScore ? scoreCountMaxPitch : ticketCountMaxPitch, 2f), basePitch, 3f);
@@ -176,6 +180,7 @@ public class InGameScoreUi : MonoBehaviour
                 if (CountSkipRequested()) { skip = true; break; }
                 timer += Time.deltaTime;
                 yield return null;
+                while (GameplayPause.IsPaused(this)) yield return null;
             }
             if (version != _countPresentationVersion) yield break;
             if (skip)
@@ -191,7 +196,8 @@ public class InGameScoreUi : MonoBehaviour
         _ticketAnimateRoutine = null;
     }
 
-    private static bool CountSkipRequested() => Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1);
+    private bool CountSkipRequested() => !GameplayPause.IsInputBlocked(this) &&
+        (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1));
     private static float FiniteCountValue(float value, float fallback) =>
         float.IsNaN(value) || float.IsInfinity(value) ? fallback : value;
 
@@ -217,16 +223,19 @@ public class InGameScoreUi : MonoBehaviour
 
     public void UpdateRoundText(int currentRound, int maxRounds)
     {
+        if (GameplayPause.IsPaused(this)) return;
         roundText.text = $"Rounds:\n{currentRound} / {maxRounds + 1}";
     }
     
     public void UpdateBallsText(int ball, int maxBalls)
     {
+        if (GameplayPause.IsPaused(this)) return;
         ballsText.text = $"Balls Thrown:\n{ball} / {maxBalls}";
     }
 
     public void UpdateScoreToBeatText(int scoreToBeat)
     {
+        if (GameplayPause.IsPaused(this)) return;
         scoreToBeatText.text = $"Quota:\n{scoreToBeat}";
     }
     
@@ -234,6 +243,7 @@ public class InGameScoreUi : MonoBehaviour
 
     public void UpdateYourScoreText(int currentScore)
     {
+        if (GameplayPause.IsPaused(this)) return;
         CancelCountAnimations();
         _currentDisplayedScore = currentScore;
         RenderScoreText(currentScore);
@@ -254,12 +264,14 @@ public class InGameScoreUi : MonoBehaviour
 
     public void TriggerWinRoundText()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (_flashRoutine != null) StopCoroutine(_flashRoutine);
         _flashRoutine = StartCoroutine(FlashTextRoutine(totalScoreText, "Win\nRound!", Color.black, Color.white));
     }
 
     public void TriggerGameLostText()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (_flashRoutine != null) StopCoroutine(_flashRoutine);
         totalScoreText.color = Color.red;
         totalScoreText.text = "Game\nLost :(";
@@ -267,6 +279,7 @@ public class InGameScoreUi : MonoBehaviour
     
     public void TriggerLastThrowText()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (_roundTextFlashRoutine != null) StopCoroutine(_roundTextFlashRoutine);
         
         _roundTextFlashRoutine = StartCoroutine(FlashTextRoutine(ballsText, "LAST\nTHROW", Color.black, Color.white));
@@ -293,14 +306,17 @@ public class InGameScoreUi : MonoBehaviour
 
     private IEnumerator FlashTextRoutine(TextMeshProUGUI textComponent, string textToDisplay, Color flashColor, Color baseColor, float flashInterval = 0.5f)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         textComponent.text = textToDisplay;
         
         while (true)
         {
             textComponent.color = baseColor;
             yield return new WaitForSeconds(flashInterval);
+            while (GameplayPause.IsPaused(this)) yield return null;
             textComponent.color = flashColor;
             yield return new WaitForSeconds(flashInterval);
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
     }
     
@@ -313,6 +329,7 @@ public class InGameScoreUi : MonoBehaviour
 
     private IEnumerator AnimateBallsToZero(int currentBalls, int maxBalls)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         while (currentBalls > 0)
         {
             currentBalls--;
@@ -323,13 +340,14 @@ public class InGameScoreUi : MonoBehaviour
 
             while (timer < 0.05f)
             {
-                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                if (CountSkipRequested())
                 {
                     skipTriggered = true;
                     break;
                 }
                 timer += Time.deltaTime;
                 yield return null;
+                while (GameplayPause.IsPaused(this)) yield return null;
             }
 
             if (skipTriggered)

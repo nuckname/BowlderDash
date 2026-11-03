@@ -66,6 +66,7 @@ public sealed class CardUIAudio : MonoBehaviour, IPointerDownHandler
 
     private bool CanPlay()
     {
+        if (GameplayPause.IsInputBlocked(this)) return false;
         if (!isActiveAndEnabled || card == null || !card.isActiveAndEnabled ||
             card.isDragging || card.isPreviewingInWorld || card.wasSuccessfullyPlayed)
             return false;

@@ -132,6 +132,7 @@ public sealed class RoulettePathDrawer : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (activeBall == null) { if (listener != null) Stop(); return; }
         if (!activeBall.IsAwaitingGesture || !IsAvailable)
         {
@@ -286,6 +287,13 @@ public sealed class RoulettePathDrawer : MonoBehaviour
         ResetGesture();
         waitingForRelease = true;
         listener?.OnDrawCancelled();
+    }
+
+    public void CancelUnfinishedGesture()
+    {
+        if (drawing) CancelGesture();
+        waitingForRelease = true;
+        beginFrame = Time.frameCount;
     }
 
     private void ResetGesture()

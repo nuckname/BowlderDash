@@ -159,6 +159,7 @@ public sealed class PhysicsImpactAudio : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsPaused(this)) return;
         // Unity completes every FixedUpdate/physics step scheduled for this rendered frame before Update.
         // Step-keyed buckets therefore deduplicate complete steps without merging low-frame-rate catch-up steps.
         if (lastFlushFrame == Time.frameCount) return;

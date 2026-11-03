@@ -18,6 +18,7 @@ public class ViewDeck : MonoBehaviour
     /// </summary>
     public void VisualizeDeck(List<CardDataSO> deckToView)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (deckViewerContainer == null)
         {
             Debug.LogWarning("Deck Viewer Container is not assigned!");
@@ -78,6 +79,7 @@ public class ViewDeck : MonoBehaviour
 
     private void ToggleView(ActiveView viewToToggle)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         // If we press the same key and the container is active, hide it
         if (_currentView == viewToToggle && deckViewerContainer.gameObject.activeSelf)
         {

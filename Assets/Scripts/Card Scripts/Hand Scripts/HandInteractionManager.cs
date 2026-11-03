@@ -32,6 +32,7 @@ public class HandInteractionManager : MonoBehaviour
 
     private void BeginDrag(CardMovement cardMovement)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         selectedCardMovement = cardMovement;
     }
 
@@ -56,6 +57,7 @@ public class HandInteractionManager : MonoBehaviour
 
     private void CardPointerEnter(CardMovement cardMovement)
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         hoveredCardMovement = cardMovement;
     }
 
@@ -66,6 +68,7 @@ public class HandInteractionManager : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         /*
         if (Input.GetKeyDown(KeyCode.J))
         {

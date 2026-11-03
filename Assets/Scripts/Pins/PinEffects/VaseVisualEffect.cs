@@ -97,6 +97,7 @@ public class VaseVisualEffect : PinEffect
 
     private IEnumerator ShrinkFlowerRoutine(Transform flowerTransform, Vector3 startScale)
     {
+        while (GameplayPause.IsPaused(flowerTransform)) yield return null;
         float elapsed = 0f;
         while (elapsed < flowerShrinkDuration)
         {
@@ -104,6 +105,7 @@ public class VaseVisualEffect : PinEffect
             float t = Mathf.Clamp01(elapsed / flowerShrinkDuration);
             flowerTransform.localScale = Vector3.Lerp(startScale, Vector3.zero, t);
             yield return null;
+            while (GameplayPause.IsPaused(flowerTransform)) yield return null;
         }
         flowerTransform.localScale = Vector3.zero;
     }

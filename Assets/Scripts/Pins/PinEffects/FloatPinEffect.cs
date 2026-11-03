@@ -78,6 +78,7 @@ public class FloatUpBehavior : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsPaused(this)) return;
         if (_timer < duration)
         {
             transform.Translate(Vector3.up * (speed * Time.deltaTime), Space.World);

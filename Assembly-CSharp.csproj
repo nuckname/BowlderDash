@@ -190,6 +190,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\Scripts\Audio\MusicPhase.cs" />
+    <Compile Include="Assets\Scripts\Manager\GameplayPause.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\ShopState.cs" />
     <Compile Include="Assets\Scripts\Manager\RoundStateManager\RoundStartState.cs" />
     <Compile Include="Assets\Scripts\Audio\GameAudio.cs" />

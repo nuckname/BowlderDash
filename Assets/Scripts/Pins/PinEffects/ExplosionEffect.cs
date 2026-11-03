@@ -27,6 +27,7 @@ public class ExplosionEffect : PinEffect
 
     public override void Execute(PinBase context, Collider instigator = null)
     {
+        if (GameplayPause.IsPaused(context)) return;
         if (_hasTriggered || !CanDetonate(context)) return;
         
         _hasTriggered = true;
@@ -40,10 +41,12 @@ public class ExplosionEffect : PinEffect
     // Watch the gameplay role during the scaled delay so old throws cannot leave a live timer.
     private IEnumerator DetonationSequence(PinBase context, int version)
     {
+        while (GameplayPause.IsPaused(context)) yield return null;
         float detonateAt = Time.time + Mathf.Max(0f, detonationDelay);
         do
         {
             yield return null;
+            while (GameplayPause.IsPaused(context)) yield return null;
             if (version != _detonationVersion) yield break;
             if (!CanDetonate(context))
             {

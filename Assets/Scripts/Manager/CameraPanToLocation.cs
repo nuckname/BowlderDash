@@ -125,8 +125,10 @@ public class CameraPanToLocation : MonoBehaviour
 
     private IEnumerator MoveCameraForDuration(Transform target, float duration, MoveRequest request)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         // Let the caller retain the request before any arrival callback.
         yield return null;
+        while (GameplayPause.IsPaused(this)) yield return null;
         if (mainCamera == null || target == null)
         {
             activeLerp = null;
@@ -153,6 +155,7 @@ public class CameraPanToLocation : MonoBehaviour
                 yield break;
             }
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
         activeLerp = null;
         FinishMove(request, false);
@@ -160,8 +163,10 @@ public class CameraPanToLocation : MonoBehaviour
 
     private IEnumerator LerpCamera(Transform target, float speed, MoveRequest request)
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         // Defer even an already-arrived move so its caller can retain the request first.
         yield return null;
+        while (GameplayPause.IsPaused(this)) yield return null;
         while (mainCamera != null && target != null)
         {
             if (Vector3.Distance(mainCamera.transform.position, target.position) <= 0.01f &&
@@ -175,6 +180,7 @@ public class CameraPanToLocation : MonoBehaviour
             mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, target.position, Time.deltaTime * speed);
             mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, target.rotation, Time.deltaTime * speed);
             yield return null;
+            while (GameplayPause.IsPaused(this)) yield return null;
         }
         activeLerp = null;
         FinishMove(request, false);
@@ -185,6 +191,7 @@ public class CameraPanToLocation : MonoBehaviour
     // Debug GUI for testing camera locations, turn on showDebugMenu and look top right, just ai slop
     private void OnGUI()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         // This will hide the entire GUI when set to false in the Inspector or by another script
         if (!showDebugMenu) return;
 

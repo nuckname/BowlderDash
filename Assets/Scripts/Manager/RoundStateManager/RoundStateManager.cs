@@ -100,7 +100,8 @@ public class RoundStateManager : MonoBehaviour
     public bool HasSelectedBallForCurrentAttempt { get; private set; }
     public GamePauseController PauseController { get; private set; }
     public bool IsGameplayPaused => PauseController != null && PauseController.IsPaused;
-    public bool IsGameplayInputBlocked => IsGameplayPaused || leaderboardPaused;
+    public bool IsGameplayInputBlocked => leaderboardPaused ||
+        (PauseController != null && PauseController.IsGameplayInputBlocked);
     internal bool OwnsLeaderboardPause => leaderboardPaused;
     public bool CanPauseGameplay => isActiveAndEnabled && startedFromMenu && !leaderboardPaused &&
         (currentState == roundStartState || currentState == spawnBossObjectsState ||
@@ -121,6 +122,20 @@ public class RoundStateManager : MonoBehaviour
         if (PauseController == controller) PauseController = null;
     }
 
+    internal void PrepareForPause()
+    {
+        foreach (var card in FindObjectsByType<CardMovement>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (card.gameObject.scene == gameObject.scene) card.PrepareForPause();
+        foreach (var pin in FindObjectsByType<DraggableSnap>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (pin.gameObject.scene == gameObject.scene) pin.CancelDrag();
+        foreach (var drawer in FindObjectsByType<PathDrawer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (drawer.gameObject.scene == gameObject.scene) drawer.CancelUnfinishedGesture();
+        foreach (var drawer in FindObjectsByType<RoulettePathDrawer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (drawer.gameObject.scene == gameObject.scene) drawer.CancelUnfinishedGesture();
+        foreach (var expander in FindObjectsByType<HexGridExpander>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (expander.gameObject.scene == gameObject.scene) expander.HidePausePreview();
+    }
+
     [Header("Floating Text Prefabs")]
     [FormerlySerializedAs("floatingTextPrefab")]
     [SerializeField] private GameObject pinFloatingTextPrefab;
@@ -136,6 +151,7 @@ public class RoundStateManager : MonoBehaviour
     [SerializeField] private GameObject maxLineGameObject;
     private void Awake()
     {
+        GameplayPause.Register(this);
         // Bind the local reference to the Singleton instance so they share the exact same data
         sessionData = SessionData.Instance;
         if (ballController != null) ballController.Released += OnPrimaryBallReleased;
@@ -150,6 +166,7 @@ public class RoundStateManager : MonoBehaviour
 
     void Update()
     {
+        if (IsGameplayInputBlocked) return;
         if (currentState != null)
         {
             currentState.UpdateState(this);
@@ -215,6 +232,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void SwitchState(RoundBaseState newState)
     {
+        if (IsGameplayPaused) return;
         // Ignore late gameplay callbacks and repeated end-game transitions.
         if (IsLeaderboardActive) return;
         // The scene starts at the menu; gameplay callbacks cannot bypass Start.
@@ -346,6 +364,7 @@ public class RoundStateManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        GameplayPause.Unregister(this);
         PauseController?.Resume();
         inGameScoreUi?.CancelCountAnimations();
         if (ballController != null) ballController.Released -= OnPrimaryBallReleased;
@@ -372,6 +391,7 @@ public class RoundStateManager : MonoBehaviour
 
     public void DrawHandForCurrentTurn()
     {
+        if (IsGameplayInputBlocked) return;
         if (hasDrawnCardsThisTurn) return;
 
         hasDrawnCardsThisTurn = true;
@@ -383,8 +403,10 @@ public class RoundStateManager : MonoBehaviour
 
     private System.Collections.IEnumerator WaitForHandDraw()
     {
+        while (GameplayPause.IsPaused(this)) yield return null;
         float drawInterval = DeckManager.Instance != null ? DeckManager.Instance.drawInterval : 0f;
         yield return new WaitForSeconds(amountOfCardsToDrawEachTurn * drawInterval);
+        while (GameplayPause.IsPaused(this)) yield return null;
 
         isHandDrawReady = true;
         handDrawReadinessRoutine = null;
@@ -434,10 +456,22 @@ public class RoundStateManager : MonoBehaviour
         return true;
     }
 
-    void OnCollisionEnter(Collision collision) => currentState?.OnCollisionEnter(this, collision);
-    void OnCollisionExit(Collision collision) => currentState?.OnCollisionExit(this, collision);
-    public void OnTriggerEnter(Collider other) => currentState?.OnTriggerEnter(this, other);
-    void OnTriggerExit(Collider other) => currentState?.OnTriggerExit(this, other);
+    void OnCollisionEnter(Collision collision)
+    {
+        if (!IsGameplayPaused) currentState?.OnCollisionEnter(this, collision);
+    }
+    void OnCollisionExit(Collision collision)
+    {
+        if (!IsGameplayPaused) currentState?.OnCollisionExit(this, collision);
+    }
+    public void OnTriggerEnter(Collider other)
+    {
+        if (!IsGameplayPaused) currentState?.OnTriggerEnter(this, other);
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if (!IsGameplayPaused) currentState?.OnTriggerExit(this, other);
+    }
     
     public void UpdateInstructionText(string newText)
     {
@@ -685,6 +719,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void OnThrowBallButtonClicked()
     {
+        if (IsGameplayInputBlocked) return;
         if (!IsPinPlacementActive) return;
 
         if (!isHandDrawReady)
@@ -698,6 +733,7 @@ public class RoundStateManager : MonoBehaviour
 
     public bool TryRethrowCurrentBall(float cameraSpeed, float zOffset = 0f)
     {
+        if (IsGameplayPaused) return false;
         if (currentState != throwingBallState || !HasSelectedBallForCurrentAttempt ||
             ballController == null || !ballController.IsLaunched)
         {
@@ -717,6 +753,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void OnPinPlacementButtonClicked()
     {
+        if (IsGameplayInputBlocked) return;
         SwitchState(pinPlacementState);
     }
     
@@ -802,6 +839,7 @@ public class RoundStateManager : MonoBehaviour
     // Called via button
     public void ClickButtonToGetBall()
     {
+        if (IsGameplayInputBlocked) return;
         if (currentState != throwingBallState || HasSelectedBallForCurrentAttempt) return;
         if (ballRampSpawner.ballsInRamp.Count == 0 || ballRampSpawner.ballsInRamp[0] == null) return;
 

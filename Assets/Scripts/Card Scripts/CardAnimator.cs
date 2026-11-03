@@ -146,6 +146,7 @@ public class CardAnimator : MonoBehaviour
 
     void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (!initalize) return;
 
         if (isShopMode)

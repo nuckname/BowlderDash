@@ -56,7 +56,7 @@ public class DraggableSnap : MonoBehaviour
     }
 
     public bool CanInteract =>
-        isActiveAndEnabled && _interactionEnabled &&
+        isActiveAndEnabled && _interactionEnabled && !GameplayPause.IsInputBlocked(this) &&
         _roundStateManager != null &&
         _roundStateManager.IsPinPlacementActive;
 
@@ -97,6 +97,7 @@ public class DraggableSnap : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (_dragging && Input.GetKeyDown(KeyCode.Escape))
         {
             CancelDrag();

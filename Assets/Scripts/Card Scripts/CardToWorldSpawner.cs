@@ -37,6 +37,7 @@ public class CardToWorldSpawner : MonoBehaviour
 
     private void Update()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (_cardMovement.isPreviewingInWorld && _spawnedWorldObjects.Count > 0)
         {
             UpdatePreviewPosition();
@@ -107,6 +108,7 @@ public class CardToWorldSpawner : MonoBehaviour
 
     private void CreatePreview()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         _currentHoveredCell = null;
         _isValidPlacement = false;
         _originalMaterials.Clear();
@@ -165,6 +167,7 @@ public class CardToWorldSpawner : MonoBehaviour
 
     private void TryPlaceObject()
     {
+        if (GameplayPause.IsInputBlocked(this)) return;
         if (!isActiveAndEnabled || _cardMovement == null || _cardMovement.cardData == null || _grid == null ||
             _roundStateManager == null || !_roundStateManager.IsPinPlacementActive ||
             Camera.main == null || PinInteractionAudio.IsPointerOverUI()) return;
