@@ -137,6 +137,7 @@ public class RoundStateManager : MonoBehaviour
             return;
         }
 
+        inGameScoreUi?.CancelCountAnimations();
         spawnBossObjectsState.ResetRuntimeState();
         sessionData.StartBrandNewSession();
         
@@ -189,6 +190,7 @@ public class RoundStateManager : MonoBehaviour
         if (!startedFromMenu && newState != mainMenuState) return;
         if (newState != roundOverState && newState != scoringState)
             PhysicsImpactAudio.SetWorldEligible(false);
+        inGameScoreUi?.CancelCountAnimations();
         if (currentState != null) currentState.ExitState(this);
         currentState = newState;
         // Request before EnterState, which can synchronously switch to another state.
@@ -242,6 +244,7 @@ public class RoundStateManager : MonoBehaviour
         cameraFollowScript?.StopTracking();
         cameraPanToLocation?.CancelActiveMove();
         tutorialManager?.StopTutorial();
+        inGameScoreUi?.CancelCountAnimations();
         inGameScoreUi?.StopAllFlashing();
         shopUI?.ToggleShop(false);
         if (cardHand != null) cardHand.SetActive(false);
@@ -297,8 +300,12 @@ public class RoundStateManager : MonoBehaviour
         leaderboardPaused = false;
     }
 
+    // UI counts run on another component and need explicit cleanup when their owner stops.
+    private void OnDisable() => inGameScoreUi?.CancelCountAnimations();
+
     private void OnDestroy()
     {
+        inGameScoreUi?.CancelCountAnimations();
         if (ballController != null) ballController.Released -= OnPrimaryBallReleased;
         PhysicsImpactAudio.SetWorldEligible(false);
         RestoreLeaderboardTimeScale();
