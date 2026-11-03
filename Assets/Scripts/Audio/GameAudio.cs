@@ -171,9 +171,15 @@ public sealed class GameAudio : MonoBehaviour
     public bool PlayPitched(SoundCueSO cue, float pitch, Vector3 position = default, float volumeScale = 1f) =>
         IsFinite(pitch) && PlayTransient(cue, position, volumeScale, Mathf.Clamp(pitch, 0.1f, 3f));
 
+    // Counter ticks keep their attacks when the previous hit still has a quiet tail.
+    public bool PlayCountTick(SoundCueSO cue, MonoBehaviour owner, float pitch) =>
+        cue != null && !cue.isUI && !AudioListener.pause && owner != null && owner.isActiveAndEnabled &&
+        !ownsGameplayPause && !ownsLeaderboardPause && IsFinite(pitch) &&
+        PlayTransient(cue, owner.transform.position, 1f, Mathf.Clamp(pitch, 0.1f, 3f), owner, true);
+
     // Random and explicit-pitch playback share the same voice limits and priority rules
     private bool PlayTransient(SoundCueSO cue, Vector3 position, float volumeScale, float? pitch,
-        MonoBehaviour owner = null)
+        MonoBehaviour owner = null, bool replaceOldestOwned = false)
     {
         if (!TryPrepareCue(cue, volumeScale, out var state, out float gain)) return false;
 
@@ -182,11 +188,15 @@ public sealed class GameAudio : MonoBehaviour
         Voice available = null;
         Voice weakest = null;
         Voice weakestUI = null;
+        Voice oldestOwned = null;
         foreach (var voice in voices)
         {
             if (voice.reservedForCardDraw) continue;
             bool suspendedGameplay = ownsGameplayPause && IsGameplayVoice(voice);
             if (voice.cue == cue && !suspendedGameplay) active++;
+            if (replaceOldestOwned && voice.cue == cue && voice.hasOwner && voice.owner == owner &&
+                !suspendedGameplay && (oldestOwned == null || voice.playOrder < oldestOwned.playOrder))
+                oldestOwned = voice;
             bool canUseSlot = !voice.reservedForPauseMenu || (cue.isUI && ownsGameplayPause);
             if (voice.cue == null)
             {
@@ -205,9 +215,11 @@ public sealed class GameAudio : MonoBehaviour
                  (voice.source.priority == weakest.source.priority && voice.source.volume < weakest.source.volume)))
                 weakest = voice;
         }
-        if (active >= Mathf.Max(1, cue.voiceLimit)) return false;
+        bool atCueLimit = active >= Mathf.Max(1, cue.voiceLimit);
+        if (atCueLimit && oldestOwned == null) return false;
         // Hover and click share the two-voice UI budget thus clicks may replace hover.
-        var slot = cue.isUI && uiActive >= InteractionUIVoiceLimit ? weakestUI : available ?? weakest;
+        var slot = atCueLimit ? oldestOwned :
+            cue.isUI && uiActive >= InteractionUIVoiceLimit ? weakestUI : available ?? oldestOwned ?? weakest;
         if (slot == null) return false;
         if (!PlayVoice(slot, cue, state, position, gain, pitch)) return false;
         slot.owner = owner;

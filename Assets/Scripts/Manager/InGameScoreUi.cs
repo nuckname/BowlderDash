@@ -31,15 +31,17 @@ public class InGameScoreUi : MonoBehaviour
     }
     
     [Header("Count Audio")]
+    // Keep saved cue references while playing the supplied impact clips once per step.
     [SerializeField] private SoundCueSO scoreCountLoopCue;
     [SerializeField] private SoundCueSO ticketCountLoopCue;
     [SerializeField, Range(0.1f, 3f)] private float scoreCountBasePitch = 1f;
     [SerializeField, Range(0.1f, 3f)] private float scoreCountMaxPitch = 2f;
     [SerializeField, Range(0.1f, 3f)] private float ticketCountBasePitch = 1f;
     [SerializeField, Range(0.1f, 3f)] private float ticketCountMaxPitch = 2f;
-    [SerializeField, Min(0f)] private float countLoopFadeInTime = 0.01f;
 
-    private GameAudio.LoopHandle _countLoop;
+    [Header("Count Timing")]
+    [SerializeField, Min(0.02f)] private float scoreCountStepInterval = 0.075f;
+
     private GameAudio _countAudioService;
     private SessionData _countSession;
     private bool _countAnimating;
@@ -91,13 +93,12 @@ public class InGameScoreUi : MonoBehaviour
         _scoreAnimateRoutine = null;
         _ticketAnimateRoutine = null;
         _countAnimating = false;
-        StopCountLoop();
+        StopCountAudio();
     }
 
-    private void StopCountLoop()
+    private void StopCountAudio()
     {
-        _countLoop.Stop(0f);
-        _countLoop = default;
+        _countAudioService?.StopOwnedTransients(this);
     }
 
     public void RefreshHUD(int totalScore, int currentRound, int currentBalls, RoundScore roundData, int maxRounds)
@@ -151,15 +152,19 @@ public class InGameScoreUi : MonoBehaviour
         int start = isScore ? _currentDisplayedScore : _currentDisplayedTickets;
         float basePitch = Mathf.Clamp(FiniteCountValue(isScore ? scoreCountBasePitch : ticketCountBasePitch, 1f), 0.1f, 3f);
         float maxPitch = Mathf.Clamp(FiniteCountValue(isScore ? scoreCountMaxPitch : ticketCountMaxPitch, 2f), basePitch, 3f);
-        float fadeIn = Mathf.Max(0f, FiniteCountValue(countLoopFadeInTime, 0f));
-        if (target > start && !CountSkipRequested())
-            _countLoop = GameAudio.Instance?.BeginLoop(isScore ? scoreCountLoopCue : ticketCountLoopCue,
-                this, 1f, basePitch, fadeIn) ?? default;
+        float stepInterval = isScore ? Mathf.Max(0.02f, FiniteCountValue(scoreCountStepInterval, 0.075f)) : 0.05f;
+        bool skipAtStart = CountSkipRequested();
 
         int current = start;
         while (current != target)
         {
             if (version != _countPresentationVersion) yield break;
+            if (skipAtStart || CountSkipRequested())
+            {
+                SetDisplayedCount(target, isScore);
+                StopCountAudio();
+                break;
+            }
             // Use a wider delta to keep the final value correct at integer boundaries.
             long delta = (long)target - current;
             int step = (int)System.Math.Min(System.Math.Abs(delta), isScore ? 2L : 1L);
@@ -168,13 +173,13 @@ public class InGameScoreUi : MonoBehaviour
             if (target > start)
             {
                 float progress = (float)(((double)current - start) / ((double)target - start));
-                _countLoop.SetParameters(1f, Mathf.Lerp(basePitch, maxPitch, progress), fadeIn);
+                _countAudioService?.PlayCountTick(isScore ? scoreCountLoopCue : ticketCountLoopCue,
+                    this, Mathf.Lerp(basePitch, maxPitch, progress));
             }
 
             float timer = 0f;
             bool skip = false;
-            // Preserve every existing 0.05-second hold, including the last displayed step.
-            while (timer < 0.05f)
+            while (timer < stepInterval)
             {
                 if (version != _countPresentationVersion) yield break;
                 if (CountSkipRequested()) { skip = true; break; }
@@ -186,11 +191,12 @@ public class InGameScoreUi : MonoBehaviour
             if (skip)
             {
                 SetDisplayedCount(target, isScore);
+                StopCountAudio();
                 break;
             }
         }
 
-        StopCountLoop();
+        // A completed count leaves the final hit's tail; skips and cancellation stop it immediately.
         _countAnimating = false;
         _scoreAnimateRoutine = null;
         _ticketAnimateRoutine = null;
