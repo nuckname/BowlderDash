@@ -17,6 +17,20 @@ public class CameraFollowBallScript : MonoBehaviour
     private Vector3 cameraOffset;
     private Quaternion cameraInitialRotation;
     private float cameraFixedX;
+    private GamePauseController presentationOwner;
+
+    internal bool TryBeginPausedPresentation(GamePauseController owner, Camera camera)
+    {
+        if (owner == null || !owner.IsPaused || presentationOwner != null || targetCamera == null ||
+            targetCamera != camera || owner.gameObject.scene != gameObject.scene) return false;
+        presentationOwner = owner;
+        return true;
+    }
+
+    internal void EndPausedPresentation(GamePauseController owner)
+    {
+        if (presentationOwner == owner) presentationOwner = null;
+    }
 
     public void StartTracking(Transform trackingStartTransform)
     {
@@ -40,7 +54,7 @@ public class CameraFollowBallScript : MonoBehaviour
 
     void LateUpdate()
     {
-        if (GameplayPause.IsPaused(this)) return;
+        if (presentationOwner != null || GameplayPause.IsPaused(this)) return;
         if (!isTrackingBall) return;
 
         // 1. Calculate where the camera normally wants to be to follow the ball

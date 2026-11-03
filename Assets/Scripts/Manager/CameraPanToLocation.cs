@@ -45,6 +45,88 @@ public class CameraPanToLocation : MonoBehaviour
 
     private Coroutine activeLerp;
     private MoveRequest activeRequest;
+    private GamePauseController presentationOwner;
+    private Camera presentationCamera;
+    private Vector3 savedPosition;
+    private Quaternion savedRotation;
+    private float savedFieldOfView, savedOrthographicSize, savedNearClip, savedFarClip;
+    private bool savedOrthographic;
+    private Vector3 presentationStartPosition, presentationTargetPosition;
+    private Quaternion presentationStartRotation, presentationTargetRotation;
+    private float presentationElapsed, presentationDuration;
+
+    internal bool HasPresentationOverride => presentationOwner != null;
+    internal bool IsPresentationTransitioning { get; private set; }
+    private bool MustWait => HasPresentationOverride || GameplayPause.IsPaused(this);
+
+    internal bool TryBeginPausedPresentation(GamePauseController owner, Transform target, float durationSeconds)
+    {
+        if (owner == null || !owner.IsPaused || presentationOwner != null || !isActiveAndEnabled ||
+            mainCamera == null || target == null || owner.gameObject.scene != gameObject.scene ||
+            target.gameObject.scene != gameObject.scene || !IsValidPresentationDuration(durationSeconds)) return false;
+        presentationOwner = owner;
+        presentationCamera = mainCamera;
+        savedPosition = mainCamera.transform.position;
+        savedRotation = mainCamera.transform.rotation;
+        savedFieldOfView = mainCamera.fieldOfView;
+        savedOrthographic = mainCamera.orthographic;
+        savedOrthographicSize = mainCamera.orthographicSize;
+        savedNearClip = mainCamera.nearClipPlane;
+        savedFarClip = mainCamera.farClipPlane;
+        BeginPresentationTransition(target.position, target.rotation, durationSeconds);
+        return true;
+    }
+
+    internal bool TryReturnPausedPresentation(GamePauseController owner, float durationSeconds)
+    {
+        if (presentationOwner != owner || presentationCamera == null || !IsValidPresentationDuration(durationSeconds)) return false;
+        BeginPresentationTransition(savedPosition, savedRotation, durationSeconds);
+        return true;
+    }
+
+    private static bool IsValidPresentationDuration(float duration) => duration > 0f && !float.IsInfinity(duration);
+
+    private void BeginPresentationTransition(Vector3 position, Quaternion rotation, float duration)
+    {
+        presentationStartPosition = presentationCamera.transform.position;
+        presentationStartRotation = presentationCamera.transform.rotation;
+        presentationTargetPosition = position;
+        presentationTargetRotation = rotation;
+        presentationElapsed = 0f;
+        presentationDuration = duration;
+        IsPresentationTransitioning = true;
+    }
+
+    internal void AdvancePausedPresentation(GamePauseController owner)
+    {
+        if (presentationOwner != owner || presentationCamera == null || !IsPresentationTransitioning) return;
+        presentationElapsed += Time.unscaledDeltaTime;
+        float progress = Mathf.Clamp01(presentationElapsed / presentationDuration);
+        float eased = progress * progress * (3f - 2f * progress);
+        presentationCamera.transform.SetPositionAndRotation(
+            Vector3.Lerp(presentationStartPosition, presentationTargetPosition, eased),
+            Quaternion.Slerp(presentationStartRotation, presentationTargetRotation, eased));
+        if (progress < 1f) return;
+        presentationCamera.transform.SetPositionAndRotation(presentationTargetPosition, presentationTargetRotation);
+        IsPresentationTransitioning = false;
+    }
+
+    internal void EndPausedPresentation(GamePauseController owner)
+    {
+        if (presentationOwner != owner) return;
+        if (presentationCamera != null)
+        {
+            presentationCamera.transform.SetPositionAndRotation(savedPosition, savedRotation);
+            presentationCamera.fieldOfView = savedFieldOfView;
+            presentationCamera.orthographic = savedOrthographic;
+            presentationCamera.orthographicSize = savedOrthographicSize;
+            presentationCamera.nearClipPlane = savedNearClip;
+            presentationCamera.farClipPlane = savedFarClip;
+        }
+        presentationCamera = null;
+        presentationOwner = null;
+        IsPresentationTransitioning = false;
+    }
 
     public sealed class MoveRequest
     {
@@ -125,10 +207,10 @@ public class CameraPanToLocation : MonoBehaviour
 
     private IEnumerator MoveCameraForDuration(Transform target, float duration, MoveRequest request)
     {
-        while (GameplayPause.IsPaused(this)) yield return null;
+        while (MustWait) yield return null;
         // Let the caller retain the request before any arrival callback.
         yield return null;
-        while (GameplayPause.IsPaused(this)) yield return null;
+        while (MustWait) yield return null;
         if (mainCamera == null || target == null)
         {
             activeLerp = null;
@@ -155,7 +237,7 @@ public class CameraPanToLocation : MonoBehaviour
                 yield break;
             }
             yield return null;
-            while (GameplayPause.IsPaused(this)) yield return null;
+            while (MustWait) yield return null;
         }
         activeLerp = null;
         FinishMove(request, false);
@@ -163,10 +245,10 @@ public class CameraPanToLocation : MonoBehaviour
 
     private IEnumerator LerpCamera(Transform target, float speed, MoveRequest request)
     {
-        while (GameplayPause.IsPaused(this)) yield return null;
+        while (MustWait) yield return null;
         // Defer even an already-arrived move so its caller can retain the request first.
         yield return null;
-        while (GameplayPause.IsPaused(this)) yield return null;
+        while (MustWait) yield return null;
         while (mainCamera != null && target != null)
         {
             if (Vector3.Distance(mainCamera.transform.position, target.position) <= 0.01f &&
@@ -180,13 +262,17 @@ public class CameraPanToLocation : MonoBehaviour
             mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, target.position, Time.deltaTime * speed);
             mainCamera.transform.rotation = Quaternion.Lerp(mainCamera.transform.rotation, target.rotation, Time.deltaTime * speed);
             yield return null;
-            while (GameplayPause.IsPaused(this)) yield return null;
+            while (MustWait) yield return null;
         }
         activeLerp = null;
         FinishMove(request, false);
     }
 
-    private void OnDisable() => CancelActiveMove();
+    private void OnDisable()
+    {
+        EndPausedPresentation(presentationOwner);
+        CancelActiveMove();
+    }
     
     // Debug GUI for testing camera locations, turn on showDebugMenu and look top right, just ai slop
     private void OnGUI()

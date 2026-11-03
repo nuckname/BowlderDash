@@ -33,11 +33,15 @@ public sealed class PauseMenuUI : MonoBehaviour
         pauseController = owner;
         pauseController.RegisterMenuInputRoot(transform);
         resumeButton.interactable = true;
+        optionsButton.interactable = true;
         var navigation = new UnityEngine.UI.Navigation { mode = UnityEngine.UI.Navigation.Mode.Explicit,
-            selectOnUp = resumeButton, selectOnDown = resumeButton,
+            selectOnUp = optionsButton, selectOnDown = optionsButton,
             selectOnLeft = resumeButton, selectOnRight = resumeButton };
         resumeButton.navigation = navigation;
-        for (int i = 1; i < buttons.Length; i++)
+        optionsButton.navigation = new UnityEngine.UI.Navigation { mode = UnityEngine.UI.Navigation.Mode.Explicit,
+            selectOnUp = resumeButton, selectOnDown = resumeButton,
+            selectOnLeft = optionsButton, selectOnRight = optionsButton };
+        for (int i = 2; i < buttons.Length; i++)
         {
             buttons[i].interactable = false;
             buttons[i].navigation = new UnityEngine.UI.Navigation { mode = UnityEngine.UI.Navigation.Mode.None };
@@ -51,6 +55,7 @@ public sealed class PauseMenuUI : MonoBehaviour
         releasedFrame = -1;
         menuInputReady = false;
         resumeButton.interactable = false;
+        optionsButton.interactable = false;
         panelRoot.SetActive(true);
         if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(resumeButton.gameObject);
     }
@@ -73,6 +78,7 @@ public sealed class PauseMenuUI : MonoBehaviour
             {
                 menuInputReady = true;
                 resumeButton.interactable = true;
+                optionsButton.interactable = true;
             }
             else if (!Input.anyKey && !Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !Input.GetMouseButton(2))
                 releasedFrame = Time.frameCount;
@@ -89,5 +95,11 @@ public sealed class PauseMenuUI : MonoBehaviour
     {
         if (menuInputReady && IsVisible && pauseController != null && pauseController.IsPaused)
             pauseController.Resume();
+    }
+
+    public void OnOptionsClicked()
+    {
+        if (menuInputReady && IsVisible && pauseController != null && pauseController.IsPaused)
+            pauseController.TryOpenOptions();
     }
 }

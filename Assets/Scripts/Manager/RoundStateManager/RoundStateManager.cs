@@ -882,10 +882,23 @@ public class RoundStateManager : MonoBehaviour
                 ClickShowMainMenu();
                 break;
             case OptionsReturnDestination.Pause:
-                // Pause owns camera restoration and resume when that route is connected
-                Debug.LogWarning("Paused options return is not connected yet", this);
+                PauseController?.TryReturnFromOptions();
                 break;
         }
+    }
+
+    internal bool TryBeginPausedOptions(GamePauseController owner)
+    {
+        if (owner == null || owner != PauseController || !IsGameplayPaused || !CanPauseGameplay ||
+            optionsReturnDestination == OptionsReturnDestination.Pause) return false;
+        optionsReturnDestination = OptionsReturnDestination.Pause;
+        return true;
+    }
+
+    internal void EndPausedOptions(GamePauseController owner)
+    {
+        if (owner == PauseController && optionsReturnDestination == OptionsReturnDestination.Pause)
+            optionsReturnDestination = OptionsReturnDestination.None;
     }
     
     public void ClickShowMainMenu()
