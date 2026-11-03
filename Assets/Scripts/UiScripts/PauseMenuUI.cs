@@ -32,19 +32,13 @@ public sealed class PauseMenuUI : MonoBehaviour
 
         pauseController = owner;
         pauseController.RegisterMenuInputRoot(transform);
-        resumeButton.interactable = true;
-        optionsButton.interactable = true;
-        var navigation = new UnityEngine.UI.Navigation { mode = UnityEngine.UI.Navigation.Mode.Explicit,
-            selectOnUp = optionsButton, selectOnDown = optionsButton,
-            selectOnLeft = resumeButton, selectOnRight = resumeButton };
-        resumeButton.navigation = navigation;
-        optionsButton.navigation = new UnityEngine.UI.Navigation { mode = UnityEngine.UI.Navigation.Mode.Explicit,
-            selectOnUp = resumeButton, selectOnDown = resumeButton,
-            selectOnLeft = optionsButton, selectOnRight = optionsButton };
-        for (int i = 2; i < buttons.Length; i++)
+        for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].interactable = false;
-            buttons[i].navigation = new UnityEngine.UI.Navigation { mode = UnityEngine.UI.Navigation.Mode.None };
+            buttons[i].interactable = true;
+            buttons[i].navigation = new UnityEngine.UI.Navigation { mode = UnityEngine.UI.Navigation.Mode.Explicit,
+                selectOnUp = buttons[(i + buttons.Length - 1) % buttons.Length],
+                selectOnDown = buttons[(i + 1) % buttons.Length],
+                selectOnLeft = buttons[i], selectOnRight = buttons[i] };
         }
         return true;
     }
@@ -56,6 +50,8 @@ public sealed class PauseMenuUI : MonoBehaviour
         menuInputReady = false;
         resumeButton.interactable = false;
         optionsButton.interactable = false;
+        resetRunButton.interactable = false;
+        mainMenuButton.interactable = false;
         panelRoot.SetActive(true);
         if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(resumeButton.gameObject);
     }
@@ -79,6 +75,8 @@ public sealed class PauseMenuUI : MonoBehaviour
                 menuInputReady = true;
                 resumeButton.interactable = true;
                 optionsButton.interactable = true;
+                resetRunButton.interactable = true;
+                mainMenuButton.interactable = true;
             }
             else if (!Input.anyKey && !Input.GetMouseButton(0) && !Input.GetMouseButton(1) && !Input.GetMouseButton(2))
                 releasedFrame = Time.frameCount;
@@ -101,5 +99,17 @@ public sealed class PauseMenuUI : MonoBehaviour
     {
         if (menuInputReady && IsVisible && pauseController != null && pauseController.IsPaused)
             pauseController.TryOpenOptions();
+    }
+
+    public void OnResetRunClicked()
+    {
+        if (menuInputReady && IsVisible && pauseController != null && pauseController.IsPaused)
+            pauseController.OnResetRunRequested();
+    }
+
+    public void OnMainMenuClicked()
+    {
+        if (menuInputReady && IsVisible && pauseController != null && pauseController.IsPaused)
+            pauseController.OnMainMenuRequested();
     }
 }

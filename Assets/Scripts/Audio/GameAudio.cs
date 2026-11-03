@@ -489,6 +489,12 @@ public sealed class GameAudio : MonoBehaviour
         WorldAudioStopped?.Invoke();
     }
 
+    internal void StopGameplayForSceneReload()
+    {
+        StopWorldVoices();
+        StopCardDrawVoices();
+    }
+
     public bool PlayUIHover(SoundCueSO cue)
     {
         if (cue == null || !cue.isUI || Time.unscaledTimeAsDouble < nextHoverTime) return false;

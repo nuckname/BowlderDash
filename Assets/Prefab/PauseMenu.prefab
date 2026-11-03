@@ -604,7 +604,7 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 6382167601048842012}
-    m_SelectOnDown: {fileID: 6382167601048842012}
+    m_SelectOnDown: {fileID: 4972309641383131820}
     m_SelectOnLeft: {fileID: 6028461390837194317}
     m_SelectOnRight: {fileID: 6028461390837194317}
   m_Transition: 1
@@ -782,12 +782,12 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 4972309641383131820}
+    m_SelectOnDown: {fileID: 6382167601048842012}
+    m_SelectOnLeft: {fileID: 193609670838043899}
+    m_SelectOnRight: {fileID: 193609670838043899}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -808,7 +808,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 6241776295462953423}
   m_OnClick:
     m_PersistentCalls:
@@ -816,6 +816,18 @@ MonoBehaviour:
       - m_Target: {fileID: 5794283432595218306}
         m_TargetAssemblyTypeName: UIButtonAudio, Assembly-CSharp
         m_MethodName: PlayClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName:
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1702348065087066681}
+        m_TargetAssemblyTypeName: PauseMenuUI, Assembly-CSharp
+        m_MethodName: OnMainMenuClicked
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1154,12 +1166,12 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
+    m_SelectOnUp: {fileID: 6028461390837194317}
+    m_SelectOnDown: {fileID: 193609670838043899}
+    m_SelectOnLeft: {fileID: 4972309641383131820}
+    m_SelectOnRight: {fileID: 4972309641383131820}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1180,7 +1192,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 8468648596935879894}
   m_OnClick:
     m_PersistentCalls:
@@ -1188,6 +1200,18 @@ MonoBehaviour:
       - m_Target: {fileID: 6413604990803412179}
         m_TargetAssemblyTypeName: UIButtonAudio, Assembly-CSharp
         m_MethodName: PlayClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName:
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1702348065087066681}
+        m_TargetAssemblyTypeName: PauseMenuUI, Assembly-CSharp
+        m_MethodName: OnResetRunClicked
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1325,7 +1349,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 6028461390837194317}
+    m_SelectOnUp: {fileID: 193609670838043899}
     m_SelectOnDown: {fileID: 6028461390837194317}
     m_SelectOnLeft: {fileID: 6382167601048842012}
     m_SelectOnRight: {fileID: 6382167601048842012}

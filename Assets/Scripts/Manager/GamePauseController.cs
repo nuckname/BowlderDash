@@ -173,6 +173,39 @@ public sealed class GamePauseController : MonoBehaviour
         return true;
     }
 
+    public void OnResetRunRequested() => TryReloadRun(true);
+    public void OnMainMenuRequested() => TryReloadRun(false);
+
+    private void TryReloadRun(bool startNewRun)
+    {
+        if (!IsPaused || IsShowingOptions || pauseMenu == null || !pauseMenu.IsVisible || roundStateManager == null) return;
+        roundStateManager.TryReloadFromPause(this, startNewRun);
+    }
+
+    internal void ReleaseForSceneReload()
+    {
+        if (!IsPaused) return;
+        RestoreOptionsPresentation();
+        if (pauseMenu != null) pauseMenu.Hide();
+        RestoreMenuCursor();
+        IsPaused = false;
+        waitingForFreshInput = false;
+        RestoreGameplayUI(false);
+        if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+        if (audioService != null) audioService.RestoreGameplaySuspension(this);
+        audioService = null;
+    }
+
+    internal void GuardInputAfterSceneReload()
+    {
+        waitingForFreshInput = true;
+        resumeFrame = Time.frameCount;
+        releasedFrame = -1;
+        SuspendGameplayUI();
+        RestoreSelectableStates();
+        if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+    }
+
     public void TryReturnFromOptions()
     {
         if (IsPaused && IsShowingOptions && optionsInputReady) BeginOptionsReturn();
@@ -274,7 +307,7 @@ public sealed class GamePauseController : MonoBehaviour
 
     public void Resume()
     {
-        if (!IsPaused) return;
+        if (!IsPaused || (roundStateManager != null && roundStateManager.IsSceneReloadPending)) return;
         RestoreOptionsPresentation();
         if (pauseMenu != null) pauseMenu.Hide();
         RestoreMenuCursor();
@@ -317,6 +350,7 @@ public sealed class GamePauseController : MonoBehaviour
 
     private void Update()
     {
+        if (roundStateManager != null && roundStateManager.IsSceneReloadPending) return;
         if (!IsPaused) UpdateFreshInputGuard();
         if (Input.GetKeyDown(KeyCode.Escape))
         {

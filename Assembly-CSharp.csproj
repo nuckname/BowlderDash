@@ -70,6 +70,7 @@
     <Compile Include="Assets\Scripts\Audio\GameMusic.cs" />
     <Compile Include="Assets\Scripts\ScoreCalculator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
+    <Compile Include="Assets\Scripts\Manager\SceneRunReload.cs" />
     <Compile Include="Assets\Scripts\Pins\PinEffects\RepeatRightPinEffect.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Card Scripts\_CardSciptableObjects\CurveParameters.cs" />

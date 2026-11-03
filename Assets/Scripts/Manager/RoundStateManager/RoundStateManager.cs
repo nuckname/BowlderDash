@@ -85,6 +85,8 @@ public class RoundStateManager : MonoBehaviour
     public RoundWinState roundWinState = new RoundWinState();
     public MainMenuState mainMenuState = new MainMenuState();
     private bool startedFromMenu;
+    private bool reloadPending;
+    public bool IsSceneReloadPending => reloadPending || SceneRunReload.IsBlockingScene(gameObject.scene);
 
     private enum OptionsReturnDestination
     {
@@ -99,11 +101,11 @@ public class RoundStateManager : MonoBehaviour
     public bool IsLeaderboardActive => currentState is LeaderboardState;
     public bool HasSelectedBallForCurrentAttempt { get; private set; }
     public GamePauseController PauseController { get; private set; }
-    public bool IsGameplayPaused => PauseController != null && PauseController.IsPaused;
-    public bool IsGameplayInputBlocked => leaderboardPaused ||
+    public bool IsGameplayPaused => IsSceneReloadPending || (PauseController != null && PauseController.IsPaused);
+    public bool IsGameplayInputBlocked => IsSceneReloadPending || leaderboardPaused ||
         (PauseController != null && PauseController.IsGameplayInputBlocked);
     internal bool OwnsLeaderboardPause => leaderboardPaused;
-    public bool CanPauseGameplay => isActiveAndEnabled && startedFromMenu && !leaderboardPaused &&
+    public bool CanPauseGameplay => isActiveAndEnabled && startedFromMenu && !leaderboardPaused && !IsSceneReloadPending &&
         (currentState == roundStartState || currentState == spawnBossObjectsState ||
          currentState == pinPlacementState || currentState == throwingBallState ||
          currentState == roundOverState || currentState == scoringState ||
@@ -161,7 +163,89 @@ public class RoundStateManager : MonoBehaviour
     private void Start()
     {
         GameAudio.Instance?.BeginMusicSession(gameObject.scene);
+        if (SceneRunReload.TryConsume(gameObject.scene, out var startup))
+        {
+            StartCoroutine(CompleteReloadStartup(startup));
+            return;
+        }
         SwitchState(mainMenuState);
+    }
+
+    private System.Collections.IEnumerator CompleteReloadStartup(SceneRunReload.Startup startup)
+    {
+        // Other scene components must finish Start before the ordinary new game path runs
+        yield return null;
+        if (!isActiveAndEnabled || !SceneRunReload.IsCurrent(startup, gameObject.scene)) yield break;
+        if (!HasReloadStartupDependencies())
+        {
+            Debug.LogError("Assign MainScene's local run managers, round data, deck and score UI before completing a run reload", this);
+            SceneRunReload.Complete(startup);
+            yield break;
+        }
+        SceneRunReload.Complete(startup);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        if (!startup.startNewRun) sessionData.StartBrandNewSession();
+        SwitchState(mainMenuState);
+        if (startup.startNewRun) ClickPlayButton();
+        PauseController?.GuardInputAfterSceneReload();
+    }
+
+    private bool HasReloadStartupDependencies() => PauseController != null && PauseController.isActiveAndEnabled &&
+        sessionData != null && roundData != null && roundData.GetRoundInfo(0) != null &&
+        cameraPanToLocation != null && cameraPanToLocation.mainCamera != null && cameraFollowScript != null &&
+        scoreCalculator != null && gridManager != null && gridManager.grid != null && gridManager.gridTicketManager != null &&
+        gridManager.hexGridVisuals != null && shopUI != null && cardHand != null && ballController != null &&
+        ballRampSpawner != null && onLaneSquareGrid != null && tutorialManager != null && inGameScoreUi != null &&
+        InGameScoreUi.Instance == inGameScoreUi && inGameScoreUi.gameObject.scene == gameObject.scene &&
+        DeckManager.Instance != null && DeckManager.Instance.gameObject.scene == gameObject.scene;
+
+    internal bool TryReloadFromPause(GamePauseController owner, bool startNewRun)
+    {
+        if (owner == null || owner != PauseController || !owner.IsPaused || !CanPauseGameplay) return false;
+        var scene = gameObject.scene;
+        if (scene.path != SceneRunReload.MainScenePath || scene.buildIndex < 0)
+        {
+            Debug.LogError("Enable the current MainScene in Build Profiles before using Reset Run or Main Menu", this);
+            return false;
+        }
+        if (!SceneRunReload.TryStage(scene, startNewRun, out int requestToken)) return false;
+        reloadPending = true;
+        AsyncOperation load;
+        try
+        {
+            load = SceneManager.LoadSceneAsync(scene.path, LoadSceneMode.Single);
+            if (load == null) throw new InvalidOperationException("MainScene load did not start");
+            load.allowSceneActivation = false;
+        }
+        catch (Exception error)
+        {
+            reloadPending = false;
+            SceneRunReload.Cancel(requestToken);
+            Debug.LogError($"Could not reload MainScene: {error.Message}", this);
+            return false;
+        }
+        PrepareForSceneReload();
+        float previousTimeScale = owner.TimeScaleBeforePause;
+        owner.ReleaseForSceneReload();
+        SceneRunReload.TakePauseOwnership(requestToken, previousTimeScale, AudioListener.pause);
+        load.allowSceneActivation = true;
+        return true;
+    }
+
+    private void PrepareForSceneReload()
+    {
+        StopAllCoroutines();
+        foreach (var roulette in FindObjectsByType<RouletteController>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (roulette.gameObject.scene == gameObject.scene) roulette.CloseForShopExit();
+        shopUI?.ToggleShop(false);
+        tutorialManager?.StopTutorial();
+        inGameScoreUi?.CancelCountAnimations();
+        inGameScoreUi?.StopAllFlashing();
+        cameraFollowScript?.StopTracking();
+        cameraPanToLocation?.CancelActiveMove();
+        PhysicsImpactAudio.SetWorldEligible(false);
+        GameAudio.Instance?.StopGameplayForSceneReload();
     }
 
     void Update()
@@ -358,12 +442,14 @@ public class RoundStateManager : MonoBehaviour
     // UI counts run on another component and need explicit cleanup when their owner stops.
     private void OnDisable()
     {
+        SceneRunReload.CancelForDestination(gameObject.scene);
         PauseController?.Resume();
         inGameScoreUi?.CancelCountAnimations();
     }
 
     private void OnDestroy()
     {
+        SceneRunReload.CancelForDestination(gameObject.scene);
         GameplayPause.Unregister(this);
         PauseController?.Resume();
         inGameScoreUi?.CancelCountAnimations();
@@ -868,7 +954,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void ClickSettingsButton()
     {
-        if (currentState != mainMenuState) return;
+        if (IsGameplayInputBlocked || currentState != mainMenuState) return;
 
         optionsReturnDestination = OptionsReturnDestination.MainMenu;
         MoveCamera(CameraLocation.SettingCameraLocation);
@@ -903,7 +989,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void ClickShowMainMenu()
     {
-        if (currentState != mainMenuState) return;
+        if (IsGameplayInputBlocked || currentState != mainMenuState) return;
 
         optionsReturnDestination = OptionsReturnDestination.None;
         MoveCamera(CameraLocation.MainMenuCameraLocation);
@@ -911,7 +997,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void ClickPlayButton()
     {
-        if (startedFromMenu || currentState != mainMenuState) return;
+        if (IsGameplayInputBlocked || startedFromMenu || currentState != mainMenuState) return;
         startedFromMenu = true;
         optionsReturnDestination = OptionsReturnDestination.None;
         StartNewGame();
@@ -919,7 +1005,7 @@ public class RoundStateManager : MonoBehaviour
     
     public void ClickLeaderboardsButton()
     {
-        if (currentState != mainMenuState) return;
+        if (IsGameplayInputBlocked || currentState != mainMenuState) return;
         optionsReturnDestination = OptionsReturnDestination.None;
         MoveCamera(CameraLocation.LeaderboardCameraLocation);
     }
