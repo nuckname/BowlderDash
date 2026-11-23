@@ -10,10 +10,28 @@
     <list default="true" id="17cbadec-c098-4e47-a03e-08721524e336" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.physics_test/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assembly-CSharp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assembly-CSharp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/New Pin Models and textures/Grail/standardSurface1.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/New Pin Models and textures/Grail/standardSurface1.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/PhotoShoot.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/PhotoShoot.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/linux32.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/linux32/libsteam_api.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/linux32/libsteam_api.so.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/linux64.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/linux64/libsteam_api.so" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/linux64/libsteam_api.so.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/osx.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/osx/libsteam_api.dylib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/osx/libsteam_api.dylib.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/steam_api.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/steam_api.dll.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/steam_api.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/steam_api.lib.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/win64.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/win64/steam_api64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/win64/steam_api64.dll.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/win64/steam_api64.lib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Plugins/redistributable_bin/win64/steam_api64.lib.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PerformanceTestRunInfo.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PerformanceTestRunInfo.json.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PerformanceTestRunSettings.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PerformanceTestRunSettings.json.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -351,7 +369,7 @@
       <workItem from="1791373783938" duration="1479000" />
       <workItem from="1791435072876" duration="2731000" />
       <workItem from="1791589850047" duration="3837000" />
-      <workItem from="1795331025087" duration="612000" />
+      <workItem from="1795331025087" duration="1574000" />
     </task>
     <servers />
   </component>
